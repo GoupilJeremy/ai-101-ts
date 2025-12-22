@@ -1,7 +1,8 @@
 interface ITodo {
   id: string,
   title: string,
-  completed: boolean
+  completed: boolean,
+  priority: 'low' | 'medium' | 'high'
 }
 
 interface ITodoItemProps {
@@ -13,6 +14,7 @@ interface ITodoItemProps {
   onEdit: ()  => void;
   onCancel: (event : any) => void;
   onToggle: () => void;
+  onPriorityChange: (priority: 'low' | 'medium' | 'high') => void;
 }
 
 interface ITodoItemState {
@@ -33,11 +35,12 @@ interface ITodoModel {
   onChanges : Array<any>;
   subscribe(onChange);
   inform();
-  addTodo(title : string);
+  addTodo(title : string, priority: 'low' | 'medium' | 'high');
   toggleAll(checked);
   toggle(todoToToggle);
   destroy(todo);
   save(todoToSave, text);
+  updatePriority(todoToUpdate: ITodo, priority: 'low' | 'medium' | 'high');
   clearCompleted();
 }
 
@@ -47,5 +50,6 @@ interface IAppProps {
 
 interface IAppState {
   editing? : string | null;
-  nowShowing? : string
+  nowShowing? : string;
+  newTodoPriority? : 'low' | 'medium' | 'high'
 }

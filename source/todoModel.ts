@@ -6,6 +6,7 @@
 /// <reference path="./interfaces.d.ts"/>
 
 import { Utils } from "./utils";
+import { Priority } from "./constants";
 
 // Generic "model" object. You can use whatever
 // framework you want. For this application it
@@ -33,11 +34,12 @@ class TodoModel implements ITodoModel {
     this.onChanges.forEach(function (cb) { cb(); });
   }
 
-  public addTodo(title : string) {
+  public addTodo(title : string, priority: Priority) {
     this.todos = this.todos.concat({
       id: Utils.uuid(),
       title: title,
-      completed: false
+      completed: false,
+      priority: priority
     });
 
     this.inform();
@@ -76,6 +78,14 @@ class TodoModel implements ITodoModel {
   public save(todoToSave : ITodo, text : string) {
     this.todos = this.todos.map(function (todo) {
       return todo !== todoToSave ? todo : Utils.extend({}, todo, {title: text});
+    });
+
+    this.inform();
+  }
+
+  public updatePriority(todoToUpdate : ITodo, priority: Priority) {
+    this.todos = this.todos.map((todo) => {
+      return todo !== todoToUpdate ? todo : Utils.extend({}, todo, {priority: priority});
     });
 
     this.inform();

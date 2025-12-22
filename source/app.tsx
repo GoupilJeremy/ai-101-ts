@@ -10,7 +10,7 @@ import * as ReactDOM from "react-dom/client";
 import { TodoModel } from "./todoModel";
 import { TodoFooter } from "./footer";
 import { TodoItem } from "./todoItem";
-import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS, ENTER_KEY } from "./constants";
+import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS, ENTER_KEY, PRIORITY_MEDIUM, Priority } from "./constants";
 
 class TodoApp extends React.Component<IAppProps, IAppState> {
 
@@ -20,7 +20,8 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
     super(props);
     this.state = {
       nowShowing: ALL_TODOS,
-      editing: null
+      editing: null,
+      newTodoPriority: PRIORITY_MEDIUM
     };
   }
 
@@ -60,9 +61,14 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
     var val = target.value.trim();
 
     if (val) {
-      this.props.model.addTodo(val);
+      this.props.model.addTodo(val, this.state.newTodoPriority as Priority);
       target.value = '';
+      this.setState({ newTodoPriority: PRIORITY_MEDIUM });
     }
+  }
+
+  public handlePriorityChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    this.setState({ newTodoPriority: event.target.value as Priority });
   }
 
   public toggleAll(event : React.FormEvent) {
@@ -90,6 +96,10 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
 
   public cancel() {
     this.setState({editing: null});
+  }
+
+  public updatePriority(todo : ITodo, priority: Priority) {
+    this.props.model.updatePriority(todo, priority);
   }
 
   public clearCompleted() {
@@ -123,6 +133,7 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
           editing={this.state.editing === todo.id}
           onSave={this.save.bind(this, todo)}
           onCancel={ e => this.cancel() }
+          onPriorityChange={this.updatePriority.bind(this, todo)}
         />
       );
     });
@@ -173,12 +184,23 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
       <div>
         <header className="header">
           <h1>todos</h1>
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onKeyDown={ e => this.handleNewTodoKeyDown(e) }
-            autoFocus={true}
-          />
+          <div className="new-todo-container">
+            <select
+              className="priority-select"
+              value={this.state.newTodoPriority}
+              onChange={e => this.handlePriorityChange(e)}
+            >
+              <option value="low">⬇️ Low</option>
+              <option value="medium">➡️ Medium</option>
+              <option value="high">⬆️ High</option>
+            </select>
+            <input
+              className="new-todo"
+              placeholder="What needs to be done?"
+              onKeyDown={ e => this.handleNewTodoKeyDown(e) }
+              autoFocus={true}
+            />
+          </div>
         </header>
         {main}
         {footer}

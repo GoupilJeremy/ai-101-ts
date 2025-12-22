@@ -9,7 +9,7 @@
 import classNames from "classnames";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { ENTER_KEY, ESCAPE_KEY } from "./constants";
+import { ENTER_KEY, ESCAPE_KEY, PRIORITY_ICONS } from "./constants";
 
 class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
 
@@ -49,6 +49,10 @@ class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
     this.setState({ editText : input.value });
   }
 
+  public handlePriorityChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    this.props.onPriorityChange(event.target.value as 'low' | 'medium' | 'high');
+  }
+
   /**
    * This is a completely optional performance enhancement that you can
    * implement on any React component. If you were to delete this method
@@ -79,6 +83,8 @@ class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
   }
 
   public render() {
+    const priorityIcon = PRIORITY_ICONS[this.props.todo.priority];
+    
     return (
       <li className={classNames({
         completed: this.props.todo.completed,
@@ -91,6 +97,16 @@ class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
             checked={this.props.todo.completed}
             onChange={this.props.onToggle}
           />
+          <select
+            className="priority-select-item"
+            value={this.props.todo.priority}
+            onChange={e => this.handlePriorityChange(e)}
+            onClick={e => e.stopPropagation()}
+          >
+            <option value="low">⬇️ Low</option>
+            <option value="medium">➡️ Medium</option>
+            <option value="high">⬆️ High</option>
+          </select>
           <label onDoubleClick={ e => this.handleEdit() }>
             {this.props.todo.title}
           </label>
