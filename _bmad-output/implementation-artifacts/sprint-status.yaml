@@ -44,7 +44,7 @@ development_status:
   # ============================================================
   epic-1: in-progress
   1-1-initialize-vscode-extension-project-with-yeoman-generator: review
-  1-2-configure-dual-build-system-and-create-webview-scaffold: backlog
+  1-2-configure-dual-build-system-and-create-webview-scaffold: review
   1-3-implement-configuration-manager-with-vscode-settings-integration: backlog
   1-4-implement-secure-api-key-storage-with-vscode-secretstorage: backlog
   1-5-create-configuration-preset-system-for-solo-team-enterprise: backlog

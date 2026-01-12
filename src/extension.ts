@@ -4,11 +4,19 @@ import * as vscode from 'vscode';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
+import { AI101WebviewProvider } from './webview/webview-provider';
+
 export function activate(context: vscode.ExtensionContext) {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "ai-101-ts" is now active!');
+
+	const provider = new AI101WebviewProvider(context.extensionUri);
+
+	context.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(AI101WebviewProvider.viewType, provider)
+	);
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
@@ -23,4 +31,4 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
