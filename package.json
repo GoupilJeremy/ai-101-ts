@@ -16,6 +16,11 @@
       {
         "command": "ai-101-ts.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "ai-101-ts.applyPreset",
+        "title": "Apply Configuration Preset",
+        "category": "AI 101"
       }
     ],
     "configuration": {

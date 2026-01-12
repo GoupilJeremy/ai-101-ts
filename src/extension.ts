@@ -28,6 +28,12 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.applyPreset', () => {
+			import('./commands/apply-preset.js').then(module => module.applyPresetCommand());
+		})
+	);
 }
 
 // This method is called when your extension is deactivated
