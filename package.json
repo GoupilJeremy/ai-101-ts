@@ -17,7 +17,54 @@
         "command": "ai-101-ts.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "AI 101",
+      "properties": {
+        "ai101.llm.provider": {
+          "type": "string",
+          "default": "openai",
+          "enum": [
+            "openai",
+            "anthropic",
+            "custom"
+          ],
+          "description": "Select the LLM provider to use."
+        },
+        "ai101.ui.transparency": {
+          "type": "string",
+          "default": "medium",
+          "enum": [
+            "minimal",
+            "medium",
+            "full"
+          ],
+          "description": "Set the transparency level of the HUD."
+        },
+        "ai101.ui.mode": {
+          "type": "string",
+          "default": "learning",
+          "enum": [
+            "learning",
+            "expert",
+            "focus",
+            "team",
+            "performance"
+          ],
+          "description": "Set the operating mode of the extension."
+        },
+        "ai101.performance.maxTokens": {
+          "type": "number",
+          "default": 4096,
+          "description": "Maximum number of tokens to use for context."
+        },
+        "ai101.telemetry.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable opt-in telemetry for diagnostics."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
