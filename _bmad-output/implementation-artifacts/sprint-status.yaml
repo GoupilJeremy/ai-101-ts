@@ -1,0 +1,182 @@
+# Sprint Status - ai-101-ts
+# generated: 2026-01-12
+# project: ai-101-ts
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog -> in-progress: Automatically when first story is created (via create-story)
+#   - in-progress -> done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-01-12
+project: ai-101-ts
+tracking_system: file-system
+story_location: "_bmad-output/implementation-artifacts"
+
+development_status:
+  # ============================================================
+  # Epic 1: Project Foundation & Core Infrastructure
+  # ============================================================
+  epic-1: in-progress
+  1-1-initialize-vscode-extension-project-with-yeoman-generator: in-progress
+  1-2-configure-dual-build-system-and-create-webview-scaffold: backlog
+  1-3-implement-configuration-manager-with-vscode-settings-integration: backlog
+  1-4-implement-secure-api-key-storage-with-vscode-secretstorage: backlog
+  1-5-create-configuration-preset-system-for-solo-team-enterprise: backlog
+  1-6-implement-export-import-configuration-functionality: backlog
+  1-7-implement-centralized-error-handler-with-retry-logic: backlog
+  1-8-set-up-testing-framework-with-mocha-and-vscode-test-electron: backlog
+  epic-1-retrospective: optional
+
+  # ============================================================
+  # Epic 2: LLM Provider Integration & Caching
+  # ============================================================
+  epic-2: backlog
+  2-1-define-illmprovider-interface-with-adapter-pattern: backlog
+  2-2-implement-openai-provider-with-error-handling: backlog
+  2-3-implement-anthropic-claude-provider-with-error-handling: backlog
+  2-4-implement-llm-provider-manager-with-registry-and-fallbacks: backlog
+  2-5-implement-hybrid-llm-cache-l1-memory-l2-file-system: backlog
+  2-6-integrate-cache-with-provider-manager: backlog
+  2-7-implement-rate-limiting-and-budget-enforcement: backlog
+  2-8-implement-real-time-cost-tracking-and-display: backlog
+  epic-2-retrospective: optional
+
+  # ============================================================
+  # Epic 3: AI Agent System & Orchestration
+  # ============================================================
+  epic-3: backlog
+  3-1-define-iagent-interface-for-shared-agent-behaviors: backlog
+  3-2-implement-agent-orchestrator-with-central-coordination-pattern: backlog
+  3-3-implement-context-agent-for-file-loading-and-token-optimization: backlog
+  3-4-implement-architect-agent-for-project-analysis: backlog
+  3-5-implement-coder-agent-for-code-generation: backlog
+  3-6-implement-reviewer-agent-for-proactive-risk-identification: backlog
+  3-7-implement-backend-state-manager-extensionstatemanager: backlog
+  3-8-implement-postmessage-state-synchronization-to-webview: backlog
+  3-9-verify-multi-agent-state-synchronization: backlog
+  3-10-implement-agent-lifecycle-events-for-extensibility: backlog
+  epic-3-retrospective: optional
+
+  # ============================================================
+  # Epic 4: Transparent HUD & Visual System
+  # ============================================================
+  epic-4: backlog
+  4-1-enhance-webview-with-transparency-and-hud-positioning: backlog
+  4-2-implement-sumi-e-aesthetic-visual-language: backlog
+  4-3-implement-vital-signs-bar-with-real-time-metrics: backlog
+  4-4-implement-spatial-anti-collision-algorithm: backlog
+  4-5-implement-adaptive-agent-positioning-system: backlog
+  4-6-implement-4-level-alert-system-with-code-anchoring: backlog
+  4-7-implement-gpu-accelerated-animations-for-60fps-performance: backlog
+  4-8-implement-async-rendering-pipeline-with-non-blocking-updates: backlog
+  epic-4-retrospective: optional
+
+  # ============================================================
+  # Epic 5: User Modes & Customization
+  # ============================================================
+  epic-5: backlog
+  5-1-implement-mode-system-infrastructure: backlog
+  5-2-implement-learning-mode-with-pedagogical-explanations: backlog
+  5-3-implement-expert-mode-with-in-depth-technical-details: backlog
+  5-4-implement-focus-dnd-mode-with-hidden-agents: backlog
+  5-5-implement-team-mode-with-visible-labels-and-metrics: backlog
+  5-6-implement-performance-mode-for-low-end-machines: backlog
+  5-7-implement-high-contrast-mode-for-accessibility: backlog
+  5-8-implement-colorblind-accessibility-alternatives: backlog
+  5-9-implement-complete-keyboard-only-navigation: backlog
+  5-10-implement-appearance-customization-settings: backlog
+  epic-5-retrospective: optional
+
+  # ============================================================
+  # Epic 6: Context Intelligence & File Management
+  # ============================================================
+  epic-6: backlog
+  6-1-implement-intelligent-file-discovery-and-context-loading: backlog
+  6-2-implement-token-budget-management-and-optimization: backlog
+  6-3-implement-visible-context-file-tracking-and-display: backlog
+  6-4-implement-project-architecture-pattern-detection: backlog
+  6-5-implement-architecture-aligned-suggestion-generation: backlog
+  6-6-implement-proactive-edge-case-identification: backlog
+  6-7-implement-real-time-security-validation: backlog
+  6-8-implement-decision-and-reasoning-history-timeline: backlog
+  6-9-implement-development-phase-detection: backlog
+  epic-6-retrospective: optional
+
+  # ============================================================
+  # Epic 7: User Interactions & Commands
+  # ============================================================
+  epic-7: backlog
+  7-1-implement-suggestion-accept-reject-with-visual-feedback: backlog
+  7-2-implement-global-hotkey-configuration-system: backlog
+  7-3-implement-drag-and-drop-alerts-to-todo-list: backlog
+  7-4-implement-contextual-hover-tooltips-on-agents: backlog
+  7-5-implement-click-to-expand-for-alert-details-and-fixes: backlog
+  7-6-implement-vscode-command-palette-integration: backlog
+  7-7-implement-keyboard-only-navigation-for-all-interactive-elements: backlog
+  7-8-implement-force-agent-state-commands-for-development-and-debug: backlog
+  epic-7-retrospective: optional
+
+  # ============================================================
+  # Epic 8: Analytics, Telemetry & Metrics
+  # ============================================================
+  epic-8: backlog
+  8-1-implement-opt-in-telemetry-system-with-privacy-controls: backlog
+  8-2-implement-usage-metrics-collection-and-display: backlog
+  8-3-implement-suggestion-acceptance-rate-tracking: backlog
+  8-4-implement-post-session-comprehension-surveys: backlog
+  8-5-implement-weekly-learning-progress-surveys: backlog
+  8-6-implement-nps-net-promoter-score-collection: backlog
+  8-7-implement-too-distracting-detection-and-mitigation: backlog
+  8-8-implement-team-adoption-and-comprehension-tracking-for-tech-leads: backlog
+  epic-8-retrospective: optional
+
+  # ============================================================
+  # Epic 9: Extensibility & Public API
+  # ============================================================
+  epic-9: backlog
+  9-1-define-and-document-illmprovider-extension-interface: backlog
+  9-2-implement-llm-provider-registration-api: backlog
+  9-3-define-and-document-iagentrenderer-extension-interface: backlog
+  9-4-implement-lifecycle-event-subscription-api: backlog
+  9-5-implement-typed-configuration-api-for-programmatic-access: backlog
+  9-6-implement-semantic-versioning-for-api-compatibility: backlog
+  epic-9-retrospective: optional
+
+  # ============================================================
+  # Epic 10: Documentation & Developer Support
+  # ============================================================
+  epic-10: backlog
+  10-1-implement-integrated-getting-started-documentation: backlog
+  10-2-implement-searchable-troubleshooting-knowledge-base: backlog
+  10-3-create-comprehensive-architecture-documentation-for-contributors: backlog
+  10-4-generate-api-documentation-with-code-examples: backlog
+  10-5-implement-clear-error-messages-with-documentation-links: backlog
+  10-6-create-detailed-changelog-with-contributor-recognition: backlog
+  10-7-implement-contextual-tooltips-throughout-ui: backlog
+  epic-10-retrospective: optional

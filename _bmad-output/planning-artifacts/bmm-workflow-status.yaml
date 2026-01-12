@@ -1,0 +1,38 @@
+# Workflow Status Template
+
+# This tracks progress through BMM methodology Analysis, Planning, and Solutioning phases.
+# Implementation phase is tracked separately in sprint-status.yaml
+
+# STATUS DEFINITIONS:
+# ==================
+# Initial Status (before completion):
+#   - required: Must be completed to progress
+#   - optional: Can be completed but not required
+#   - recommended: Strongly suggested but not required
+#   - conditional: Required only if certain conditions met (e.g., if_has_ui)
+#
+# Completion Status:
+#   - {file-path}: File created/found (e.g., "docs/product-brief.md")
+#   - skipped: Optional/conditional workflow that was skipped
+
+generated: "2026-01-10"
+project: "ai-101-ts"
+user_description: "A revolutionary VSCode plugin that makes the AI's reasoning process visible and understandable through a Heads-Up Display (HUD) using a minimalist Japanese sumi-e aesthetic."
+project_type: "Developer Tool"
+selected_track: "method"
+field_type: "greenfield"
+brainstorm_requested: false
+research_requested: false
+product_brief_requested: false
+workflow_path: "_bmad/bmm/workflows/workflow-status/paths/method-greenfield.yaml"
+workflow_status:
+  brainstorm-project: skipped
+  research: skipped
+  product-brief: skipped
+  prd: _bmad-output/planning-artifacts/prd.md
+  create-ux-design: _bmad-output/planning-artifacts/ux-design-specification.md
+  create-architecture: _bmad-output/planning-artifacts/architecture.md
+  create-epics-and-stories: _bmad-output/planning-artifacts/epics.md
+  test-design: optional
+  implementation-readiness: _bmad-output/planning-artifacts/implementation-readiness-report-2026-01-12.md
+  sprint-planning: _bmad-output/implementation-artifacts/sprint-status.yaml
