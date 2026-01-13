@@ -69,12 +69,32 @@ function applyUpdate(update: any) {
             document.querySelectorAll('.alert-component').forEach(el => el.remove());
             break;
         case 'fullState':
+            if (update.mode && update.config) {
+                applyModeUpdate(update.mode, update.config);
+            }
             Object.entries(update.states).forEach(([agent, state]: any) => {
                 executeUpdateAgentHUD(agent, state);
             });
             if (update.metrics) executeUpdateMetricsUI(update.metrics);
             if (update.alerts) update.alerts.forEach((alert: any) => executeRenderAlert(alert));
             break;
+    }
+}
+
+function applyModeUpdate(mode: string, config: any) {
+    performanceMode = (mode === 'performance' || config.animationComplexity === 'none');
+
+    // Update all existing agents and alerts to reflect the new mode
+    const agents = document.querySelectorAll('.agent-icon');
+    agents.forEach((el: any) => {
+        el.classList.toggle('low-fx', performanceMode);
+        el.classList.toggle('show-labels', config.showLabels);
+    });
+
+    const hudContainer = document.getElementById('hud-container');
+    if (hudContainer) {
+        hudContainer.style.opacity = config.hudOpacity.toString();
+        hudContainer.classList.toggle('focus-mode', mode === 'focus');
     }
 }
 
@@ -97,8 +117,12 @@ window.addEventListener('message', event => {
         case 'toWebview:clearAlerts':
             requestUpdate({ type: 'clearAlerts' });
             break;
+        case 'toWebview:modeUpdate':
+            console.log('Mode update received:', message.mode, message.config);
+            applyModeUpdate(message.mode, message.config);
+            break;
         case 'toWebview:fullStateUpdate':
-            requestUpdate({ type: 'fullState', states: message.states, metrics: message.metrics, alerts: message.alerts });
+            requestUpdate({ type: 'fullState', states: message.states, metrics: message.metrics, alerts: message.alerts, mode: message.mode, config: message.modeConfig });
             break;
     }
 });
@@ -124,7 +148,12 @@ function executeUpdateAgentHUD(agent: string, state: any) {
         agentEl.id = `agent-${agent}`;
         agentEl.className = 'agent-icon';
         const icons: any = { context: '🔍', architect: '🏗️', coder: '💻', reviewer: '🛡️' };
-        agentEl.innerText = icons[agent] || '🤖';
+        const labelMap: any = { context: 'Context', architect: 'Architect', coder: 'Coder', reviewer: 'Reviewer' };
+
+        agentEl.innerHTML = `
+            <div class="agent-symbol">${icons[agent] || '🤖'}</div>
+            <div class="agent-label-text">${labelMap[agent] || agent}</div>
+        `;
         hud.appendChild(agentEl);
     }
 

@@ -51,6 +51,7 @@ body {
     width: 40px;
     height: 40px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 24px;
@@ -60,6 +61,30 @@ body {
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
     will-change: transform, opacity;
     transform: translate3d(0, 0, 0);
+}
+
+.agent-label-text {
+    display: none;
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 2px;
+}
+
+.show-labels {
+    border-radius: 4px;
+    width: auto;
+    padding: 5px 10px;
+}
+
+.show-labels .agent-label-text {
+    display: block;
+}
+
+.focus-mode {
+    visibility: hidden;
+    opacity: 0 !important;
+    transition: visibility 0s 0.5s, opacity 0.5s linear;
 }
 
 .agent-icon.thinking {

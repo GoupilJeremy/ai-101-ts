@@ -1,4 +1,5 @@
 import { AgentType, IAgentState, AgentStatus, IAlert } from '../agents/shared/agent.interface.js';
+import { AgentMode, IModeConfig, ModeConfigs } from '../modes/mode-types.js';
 
 export interface IMetricsState {
     tokens: number;
@@ -15,6 +16,8 @@ export class ExtensionStateManager {
     private agentStates: Map<AgentType, IAgentState> = new Map();
     private metrics: IMetricsState = { tokens: 0, files: 0, cost: 0 };
     private alerts: IAlert[] = [];
+    private currentMode: AgentMode = AgentMode.Learning;
+    private modeConfig: IModeConfig = ModeConfigs[AgentMode.Learning];
     private webview: { postMessage: (message: any) => Thenable<boolean> } | undefined;
 
     private constructor() {
@@ -42,7 +45,24 @@ export class ExtensionStateManager {
                 type: 'toWebview:fullStateUpdate',
                 states: this.getAllAgentStates(),
                 metrics: this.metrics,
-                alerts: this.alerts
+                alerts: this.alerts,
+                mode: this.currentMode,
+                modeConfig: this.modeConfig
+            });
+        }
+    }
+
+    /**
+     * Updates the active mode and notifies webview.
+     */
+    public updateMode(mode: AgentMode, config: IModeConfig): void {
+        this.currentMode = mode;
+        this.modeConfig = config;
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:modeUpdate',
+                mode,
+                config
             });
         }
     }
