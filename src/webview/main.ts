@@ -22,40 +22,88 @@ function monitorFPS() {
 }
 monitorFPS();
 
+// Async Rendering Pipeline (Batching & Debouncing)
+const updateQueue: any[] = [];
+let isRenderingRequested = false;
+
+function requestUpdate(update: any) {
+    updateQueue.push(update);
+    if (!isRenderingRequested) {
+        isRenderingRequested = true;
+        requestAnimationFrame(processUpdateQueue);
+    }
+}
+
+function processUpdateQueue() {
+    isRenderingRequested = false;
+
+    // Process only the last update of each type in this frame to avoid redundant work
+    const latestUpdates: Record<string, any> = {};
+
+    while (updateQueue.length > 0) {
+        const update = updateQueue.shift();
+        const key = `${update.type}:${update.agent || ''}:${update.alertId || ''}`;
+        latestUpdates[key] = update;
+    }
+
+    Object.values(latestUpdates).forEach(update => {
+        applyUpdate(update);
+    });
+}
+
+function applyUpdate(update: any) {
+    switch (update.type) {
+        case 'agentState':
+            executeUpdateAgentHUD(update.agent, update.state);
+            break;
+        case 'metrics':
+            executeUpdateMetricsUI(update.metrics);
+            break;
+        case 'cursor':
+            executeHandleCursorUpdate(update.cursor);
+            break;
+        case 'newAlert':
+            executeRenderAlert(update.alert);
+            break;
+        case 'clearAlerts':
+            document.querySelectorAll('.alert-component').forEach(el => el.remove());
+            break;
+        case 'fullState':
+            Object.entries(update.states).forEach(([agent, state]: any) => {
+                executeUpdateAgentHUD(agent, state);
+            });
+            if (update.metrics) executeUpdateMetricsUI(update.metrics);
+            if (update.alerts) update.alerts.forEach((alert: any) => executeRenderAlert(alert));
+            break;
+    }
+}
+
 // Listen for messages from the extension
 window.addEventListener('message', event => {
     const message = event.data;
     switch (message.type) {
         case 'toWebview:agentStateUpdate':
-            updateAgentHUD(message.agent, message.state);
+            requestUpdate({ type: 'agentState', agent: message.agent, state: message.state });
             break;
         case 'toWebview:metricsUpdate':
-            updateMetricsUI(message.metrics);
+            requestUpdate({ type: 'metrics', metrics: message.metrics });
             break;
         case 'toWebview:cursorUpdate':
-            handleCursorUpdate(message.cursor);
+            requestUpdate({ type: 'cursor', cursor: message.cursor });
             break;
         case 'toWebview:newAlert':
-            renderAlert(message.alert);
+            requestUpdate({ type: 'newAlert', alert: message.alert, alertId: message.alert.id });
             break;
         case 'toWebview:clearAlerts':
-            document.querySelectorAll('.alert-component').forEach(el => el.remove());
+            requestUpdate({ type: 'clearAlerts' });
             break;
         case 'toWebview:fullStateUpdate':
-            Object.entries(message.states).forEach(([agent, state]: any) => {
-                updateAgentHUD(agent, state);
-            });
-            if (message.metrics) {
-                updateMetricsUI(message.metrics);
-            }
-            if (message.alerts) {
-                message.alerts.forEach((alert: any) => renderAlert(alert));
-            }
+            requestUpdate({ type: 'fullState', states: message.states, metrics: message.metrics, alerts: message.alerts });
             break;
     }
 });
 
-function updateMetricsUI(metrics: any) {
+function executeUpdateMetricsUI(metrics: any) {
     const metricsEl = document.getElementById('metrics');
     if (metricsEl) {
         const formattedCost = new Intl.NumberFormat('en-US', {
@@ -66,7 +114,7 @@ function updateMetricsUI(metrics: any) {
     }
 }
 
-function updateAgentHUD(agent: string, state: any) {
+function executeUpdateAgentHUD(agent: string, state: any) {
     const hud = document.getElementById('agent-hud');
     if (!hud) return;
 
@@ -100,18 +148,15 @@ function updateAgentHUD(agent: string, state: any) {
         if (targetTop > 95) targetTop = 95;
     }
 
-    // Apply baseline position via transform for GPU acceleration
     agentEl.style.left = `${positions[agent]?.left || 10}%`;
     agentEl.dataset.baseTop = targetTop.toString();
-
-    // We update the transform in handleCursorRepulsion or repositioning
     applyRepulsionToAgent(agentEl as HTMLElement, lastCursor);
 }
 
 let currentViewport: any = null;
 let lastCursor: any = null;
 
-function handleCursorUpdate(cursor: any) {
+function executeHandleCursorUpdate(cursor: any) {
     lastCursor = cursor;
     currentViewport = cursor.visibleRanges[0];
     repositionAgents();
@@ -137,19 +182,23 @@ function repositionAlerts() {
             if (relativePos < 0.05) relativePos = 0.05;
             if (relativePos > 0.95) relativePos = 0.95;
 
-            // Use translate3d for smooth vertical positioning
             const targetY = relativePos * window.innerHeight;
             el.style.transform = `translate3d(0, ${targetY}px, 0)`;
         }
     });
 }
 
-function renderAlert(alert: any) {
+function executeRenderAlert(alert: any) {
     const hud = document.getElementById('agent-hud');
     if (!hud) return;
 
-    const alertEl = document.createElement('div');
-    alertEl.id = `alert-${alert.id}`;
+    let alertEl = document.getElementById(`alert-${alert.id}`);
+    if (!alertEl) {
+        alertEl = document.createElement('div');
+        alertEl.id = `alert-${alert.id}`;
+        hud.appendChild(alertEl);
+    }
+
     alertEl.className = `alert-component alert-${alert.severity}`;
     alertEl.dataset.anchorLine = alert.anchorLine?.toString() || '';
     const icons: any = { info: '💡', warning: '⚠️', critical: '🚨', urgent: '🔥' };
@@ -157,13 +206,9 @@ function renderAlert(alert: any) {
         <div class="alert-icon-ideogram">${icons[alert.severity] || '❗'}</div>
         <div class="alert-tooltip">${alert.message}</div>
     `;
-    hud.appendChild(alertEl);
     repositionAlerts();
 }
 
-/**
- * Combined anchoring + repulsion logic using translate3d
- */
 function applyRepulsionToAgent(el: HTMLElement, cursor: any) {
     const baseTopPercent = parseFloat(el.dataset.baseTop || '20');
     const baseTopPx = (baseTopPercent / 100) * window.innerHeight;
@@ -174,7 +219,7 @@ function applyRepulsionToAgent(el: HTMLElement, cursor: any) {
     if (cursor) {
         const cursorYPx = cursor.relativeY * window.innerHeight;
         const dist = Math.abs(baseTopPx - cursorYPx);
-        const threshold = window.innerHeight * 0.15; // 15% of viewport height
+        const threshold = window.innerHeight * 0.15;
 
         if (dist < threshold) {
             const repulsionScale = (threshold - dist) / threshold;
