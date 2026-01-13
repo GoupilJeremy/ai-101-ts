@@ -5,6 +5,7 @@ export interface IMetricsState {
     tokens: number;
     files: number;
     cost: number;
+    sessionTime?: number; // Session duration in seconds (Team Mode)
 }
 
 /**
@@ -14,14 +15,17 @@ export interface IMetricsState {
 export class ExtensionStateManager {
     private static instance: ExtensionStateManager;
     private agentStates: Map<AgentType, IAgentState> = new Map();
-    private metrics: IMetricsState = { tokens: 0, files: 0, cost: 0 };
+    private metrics: IMetricsState = { tokens: 0, files: 0, cost: 0, sessionTime: 0 };
     private alerts: IAlert[] = [];
     private currentMode: AgentMode = AgentMode.Learning;
     private modeConfig: IModeConfig = ModeConfigs[AgentMode.Learning];
     private webview: { postMessage: (message: any) => Thenable<boolean> } | undefined;
+    private sessionStartTime: number = Date.now();
+    private sessionTimerInterval: NodeJS.Timeout | undefined;
 
     private constructor() {
         this.initializeDefaultStates();
+        this.startSessionTimer();
     }
 
     public static getInstance(): ExtensionStateManager {
@@ -168,6 +172,38 @@ export class ExtensionStateManager {
                 agent,
                 state
             });
+        }
+    }
+
+    /**
+     * Start session timer for Team Mode metrics.
+     * Updates sessionTime every second in Team Mode.
+     */
+    private startSessionTimer(): void {
+        this.sessionTimerInterval = setInterval(() => {
+            if (this.currentMode === AgentMode.Team) {
+                const sessionTime = Math.floor((Date.now() - this.sessionStartTime) / 1000);
+                this.metrics.sessionTime = sessionTime;
+                this.updateMetrics(this.metrics);
+            }
+        }, 1000); // Update every second
+    }
+
+    /**
+     * Reset session timer (called when extension is deactivated or session ends).
+     */
+    public resetSessionTimer(): void {
+        this.sessionStartTime = Date.now();
+        this.metrics.sessionTime = 0;
+    }
+
+    /**
+     * Stop session timer (cleanup).
+     */
+    public stopSessionTimer(): void {
+        if (this.sessionTimerInterval) {
+            clearInterval(this.sessionTimerInterval);
+            this.sessionTimerInterval = undefined;
         }
     }
 }

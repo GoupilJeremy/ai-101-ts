@@ -153,7 +153,16 @@ function executeUpdateMetricsUI(metrics: any) {
             style: 'currency',
             currency: 'USD'
         }).format(metrics.cost);
-        metricsEl.innerText = `Tokens: ${metrics.tokens.toLocaleString()} | Cost: ${formattedCost} | Files: ${metrics.files}`;
+
+        // Team Mode: Show expanded metrics with session time
+        if (currentMode === 'team' && metrics.sessionTime !== undefined) {
+            const minutes = Math.floor(metrics.sessionTime / 60);
+            const seconds = metrics.sessionTime % 60;
+            metricsEl.innerText = `Tokens: ${metrics.tokens.toLocaleString()} | Cost: ${formattedCost} | Files: ${metrics.files} | Time: ${minutes}m ${seconds}s`;
+        } else {
+            // Normal mode: Standard metrics
+            metricsEl.innerText = `Tokens: ${metrics.tokens.toLocaleString()} | Cost: ${formattedCost} | Files: ${metrics.files}`;
+        }
     }
 }
 
@@ -178,6 +187,24 @@ function executeUpdateAgentHUD(agent: string, state: any) {
 
     agentEl.className = `agent-icon ${state.status} ${performanceMode ? 'low-fx' : ''}`;
 
+    // Update label text with descriptive state (Team Mode)
+    const labelEl = agentEl.querySelector('.agent-label-text') as HTMLElement;
+    if (labelEl) {
+        if (currentMode === 'team') {
+            // Team Mode: Show descriptive state text for team visibility
+            labelEl.textContent = getDescriptiveStateText(agent, state);
+            labelEl.style.display = 'block';
+        } else if (currentMode === 'learning' || currentVerbosity === 'high') {
+            // Learning Mode or high verbosity: Show agent name only
+            const labelMap: any = { context: 'Context', architect: 'Architect', coder: 'Coder', reviewer: 'Reviewer' };
+            labelEl.textContent = labelMap[agent] || agent;
+            labelEl.style.display = 'block';
+        } else {
+            // Expert/Focus/Performance modes: Hide labels
+            labelEl.style.display = 'none';
+        }
+    }
+
     const positions: any = {
         context: { top: 10, left: 10 },
         architect: { top: 10, left: 30 },
@@ -199,6 +226,45 @@ function executeUpdateAgentHUD(agent: string, state: any) {
     agentEl.style.left = `${positions[agent]?.left || 10}%`;
     agentEl.dataset.baseTop = targetTop.toString();
     applyRepulsionToAgent(agentEl as HTMLElement, lastCursor);
+}
+
+/**
+ * Get descriptive state text for Team Mode visibility.
+ * Shows what each agent is currently doing in human-readable format.
+ */
+function getDescriptiveStateText(agent: string, state: any): string {
+    const stateMessages: any = {
+        context: {
+            idle: 'Context: Ready',
+            thinking: 'Loading context files...',
+            working: 'Optimizing token budget...',
+            success: 'Context ready',
+            error: 'Context error'
+        },
+        architect: {
+            idle: 'Architect: Ready',
+            thinking: 'Analyzing project structure...',
+            working: 'Designing solution...',
+            success: 'Architecture complete',
+            error: 'Analysis error'
+        },
+        coder: {
+            idle: 'Coder: Ready',
+            thinking: 'Planning code generation...',
+            working: 'Generating code...',
+            success: 'Code ready for review',
+            error: 'Generation error'
+        },
+        reviewer: {
+            idle: 'Reviewer: Ready',
+            thinking: 'Analyzing code quality...',
+            working: 'Identifying risks...',
+            success: 'Review complete',
+            error: 'Review error'
+        }
+    };
+
+    return stateMessages[agent]?.[state.status] || `${agent}: ${state.status}`;
 }
 
 let currentViewport: any = null;
