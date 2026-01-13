@@ -1,6 +1,8 @@
 import { IAgent, AgentType, IAgentRequest, IAgentResponse, IAgentState, AgentStatus, IAlert } from '../shared/agent.interface.js';
 import { LLMProviderManager } from '../../llm/provider-manager.js';
 import { ExtensionStateManager } from '../../state/extension-state-manager.js';
+import { ModeManager } from '../../modes/mode-manager.js';
+import { AgentMode } from '../../modes/mode-types.js';
 import * as vscode from 'vscode';
 
 /**
@@ -70,11 +72,16 @@ Briefly explain your overall assessment.`;
                 const activeEditor = vscode.window.activeTextEditor;
                 const anchorLine = activeEditor?.selection.active.line;
 
+                let alertMessage = risks.substring(0, 200);
+                if (ModeManager.getInstance().getCurrentMode() === AgentMode.Learning) {
+                    alertMessage += '\n\n💡 Learn why this is a risk: https://owasp.org/www-project-top-ten/';
+                }
+
                 const alert: IAlert = {
                     id: `review-${Date.now()}`,
                     agent: this.name,
                     severity: risks.toLowerCase().includes('critical') || risks.toLowerCase().includes('security') ? 'urgent' : 'warning',
-                    message: risks.substring(0, 200),
+                    message: alertMessage,
                     anchorLine,
                     timestamp: Date.now()
                 };

@@ -102,7 +102,7 @@ development_status:
   # ============================================================
   epic-5: in-progress
   5-1-implement-mode-system-infrastructure: review
-  5-2-implement-learning-mode-with-pedagogical-explanations: backlog
+  5-2-implement-learning-mode-with-pedagogical-explanations: review
   5-3-implement-expert-mode-with-in-depth-technical-details: backlog
   5-4-implement-focus-dnd-mode-with-hidden-agents: backlog
   5-5-implement-team-mode-with-visible-labels-and-metrics: backlog

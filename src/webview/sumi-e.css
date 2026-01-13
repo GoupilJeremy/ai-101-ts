@@ -90,6 +90,12 @@
     white-space: normal;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     z-index: 20;
+    pointer-events: auto;
+}
+
+.alert-tooltip a {
+    color: #3498db;
+    text-decoration: underline;
 }
 
 .alert-urgent {

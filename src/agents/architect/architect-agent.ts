@@ -1,5 +1,7 @@
 import { IAgent, AgentType, IAgentRequest, IAgentResponse, IAgentState, AgentStatus } from '../shared/agent.interface.js';
 import { LLMProviderManager } from '../../llm/provider-manager.js';
+import { ModeManager } from '../../modes/mode-manager.js';
+import { AgentMode } from '../../modes/mode-types.js';
 
 /**
  * ArchitectAgent analyzes the project structure and context to identify patterns
@@ -43,15 +45,22 @@ export class ArchitectAgent implements IAgent {
             patterns.push('Custom Error Handling Pattern');
         }
 
-        const result = patterns.length > 0
+        let result = patterns.length > 0
             ? `Detected Patterns:\n- ${patterns.join('\n- ')}\n\nRecommendation: When generating code, follow these established project conventions to ensure consistency and maintainability.`
             : 'No clear architectural patterns detected in the current context. Applying generic clean code principles and TypeScript best practices.';
+
+        let reasoning = `Analyzed the provided context for common software patterns and project-specific conventions. Identified ${patterns.length} distinct patterns.`;
+
+        if (ModeManager.getInstance().getCurrentMode() === AgentMode.Learning) {
+            result += `\n\n🎓 LEARNING TIP: Software patterns like 'Singleton' or 'Adapter' help decouple your code and make it more testable. In this project, we use the singleton pattern for Managers to ensure a single source of truth for state.`;
+            reasoning = `[STUDENT FOCUS] ${reasoning} Added educational context about the identified patterns to help understanding of the 'Why' behind the project structure.`;
+        }
 
         this.updateState('success', 'Architecture analysis complete.');
 
         return {
             result: result,
-            reasoning: `Analyzed the provided context for common software patterns and project-specific conventions. Identified ${patterns.length} distinct patterns.`,
+            reasoning: reasoning,
             confidence: 0.9
         };
     }

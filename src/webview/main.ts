@@ -231,9 +231,15 @@ function executeRenderAlert(alert: any) {
     alertEl.className = `alert-component alert-${alert.severity}`;
     alertEl.dataset.anchorLine = alert.anchorLine?.toString() || '';
     const icons: any = { info: '💡', warning: '⚠️', critical: '🚨', urgent: '🔥' };
+
+    // Simple link detection
+    const messageWithLinks = alert.message
+        .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>')
+        .replace(/\n/g, '<br/>');
+
     alertEl.innerHTML = `
         <div class="alert-icon-ideogram">${icons[alert.severity] || '❗'}</div>
-        <div class="alert-tooltip">${alert.message}</div>
+        <div class="alert-tooltip">${messageWithLinks}</div>
     `;
     repositionAlerts();
 }
