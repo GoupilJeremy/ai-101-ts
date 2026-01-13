@@ -7,6 +7,10 @@ let lastTime = performance.now();
 let fps = 60;
 let performanceMode = false;
 
+// Mode tracking for condensed rendering
+let currentMode = 'learning';
+let currentVerbosity: 'low' | 'high' = 'high';
+
 function monitorFPS() {
     frameCount++;
     const now = performance.now();
@@ -84,6 +88,10 @@ function applyUpdate(update: any) {
 function applyModeUpdate(mode: string, config: any) {
     performanceMode = (mode === 'performance' || config.animationComplexity === 'none');
 
+    // Track current mode and verbosity for condensed rendering (Expert Mode)
+    currentMode = mode;
+    currentVerbosity = config.explanationVerbositiy || 'high';
+
     // Update all existing agents and alerts to reflect the new mode
     const agents = document.querySelectorAll('.agent-icon');
     agents.forEach((el: any) => {
@@ -95,7 +103,10 @@ function applyModeUpdate(mode: string, config: any) {
     if (hudContainer) {
         hudContainer.style.opacity = config.hudOpacity.toString();
         hudContainer.classList.toggle('focus-mode', mode === 'focus');
+        hudContainer.classList.toggle('expert-mode', mode === 'expert');
     }
+
+    console.log(`AI-101 Webview: Mode=${mode}, Verbosity=${currentVerbosity}, HUD Opacity=${config.hudOpacity}`);
 }
 
 // Listen for messages from the extension
@@ -232,14 +243,23 @@ function executeRenderAlert(alert: any) {
     alertEl.dataset.anchorLine = alert.anchorLine?.toString() || '';
     const icons: any = { info: '💡', warning: '⚠️', critical: '🚨', urgent: '🔥' };
 
-    // Simple link detection
-    const messageWithLinks = alert.message
-        .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>')
-        .replace(/\n/g, '<br/>');
+    // Expert Mode: Condensed rendering (signal > noise)
+    let messageToDisplay = alert.message;
+    if (currentVerbosity === 'low') {
+        // In Expert Mode, render links more compactly and keep message concise
+        messageToDisplay = messageToDisplay
+            .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">🔗</a>')
+            .replace(/\n/g, '<br/>');
+    } else {
+        // Normal mode: Full link display
+        messageToDisplay = messageToDisplay
+            .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>')
+            .replace(/\n/g, '<br/>');
+    }
 
     alertEl.innerHTML = `
         <div class="alert-icon-ideogram">${icons[alert.severity] || '❗'}</div>
-        <div class="alert-tooltip">${messageWithLinks}</div>
+        <div class="alert-tooltip">${messageToDisplay}</div>
     `;
     repositionAlerts();
 }

@@ -31,12 +31,28 @@ export class ReviewerAgent implements IAgent {
 
         this.updateState('thinking', 'Reviewing generated code for risks...');
 
-        const systemPrompt = `You are the Reviewer Agent for AI-101. 
+        const mode = ModeManager.getInstance().getCurrentMode();
+        let modeInstructions = '';
+        if (mode === AgentMode.Expert) {
+            modeInstructions = `
+[EXPERT MODE ACTIVE]
+Provide in-depth security and quality analysis for experienced developers. Keep it concise and signal-focused.
+
+Enhanced focus areas:
+- Reference specific OWASP Top 10 vulnerabilities when applicable (e.g., A01:2021 - Broken Access Control)
+- Explicitly enumerate edge cases with specific handling recommendations
+- Analyze time/space complexity implications of suggested fixes
+- Flag architectural anti-patterns and long-term maintainability concerns
+- Provide condensed, actionable insights - no hand-holding explanations`;
+        }
+
+        const systemPrompt = `You are the Reviewer Agent for AI-101.
 Your goal is to perform a rigorous security and quality review of the generated code.
 Focus on:
 1. Security Vulnerabilities (SQL injection, XSS, Command injection, hardcoded secrets).
 2. Edge cases (null/undefined, error handling, boundary conditions).
 3. Technical debt and performance issues.
+${modeInstructions}
 
 EXPECTED OUTPUT FORMAT:
 [STATUS]
@@ -73,8 +89,12 @@ Briefly explain your overall assessment.`;
                 const anchorLine = activeEditor?.selection.active.line;
 
                 let alertMessage = risks.substring(0, 200);
-                if (ModeManager.getInstance().getCurrentMode() === AgentMode.Learning) {
+                const currentMode = ModeManager.getInstance().getCurrentMode();
+                if (currentMode === AgentMode.Learning) {
                     alertMessage += '\n\n💡 Learn why this is a risk: https://owasp.org/www-project-top-ten/';
+                } else if (currentMode === AgentMode.Expert) {
+                    // Expert mode: condensed message, no educational links
+                    alertMessage = risks.substring(0, 150); // Shorter for experts
                 }
 
                 const alert: IAlert = {

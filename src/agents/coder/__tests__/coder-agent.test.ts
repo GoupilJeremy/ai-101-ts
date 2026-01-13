@@ -1,10 +1,15 @@
 import * as assert from 'assert';
 import { CoderAgent } from '../coder-agent.js';
 import { LLMProviderManager } from '../../../llm/provider-manager.js';
+import { ModeManager } from '../../../modes/mode-manager.js';
+import { AgentMode } from '../../../modes/mode-types.js';
 
 // Mock LLMProviderManager
 class MockLLMManager {
+    public lastPrompt: string = '';
+
     public async callLLM(agent: string, prompt: string) {
+        this.lastPrompt = prompt; // Store for verification
         return {
             text: '[REASONING]\nI am using a singleton.\n[CODE]\nexport class Test {}\n[ALTERNATIVES]\nUse a factory.',
             tokens: { prompt: 10, completion: 10, total: 20 },
@@ -44,6 +49,75 @@ suite('CoderAgent Test Suite', () => {
             assert.fail('Should have thrown error');
         } catch (error: any) {
             assert.ok(error.message.includes('not initialized'));
+        }
+    });
+
+    test('Expert Mode - Should include [TECH DEBT] and [COMPLEXITY] sections in prompt', async () => {
+        // Mock ModeManager to return Expert mode
+        const modeManager = ModeManager.getInstance();
+        const originalGetMode = modeManager.getCurrentMode;
+        modeManager.getCurrentMode = () => AgentMode.Expert;
+
+        try {
+            const mockLLMWithCapture = mockLLM as MockLLMManager;
+            await agent.execute({ prompt: 'Create an async function' });
+
+            // Verify that prompt includes Expert mode instructions
+            assert.ok(mockLLMWithCapture.lastPrompt.includes('[EXPERT MODE ACTIVE]'), 'Prompt should include [EXPERT MODE ACTIVE]');
+            assert.ok(mockLLMWithCapture.lastPrompt.includes('[TECH DEBT]'), 'Prompt should include [TECH DEBT] section');
+            assert.ok(mockLLMWithCapture.lastPrompt.includes('[COMPLEXITY]'), 'Prompt should include [COMPLEXITY] section');
+        } finally {
+            // Restore original method
+            modeManager.getCurrentMode = originalGetMode;
+        }
+    });
+
+    test('Expert Mode - Should request time/space complexity analysis', async () => {
+        const modeManager = ModeManager.getInstance();
+        const originalGetMode = modeManager.getCurrentMode;
+        modeManager.getCurrentMode = () => AgentMode.Expert;
+
+        try {
+            const mockLLMWithCapture = mockLLM as MockLLMManager;
+            await agent.execute({ prompt: 'Sort an array' });
+
+            // Verify complexity analysis is requested
+            assert.ok(mockLLMWithCapture.lastPrompt.includes('time') || mockLLMWithCapture.lastPrompt.includes('space') || mockLLMWithCapture.lastPrompt.includes('complexity'), 'Prompt should request complexity analysis');
+        } finally {
+            modeManager.getCurrentMode = originalGetMode;
+        }
+    });
+
+    test('Expert Mode - Should request trade-off analysis', async () => {
+        const modeManager = ModeManager.getInstance();
+        const originalGetMode = modeManager.getCurrentMode;
+        modeManager.getCurrentMode = () => AgentMode.Expert;
+
+        try {
+            const mockLLMWithCapture = mockLLM as MockLLMManager;
+            await agent.execute({ prompt: 'Design a cache' });
+
+            // Verify trade-off analysis is requested
+            assert.ok(mockLLMWithCapture.lastPrompt.includes('trade-off') || mockLLMWithCapture.lastPrompt.includes('tradeoff'), 'Prompt should request trade-off analysis');
+        } finally {
+            modeManager.getCurrentMode = originalGetMode;
+        }
+    });
+
+    test('Expert Mode - Should NOT include [PEDAGOGY] section', async () => {
+        const modeManager = ModeManager.getInstance();
+        const originalGetMode = modeManager.getCurrentMode;
+        modeManager.getCurrentMode = () => AgentMode.Expert;
+
+        try {
+            const mockLLMWithCapture = mockLLM as MockLLMManager;
+            await agent.execute({ prompt: 'Write a function' });
+
+            // Verify PEDAGOGY is NOT mentioned (experts don't need educational content)
+            assert.ok(!mockLLMWithCapture.lastPrompt.includes('[PEDAGOGY]'), 'Expert mode should not include [PEDAGOGY] section');
+            assert.ok(!mockLLMWithCapture.lastPrompt.includes('LEARNING MODE'), 'Expert mode should not include LEARNING MODE');
+        } finally {
+            modeManager.getCurrentMode = originalGetMode;
         }
     });
 });
