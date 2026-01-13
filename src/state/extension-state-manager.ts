@@ -44,11 +44,11 @@ export class ExtensionStateManager {
      * Returns a snapshot of all agent states.
      */
     public getAllAgentStates(): Record<AgentType, IAgentState> {
-        const snapshot: any = {};
+        const snapshot: Partial<Record<AgentType, IAgentState>> = {};
         this.agentStates.forEach((state, agent) => {
-            snapshot[agent] = state;
+            snapshot[agent] = { ...state };
         });
-        return snapshot;
+        return snapshot as Record<AgentType, IAgentState>;
     }
 
     private initializeDefaultStates(): void {
