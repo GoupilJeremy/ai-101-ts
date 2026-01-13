@@ -75,7 +75,7 @@ development_status:
   3-2-implement-agent-orchestrator-with-central-coordination-pattern: review
   3-3-implement-context-agent-for-file-loading-and-token-optimization: review
   3-4-implement-architect-agent-for-project-analysis: review
-  3-5-implement-coder-agent-for-code-generation: backlog
+  3-5-implement-coder-agent-for-code-generation: review
   3-6-implement-reviewer-agent-for-proactive-risk-identification: backlog
   3-7-implement-backend-state-manager-extensionstatemanager: backlog
   3-8-implement-postmessage-state-synchronization-to-webview: backlog
