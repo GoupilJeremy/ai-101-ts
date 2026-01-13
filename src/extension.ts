@@ -8,6 +8,7 @@ import { AI101WebviewProvider } from './webview/webview-provider.js';
 import { ErrorHandler } from './errors/error-handler.js';
 import { LLMProviderManager } from './llm/provider-manager.js';
 import { RateLimiter } from './llm/rate-limiter.js';
+import { VitalSignsBar } from './ui/vital-signs-bar.js';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -18,6 +19,9 @@ export function activate(context: vscode.ExtensionContext) {
 	// Initialize LLM Manager and Rate Limiter
 	LLMProviderManager.getInstance().initialize(context.globalStorageUri.fsPath);
 	RateLimiter.getInstance().reset();
+
+	// Initialize UI Components
+	context.subscriptions.push(VitalSignsBar.getInstance().getDisposable());
 
 	console.log('Congratulations, your extension "ai-101-ts" is now active!');
 

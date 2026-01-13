@@ -64,7 +64,7 @@ development_status:
   2-5-implement-hybrid-llm-cache-l1-memory-l2-file-system: review
   2-6-integrate-cache-with-provider-manager: review
   2-7-implement-rate-limiting-and-budget-enforcement: review
-  2-8-implement-real-time-cost-tracking-and-display: backlog
+  2-8-implement-real-time-cost-tracking-and-display: review
   epic-2-retrospective: optional
 
   # ============================================================

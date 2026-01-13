@@ -4,6 +4,7 @@ import { LLMProviderError } from '../errors/llm-provider-error.js';
 import { HybridLLMCache } from './cache.js';
 import { RateLimiter } from './rate-limiter.js';
 import { BudgetExceededError } from '../errors/budget-exceeded-error.js';
+import { VitalSignsBar } from '../ui/vital-signs-bar.js';
 
 /**
  * Supported agent types in the system.
@@ -129,6 +130,7 @@ export class LLMProviderManager {
         }
 
         RateLimiter.getInstance().recordUsage(response.tokens.total, response.cost);
+        VitalSignsBar.getInstance().update();
 
         return response;
     }
