@@ -15,7 +15,9 @@ export const SOLO_PRESET: IPreset = {
             mode: 'learning'
         },
         performance: {
-            maxTokens: 4096
+            maxTokens: 4096,
+            tokenBudget: 50000,
+            costBudget: 0.10
         }
     }
 };
@@ -29,7 +31,9 @@ export const TEAM_PRESET: IPreset = {
             mode: 'team'
         },
         performance: {
-            maxTokens: 8192
+            maxTokens: 8192,
+            tokenBudget: 100000,
+            costBudget: 0.50
         }
     }
 };
@@ -50,6 +54,11 @@ export const ENTERPRISE_PRESET: IPreset = {
         ui: {
             transparency: 'minimal',
             mode: 'focus'
+        },
+        performance: {
+            maxTokens: 16384,
+            tokenBudget: 500000,
+            costBudget: 2.00
         },
         telemetry: {
             enabled: true // Logging compliance

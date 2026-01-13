@@ -1,4 +1,4 @@
-import { AI101Error } from './ai101-error.js';
+import { AI101Error } from './configuration-error.js';
 
 /**
  * Error thrown when LLM budget (tokens or cost) is exceeded.

@@ -71,6 +71,8 @@ export class ConfigurationManager {
             },
             performance: {
                 maxTokens: config.get<number>('performance.maxTokens', 4096),
+                tokenBudget: config.get<number>('performance.tokenBudget', 50000), // Default session budget
+                costBudget: config.get<number>('performance.costBudget', 0.10),   // Default $0.10 session budget
             },
             telemetry: {
                 enabled: config.get<boolean>('telemetry.enabled', true),
@@ -105,6 +107,14 @@ export class ConfigurationManager {
 
         if (config.performance.maxTokens <= 0) {
             throw new ConfigurationError('Max tokens must be greater than 0');
+        }
+
+        if (config.performance.tokenBudget <= 0) {
+            throw new ConfigurationError('Token budget must be greater than 0');
+        }
+
+        if (config.performance.costBudget <= 0) {
+            throw new ConfigurationError('Cost budget must be greater than 0');
         }
     }
 }

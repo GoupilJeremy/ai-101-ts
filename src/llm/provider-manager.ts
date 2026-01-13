@@ -2,6 +2,8 @@ import { ILLMProvider, ILLMOptions, ILLMResponse } from './provider.interface.js
 import { ConfigurationManager } from '../config/configuration-manager.js';
 import { LLMProviderError } from '../errors/llm-provider-error.js';
 import { HybridLLMCache } from './cache.js';
+import { RateLimiter } from './rate-limiter.js';
+import { BudgetExceededError } from '../errors/budget-exceeded-error.js';
 
 /**
  * Supported agent types in the system.
@@ -78,7 +80,17 @@ export class LLMProviderManager {
             }
         }
 
-        // 2. Provider Selection
+        // 2. Budget Check (Pre-call)
+        try {
+            RateLimiter.getInstance().checkBudget();
+        } catch (error) {
+            if (error instanceof BudgetExceededError) {
+                throw error;
+            }
+            throw error;
+        }
+
+        // 3. Provider Selection
         const config = ConfigurationManager.getInstance().getSettings();
         const preferredProviderName = config.llm.agentProviders[agent] || config.llm.provider;
 
@@ -111,10 +123,12 @@ export class LLMProviderManager {
             }
         }
 
-        // 3. Store in Cache
+        // 4. Store in Cache and Record Usage
         if (this.cache && cacheKey) {
             await this.cache.set(cacheKey, agent, response);
         }
+
+        RateLimiter.getInstance().recordUsage(response.tokens.total, response.cost);
 
         return response;
     }

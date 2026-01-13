@@ -6,12 +6,18 @@ import * as vscode from 'vscode';
 // Your extension is activated the very first time the command is executed
 import { AI101WebviewProvider } from './webview/webview-provider.js';
 import { ErrorHandler } from './errors/error-handler.js';
+import { LLMProviderManager } from './llm/provider-manager.js';
+import { RateLimiter } from './llm/rate-limiter.js';
 
 export function activate(context: vscode.ExtensionContext) {
 
 	// Initialize Centralized Error Handler
 	ErrorHandler.initialize();
 	ErrorHandler.log('Extension "ai-101-ts" activation started.');
+
+	// Initialize LLM Manager and Rate Limiter
+	LLMProviderManager.getInstance().initialize(context.globalStorageUri.fsPath);
+	RateLimiter.getInstance().reset();
 
 	console.log('Congratulations, your extension "ai-101-ts" is now active!');
 
