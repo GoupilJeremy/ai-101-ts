@@ -86,7 +86,7 @@ development_status:
   # ============================================================
   # Epic 4: Transparent HUD & Visual System
   # ============================================================
-  epic-4: backlog
+  epic-4: review
   4-1-enhance-webview-with-transparency-and-hud-positioning: review
   4-2-implement-sumi-e-aesthetic-visual-language: review
   4-3-implement-vital-signs-bar-with-real-time-metrics: review
