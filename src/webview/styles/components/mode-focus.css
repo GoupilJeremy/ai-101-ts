@@ -1,0 +1,103 @@
+/**
+ * Focus Mode Styles
+ * Hide HUD elements with smooth GPU-accelerated transitions
+ */
+
+/* Main HUD container fade-out in Focus Mode */
+#hud-container[data-mode="focus"] .agent-icon,
+#hud-container.focus-mode .agent-icon {
+    will-change: opacity;
+    opacity: 0;
+    pointer-events: none; /* Allow clicks to pass through */
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Vital Signs Bar slide up and hide */
+#metrics[data-mode="focus"],
+#metrics.focus-mode {
+    will-change: transform, opacity;
+    transform: translate3d(0, -100%, 0); /* Slide up */
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Alert components remain visible if critical */
+.alert-component {
+    will-change: opacity;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hide non-critical alerts in Focus Mode */
+#hud-container[data-mode="focus"] .alert-component:not(.alert-urgent),
+#hud-container.focus-mode .alert-component:not(.alert-urgent) {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Toast notifications positioning (bottom-right) */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(30, 30, 30, 0.95);
+    border-left: 3px solid #e74c3c;
+    padding: 12px 16px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 300px;
+    will-change: transform, opacity;
+    animation: slideInFromRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10000;
+}
+
+.toast__icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.toast__message {
+    color: #ffffff;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.toast--critical {
+    border-left-color: #e74c3c;
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translate3d(100%, 0, 0);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
+
+/* Optional: Focus Mode status indicator */
+.focus-mode-indicator {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 12px;
+    background: rgba(100, 100, 100, 0.3);
+    border-radius: 12px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+#hud-container[data-mode="focus"] .focus-mode-indicator,
+#hud-container.focus-mode .focus-mode-indicator {
+    opacity: 1;
+}

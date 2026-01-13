@@ -9,6 +9,7 @@ import { ExtensionStateManager } from '../state/extension-state-manager.js';
 export class ModeManager {
     private static instance: ModeManager;
     private currentMode: AgentMode = AgentMode.Learning;
+    private previousMode: AgentMode | undefined; // Store mode to restore when exiting Focus
     private onModeChangedEmitter = new vscode.EventEmitter<{ previous: AgentMode, next: AgentMode }>();
     public readonly onModeChanged = this.onModeChangedEmitter.event;
 
@@ -30,6 +31,12 @@ export class ModeManager {
         if (this.currentMode === mode) return;
 
         const previousMode = this.currentMode;
+
+        // Store previous mode for Focus Mode restoration (only when entering Focus)
+        if (mode === AgentMode.Focus && this.currentMode !== AgentMode.Focus) {
+            this.previousMode = this.currentMode;
+        }
+
         this.currentMode = mode;
 
         // Persist to configuration
@@ -42,6 +49,16 @@ export class ModeManager {
         this.onModeChangedEmitter.fire({ previous: previousMode, next: mode });
 
         console.log(`AI-101: Mode switched from ${previousMode} to ${mode}`);
+    }
+
+    /**
+     * Restore the previous mode before entering Focus Mode.
+     * If no previous mode is stored, defaults to Learning mode.
+     */
+    public async restorePreviousMode(): Promise<void> {
+        const modeToRestore = this.previousMode || AgentMode.Learning;
+        this.previousMode = undefined; // Clear stored mode after restoration
+        await this.setMode(modeToRestore);
     }
 
     public getCurrentMode(): AgentMode {

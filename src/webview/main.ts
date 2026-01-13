@@ -104,6 +104,14 @@ function applyModeUpdate(mode: string, config: any) {
         hudContainer.style.opacity = config.hudOpacity.toString();
         hudContainer.classList.toggle('focus-mode', mode === 'focus');
         hudContainer.classList.toggle('expert-mode', mode === 'expert');
+        // Set data-mode attribute for CSS selectors
+        hudContainer.setAttribute('data-mode', mode);
+    }
+
+    // Also set data-mode on metrics (Vital Signs Bar) for auto-hide
+    const metricsEl = document.getElementById('metrics');
+    if (metricsEl) {
+        metricsEl.setAttribute('data-mode', mode);
     }
 
     console.log(`AI-101 Webview: Mode=${mode}, Verbosity=${currentVerbosity}, HUD Opacity=${config.hudOpacity}`);
@@ -229,6 +237,20 @@ function repositionAlerts() {
 }
 
 function executeRenderAlert(alert: any) {
+    const icons: any = { info: '💡', warning: '⚠️', critical: '🚨', urgent: '🔥' };
+
+    // Focus Mode: Show only critical/urgent alerts as toast notifications
+    if (currentMode === 'focus') {
+        if (alert.severity !== 'critical' && alert.severity !== 'urgent') {
+            return; // Suppress non-critical alerts in Focus Mode
+        }
+
+        // Render as toast notification (bottom-right)
+        showToastNotification(alert.message, icons[alert.severity] || '🚨');
+        return;
+    }
+
+    // Normal/Expert Mode: Render as standard alert
     const hud = document.getElementById('agent-hud');
     if (!hud) return;
 
@@ -241,7 +263,6 @@ function executeRenderAlert(alert: any) {
 
     alertEl.className = `alert-component alert-${alert.severity}`;
     alertEl.dataset.anchorLine = alert.anchorLine?.toString() || '';
-    const icons: any = { info: '💡', warning: '⚠️', critical: '🚨', urgent: '🔥' };
 
     // Expert Mode: Condensed rendering (signal > noise)
     let messageToDisplay = alert.message;
@@ -262,6 +283,26 @@ function executeRenderAlert(alert: any) {
         <div class="alert-tooltip">${messageToDisplay}</div>
     `;
     repositionAlerts();
+}
+
+/**
+ * Show a toast notification (used in Focus Mode for critical alerts)
+ */
+function showToastNotification(message: string, icon: string = '🚨') {
+    const toast = document.createElement('div');
+    toast.className = 'toast toast--critical';
+    toast.innerHTML = `
+        <div class="toast__icon">${icon}</div>
+        <div class="toast__message">${message}</div>
+    `;
+
+    document.body.appendChild(toast);
+
+    // Auto-dismiss after 5 seconds
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
 }
 
 function applyRepulsionToAgent(el: HTMLElement, cursor: any) {

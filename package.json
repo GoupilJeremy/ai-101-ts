@@ -32,6 +32,19 @@
         "command": "ai-101-ts.importConfig",
         "title": "Import Configuration",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.toggleFocusMode",
+        "title": "Toggle Focus Mode",
+        "category": "AI 101"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "ai-101-ts.toggleFocusMode",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f",
+        "when": "editorTextFocus"
       }
     ],
     "configuration": {
