@@ -1,0 +1,69 @@
+/* Sumi-e Aesthetic Design System */
+:root {
+    --sumi-ink: #1a1a1a;
+    --washi-white: rgba(255, 255, 255, 0.9);
+    --sumi-accent: #c0392b;
+    /* Traditional vermilion */
+    --brush-font: 'Outfit', 'Inter', sans-serif;
+}
+
+.sumi-container {
+    padding: 20px;
+    background: transparent;
+}
+
+/* Agent Icon with Brush Stroke Effect */
+.agent-brush-container {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brush-circle {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--sumi-ink);
+    border-radius: 50%;
+    opacity: 0.2;
+    mask-image: linear-gradient(to bottom, black, transparent);
+    /* In a real scenario, this would use a brush SVG mask */
+}
+
+.agent-icon-sumi {
+    font-size: 28px;
+    color: var(--sumi-ink);
+    z-index: 2;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Minimalist typography */
+.sumi-text {
+    font-family: var(--brush-font);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    color: var(--sumi-ink);
+}
+
+/* Accent for alerts */
+.alert-urgent {
+    color: var(--sumi-accent);
+    border-left: 3px solid var(--sumi-accent);
+    padding-left: 10px;
+    margin: 10px 0;
+}
+
+/* Ma - Space prioritization */
+.ma-space {
+    margin: 40px 0;
+}
+
+/* Subtle hand-drawn imperfection */
+.hand-drawn {
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    border: 1px solid var(--sumi-ink);
+    opacity: 0.4;
+}

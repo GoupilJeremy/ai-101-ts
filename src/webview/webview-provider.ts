@@ -34,6 +34,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
     private _getHtmlForWebview(webview: vscode.Webview) {
         const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'webview.js'));
         const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'index.css'));
+        const sumiUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'sumi-e.css'));
         const htmlPath = vscode.Uri.joinPath(this._extensionUri, 'dist', 'index.html');
 
         let htmlContent = '';
@@ -49,6 +50,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         return htmlContent
             .replace(/\$\{scriptUri\}/g, scriptUri.toString())
             .replace(/\$\{styleUri\}/g, styleUri.toString())
+            .replace(/\$\{sumiUri\}/g, sumiUri.toString())
             .replace(/\$\{nonce\}/g, nonce)
             .replace(/\$\{webview.cspSource\}/g, webview.cspSource);
     }
