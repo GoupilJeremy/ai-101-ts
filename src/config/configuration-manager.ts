@@ -17,6 +17,8 @@ export interface IConfiguration {
     };
     performance: {
         maxTokens: number;
+        tokenBudget: number;
+        costBudget: number;
     };
     telemetry: {
         enabled: boolean;

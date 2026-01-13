@@ -1,6 +1,7 @@
 import { ILLMProvider, ILLMOptions, ILLMResponse } from './provider.interface.js';
 import { ConfigurationManager } from '../config/configuration-manager.js';
 import { LLMProviderError } from '../errors/llm-provider-error.js';
+import { HybridLLMCache } from './cache.js';
 
 /**
  * Supported agent types in the system.
@@ -13,6 +14,7 @@ export type AgentType = 'architect' | 'coder' | 'reviewer' | 'context';
 export class LLMProviderManager {
     private static instance: LLMProviderManager;
     private providers: Map<string, ILLMProvider> = new Map();
+    private cache: HybridLLMCache | undefined;
 
     private constructor() { }
 
@@ -24,6 +26,14 @@ export class LLMProviderManager {
             LLMProviderManager.instance = new LLMProviderManager();
         }
         return LLMProviderManager.instance;
+    }
+
+    /**
+     * Initializes the manager with a storage path for the cache.
+     * @param storagePath Absolute path where cache data should be stored.
+     */
+    public initialize(storagePath: string): void {
+        this.cache = new HybridLLMCache(storagePath);
     }
 
     /**
@@ -45,12 +55,30 @@ export class LLMProviderManager {
 
     /**
      * Executes an LLM call using the preferred provider for the given agent.
-     * Implements automatic fallback logic.
+     * Implements automatic fallback logic and caching.
      * @param agent The agent type triggering the call.
      * @param prompt The input prompt.
      * @param options Request options.
      */
     public async callLLM(agent: AgentType, prompt: string, options: ILLMOptions = {}): Promise<ILLMResponse> {
+        // 1. Cache Check
+        let cacheKey: string | undefined;
+        if (this.cache) {
+            // Include model and key options in cache key generation for uniqueness
+            const context = JSON.stringify({
+                model: options.model,
+                temperature: options.temperature,
+                maxTokens: options.maxTokens
+            });
+            cacheKey = this.cache.generateKey(agent, prompt, context);
+            const cachedResponse = await this.cache.get(cacheKey);
+            if (cachedResponse) {
+                console.log(`Cache hit for agent '${agent}'`);
+                return cachedResponse;
+            }
+        }
+
+        // 2. Provider Selection
         const config = ConfigurationManager.getInstance().getSettings();
         const preferredProviderName = config.llm.agentProviders[agent] || config.llm.provider;
 
@@ -62,20 +90,33 @@ export class LLMProviderManager {
         // Check if primary is available
         if (!(await provider.isAvailable())) {
             console.warn(`Primary provider '${preferredProviderName}' is not available, attempting fallback...`);
-            return this.callWithFallback(agent, prompt, options, [preferredProviderName]);
+            const fallbackResponse = await this.callWithFallback(agent, prompt, options, [preferredProviderName]);
+            if (this.cache && cacheKey) {
+                await this.cache.set(cacheKey, agent, fallbackResponse);
+            }
+            return fallbackResponse;
         }
 
+        let response: ILLMResponse;
         try {
-            return await provider.generateCompletion(prompt, options);
+            response = await provider.generateCompletion(prompt, options);
         } catch (error: any) {
             // Check if it's a transient error that warrants a fallback
             if (error instanceof LLMProviderError && error.isTransient) {
                 console.warn(`Primary provider '${preferredProviderName}' failed with transient error: ${error.message}. Attempting fallback...`);
-                return this.callWithFallback(agent, prompt, options, [preferredProviderName]);
+                response = await this.callWithFallback(agent, prompt, options, [preferredProviderName]);
+            } else {
+                // Non-transient errors (like Auth failures or invalid models) should bubble up
+                throw error;
             }
-            // Non-transient errors (like Auth failures or invalid models) should bubble up
-            throw error;
         }
+
+        // 3. Store in Cache
+        if (this.cache && cacheKey) {
+            await this.cache.set(cacheKey, agent, response);
+        }
+
+        return response;
     }
 
     /**

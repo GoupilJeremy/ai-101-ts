@@ -3,6 +3,9 @@ import { LLMProviderManager, AgentType } from '../provider-manager.js';
 import { ILLMProvider, ILLMOptions, ILLMResponse, IModelInfo } from '../provider.interface.js';
 import { ConfigurationManager } from '../../config/configuration-manager.js';
 import { LLMProviderError } from '../../errors/llm-provider-error.js';
+import * as os from 'os';
+import * as fs from 'fs';
+import * as path from 'path';
 
 // Mock Provider
 class MockProvider implements ILLMProvider {
@@ -48,10 +51,17 @@ class MockConfigManager {
 suite('LLMProviderManager Test Suite', () => {
     let manager: LLMProviderManager;
 
+    let tempDir: string;
+
     setup(() => {
         // Reset singleton for tests if possible, or just clear providers
         manager = LLMProviderManager.getInstance();
         (manager as any).providers.clear();
+
+        // Initialize cache for manager
+        tempDir = path.join(os.tmpdir(), `ai101-manager-test-${Date.now()}`);
+        if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
+        manager.initialize(tempDir);
 
         // Default settings
         MockConfigManager.settings = {
@@ -65,6 +75,12 @@ suite('LLMProviderManager Test Suite', () => {
                 }
             }
         };
+    });
+
+    teardown(() => {
+        if (fs.existsSync(tempDir)) {
+            fs.rmSync(tempDir, { recursive: true, force: true });
+        }
     });
 
     test('Registry should store and retrieve providers', () => {
@@ -127,5 +143,35 @@ suite('LLMProviderManager Test Suite', () => {
             assert.ok(error instanceof LLMProviderError);
             assert.strictEqual(error.code, 'ALL_PROVIDERS_FAILED');
         }
+    });
+
+    test('callLLM should return cached response on hit', async () => {
+        let callCount = 0;
+        const provider: ILLMProvider = {
+            name: 'cached-provider',
+            generateCompletion: async () => {
+                callCount++;
+                return {
+                    text: 'Original Response',
+                    tokens: { prompt: 10, completion: 10, total: 20 },
+                    model: 'test', finishReason: 'stop', cost: 0.01
+                };
+            },
+            estimateTokens: async () => 0,
+            getModelInfo: () => ({ id: 'test', name: 'test', contextWindow: 4096 }),
+            isAvailable: async () => true
+        };
+
+        manager.registerProvider('openai', provider);
+
+        // First call - Miss
+        const resp1 = await manager.callLLM('coder', 'Cache me');
+        assert.strictEqual(resp1.text, 'Original Response');
+        assert.strictEqual(callCount, 1);
+
+        // Second call - Hit
+        const resp2 = await manager.callLLM('coder', 'Cache me');
+        assert.strictEqual(resp2.text, 'Original Response');
+        assert.strictEqual(callCount, 1); // Should not have called provider again
     });
 });
