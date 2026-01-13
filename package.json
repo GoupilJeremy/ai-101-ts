@@ -21,6 +21,16 @@
         "command": "ai-101-ts.applyPreset",
         "title": "Apply Configuration Preset",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.exportConfig",
+        "title": "Export Configuration",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.importConfig",
+        "title": "Import Configuration",
+        "category": "AI 101"
       }
     ],
     "configuration": {
