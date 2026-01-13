@@ -28,18 +28,21 @@ const esbuildProblemMatcherPlugin = {
 /**
  * @type {import('esbuild').Plugin}
  */
-const copyHtmlPlugin = {
-	name: 'copy-html',
+const copyAssetsPlugin = {
+	name: 'copy-assets',
 	setup(build) {
 		build.onEnd(() => {
 			try {
-				fs.copyFileSync(
-					path.join(__dirname, 'src/webview/index.html'),
-					path.join(__dirname, 'dist/index.html')
-				);
-				console.log('[build] copied index.html to dist/');
+				const assets = ['index.html', 'index.css'];
+				assets.forEach(asset => {
+					fs.copyFileSync(
+						path.join(__dirname, 'src/webview', asset),
+						path.join(__dirname, 'dist', asset)
+					);
+				});
+				console.log('[build] copied assets to dist/');
 			} catch (e) {
-				console.error('[build] failed to copy index.html', e);
+				console.error('[build] failed to copy assets', e);
 			}
 		});
 	}
@@ -78,7 +81,7 @@ async function main() {
 		logLevel: 'silent',
 		plugins: [
 			esbuildProblemMatcherPlugin,
-			copyHtmlPlugin
+			copyAssetsPlugin
 		],
 	});
 

@@ -1,0 +1,71 @@
+:root {
+    --hud-bg-opacity: 0.15;
+    --hud-accent: #ffffff;
+    --hud-text: rgba(255, 255, 255, 0.85);
+}
+
+body {
+    background-color: transparent !important;
+    color: var(--hud-text);
+    font-family: var(--vscode-font-family, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    user-select: none;
+    pointer-events: none; /* Let clicks pass through by default */
+}
+
+#hud-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#vital-signs-bar {
+    height: 24px;
+    background-color: rgba(0, 0, 0, var(--hud-bg-opacity));
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 11px;
+    pointer-events: auto; /* Buttons/text are interactable */
+    backdrop-filter: blur(2px);
+}
+
+#agent-hud {
+    flex-grow: 1;
+    position: relative;
+    margin-top: 20px;
+}
+
+.agent-icon {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    pointer-events: auto;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.agent-icon.thinking {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+/* Sumi-e brush effect placeholders */
+.brush-stroke {
+    mask-image: url('brush.svg'); /* Will be added later */
+}

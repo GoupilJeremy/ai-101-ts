@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
-    <title>AI 101</title>
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">
+    <link rel="stylesheet" href="${styleUri}">
+    <title>AI 101 HUD</title>
 </head>
+
 <body>
-    <div id="root">
-        <h1>AI 101 HUD</h1>
+    <div id="hud-container">
+        <div id="vital-signs-bar">
+            <span id="metrics">Tokens: 0 | Cost: $0.00 | Files: 0</span>
+        </div>
+        <div id="agent-hud">
+            <!-- Agents will be injected here -->
+        </div>
     </div>
     <script nonce="${nonce}" src="${scriptUri}"></script>
 </body>
+
 </html>

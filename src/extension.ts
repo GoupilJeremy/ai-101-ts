@@ -5,6 +5,7 @@ import * as vscode from 'vscode';
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 import { AI101WebviewProvider } from './webview/webview-provider.js';
+import { WebviewManager } from './ui/webview-manager.js';
 import { ErrorHandler } from './errors/error-handler.js';
 import { LLMProviderManager } from './llm/provider-manager.js';
 import { RateLimiter } from './llm/rate-limiter.js';
@@ -22,14 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Initialize UI Components
 	context.subscriptions.push(VitalSignsBar.getInstance().getDisposable());
-
-	console.log('Congratulations, your extension "ai-101-ts" is now active!');
-
-	const provider = new AI101WebviewProvider(context.extensionUri);
-
-	context.subscriptions.push(
-		vscode.window.registerWebviewViewProvider(AI101WebviewProvider.viewType, provider)
-	);
+	WebviewManager.getInstance().initialize(context);
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
