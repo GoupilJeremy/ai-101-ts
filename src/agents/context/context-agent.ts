@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { IAgent, AgentType, IAgentRequest, IAgentResponse, IAgentState, AgentStatus } from '../shared/agent.interface.js';
 import { LLMProviderManager } from '../../llm/provider-manager.js';
 import { ErrorHandler } from '../../errors/error-handler.js';
+import { MetricsProvider } from '../../ui/metrics-provider.js';
 
 /**
  * ContextAgent is responsible for loading relevant project files and optimizing context
@@ -54,6 +55,11 @@ export class ContextAgent implements IAgent {
             // Token Optimization
             const optimizedContext = await this.optimizeTokens(contextContent);
 
+            // Report metrics
+            const tokens = await this.estimateTokens(optimizedContext);
+            MetricsProvider.getInstance().updateTokens(tokens);
+            MetricsProvider.getInstance().updateFiles(this.loadedFiles.length);
+
             this.updateState('success', `Loaded ${this.loadedFiles.length} files.`);
 
             return {
@@ -88,23 +94,21 @@ export class ContextAgent implements IAgent {
         // In a real scenario, we'd also notify the state manager here if not handled by orchestrator
     }
 
-    private async optimizeTokens(content: string): Promise<string> {
-        // For now, a simple truncation if too long. 
-        // In Story 6.2 we will implement advanced optimization.
-        const maxContextTokens = 10000; // Placeholder limit
-
-        let tokens: number;
+    private async estimateTokens(content: string): Promise<number> {
         try {
             const encoding = await this.getEncoding();
-            tokens = encoding.encode(content).length;
+            return encoding.encode(content).length;
         } catch (e) {
-            // Fallback to char approximation if tiktoken fails
-            tokens = content.length / 4;
+            return Math.ceil(content.length / 4);
         }
+    }
+
+    private async optimizeTokens(content: string): Promise<string> {
+        const maxContextTokens = 10000;
+        const tokens = await this.estimateTokens(content);
 
         if (tokens > maxContextTokens) {
             ErrorHandler.log(`Context exceeds limit (${tokens} tokens). Truncating...`, 'WARNING');
-            // Hard truncation for now
             return content.substring(0, maxContextTokens * 4);
         }
 

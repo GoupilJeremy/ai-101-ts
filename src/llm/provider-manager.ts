@@ -5,6 +5,7 @@ import { HybridLLMCache } from './cache.js';
 import { RateLimiter } from './rate-limiter.js';
 import { BudgetExceededError } from '../errors/budget-exceeded-error.js';
 import { VitalSignsBar } from '../ui/vital-signs-bar.js';
+import { MetricsProvider } from '../ui/metrics-provider.js';
 
 /**
  * Supported agent types in the system.
@@ -131,6 +132,7 @@ export class LLMProviderManager {
 
         RateLimiter.getInstance().recordUsage(response.tokens.total, response.cost);
         VitalSignsBar.getInstance().update();
+        MetricsProvider.getInstance().sync();
 
         return response;
     }
@@ -157,7 +159,13 @@ export class LLMProviderManager {
 
             try {
                 console.log(`Attempting fallback call to '${providerName}' for agent '${agent}'`);
-                return await provider.generateCompletion(prompt, options);
+                const response = await provider.generateCompletion(prompt, options);
+
+                RateLimiter.getInstance().recordUsage(response.tokens.total, response.cost);
+                VitalSignsBar.getInstance().update();
+                MetricsProvider.getInstance().sync();
+
+                return response;
             } catch (error: any) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
                 errors.push({ provider: providerName, error: errorMessage });

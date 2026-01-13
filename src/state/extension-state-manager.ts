@@ -1,5 +1,11 @@
 import { AgentType, IAgentState, AgentStatus } from '../agents/shared/agent.interface.js';
 
+export interface IMetricsState {
+    tokens: number;
+    files: number;
+    cost: number;
+}
+
 /**
  * Manages the state of all AI agents in the extension.
  * Serves as the single source of truth for agent activity.
@@ -7,6 +13,7 @@ import { AgentType, IAgentState, AgentStatus } from '../agents/shared/agent.inte
 export class ExtensionStateManager {
     private static instance: ExtensionStateManager;
     private agentStates: Map<AgentType, IAgentState> = new Map();
+    private metrics: IMetricsState = { tokens: 0, files: 0, cost: 0 };
     private webview: { postMessage: (message: any) => Thenable<boolean> } | undefined;
 
     private constructor() {
@@ -32,7 +39,21 @@ export class ExtensionStateManager {
         if (this.webview) {
             this.webview.postMessage({
                 type: 'toWebview:fullStateUpdate',
-                states: this.getAllAgentStates()
+                states: this.getAllAgentStates(),
+                metrics: this.metrics
+            });
+        }
+    }
+
+    /**
+     * Updates the global metrics and notifies the webview.
+     */
+    public updateMetrics(metrics: IMetricsState): void {
+        this.metrics = { ...metrics };
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:metricsUpdate',
+                metrics: this.metrics
             });
         }
     }
