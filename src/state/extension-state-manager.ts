@@ -7,6 +7,7 @@ import { AgentType, IAgentState, AgentStatus } from '../agents/shared/agent.inte
 export class ExtensionStateManager {
     private static instance: ExtensionStateManager;
     private agentStates: Map<AgentType, IAgentState> = new Map();
+    private webview: { postMessage: (message: any) => Thenable<boolean> } | undefined;
 
     private constructor() {
         this.initializeDefaultStates();
@@ -17,6 +18,23 @@ export class ExtensionStateManager {
             ExtensionStateManager.instance = new ExtensionStateManager();
         }
         return ExtensionStateManager.instance;
+    }
+    /**
+     * Registers a webview for state synchronization.
+     * Automatically sends a full state snapshot upon registration.
+     */
+    public setWebview(webview: { postMessage: (message: any) => Thenable<boolean> }): void {
+        this.webview = webview;
+        this.syncFullState();
+    }
+
+    private syncFullState(): void {
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:fullStateUpdate',
+                states: this.getAllAgentStates()
+            });
+        }
     }
 
     /**
@@ -63,10 +81,12 @@ export class ExtensionStateManager {
     }
 
     private notifyStateUpdate(agent: AgentType, state: IAgentState): void {
-        // This will be implemented in Story 3.8 for webview sync
-        console.log(`[ExtensionStateManager] State update for ${agent}: ${state.status} (${state.currentTask || 'no task'})`);
-
-        // Placeholder for postMessage to webview
-        // if (this.webview) { this.webview.postMessage({ type: 'toWebview:agentStateUpdate', agent, ...state }); }
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:agentStateUpdate',
+                agent,
+                state
+            });
+        }
     }
 }

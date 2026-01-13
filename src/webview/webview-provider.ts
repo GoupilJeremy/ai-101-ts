@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import { ExtensionStateManager } from '../state/extension-state-manager.js';
 
 export class AI101WebviewProvider implements vscode.WebviewViewProvider {
     public static readonly viewType = 'ai101.webview';
@@ -25,6 +26,9 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         };
 
         webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+
+        // Register for state sync
+        ExtensionStateManager.getInstance().setWebview(webviewView.webview);
     }
 
     private _getHtmlForWebview(webview: vscode.Webview) {

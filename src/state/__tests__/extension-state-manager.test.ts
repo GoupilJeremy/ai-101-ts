@@ -31,4 +31,25 @@ suite('ExtensionStateManager Test Suite', () => {
         const statesAfter = stateManager.getAllAgentStates();
         assert.notStrictEqual(statesAfter.coder.status, 'alert');
     });
+
+    test('Should send postMessage when state updates', async () => {
+        let lastMessage: any;
+        const mockWebview = {
+            postMessage: async (msg: any) => {
+                lastMessage = msg;
+                return true;
+            }
+        };
+
+        stateManager.setWebview(mockWebview as any);
+
+        // Check full state sync upon registration
+        assert.strictEqual(lastMessage.type, 'toWebview:fullStateUpdate');
+
+        // Check incremental update
+        stateManager.updateAgentState('context', 'working', 'Loading files');
+        assert.strictEqual(lastMessage.type, 'toWebview:agentStateUpdate');
+        assert.strictEqual(lastMessage.agent, 'context');
+        assert.strictEqual(lastMessage.state.status, 'working');
+    });
 });
