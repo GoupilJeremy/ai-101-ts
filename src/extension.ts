@@ -10,6 +10,7 @@ import { ErrorHandler } from './errors/error-handler.js';
 import { LLMProviderManager } from './llm/provider-manager.js';
 import { RateLimiter } from './llm/rate-limiter.js';
 import { VitalSignsBar } from './ui/vital-signs-bar.js';
+import { SpatialManager } from './ui/spatial-manager.js';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -23,6 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Initialize UI Components
 	context.subscriptions.push(VitalSignsBar.getInstance().getDisposable());
+	context.subscriptions.push(SpatialManager.getInstance());
 	WebviewManager.getInstance().initialize(context);
 
 	// The command has been defined in the package.json file

@@ -13,6 +13,9 @@ window.addEventListener('message', event => {
             console.log('Metrics update:', message.metrics);
             updateMetricsUI(message.metrics);
             break;
+        case 'toWebview:cursorUpdate':
+            handleCursorRepulsion(message.cursor);
+            break;
         case 'toWebview:fullStateUpdate':
             console.log('Full agent state snapshot received:', message.states);
             Object.entries(message.states).forEach(([agent, state]: any) => {
@@ -66,5 +69,29 @@ function updateAgentHUD(agent: string, state: any) {
     if (pos) {
         agentEl.style.top = pos.top;
         agentEl.style.left = pos.left;
+        agentEl.dataset.baseTop = pos.top;
+        agentEl.dataset.baseLeft = pos.left;
     }
+}
+
+function handleCursorRepulsion(cursor: any) {
+    const agents = document.querySelectorAll('.agent-icon');
+    const threshold = 0.15; // 15% distance threshold
+
+    agents.forEach((el: any) => {
+        const baseTop = parseFloat(el.dataset.baseTop || '20');
+        const baseLeft = parseFloat(el.dataset.baseLeft || '10');
+
+        // Simple 1D vertical repulsion for now since we only have line data faithfully
+        const dist = Math.abs(baseTop - (cursor.relativeY * 100));
+
+        if (dist < 15) { // If within 15% of cursor
+            const offset = (15 - dist) * (baseTop > cursor.relativeY * 100 ? 1 : -1);
+            el.style.transform = `translateY(${offset}px)`;
+            el.style.opacity = '0.3';
+        } else {
+            el.style.transform = `translateY(0)`;
+            el.style.opacity = '1';
+        }
+    });
 }

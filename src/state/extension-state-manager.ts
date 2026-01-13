@@ -59,6 +59,18 @@ export class ExtensionStateManager {
     }
 
     /**
+     * Notifies the webview about raw cursor movements for anti-collision.
+     */
+    public notifyCursorUpdate(update: any): void {
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:cursorUpdate',
+                cursor: update
+            });
+        }
+    }
+
+    /**
      * Updates the status and current task of a specific agent.
      */
     public updateAgentState(agent: AgentType, status: AgentStatus, currentTask?: string): void {
