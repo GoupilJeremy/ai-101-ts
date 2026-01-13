@@ -9,7 +9,18 @@ export type AgentType = 'architect' | 'coder' | 'reviewer' | 'context';
 /**
  * Current status of an agent.
  */
-export type AgentStatus = 'idle' | 'thinking' | 'working' | 'alert' | 'success';
+export type AgentStatus = 'idle' | 'thinking' | 'working' | 'success' | 'alert' | 'error';
+
+export type AlertSeverity = 'info' | 'warning' | 'critical' | 'urgent';
+
+export interface IAlert {
+    id: string;
+    agent: AgentType;
+    severity: AlertSeverity;
+    message: string;
+    anchorLine?: number;
+    timestamp: number;
+}
 
 /**
  * Current state of an agent for UI synchronization.

@@ -1,4 +1,4 @@
-import { AgentType, IAgentState, AgentStatus } from '../agents/shared/agent.interface.js';
+import { AgentType, IAgentState, AgentStatus, IAlert } from '../agents/shared/agent.interface.js';
 
 export interface IMetricsState {
     tokens: number;
@@ -14,6 +14,7 @@ export class ExtensionStateManager {
     private static instance: ExtensionStateManager;
     private agentStates: Map<AgentType, IAgentState> = new Map();
     private metrics: IMetricsState = { tokens: 0, files: 0, cost: 0 };
+    private alerts: IAlert[] = [];
     private webview: { postMessage: (message: any) => Thenable<boolean> } | undefined;
 
     private constructor() {
@@ -40,7 +41,33 @@ export class ExtensionStateManager {
             this.webview.postMessage({
                 type: 'toWebview:fullStateUpdate',
                 states: this.getAllAgentStates(),
-                metrics: this.metrics
+                metrics: this.metrics,
+                alerts: this.alerts
+            });
+        }
+    }
+
+    /**
+     * Adds an alert and notifies the webview.
+     */
+    public addAlert(alert: IAlert): void {
+        this.alerts.push(alert);
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:newAlert',
+                alert
+            });
+        }
+    }
+
+    /**
+     * Clears all alerts.
+     */
+    public clearAlerts(): void {
+        this.alerts = [];
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:clearAlerts'
             });
         }
     }

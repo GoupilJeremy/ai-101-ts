@@ -1,28 +1,55 @@
 // Webview Entry Point
 console.log('Webview loaded');
 
+// Performance Monitoring
+let frameCount = 0;
+let lastTime = performance.now();
+let fps = 60;
+let performanceMode = false;
+
+function monitorFPS() {
+    frameCount++;
+    const now = performance.now();
+    if (now - lastTime >= 1000) {
+        fps = frameCount;
+        frameCount = 0;
+        lastTime = now;
+        if (fps < 30 && !performanceMode) {
+            console.warn(`Low FPS detected: ${fps}. Recommendation: Enable Performance Mode.`);
+        }
+    }
+    requestAnimationFrame(monitorFPS);
+}
+monitorFPS();
+
 // Listen for messages from the extension
 window.addEventListener('message', event => {
     const message = event.data;
     switch (message.type) {
         case 'toWebview:agentStateUpdate':
-            console.log(`Agent ${message.agent} state update:`, message.state);
             updateAgentHUD(message.agent, message.state);
             break;
         case 'toWebview:metricsUpdate':
-            console.log('Metrics update:', message.metrics);
             updateMetricsUI(message.metrics);
             break;
         case 'toWebview:cursorUpdate':
             handleCursorUpdate(message.cursor);
             break;
+        case 'toWebview:newAlert':
+            renderAlert(message.alert);
+            break;
+        case 'toWebview:clearAlerts':
+            document.querySelectorAll('.alert-component').forEach(el => el.remove());
+            break;
         case 'toWebview:fullStateUpdate':
-            console.log('Full agent state snapshot received:', message.states);
             Object.entries(message.states).forEach(([agent, state]: any) => {
                 updateAgentHUD(agent, state);
             });
             if (message.metrics) {
                 updateMetricsUI(message.metrics);
+            }
+            if (message.alerts) {
+                message.alerts.forEach((alert: any) => renderAlert(alert));
             }
             break;
     }
@@ -35,7 +62,6 @@ function updateMetricsUI(metrics: any) {
             style: 'currency',
             currency: 'USD'
         }).format(metrics.cost);
-
         metricsEl.innerText = `Tokens: ${metrics.tokens.toLocaleString()} | Cost: ${formattedCost} | Files: ${metrics.files}`;
     }
 }
@@ -49,16 +75,13 @@ function updateAgentHUD(agent: string, state: any) {
         agentEl = document.createElement('div');
         agentEl.id = `agent-${agent}`;
         agentEl.className = 'agent-icon';
-        // Simplified icon map
         const icons: any = { context: '🔍', architect: '🏗️', coder: '💻', reviewer: '🛡️' };
         agentEl.innerText = icons[agent] || '🤖';
         hud.appendChild(agentEl);
     }
 
-    // Apply state classes
-    agentEl.className = `agent-icon ${state.status}`;
+    agentEl.className = `agent-icon ${state.status} ${performanceMode ? 'low-fx' : ''}`;
 
-    // Position agents based on anchor line if available, else use base positions
     const positions: any = {
         context: { top: 10, left: 10 },
         architect: { top: 10, left: 30 },
@@ -69,49 +92,98 @@ function updateAgentHUD(agent: string, state: any) {
     let targetTop = positions[agent]?.top || 20;
 
     if (state.anchorLine !== undefined && currentViewport) {
-        // Map line to viewport %
         const { start, end } = currentViewport;
         const totalLines = end - start;
         const relativePos = (state.anchorLine - start) / Math.max(1, totalLines);
-
         targetTop = relativePos * 100;
-
-        // Docking logic
         if (targetTop < 5) targetTop = 5;
         if (targetTop > 95) targetTop = 95;
     }
 
-    agentEl.style.top = `${targetTop}%`;
+    // Apply baseline position via transform for GPU acceleration
     agentEl.style.left = `${positions[agent]?.left || 10}%`;
     agentEl.dataset.baseTop = targetTop.toString();
-    agentEl.dataset.baseLeft = (positions[agent]?.left || 10).toString();
+
+    // We update the transform in handleCursorRepulsion or repositioning
+    applyRepulsionToAgent(agentEl as HTMLElement, lastCursor);
 }
 
 let currentViewport: any = null;
+let lastCursor: any = null;
 
 function handleCursorUpdate(cursor: any) {
+    lastCursor = cursor;
     currentViewport = cursor.visibleRanges[0];
-    handleCursorRepulsion(cursor);
+    repositionAgents();
+    repositionAlerts();
 }
 
-function handleCursorRepulsion(cursor: any) {
+function repositionAgents() {
     const agents = document.querySelectorAll('.agent-icon');
-    const threshold = 0.15; // 15% distance threshold
-
     agents.forEach((el: any) => {
-        const baseTop = parseFloat(el.dataset.baseTop || '20');
-        const baseLeft = parseFloat(el.dataset.baseLeft || '10');
+        applyRepulsionToAgent(el, lastCursor);
+    });
+}
 
-        // Simple 1D vertical repulsion for now since we only have line data faithfully
-        const dist = Math.abs(baseTop - (cursor.relativeY * 100));
+function repositionAlerts() {
+    if (!currentViewport) return;
+    const alerts = document.querySelectorAll('.alert-component');
+    alerts.forEach((el: any) => {
+        const anchorLine = parseInt(el.dataset.anchorLine);
+        if (!isNaN(anchorLine)) {
+            const { start, end } = currentViewport;
+            const totalLines = end - start;
+            let relativePos = (anchorLine - start) / Math.max(1, totalLines);
+            if (relativePos < 0.05) relativePos = 0.05;
+            if (relativePos > 0.95) relativePos = 0.95;
 
-        if (dist < 15) { // If within 15% of cursor
-            const offset = (15 - dist) * (baseTop > cursor.relativeY * 100 ? 1 : -1);
-            el.style.transform = `translateY(${offset}px)`;
-            el.style.opacity = '0.3';
-        } else {
-            el.style.transform = `translateY(0)`;
-            el.style.opacity = '1';
+            // Use translate3d for smooth vertical positioning
+            const targetY = relativePos * window.innerHeight;
+            el.style.transform = `translate3d(0, ${targetY}px, 0)`;
         }
     });
+}
+
+function renderAlert(alert: any) {
+    const hud = document.getElementById('agent-hud');
+    if (!hud) return;
+
+    const alertEl = document.createElement('div');
+    alertEl.id = `alert-${alert.id}`;
+    alertEl.className = `alert-component alert-${alert.severity}`;
+    alertEl.dataset.anchorLine = alert.anchorLine?.toString() || '';
+    const icons: any = { info: '💡', warning: '⚠️', critical: '🚨', urgent: '🔥' };
+    alertEl.innerHTML = `
+        <div class="alert-icon-ideogram">${icons[alert.severity] || '❗'}</div>
+        <div class="alert-tooltip">${alert.message}</div>
+    `;
+    hud.appendChild(alertEl);
+    repositionAlerts();
+}
+
+/**
+ * Combined anchoring + repulsion logic using translate3d
+ */
+function applyRepulsionToAgent(el: HTMLElement, cursor: any) {
+    const baseTopPercent = parseFloat(el.dataset.baseTop || '20');
+    const baseTopPx = (baseTopPercent / 100) * window.innerHeight;
+
+    let translateY = baseTopPx;
+    let opacity = 1.0;
+
+    if (cursor) {
+        const cursorYPx = cursor.relativeY * window.innerHeight;
+        const dist = Math.abs(baseTopPx - cursorYPx);
+        const threshold = window.innerHeight * 0.15; // 15% of viewport height
+
+        if (dist < threshold) {
+            const repulsionScale = (threshold - dist) / threshold;
+            const offset = threshold * repulsionScale * (baseTopPx > cursorYPx ? 1 : -1);
+            translateY += offset;
+            opacity = 0.3 + (0.7 * (1 - repulsionScale));
+        }
+    }
+
+    el.style.transform = `translate3d(0, ${translateY}px, 0)`;
+    el.style.opacity = opacity.toString();
 }
