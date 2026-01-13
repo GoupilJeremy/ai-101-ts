@@ -62,7 +62,7 @@ export interface ILLMProvider {
      * Estimates the number of tokens in the given text.
      * @param text The input text.
      */
-    estimateTokens(text: string): number;
+    estimateTokens(text: string): Promise<number>;
 
     /**
      * Returns information about a specific model supported by this provider.

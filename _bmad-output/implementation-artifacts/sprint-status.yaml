@@ -58,7 +58,7 @@ development_status:
   # ============================================================
   epic-2: in-progress
   2-1-define-illmprovider-interface-with-adapter-pattern: review
-  2-2-implement-openai-provider-with-error-handling: backlog
+  2-2-implement-openai-provider-with-error-handling: review
   2-3-implement-anthropic-claude-provider-with-error-handling: backlog
   2-4-implement-llm-provider-manager-with-registry-and-fallbacks: backlog
   2-5-implement-hybrid-llm-cache-l1-memory-l2-file-system: backlog
