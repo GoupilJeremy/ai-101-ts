@@ -1,5 +1,6 @@
 {
   "name": "ai-101-ts",
+  "publisher": "GoupilJeremy",
   "displayName": "ai-101-ts",
   "description": "VSCode AI agents with transparent HUD",
   "version": "0.0.1",

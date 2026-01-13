@@ -42,7 +42,7 @@ development_status:
   # ============================================================
   # Epic 1: Project Foundation & Core Infrastructure
   # ============================================================
-  epic-1: in-progress
+  epic-1: review
   1-1-initialize-vscode-extension-project-with-yeoman-generator: review
   1-2-configure-dual-build-system-and-create-webview-scaffold: review
   1-3-implement-configuration-manager-with-vscode-settings-integration: review
@@ -50,7 +50,7 @@ development_status:
   1-5-create-configuration-preset-system-for-solo-team-enterprise: review
   1-6-implement-export-import-configuration-functionality: review
   1-7-implement-centralized-error-handler-with-retry-logic: review
-  1-8-set-up-testing-framework-with-mocha-and-vscode-test-electron: backlog
+  1-8-set-up-testing-framework-with-mocha-and-vscode-test-electron: review
   epic-1-retrospective: optional
 
   # ============================================================
