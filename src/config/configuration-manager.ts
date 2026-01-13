@@ -4,6 +4,12 @@ import { ConfigurationError } from '../errors/configuration-error';
 export interface IConfiguration {
     llm: {
         provider: 'openai' | 'anthropic' | 'custom';
+        agentProviders: {
+            architect: 'openai' | 'anthropic' | 'custom';
+            coder: 'openai' | 'anthropic' | 'custom';
+            reviewer: 'openai' | 'anthropic' | 'custom';
+            context: 'openai' | 'anthropic' | 'custom';
+        };
     };
     ui: {
         transparency: 'minimal' | 'medium' | 'full';
@@ -45,9 +51,17 @@ export class ConfigurationManager {
     public getSettings(): IConfiguration {
         const config = vscode.workspace.getConfiguration(this.section);
 
+        const defaultProvider = config.get<any>('llm.provider', 'openai');
+
         const settings: IConfiguration = {
             llm: {
-                provider: config.get<any>('llm.provider', 'openai'),
+                provider: defaultProvider,
+                agentProviders: {
+                    architect: config.get<any>('llm.agentProviders.architect', defaultProvider),
+                    coder: config.get<any>('llm.agentProviders.coder', defaultProvider),
+                    reviewer: config.get<any>('llm.agentProviders.reviewer', defaultProvider),
+                    context: config.get<any>('llm.agentProviders.context', defaultProvider),
+                },
             },
             ui: {
                 transparency: config.get<any>('ui.transparency', 'medium'),
@@ -69,6 +83,12 @@ export class ConfigurationManager {
         const validProviders = ['openai', 'anthropic', 'custom'];
         if (!validProviders.includes(config.llm.provider)) {
             throw new ConfigurationError(`Invalid LLM provider: ${config.llm.provider}`);
+        }
+
+        for (const [agent, provider] of Object.entries(config.llm.agentProviders)) {
+            if (!validProviders.includes(provider)) {
+                throw new ConfigurationError(`Invalid LLM provider for agent ${agent}: ${provider}`);
+            }
         }
 
         const validTransparency = ['minimal', 'medium', 'full'];

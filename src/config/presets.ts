@@ -1,4 +1,4 @@
-import { IConfiguration } from './configuration-manager';
+import { IConfiguration } from './configuration-manager.js';
 
 export interface IPreset {
     name: string;
@@ -39,7 +39,13 @@ export const ENTERPRISE_PRESET: IPreset = {
     description: 'Optimized for security, compliance, and on-premise resources.',
     config: {
         llm: {
-            provider: 'custom' // Assume custom/on-prem for enterprise
+            provider: 'custom',
+            agentProviders: {
+                architect: 'custom',
+                coder: 'custom',
+                reviewer: 'custom',
+                context: 'custom'
+            }
         },
         ui: {
             transparency: 'minimal',
