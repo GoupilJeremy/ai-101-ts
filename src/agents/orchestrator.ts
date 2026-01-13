@@ -1,7 +1,14 @@
+import * as vscode from 'vscode';
 import { LLMProviderManager } from '../llm/provider-manager.js';
 import { ExtensionStateManager } from '../state/extension-state-manager.js';
 import { ErrorHandler } from '../errors/error-handler.js';
 import { IAgent, AgentType, IAgentRequest, IAgentResponse } from './shared/agent.interface.js';
+
+export interface AgentLifecycleEvent {
+    agent: AgentType;
+    timestamp: number;
+    data?: any;
+}
 
 /**
  * Orchestrates the collaboration between multiple AI agents.
@@ -11,6 +18,16 @@ export class AgentOrchestrator {
     private static instance: AgentOrchestrator;
     private agents: Map<AgentType, IAgent> = new Map();
     private stateManager: ExtensionStateManager;
+
+    // Event Emitters
+    private _onAgentStart = new vscode.EventEmitter<AgentLifecycleEvent>();
+    public readonly onAgentStart = this._onAgentStart.event;
+
+    private _onAgentComplete = new vscode.EventEmitter<AgentLifecycleEvent>();
+    public readonly onAgentComplete = this._onAgentComplete.event;
+
+    private _onAgentError = new vscode.EventEmitter<AgentLifecycleEvent>();
+    public readonly onAgentError = this._onAgentError.event;
 
     private constructor() {
         this.stateManager = ExtensionStateManager.getInstance();
@@ -114,12 +131,21 @@ export class AgentOrchestrator {
 
         this.stateManager.updateAgentState(type, 'thinking', `Processing request...`);
 
+        const eventData: AgentLifecycleEvent = { agent: type, timestamp: Date.now() };
+        this._onAgentStart.fire({ ...eventData, data: { request } });
+
         try {
             const response = await agent.execute(request);
             this.stateManager.updateAgentState(type, 'success', `Task complete.`);
+
+            this._onAgentComplete.fire({ ...eventData, data: { response } });
+
             return response;
         } catch (error: any) {
             this.stateManager.updateAgentState(type, 'alert', `Error: ${error.message}`);
+
+            this._onAgentError.fire({ ...eventData, data: { error: error.message } });
+
             throw error;
         }
     }

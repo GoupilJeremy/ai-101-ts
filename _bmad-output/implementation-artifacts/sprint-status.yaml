@@ -80,7 +80,7 @@ development_status:
   3-7-implement-backend-state-manager-extensionstatemanager: review
   3-8-implement-postmessage-state-synchronization-to-webview: review
   3-9-verify-multi-agent-state-synchronization: review
-  3-10-implement-agent-lifecycle-events-for-extensibility: backlog
+  3-10-implement-agent-lifecycle-events-for-extensibility: review
   epic-3-retrospective: optional
 
   # ============================================================
