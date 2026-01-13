@@ -14,7 +14,7 @@ window.addEventListener('message', event => {
             updateMetricsUI(message.metrics);
             break;
         case 'toWebview:cursorUpdate':
-            handleCursorRepulsion(message.cursor);
+            handleCursorUpdate(message.cursor);
             break;
         case 'toWebview:fullStateUpdate':
             console.log('Full agent state snapshot received:', message.states);
@@ -58,20 +58,40 @@ function updateAgentHUD(agent: string, state: any) {
     // Apply state classes
     agentEl.className = `agent-icon ${state.status}`;
 
-    // Position agents roughly for now
+    // Position agents based on anchor line if available, else use base positions
     const positions: any = {
-        context: { top: '20%', left: '10%' },
-        architect: { top: '20%', left: '30%' },
-        coder: { top: '20%', left: '50%' },
-        reviewer: { top: '20%', left: '70%' }
+        context: { top: 10, left: 10 },
+        architect: { top: 10, left: 30 },
+        coder: { top: 10, left: 50 },
+        reviewer: { top: 10, left: 70 }
     };
-    const pos = positions[agent];
-    if (pos) {
-        agentEl.style.top = pos.top;
-        agentEl.style.left = pos.left;
-        agentEl.dataset.baseTop = pos.top;
-        agentEl.dataset.baseLeft = pos.left;
+
+    let targetTop = positions[agent]?.top || 20;
+
+    if (state.anchorLine !== undefined && currentViewport) {
+        // Map line to viewport %
+        const { start, end } = currentViewport;
+        const totalLines = end - start;
+        const relativePos = (state.anchorLine - start) / Math.max(1, totalLines);
+
+        targetTop = relativePos * 100;
+
+        // Docking logic
+        if (targetTop < 5) targetTop = 5;
+        if (targetTop > 95) targetTop = 95;
     }
+
+    agentEl.style.top = `${targetTop}%`;
+    agentEl.style.left = `${positions[agent]?.left || 10}%`;
+    agentEl.dataset.baseTop = targetTop.toString();
+    agentEl.dataset.baseLeft = (positions[agent]?.left || 10).toString();
+}
+
+let currentViewport: any = null;
+
+function handleCursorUpdate(cursor: any) {
+    currentViewport = cursor.visibleRanges[0];
+    handleCursorRepulsion(cursor);
 }
 
 function handleCursorRepulsion(cursor: any) {

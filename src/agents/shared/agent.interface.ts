@@ -21,6 +21,8 @@ export interface IAgentState {
     currentTask?: string;
     /** Timestamp of the last state update */
     lastUpdate: number;
+    /** Target line number for spatial anchoring */
+    anchorLine?: number;
 }
 
 /**

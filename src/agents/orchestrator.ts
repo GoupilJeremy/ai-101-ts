@@ -129,14 +129,17 @@ export class AgentOrchestrator {
             return { result: '', reasoning: 'Agent not registered', confidence: 1.0 };
         }
 
-        this.stateManager.updateAgentState(type, 'thinking', `Processing request...`);
+        const activeEditor = vscode.window.activeTextEditor;
+        const anchorLine = activeEditor?.selection.active.line;
+
+        this.stateManager.updateAgentState(type, 'thinking', `Processing request...`, anchorLine);
 
         const eventData: AgentLifecycleEvent = { agent: type, timestamp: Date.now() };
         this._onAgentStart.fire({ ...eventData, data: { request } });
 
         try {
             const response = await agent.execute(request);
-            this.stateManager.updateAgentState(type, 'success', `Task complete.`);
+            this.stateManager.updateAgentState(type, 'success', `Task complete.`, anchorLine);
 
             this._onAgentComplete.fire({ ...eventData, data: { response } });
 
