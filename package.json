@@ -97,8 +97,9 @@
     "test": "vscode-test"
   },
   "dependencies": {
-    "openai": "^4.28.0",
-    "js-tiktoken": "^1.0.10"
+    "@anthropic-ai/sdk": "^0.71.2",
+    "js-tiktoken": "^1.0.10",
+    "openai": "^4.28.0"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
