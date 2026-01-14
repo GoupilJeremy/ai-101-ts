@@ -37,6 +37,11 @@
         "command": "ai-101-ts.toggleFocusMode",
         "title": "Toggle Focus Mode",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.toggleLargeText",
+        "title": "Toggle Large Text Mode",
+        "category": "AI 101"
       }
     ],
     "keybindings": [
@@ -91,6 +96,16 @@
           "type": "boolean",
           "default": true,
           "description": "Enable opt-in telemetry for diagnostics."
+        },
+        "ai101.teamMode.largeText": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable 125% scale for Team Mode screen sharing visibility."
+        },
+        "ai101.teamMode.surveyEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable team comprehension surveys (opt-in)."
         }
       }
     }

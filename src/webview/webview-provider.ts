@@ -35,6 +35,9 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
 
         // Listen for messages from webview
         webviewView.webview.onDidReceiveMessage(this.handleWebviewMessage.bind(this));
+
+        // Listen for configuration changes to sync large text mode
+        vscode.workspace.onDidChangeConfiguration(this.handleConfigurationChange.bind(this));
     }
 
     private async handleWebviewMessage(message: any): Promise<void> {
@@ -56,6 +59,20 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         }
     }
 
+    private handleConfigurationChange(event: vscode.ConfigurationChangeEvent): void {
+        if (event.affectsConfiguration('ai101.teamMode.largeText')) {
+            const config = vscode.workspace.getConfiguration('ai101.teamMode');
+            const largeTextEnabled = config.get<boolean>('largeText', false);
+
+            if (this._view) {
+                this._view.webview.postMessage({
+                    type: 'toWebview:largeTextUpdate',
+                    enabled: largeTextEnabled
+                });
+            }
+        }
+    }
+
     private handleSuggestionAction(
         agent: string,
         action: 'accepted' | 'rejected',
@@ -67,6 +84,15 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         if (currentMode === AgentMode.Team) {
             TeamMetricsTracker.getInstance().recordSuggestionAction(agent as any, action, complexity);
             console.log(`Team Mode: Suggestion ${action} logged for ${agent}`);
+
+            // Send metrics update to webview for team visibility
+            if (this._view) {
+                const metrics = TeamMetricsTracker.getInstance().getMetrics();
+                this._view.webview.postMessage({
+                    type: 'toWebview:teamMetricsUpdate',
+                    metrics: metrics
+                });
+            }
         }
     }
 

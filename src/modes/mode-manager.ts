@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { AgentMode, ModeConfigs, IModeConfig } from './mode-types.js';
 import { ExtensionStateManager } from '../state/extension-state-manager.js';
+import { SurveyManager } from '../team/survey-manager.js';
 
 /**
  * Manages the current active mode of the extension and coordinates
@@ -44,6 +45,9 @@ export class ModeManager {
 
         // Sync with State Manager (and thus Webview)
         ExtensionStateManager.getInstance().updateMode(mode, ModeConfigs[mode]);
+
+        // Notify SurveyManager about mode changes for session tracking
+        SurveyManager.getInstance().updateMode(mode);
 
         // Notify listeners
         this.onModeChangedEmitter.fire({ previous: previousMode, next: mode });

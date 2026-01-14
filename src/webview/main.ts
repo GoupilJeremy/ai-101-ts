@@ -106,6 +106,15 @@ function applyModeUpdate(mode: string, config: any) {
         hudContainer.classList.toggle('expert-mode', mode === 'expert');
         // Set data-mode attribute for CSS selectors
         hudContainer.setAttribute('data-mode', mode);
+
+        // Apply large text mode if enabled (Team Mode only)
+        // Note: In webview context, we use the VSCode API via acquireVsCodeApi()
+        // For now, we'll use a simple flag that can be set via message passing
+        if (mode === 'team') {
+            hudContainer.setAttribute('data-large-text', 'true');
+        } else {
+            hudContainer.removeAttribute('data-large-text');
+        }
     }
 
     // Also set data-mode on metrics (Vital Signs Bar) for auto-hide
@@ -143,8 +152,70 @@ window.addEventListener('message', event => {
         case 'toWebview:fullStateUpdate':
             requestUpdate({ type: 'fullState', states: message.states, metrics: message.metrics, alerts: message.alerts, mode: message.mode, config: message.modeConfig });
             break;
+        case 'toWebview:largeTextUpdate':
+            console.log('Large text update received:', message.enabled);
+            updateLargeTextMode(message.enabled);
+            break;
+        case 'toWebview:teamMetricsUpdate':
+            console.log('Team metrics update received:', message.metrics);
+            updateTeamMetricsDisplay(message.metrics);
+            break;
     }
 });
+
+function updateLargeTextMode(enabled: boolean): void {
+    const hudContainer = document.getElementById('hud-container');
+    if (hudContainer) {
+        if (currentMode === 'team') {
+            hudContainer.setAttribute('data-large-text', enabled ? 'true' : 'false');
+        }
+    }
+}
+
+function updateTeamMetricsDisplay(metrics: any): void {
+    // Create or update team metrics panel
+    let metricsPanel = document.getElementById('team-metrics-panel');
+
+    if (!metricsPanel && currentMode === 'team') {
+        metricsPanel = document.createElement('div');
+        metricsPanel.id = 'team-metrics-panel';
+        metricsPanel.className = 'team-metrics-panel';
+        document.body.appendChild(metricsPanel);
+    }
+
+    if (metricsPanel && currentMode === 'team') {
+        const summary = metrics.getMetricsSummary ? metrics.getMetricsSummary() :
+            `Acceptance: ${metrics.overallAcceptanceRate || 0}% | Time Saved: ${Math.floor(metrics.totalTimeSaved / 60)}h ${metrics.totalTimeSaved % 60}m`;
+
+        metricsPanel.innerHTML = `
+            <div class="team-metrics-panel__title">Team Metrics</div>
+            <div class="team-metrics-panel__item">
+                <span class="team-metrics-panel__label">Overall Acceptance:</span>
+                <span class="team-metrics-panel__value team-metrics-panel__value--positive">${metrics.overallAcceptanceRate || 0}%</span>
+            </div>
+            <div class="team-metrics-panel__item">
+                <span class="team-metrics-panel__label">Time Saved:</span>
+                <span class="team-metrics-panel__value team-metrics-panel__value--positive">${Math.floor(metrics.totalTimeSaved / 60)}h ${metrics.totalTimeSaved % 60}m</span>
+            </div>
+            <div class="team-metrics-panel__item">
+                <span class="team-metrics-panel__label">Architect:</span>
+                <span class="team-metrics-panel__value">${metrics.architect?.accepted || 0} accepted, ${metrics.architect?.rejected || 0} rejected</span>
+            </div>
+            <div class="team-metrics-panel__item">
+                <span class="team-metrics-panel__label">Coder:</span>
+                <span class="team-metrics-panel__value">${metrics.coder?.accepted || 0} accepted, ${metrics.coder?.rejected || 0} rejected</span>
+            </div>
+            <div class="team-metrics-panel__item">
+                <span class="team-metrics-panel__label">Reviewer:</span>
+                <span class="team-metrics-panel__value">${metrics.reviewer?.accepted || 0} accepted, ${metrics.reviewer?.rejected || 0} rejected</span>
+            </div>
+            <div class="team-metrics-panel__item">
+                <span class="team-metrics-panel__label">Context:</span>
+                <span class="team-metrics-panel__value">${metrics.context?.accepted || 0} accepted, ${metrics.context?.rejected || 0} rejected</span>
+            </div>
+        `;
+    }
+}
 
 function executeUpdateMetricsUI(metrics: any) {
     const metricsEl = document.getElementById('metrics');
