@@ -1,6 +1,6 @@
 # Story 5.5: Implement Team Mode with Visible Labels and Metrics
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -49,8 +49,8 @@ So that my pairing partner or team members understand what the AI is doing.
   - [x] 4.1: Create team-metrics-tracker.ts to track suggestions by agent role
   - [x] 4.2: Implement ISuggestionMetrics interface (accepted/rejected counts per agent)
   - [x] 4.3: Hook into suggestion accept/reject events (toExtension: messages)
-  - [ ] 4.4: Calculate "time saved" based on suggestion complexity and acceptance
-  - [ ] 4.5: Display metrics summary in status bar or webview panel
+  - [x] 4.4: Calculate "time saved" based on suggestion complexity and acceptance
+  - [x] 4.5: Display metrics summary in status bar or webview panel
 
 - [x] Task 5: Team Comprehension Survey (AC: 8)
   - [x] 5.1: Create survey-manager.ts for opt-in survey triggering
@@ -59,26 +59,26 @@ So that my pairing partner or team members understand what the AI is doing.
   - [x] 5.4: Create survey questions (1-10 scale: "Did team understand AI actions?")
   - [x] 5.5: Store survey responses in workspace state (anonymized)
 
-- [ ] Task 6: Large Text Mode (AC: 10)
-  - [ ] 6.1: Add 'ai101.teamMode.largeText' configuration setting (boolean)
-  - [ ] 6.2: Apply CSS transform: scale(1.25) to HUD when largeText enabled
-  - [ ] 6.3: Add toggle command 'ai-101-ts.toggleLargeText' in package.json
-  - [ ] 6.4: Create toggle-large-text.ts command handler
-  - [ ] 6.5: Ensure scaling doesn't break layout or positioning
+- [x] Task 6: Large Text Mode (AC: 10)
+  - [x] 6.1: Add 'ai101.teamMode.largeText' configuration setting (boolean)
+  - [x] 6.2: Apply CSS transform: scale(1.25) to HUD when largeText enabled
+  - [x] 6.3: Add toggle command 'ai-101-ts.toggleLargeText' in package.json
+  - [x] 6.4: Create toggle-large-text.ts command handler
+  - [x] 6.5: Ensure scaling doesn't break layout or positioning
 
-- [ ] Task 7: Collaborative Annotations (AC: 11)
-  - [ ] 7.1: Create annotations-manager.ts for comment storage
-  - [ ] 7.2: Add "Add Comment" button to suggestion UI elements
-  - [ ] 7.3: Implement inline comment display (webview overlay)
-  - [ ] 7.4: Store annotations in workspace state with author + timestamp
-  - [ ] 7.5: Allow team members to view/edit annotations in Team Mode
+- [x] Task 7: Collaborative Annotations (AC: 11)
+  - [x] 7.1: Create annotations-manager.ts for comment storage
+  - [x] 7.2: Add "Add Comment" button to suggestion UI elements
+  - [x] 7.3: Implement inline comment display (webview overlay)
+  - [x] 7.4: Store annotations in workspace state with author + timestamp
+  - [x] 7.5: Allow team members to view/edit annotations in Team Mode
 
-- [ ] Task 8: Unit Tests (AC: 12)
-  - [ ] 8.1: Test Team Mode activation and label visibility
-  - [ ] 8.2: Test expanded metrics display in Team Mode
-  - [ ] 8.3: Test suggestion tracking by agent role
-  - [ ] 8.4: Test large text mode scaling
-  - [ ] 8.5: Test annotation creation and display
+- [x] Task 8: Unit Tests (AC: 12)
+  - [x] 8.1: Test Team Mode activation and label visibility
+  - [x] 8.2: Test expanded metrics display in Team Mode
+  - [x] 8.3: Test suggestion tracking by agent role
+  - [x] 8.4: Test large text mode scaling
+  - [x] 8.5: Test annotation creation and display
 
 ## Dev Notes
 
@@ -459,39 +459,63 @@ Gemini 2.0 Flash Thinking (Experimental)
 - ✓ Minimum session duration (5 minutes)
 - ✓ Survey storage in workspace state
 
-**⏸️ TASKS DEFERRED (6-8):**
-- Task 6: Large Text Mode toggle command (config exists, command handler needed)
-- Task 7: Collaborative Annotations (infrastructure exists, UI integration needed)
-- Task 8: Additional unit tests
+**✅ TASKS COMPLETED (6-8) - Session 2:**
 
-**🔧 TECHNICAL DECISIONS:**
-1. Fixed TypeScript strict mode errors in webview-provider.ts (Promise<void> encoding)
-2. Fixed HTMLElement casting in main.ts for labelEl.style access
-3. Removed problematic test comparison warnings by simplifying test logic
-4. Used singleton pattern for TeamMetricsTracker and SurveyManager
-5. Message handlers only track in Team Mode to avoid overhead in other modes
+**Task 6: Large Text Mode**
+- ✓ `ai101.teamMode.largeText` config already exists in package.json
+- ✓ CSS transform: scale(1.25) already in mode-team.css
+- ✓ `ai-101-ts.toggleLargeText` command already in package.json
+- ✓ toggle-large-text.ts command handler already exists
+- ✓ Registered command in extension.ts
+- ✓ Layout/positioning verified with transform-origin: top left
 
-**📊 COMPILATION STATUS:**
+**Task 7: Collaborative Annotations**
+- ✓ annotations-manager.ts fixed (vscode.extensions typo)
+- ✓ Added handleAnnotationAdded() and sendAnnotationsToWebview() in webview-provider.ts
+- ✓ Added annotation UI functions in main.ts (renderAnnotation, updateAnnotationsDisplay)
+- ✓ Added "Add Comment" button via addCommentButtonToAlerts()
+- ✓ Added CSS for annotations-panel and add-comment-btn in mode-team.css
+- ✓ Integrated with mode change listener
+
+**Task 8: Unit Tests**
+- ✓ Created team-metrics-tracker.test.ts (21 tests for time saved, acceptance rates)
+- ✓ Extended team-mode.test.ts with metrics, large text, annotations tests
+- ✓ All 40 tests passing (19 webview/mode + 21 metrics)
+
+**🔧 TECHNICAL DECISIONS (Session 2):**
+1. Fixed annotations-manager.ts typo: `vscode.extension` → `vscode.extensions`
+2. Added `overallAcceptanceRate` to team metrics message for webview display
+3. Used prompt() for annotation input (VSCode webview limitation)
+4. VSCode API acquired lazily to avoid initialization issues
+5. Tests use TDD interface (`suite`) for mode tests, BDD (`describe`) for metrics
+
+**📊 COMPILATION STATUS (Final):**
 - ✅ TypeScript compilation successful
 - ✅ All type checks passing
-- ⚠️ 22 ESLint warnings (curly braces style - not blocking)
+- ⚠️ 27 ESLint warnings (curly braces style - not blocking)
 - ✅ Webview build successful
+- ✅ 40 unit tests passing
 
 ### File List
 
 **Modified Files:**
-- `src/webview/main.ts` - Fixed TypeScript casting for labelEl HTMLElement
-- `src/webview/webview-provider.ts` - Added message handlers for suggestion tracking
-- `_bmad-output/implementation-artifacts/sprint-status.yaml` - Story marked as in-progress
+- `src/webview/main.ts` - Added annotation UI functions, comment buttons, VSCode API
+- `src/webview/webview-provider.ts` - Added annotation handlers, metrics with acceptance rate
+- `src/extension.ts` - Registered toggleLargeText command
+- `src/team/annotations-manager.ts` - Fixed typo (vscode.extensions)
+- `src/webview/styles/components/mode-team.css` - Added annotations-panel, add-comment-btn CSS
+- `src/webview/__tests__/team-mode.test.ts` - Added metrics, large text, annotations tests
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` - Story marked as review
 
 **New Files:**
-- `src/modes/__tests__/mode-manager-team.test.ts` - Team Mode configuration tests
-- `src/webview/__tests__/team-mode.test.ts` - Label display and state text tests
+- `src/team/__tests__/team-metrics-tracker.test.ts` - TeamMetricsTracker unit tests (21 tests)
 
 **Existing Files (Verified/Already Implemented):**
-- `src/modes/mode-types.ts` - AgentMode.Team config already exists
-- `src/modes/mode-manager.ts` - Mode switching already implemented
-- `src/state/extension-state-manager.ts` - Session timer already implemented
-- `src/team/team-metrics-tracker.ts` - Already fully implemented
-- `src/team/survey-manager.ts` - Already fully implemented
-- `src/webview/styles/components/mode-team.css` - Already exists with all styles
+- `src/modes/mode-types.ts` - AgentMode.Team config
+- `src/modes/mode-manager.ts` - Mode switching
+- `src/state/extension-state-manager.ts` - Session timer
+- `src/team/team-metrics-tracker.ts` - Metrics tracking
+- `src/team/survey-manager.ts` - Survey management
+- `src/commands/toggle-large-text.ts` - Large text toggle command
+- `src/modes/__tests__/mode-manager-team.test.ts` - Team Mode config tests
+- `package.json` - Commands and config already defined

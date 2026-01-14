@@ -148,3 +148,49 @@
 .team-metrics-panel__value--negative {
     color: var(--vscode-gitDecoration-deletedResourceForeground);
 }
+
+/* Annotations Panel */
+.annotations-panel {
+    position: fixed;
+    bottom: 60px;
+    left: 20px;
+    background: rgba(30, 30, 30, 0.95);
+    border: 1px solid var(--vscode-panel-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    min-width: 280px;
+    max-width: 350px;
+    max-height: 300px;
+    overflow-y: auto;
+    font-size: 13px;
+    color: var(--vscode-editor-foreground);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    z-index: 998;
+}
+
+.annotations-panel__title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--vscode-panel-border);
+    padding-bottom: 6px;
+}
+
+/* Add Comment Button on Alerts */
+.add-comment-btn {
+    display: block;
+    margin-top: 8px;
+    padding: 4px 8px;
+    font-size: 11px;
+    background: rgba(100, 100, 100, 0.3);
+    border: 1px solid var(--vscode-panel-border);
+    border-radius: 4px;
+    color: var(--vscode-editor-foreground);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.add-comment-btn:hover {
+    background: rgba(100, 100, 100, 0.5);
+}

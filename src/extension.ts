@@ -92,6 +92,12 @@ export function activate(context: vscode.ExtensionContext) {
 			import('./commands/toggle-performance-mode.js').then(module => module.togglePerformanceModeCommand());
 		})
 	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.toggleLargeText', () => {
+			import('./commands/toggle-large-text.js').then(module => module.toggleLargeTextCommand());
+		})
+	);
 }
 
 // This method is called when your extension is deactivated

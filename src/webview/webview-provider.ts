@@ -4,6 +4,7 @@ import { ExtensionStateManager } from '../state/extension-state-manager.js';
 import { ModeManager } from '../modes/mode-manager.js';
 import { AgentMode } from '../modes/mode-types.js';
 import { TeamMetricsTracker } from '../team/team-metrics-tracker.js';
+import { AnnotationsManager } from '../team/annotations-manager.js';
 
 export class AI101WebviewProvider implements vscode.WebviewViewProvider {
     public static readonly viewType = 'ai101.webview';
@@ -51,8 +52,10 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
                 this.handleSuggestionAction(message.agent, 'rejected', message.complexity);
                 break;
             case 'toExtension:annotationAdded':
-                // Future: Handle annotation storage (Task 7)
-                console.log('Annotation added:', message);
+                this.handleAnnotationAdded(message.suggestionId, message.comment, message.author);
+                break;
+            case 'toExtension:getAnnotations':
+                this.sendAnnotationsToWebview(message.suggestionId);
                 break;
             default:
                 console.warn('Unknown message type from webview:', type);
@@ -87,13 +90,49 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
 
             // Send metrics update to webview for team visibility
             if (this._view) {
-                const metrics = TeamMetricsTracker.getInstance().getMetrics();
+                const tracker = TeamMetricsTracker.getInstance();
+                const metrics = tracker.getMetrics();
+                const overallAcceptanceRate = tracker.getOverallAcceptanceRate();
                 this._view.webview.postMessage({
                     type: 'toWebview:teamMetricsUpdate',
-                    metrics: metrics
+                    metrics: {
+                        ...metrics,
+                        overallAcceptanceRate
+                    }
                 });
             }
         }
+    }
+
+    private handleAnnotationAdded(suggestionId: string, comment: string, author: string): void {
+        const currentMode = ModeManager.getInstance().getCurrentMode();
+
+        if (currentMode === AgentMode.Team) {
+            const annotation = AnnotationsManager.getInstance().addAnnotation(suggestionId, comment, author);
+            console.log(`Team Mode: Annotation added for suggestion ${suggestionId}`);
+
+            // Send annotation update to webview
+            if (this._view) {
+                this._view.webview.postMessage({
+                    type: 'toWebview:annotationAdded',
+                    annotation
+                });
+            }
+        }
+    }
+
+    private sendAnnotationsToWebview(suggestionId?: string): void {
+        if (!this._view) return;
+
+        const annotationsManager = AnnotationsManager.getInstance();
+        const annotations = suggestionId
+            ? annotationsManager.getAnnotationsForSuggestion(suggestionId)
+            : annotationsManager.getAllAnnotations();
+
+        this._view.webview.postMessage({
+            type: 'toWebview:annotationsUpdate',
+            annotations
+        });
     }
 
     private _getHtmlForWebview(webview: vscode.Webview) {

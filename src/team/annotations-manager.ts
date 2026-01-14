@@ -23,7 +23,7 @@ export class AnnotationsManager {
         // Use VSCode's workspace state for persistence
         const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(''));
         const workspaceUri = workspaceFolder ? workspaceFolder.uri : vscode.Uri.file('');
-        const context = vscode.extension.getExtension('GoupilJeremy.ai-101-ts')?.exports;
+        const context = vscode.extensions.getExtension('GoupilJeremy.ai-101-ts')?.exports;
         this.workspaceState = context?.workspaceState || { get: () => [], update: () => { } };
         this.loadAnnotations();
     }

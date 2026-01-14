@@ -121,6 +121,8 @@ function applyModeUpdate(mode: string, config: any) {
         // For now, we'll use a simple flag that can be set via message passing
         if (mode === 'team') {
             hudContainer.setAttribute('data-large-text', 'true');
+            // Add comment buttons to existing alerts when switching to Team Mode
+            addCommentButtonToAlerts();
         } else {
             hudContainer.removeAttribute('data-large-text');
         }
@@ -168,6 +170,14 @@ window.addEventListener('message', event => {
         case 'toWebview:teamMetricsUpdate':
             console.log('Team metrics update received:', message.metrics);
             updateTeamMetricsDisplay(message.metrics);
+            break;
+        case 'toWebview:annotationAdded':
+            console.log('Annotation added:', message.annotation);
+            renderAnnotation(message.annotation);
+            break;
+        case 'toWebview:annotationsUpdate':
+            console.log('Annotations update received:', message.annotations);
+            updateAnnotationsDisplay(message.annotations);
             break;
     }
 });
@@ -224,6 +234,123 @@ function updateTeamMetricsDisplay(metrics: any): void {
             </div>
         `;
     }
+}
+
+// VSCode API for posting messages back to extension
+declare const acquireVsCodeApi: () => { postMessage: (message: any) => void };
+let vscodeApi: { postMessage: (message: any) => void } | null = null;
+function getVsCodeApi() {
+    if (!vscodeApi) {
+        vscodeApi = acquireVsCodeApi();
+    }
+    return vscodeApi;
+}
+
+// Annotations storage for Team Mode
+let currentAnnotations: any[] = [];
+
+/**
+ * Render a single annotation in the annotation panel
+ */
+function renderAnnotation(annotation: any): void {
+    if (currentMode !== 'team') return;
+
+    currentAnnotations.push(annotation);
+
+    let annotationsPanel = document.getElementById('annotations-panel');
+    if (!annotationsPanel) {
+        annotationsPanel = document.createElement('div');
+        annotationsPanel.id = 'annotations-panel';
+        annotationsPanel.className = 'annotations-panel';
+        annotationsPanel.innerHTML = '<div class="annotations-panel__title">Team Annotations</div>';
+        document.body.appendChild(annotationsPanel);
+    }
+
+    const annotationEl = createAnnotationElement(annotation);
+    annotationsPanel.appendChild(annotationEl);
+}
+
+/**
+ * Update all annotations display
+ */
+function updateAnnotationsDisplay(annotations: any[]): void {
+    if (currentMode !== 'team') return;
+
+    currentAnnotations = annotations;
+
+    let annotationsPanel = document.getElementById('annotations-panel');
+    if (!annotationsPanel) {
+        annotationsPanel = document.createElement('div');
+        annotationsPanel.id = 'annotations-panel';
+        annotationsPanel.className = 'annotations-panel';
+        document.body.appendChild(annotationsPanel);
+    }
+
+    annotationsPanel.innerHTML = '<div class="annotations-panel__title">Team Annotations</div>';
+
+    annotations.forEach(annotation => {
+        const annotationEl = createAnnotationElement(annotation);
+        annotationsPanel!.appendChild(annotationEl);
+    });
+}
+
+/**
+ * Create an annotation element
+ */
+function createAnnotationElement(annotation: any): HTMLElement {
+    const el = document.createElement('div');
+    el.className = 'team-annotation';
+    el.dataset.annotationId = annotation.id;
+
+    const timestamp = new Date(annotation.timestamp).toLocaleString();
+
+    el.innerHTML = `
+        <div class="team-annotation__header">
+            <span class="team-annotation__author">${annotation.author}</span>
+            <span class="team-annotation__timestamp">${timestamp}</span>
+        </div>
+        <div class="team-annotation__content">${annotation.comment}</div>
+    `;
+
+    return el;
+}
+
+/**
+ * Show add comment dialog for a suggestion
+ */
+function showAddCommentDialog(suggestionId: string): void {
+    const comment = prompt('Enter your comment for this suggestion:');
+    if (comment) {
+        const author = prompt('Your name:', 'Team Member') || 'Team Member';
+        getVsCodeApi().postMessage({
+            type: 'toExtension:annotationAdded',
+            suggestionId,
+            comment,
+            author
+        });
+    }
+}
+
+/**
+ * Add "Add Comment" button to alert elements (suggestions) in Team Mode
+ */
+function addCommentButtonToAlerts(): void {
+    if (currentMode !== 'team') return;
+
+    const alerts = document.querySelectorAll('.alert-component');
+    alerts.forEach((alertEl: any) => {
+        if (alertEl.querySelector('.add-comment-btn')) return; // Already has button
+
+        const btn = document.createElement('button');
+        btn.className = 'add-comment-btn';
+        btn.textContent = '💬 Add Comment';
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            const suggestionId = alertEl.id || `alert-${Date.now()}`;
+            showAddCommentDialog(suggestionId);
+        };
+        alertEl.appendChild(btn);
+    });
 }
 
 function executeUpdateMetricsUI(metrics: any) {
@@ -429,6 +556,11 @@ function executeRenderAlert(alert: any) {
         <div class="alert-tooltip">${messageToDisplay}</div>
     `;
     repositionAlerts();
+
+    // Team Mode: Add comment button to alerts
+    if (currentMode === 'team') {
+        addCommentButtonToAlerts();
+    }
 }
 
 /**
