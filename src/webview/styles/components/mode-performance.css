@@ -1,0 +1,44 @@
+/**
+ * Performance Mode Styles
+ * Optimized for low-end machines with reduced animations and simplified UI
+ */
+
+/* Performance Mode: Reduce animations and transitions */
+.performance-mode .agent-icon,
+.performance-mode .alert-component {
+    transition: none;
+    animation: none;
+}
+
+/* Performance Mode: Simplified agent icons */
+.performance-mode .agent-icon .agent-symbol {
+    font-size: 20px;
+    text-shadow: none;
+}
+
+/* Performance Mode: Hide labels for better performance */
+.performance-mode .agent-label-text {
+    display: none;
+}
+
+/* Performance Mode: Reduced opacity for non-critical elements */
+.performance-mode #vital-signs-bar {
+    opacity: 0.7;
+}
+
+/* Performance Mode: Disable complex effects */
+.performance-mode {
+    will-change: auto;
+    backdrop-filter: none;
+}
+
+/* Performance Mode: Simplified alert display */
+.performance-mode .alert-component {
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+/* Performance Mode: Optimized positioning */
+.performance-mode .agent-icon {
+    transform: none;
+}

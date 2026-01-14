@@ -39,6 +39,11 @@
         "category": "AI 101"
       },
       {
+        "command": "ai-101-ts.togglePerformanceMode",
+        "title": "Toggle Performance Mode",
+        "category": "AI 101"
+      },
+      {
         "command": "ai-101-ts.toggleLargeText",
         "title": "Toggle Large Text Mode",
         "category": "AI 101"

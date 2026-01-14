@@ -92,6 +92,15 @@ function applyModeUpdate(mode: string, config: any) {
     currentMode = mode;
     currentVerbosity = config.explanationVerbositiy || 'high';
 
+    // Performance Mode: Apply additional optimizations
+    if (mode === 'performance') {
+        console.log('Performance Mode activated - applying optimizations');
+        // Reduce animation complexity and hide non-essential elements
+        document.body.classList.add('performance-mode');
+    } else {
+        document.body.classList.remove('performance-mode');
+    }
+
     // Update all existing agents and alerts to reflect the new mode
     const agents = document.querySelectorAll('.agent-icon');
     agents.forEach((el: any) => {

@@ -100,6 +100,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'webview.js'));
         const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'index.css'));
         const sumiUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'sumi-e.css'));
+        const performanceModeStyleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'mode-performance.css'));
         const htmlPath = vscode.Uri.joinPath(this._extensionUri, 'dist', 'index.html');
 
         let htmlContent = '';
@@ -116,6 +117,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
             .replace(/\$\{scriptUri\}/g, scriptUri.toString())
             .replace(/\$\{styleUri\}/g, styleUri.toString())
             .replace(/\$\{sumiUri\}/g, sumiUri.toString())
+            .replace(/\$\{performanceModeStyleUri\}/g, performanceModeStyleUri.toString())
             .replace(/\$\{nonce\}/g, nonce)
             .replace(/\$\{webview.cspSource\}/g, webview.cspSource);
     }

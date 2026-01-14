@@ -86,6 +86,12 @@ export function activate(context: vscode.ExtensionContext) {
 			import('./commands/toggle-focus-mode.js').then(module => module.toggleFocusModeCommand());
 		})
 	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.togglePerformanceMode', () => {
+			import('./commands/toggle-performance-mode.js').then(module => module.togglePerformanceModeCommand());
+		})
+	);
 }
 
 // This method is called when your extension is deactivated

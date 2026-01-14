@@ -56,7 +56,7 @@ development_status:
   # ============================================================
   # Epic 2: LLM Provider Integration & Caching
   # ============================================================
-  epic-2: in-progress
+  epic-2: review
   2-1-define-illmprovider-interface-with-adapter-pattern: review
   2-2-implement-openai-provider-with-error-handling: review
   2-3-implement-anthropic-claude-provider-with-error-handling: review
@@ -70,7 +70,7 @@ development_status:
   # ============================================================
   # Epic 3: AI Agent System & Orchestration
   # ============================================================
-  epic-3: backlog
+  epic-3: review
   3-1-define-iagent-interface-for-shared-agent-behaviors: review
   3-2-implement-agent-orchestrator-with-central-coordination-pattern: review
   3-3-implement-context-agent-for-file-loading-and-token-optimization: review
