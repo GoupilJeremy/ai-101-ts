@@ -47,6 +47,11 @@
         "command": "ai-101-ts.toggleLargeText",
         "title": "Toggle Large Text Mode",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.toggleHighContrast",
+        "title": "Toggle High Contrast Mode",
+        "category": "AI 101"
       }
     ],
     "keybindings": [
@@ -131,6 +136,16 @@
           "type": "number",
           "default": 1000,
           "description": "Vital Signs Bar update interval in Performance Mode (ms)."
+        },
+        "ai101.accessibility.highContrast": {
+          "type": "boolean",
+          "default": null,
+          "description": "Enable High Contrast Mode. Set to null for auto-detection based on VSCode theme."
+        },
+        "ai101.accessibility.autoDetectHighContrast": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically enable High Contrast Mode when VSCode High Contrast theme is active."
         }
       }
     }

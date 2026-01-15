@@ -107,7 +107,7 @@ development_status:
   5-4-implement-focus-dnd-mode-with-hidden-agents: review
   5-5-implement-team-mode-with-visible-labels-and-metrics: review
   5-6-implement-performance-mode-for-low-end-machines: review
-  5-7-implement-high-contrast-mode-for-accessibility: backlog
+  5-7-implement-high-contrast-mode-for-accessibility: in-progress
   5-8-implement-colorblind-accessibility-alternatives: backlog
   5-9-implement-keyboard-only-navigation-for-hud: backlog
   5-10-verify-accessibility-compliance-with-reference-tools: backlog

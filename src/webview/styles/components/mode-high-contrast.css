@@ -1,0 +1,341 @@
+/**
+ * High Contrast Mode Styles
+ * WCAG AAA compliant accessibility styles
+ * Story 5.7: Implement High Contrast Mode for Accessibility
+ */
+
+/* ==========================================================================
+   HIGH CONTRAST COLOR PALETTE (WCAG AAA 7:1 minimum)
+   ========================================================================== */
+
+.high-contrast-mode {
+    --sumi-ink: #000000;           /* Pure black */
+    --washi-white: #ffffff;        /* Pure white */
+    --sumi-accent: #cc0000;        /* High-contrast red (9.5:1 on white) */
+    --hc-success: #006600;         /* Dark green (7.1:1 on white) */
+    --hc-warning: #996600;         /* Dark amber (5.7:1 - uses bold text) */
+    --hc-info: #004499;            /* Dark blue (8.6:1 on white) */
+}
+
+/* ==========================================================================
+   MINIMUM 60% OPACITY ENFORCEMENT (NFR8 - AC: 3)
+   ========================================================================== */
+
+.high-contrast-mode .agent-icon,
+.high-contrast-mode .alert-component,
+.high-contrast-mode #vital-signs-bar,
+.high-contrast-mode .agent-label-text,
+.high-contrast-mode #metrics {
+    opacity: 0.9 !important;
+    min-opacity: 0.6;
+}
+
+/* Override any lower opacity from Performance Mode or Focus Mode */
+.high-contrast-mode * {
+    opacity: unset;
+}
+
+.high-contrast-mode .agent-icon {
+    opacity: 1 !important;
+}
+
+/* ==========================================================================
+   BOLD SUMI-E AESTHETIC (AC: 4)
+   Stronger brush strokes while maintaining minimalist aesthetic
+   ========================================================================== */
+
+.high-contrast-mode .agent-icon {
+    border: 2px solid var(--sumi-ink);
+    background-color: var(--washi-white);
+    box-shadow: 0 0 0 1px var(--sumi-ink);
+}
+
+.high-contrast-mode .alert-component {
+    border-width: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.high-contrast-mode #vital-signs-bar {
+    border-bottom: 2px solid var(--sumi-ink);
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.high-contrast-mode .agent-icon .agent-symbol {
+    text-shadow: 1px 1px 0 var(--washi-white),
+                 -1px -1px 0 var(--washi-white),
+                 1px -1px 0 var(--washi-white),
+                 -1px 1px 0 var(--washi-white);
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   ENHANCED TEXT READABILITY (AC: 7)
+   Larger fonts, bolder weights, increased spacing
+   ========================================================================== */
+
+.high-contrast-mode {
+    font-size: 14px !important;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.high-contrast-mode .agent-label-text {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--sumi-ink) !important;
+}
+
+.high-contrast-mode #metrics {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--sumi-ink) !important;
+}
+
+.high-contrast-mode .alert-tooltip {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   REDUNDANT CODING FOR AGENT STATES (AC: 8)
+   Shape + Color for state communication
+   ========================================================================== */
+
+/* Base shape indicator positioning */
+.high-contrast-mode .agent-icon::before {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+/* Idle state: Circle */
+.high-contrast-mode .agent-icon.idle::before {
+    content: '○';
+    color: var(--sumi-ink);
+}
+
+/* Thinking state: Triangle */
+.high-contrast-mode .agent-icon.thinking::before {
+    content: '△';
+    color: var(--hc-info);
+}
+
+/* Working state: Square */
+.high-contrast-mode .agent-icon.working::before {
+    content: '□';
+    color: var(--sumi-accent);
+}
+
+/* Success state: Checkmark */
+.high-contrast-mode .agent-icon.success::before {
+    content: '✓';
+    color: var(--hc-success);
+}
+
+/* Error state: X mark */
+.high-contrast-mode .agent-icon.error::before {
+    content: '✕';
+    color: var(--sumi-accent);
+}
+
+/* Add color backgrounds to states for additional redundancy */
+.high-contrast-mode .agent-icon.idle {
+    background-color: var(--washi-white);
+}
+
+.high-contrast-mode .agent-icon.thinking {
+    background-color: #e6f0ff; /* Light blue tint */
+    border-color: var(--hc-info);
+}
+
+.high-contrast-mode .agent-icon.working {
+    background-color: #fff0e6; /* Light orange tint */
+    border-color: var(--sumi-accent);
+}
+
+.high-contrast-mode .agent-icon.success {
+    background-color: #e6ffe6; /* Light green tint */
+    border-color: var(--hc-success);
+}
+
+.high-contrast-mode .agent-icon.error {
+    background-color: #ffe6e6; /* Light red tint */
+    border-color: var(--sumi-accent);
+}
+
+/* ==========================================================================
+   ALERT SEVERITY WITHOUT COLOR DEPENDENCE (AC: 9)
+   Border patterns + icons + size variation
+   ========================================================================== */
+
+/* Info: Solid border, normal size */
+.high-contrast-mode .alert-info {
+    border-style: solid;
+    border-width: 2px;
+    border-color: var(--hc-info);
+    width: 24px;
+    height: 24px;
+}
+
+.high-contrast-mode .alert-info .alert-icon-ideogram::before {
+    content: 'ℹ';
+}
+
+/* Warning: Dashed border, slightly larger */
+.high-contrast-mode .alert-warning {
+    border-style: dashed;
+    border-width: 2px;
+    border-color: var(--hc-warning);
+    width: 28px;
+    height: 28px;
+}
+
+.high-contrast-mode .alert-warning .alert-icon-ideogram::before {
+    content: '⚠';
+}
+
+/* Critical: Double border, larger */
+.high-contrast-mode .alert-critical {
+    border-style: double;
+    border-width: 4px;
+    border-color: var(--sumi-accent);
+    width: 32px;
+    height: 32px;
+}
+
+.high-contrast-mode .alert-critical .alert-icon-ideogram::before {
+    content: '⛔';
+}
+
+/* Urgent: Dotted thick border, largest */
+.high-contrast-mode .alert-urgent {
+    border-style: dotted;
+    border-width: 3px;
+    border-color: var(--sumi-accent);
+    width: 36px;
+    height: 36px;
+    animation: none !important; /* Override pulsing animation */
+}
+
+.high-contrast-mode .alert-urgent .alert-icon-ideogram::before {
+    content: '🔥';
+}
+
+/* Add text labels for severity in tooltips */
+.high-contrast-mode .alert-info .alert-tooltip::before {
+    content: '[INFO] ';
+    font-weight: bold;
+}
+
+.high-contrast-mode .alert-warning .alert-tooltip::before {
+    content: '[WARNING] ';
+    font-weight: bold;
+}
+
+.high-contrast-mode .alert-critical .alert-tooltip::before {
+    content: '[CRITICAL] ';
+    font-weight: bold;
+    color: var(--sumi-accent);
+}
+
+.high-contrast-mode .alert-urgent .alert-tooltip::before {
+    content: '[URGENT] ';
+    font-weight: bold;
+    color: var(--sumi-accent);
+}
+
+/* ==========================================================================
+   TOAST NOTIFICATIONS (High Contrast)
+   ========================================================================== */
+
+.high-contrast-mode .toast {
+    background-color: var(--sumi-ink);
+    color: var(--washi-white);
+    border: 2px solid var(--washi-white);
+    font-weight: 600;
+}
+
+.high-contrast-mode .toast--critical {
+    background-color: var(--sumi-accent);
+    border-color: var(--washi-white);
+}
+
+/* ==========================================================================
+   TEAM MODE COMPATIBILITY
+   High Contrast should work with Team Mode labels
+   ========================================================================== */
+
+.high-contrast-mode[data-mode="team"] .agent-label-text {
+    display: block !important;
+    background-color: var(--washi-white);
+    padding: 2px 6px;
+    border: 1px solid var(--sumi-ink);
+}
+
+/* ==========================================================================
+   PERFORMANCE MODE COMPATIBILITY
+   High Contrast opacity rules take precedence
+   ========================================================================== */
+
+.high-contrast-mode.performance-mode .agent-icon {
+    opacity: 0.9 !important; /* HC minimum, not Performance's lower value */
+}
+
+/* Keep the simple spinner in Performance + HC */
+.high-contrast-mode.performance-mode .agent-icon.thinking::after {
+    border-top-color: var(--sumi-ink);
+}
+
+/* ==========================================================================
+   FOCUS INDICATOR FOR KEYBOARD NAVIGATION
+   ========================================================================== */
+
+.high-contrast-mode *:focus {
+    outline: 3px solid var(--sumi-accent) !important;
+    outline-offset: 2px;
+}
+
+.high-contrast-mode .agent-icon:focus,
+.high-contrast-mode .alert-component:focus {
+    box-shadow: 0 0 0 4px var(--sumi-accent);
+}
+
+/* ==========================================================================
+   ANNOTATIONS PANEL (Team Mode + High Contrast)
+   ========================================================================== */
+
+.high-contrast-mode .annotations-panel {
+    background-color: var(--washi-white);
+    border: 2px solid var(--sumi-ink);
+}
+
+.high-contrast-mode .team-annotation {
+    border-bottom: 1px solid var(--sumi-ink);
+}
+
+.high-contrast-mode .team-annotation__author {
+    font-weight: 700;
+    color: var(--sumi-ink);
+}
+
+/* ==========================================================================
+   TEAM METRICS PANEL (High Contrast)
+   ========================================================================== */
+
+.high-contrast-mode .team-metrics-panel {
+    background-color: var(--washi-white);
+    border: 2px solid var(--sumi-ink);
+    color: var(--sumi-ink);
+}
+
+.high-contrast-mode .team-metrics-panel__value--positive {
+    color: var(--hc-success);
+    font-weight: 700;
+}

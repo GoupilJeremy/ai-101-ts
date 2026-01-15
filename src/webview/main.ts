@@ -207,6 +207,10 @@ window.addEventListener('message', event => {
             console.log('Annotations update received:', message.annotations);
             updateAnnotationsDisplay(message.annotations);
             break;
+        case 'toWebview:highContrastUpdate':
+            console.log('High Contrast update received:', message.enabled);
+            updateHighContrastMode(message.enabled, message.config);
+            break;
     }
 });
 
@@ -215,6 +219,49 @@ function updateLargeTextMode(enabled: boolean): void {
     if (hudContainer) {
         if (currentMode === 'team') {
             hudContainer.setAttribute('data-large-text', enabled ? 'true' : 'false');
+        }
+    }
+}
+
+function updateHighContrastMode(enabled: boolean, config: any): void {
+    const hudContainer = document.getElementById('hud-container');
+    if (hudContainer) {
+        if (enabled) {
+            hudContainer.classList.add('high-contrast-mode');
+            console.log('High Contrast Mode enabled in webview');
+        } else {
+            hudContainer.classList.remove('high-contrast-mode');
+            console.log('High Contrast Mode disabled in webview');
+        }
+    }
+
+    // Update all existing agents and alerts to reflect High Contrast Mode
+    const agents = document.querySelectorAll('.agent-icon');
+    agents.forEach((el: any) => {
+        el.classList.toggle('high-contrast-mode', enabled);
+    });
+
+    const alerts = document.querySelectorAll('.alert-component');
+    alerts.forEach((el: any) => {
+        el.classList.toggle('high-contrast-mode', enabled);
+    });
+
+    // Update metrics display
+    const metricsEl = document.getElementById('metrics');
+    if (metricsEl) {
+        metricsEl.classList.toggle('high-contrast-mode', enabled);
+    }
+
+    // Update team metrics panel if in Team Mode
+    if (currentMode === 'team') {
+        const teamMetricsPanel = document.getElementById('team-metrics-panel');
+        if (teamMetricsPanel) {
+            teamMetricsPanel.classList.toggle('high-contrast-mode', enabled);
+        }
+
+        const annotationsPanel = document.getElementById('annotations-panel');
+        if (annotationsPanel) {
+            annotationsPanel.classList.toggle('high-contrast-mode', enabled);
         }
     }
 }

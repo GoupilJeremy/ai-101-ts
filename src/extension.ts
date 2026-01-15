@@ -102,6 +102,12 @@ export function activate(context: vscode.ExtensionContext) {
 			import('./commands/toggle-large-text.js').then(module => module.toggleLargeTextCommand());
 		})
 	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.toggleHighContrast', () => {
+			import('./commands/toggle-high-contrast.js').then(module => module.toggleHighContrastCommand());
+		})
+	);
 }
 
 // This method is called when your extension is deactivated
