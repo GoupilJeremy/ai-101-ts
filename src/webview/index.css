@@ -114,6 +114,53 @@ body {
     }
 }
 
+/* Keyboard Navigation Focus Ring */
+.keyboard-focus {
+    outline: 2px solid #007acc !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.3) !important;
+}
+
+/* High contrast focus ring */
+.high-contrast-mode .keyboard-focus {
+    outline: 3px solid #ffffff !important;
+    outline-offset: 1px !important;
+    box-shadow: 0 0 0 1px #000000 !important;
+}
+
+/* Alert components */
+.alert-component {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #ffffff;
+    pointer-events: auto;
+    max-width: 300px;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+.alert-component:focus {
+    outline: none;
+}
+
+.alert-component.keyboard-focus {
+    outline: 2px solid #ff6b6b !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.3) !important;
+}
+
+/* Screen reader live region */
+#sr-live-region {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
 /* Sumi-e brush effect placeholders */
 .brush-stroke {
     mask-image: url('brush.svg');

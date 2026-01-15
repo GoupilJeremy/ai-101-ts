@@ -165,6 +165,215 @@ function applyModeUpdate(mode: string, config: any) {
     console.log(`AI-101 Webview: Mode=${mode}, Verbosity=${currentVerbosity}, HUD Opacity=${config.hudOpacity}`);
 }
 
+// Keyboard Navigation State
+let currentFocusIndex = -1;
+let interactiveElements: HTMLElement[] = [];
+
+// Initialize keyboard navigation
+function initializeKeyboardNavigation() {
+    updateInteractiveElements();
+
+    // Add keydown event listener
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Add focus event listeners for focus management
+    document.addEventListener('focusin', handleFocusIn);
+    document.addEventListener('focusout', handleFocusOut);
+}
+
+function updateInteractiveElements() {
+    // Get all interactive elements (agents and alerts)
+    interactiveElements = Array.from(document.querySelectorAll('.agent-icon, .alert-component')) as HTMLElement[];
+
+    // Ensure all have tabindex
+    interactiveElements.forEach(el => {
+        if (!el.hasAttribute('tabindex')) {
+            el.setAttribute('tabindex', '0');
+        }
+    });
+}
+
+function handleKeyDown(event: KeyboardEvent) {
+    if (interactiveElements.length === 0) return;
+
+    switch (event.key) {
+        case 'Tab':
+            event.preventDefault();
+            handleTabNavigation(event.shiftKey);
+            break;
+        case 'ArrowRight':
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'ArrowDown':
+            event.preventDefault();
+            handleArrowNavigation(event.key);
+            break;
+        case 'Enter':
+        case ' ':
+            event.preventDefault();
+            handleActivation();
+            break;
+        case 'Escape':
+            event.preventDefault();
+            handleEscape();
+            break;
+    }
+}
+
+function handleTabNavigation(shiftKey: boolean) {
+    if (currentFocusIndex === -1) {
+        // No current focus, start with first element
+        currentFocusIndex = 0;
+    } else {
+        if (shiftKey) {
+            // Shift+Tab: previous
+            currentFocusIndex = currentFocusIndex > 0 ? currentFocusIndex - 1 : interactiveElements.length - 1;
+        } else {
+            // Tab: next
+            currentFocusIndex = currentFocusIndex < interactiveElements.length - 1 ? currentFocusIndex + 1 : 0;
+        }
+    }
+
+    focusElement(currentFocusIndex);
+}
+
+function handleArrowNavigation(key: string) {
+    if (currentFocusIndex === -1) {
+        currentFocusIndex = 0;
+        focusElement(currentFocusIndex);
+        return;
+    }
+
+    const currentElement = interactiveElements[currentFocusIndex];
+    let nextIndex = currentFocusIndex;
+
+    if (currentElement.classList.contains('agent-icon')) {
+        // Agent navigation
+        if (key === 'ArrowRight') {
+            // Find next agent
+            for (let i = currentFocusIndex + 1; i < interactiveElements.length; i++) {
+                if (interactiveElements[i].classList.contains('agent-icon')) {
+                    nextIndex = i;
+                    break;
+                }
+            }
+        } else if (key === 'ArrowLeft') {
+            // Find previous agent
+            for (let i = currentFocusIndex - 1; i >= 0; i--) {
+                if (interactiveElements[i].classList.contains('agent-icon')) {
+                    nextIndex = i;
+                    break;
+                }
+            }
+        }
+    } else if (currentElement.classList.contains('alert-component')) {
+        // Alert navigation
+        if (key === 'ArrowDown') {
+            // Find next alert
+            for (let i = currentFocusIndex + 1; i < interactiveElements.length; i++) {
+                if (interactiveElements[i].classList.contains('alert-component')) {
+                    nextIndex = i;
+                    break;
+                }
+            }
+        } else if (key === 'ArrowUp') {
+            // Find previous alert
+            for (let i = currentFocusIndex - 1; i >= 0; i--) {
+                if (interactiveElements[i].classList.contains('alert-component')) {
+                    nextIndex = i;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (nextIndex !== currentFocusIndex) {
+        currentFocusIndex = nextIndex;
+        focusElement(currentFocusIndex);
+    }
+}
+
+function handleActivation() {
+    if (currentFocusIndex === -1) return;
+
+    const element = interactiveElements[currentFocusIndex];
+    if (element.classList.contains('agent-icon')) {
+        // Activate agent (could expand details, show menu, etc.)
+        console.log('Activating agent:', element.dataset.agent);
+        // For now, just announce
+        announceToScreenReader(`Agent ${element.dataset.agent} activated`);
+    } else if (element.classList.contains('alert-component')) {
+        // Activate alert (could expand, accept suggestion, etc.)
+        console.log('Activating alert:', element.id);
+        announceToScreenReader('Alert activated');
+    }
+}
+
+function handleEscape() {
+    if (currentFocusIndex === -1) return;
+
+    const element = interactiveElements[currentFocusIndex];
+    if (element.classList.contains('alert-component')) {
+        // Dismiss/collapse alert
+        console.log('Dismissing alert:', element.id);
+        announceToScreenReader('Alert dismissed');
+    }
+}
+
+function focusElement(index: number) {
+    if (index >= 0 && index < interactiveElements.length) {
+        interactiveElements[index].focus();
+    }
+}
+
+function focusFirstElement() {
+    updateInteractiveElements();
+    if (interactiveElements.length > 0) {
+        currentFocusIndex = 0;
+        focusElement(0);
+        announceToScreenReader('HUD focused for keyboard navigation');
+    }
+}
+
+function handleFocusIn(event: FocusEvent) {
+    const target = event.target as HTMLElement;
+    const index = interactiveElements.indexOf(target);
+    if (index !== -1) {
+        currentFocusIndex = index;
+        target.classList.add('keyboard-focus');
+    }
+}
+
+function handleFocusOut(event: FocusEvent) {
+    const target = event.target as HTMLElement;
+    target.classList.remove('keyboard-focus');
+}
+
+function announceToScreenReader(message: string) {
+    // Create a live region for screen reader announcements
+    let liveRegion = document.getElementById('sr-live-region');
+    if (!liveRegion) {
+        liveRegion = document.createElement('div');
+        liveRegion.id = 'sr-live-region';
+        liveRegion.setAttribute('aria-live', 'polite');
+        liveRegion.setAttribute('aria-atomic', 'true');
+        liveRegion.style.position = 'absolute';
+        liveRegion.style.left = '-10000px';
+        liveRegion.style.width = '1px';
+        liveRegion.style.height = '1px';
+        liveRegion.style.overflow = 'hidden';
+        document.body.appendChild(liveRegion);
+    }
+    liveRegion.textContent = message;
+}
+
+// Initialize keyboard navigation when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeKeyboardNavigation);
+} else {
+    initializeKeyboardNavigation();
+}
+
 // Listen for messages from the extension
 window.addEventListener('message', event => {
     const message = event.data;
@@ -215,7 +424,14 @@ window.addEventListener('message', event => {
             console.log('Colorblind update received:', message.enabled, message.config);
             updateColorblindMode(message.enabled, message.config);
             break;
+        case 'toWebview:focusFirstElement':
+            console.log('Focus first element requested');
+            focusFirstElement();
+            break;
     }
+
+    // Update interactive elements after any DOM changes
+    setTimeout(updateInteractiveElements, 0);
 });
 
 function updateLargeTextMode(enabled: boolean): void {
@@ -359,6 +575,7 @@ function updateTeamMetricsDisplay(metrics: any): void {
         `;
     }
 }
+
 
 // VSCode API for posting messages back to extension
 declare const acquireVsCodeApi: () => { postMessage: (message: any) => void };
@@ -546,6 +763,12 @@ function executeUpdateAgentHUD(agent: string, state: any) {
     agentEl.className = `agent-icon ${state.status} ${performanceMode ? 'low-fx' : ''}`;
     agentEl.setAttribute('data-agent', agent);
 
+    // Add ARIA attributes for accessibility
+    agentEl.setAttribute('role', 'button');
+    agentEl.setAttribute('aria-label', `Agent ${agent}: ${state.status}`);
+    agentEl.setAttribute('aria-describedby', `agent-description-${agent}`);
+    agentEl.setAttribute('aria-expanded', 'false'); // Could be expanded for details
+
     // Update label text with descriptive state (Team Mode)
     const labelEl = agentEl.querySelector('.agent-label-text') as HTMLElement;
     if (labelEl) {
@@ -707,6 +930,12 @@ function executeRenderAlert(alert: any) {
 
     alertEl.className = `alert-component alert-${alert.severity}`;
     alertEl.dataset.anchorLine = alert.anchorLine?.toString() || '';
+
+    // Add ARIA attributes for accessibility
+    alertEl.setAttribute('role', 'alert');
+    alertEl.setAttribute('aria-label', `Alert: ${alert.message}`);
+    alertEl.setAttribute('aria-live', 'polite');
+    alertEl.setAttribute('aria-atomic', 'true');
 
     // Expert Mode: Condensed rendering (signal > noise)
     let messageToDisplay = alert.message;

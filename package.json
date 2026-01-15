@@ -57,6 +57,11 @@
         "command": "ai-101-ts.toggleColorblind",
         "title": "Toggle Colorblind Mode",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.focusHud",
+        "title": "Focus HUD for Keyboard Navigation",
+        "category": "AI 101"
       }
     ],
     "keybindings": [
@@ -65,6 +70,13 @@
         "key": "ctrl+shift+f",
         "mac": "cmd+shift+f",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "ai-101-ts.focusHud",
+        "key": "ctrl+shift+h",
+        "mac": "cmd+shift+h",
+        "when": "editorTextFocus",
+        "description": "Focus the AI HUD for keyboard navigation"
       }
     ],
     "configuration": {
@@ -173,6 +185,47 @@
             }
           },
           "description": "Colorblind accessibility settings"
+        },
+        "ai101.keyboard.shortcuts": {
+          "type": "object",
+          "properties": {
+            "enableHudNavigation": {
+              "type": "boolean",
+              "default": true,
+              "description": "Enable keyboard navigation for HUD elements"
+            },
+            "tabNavigation": {
+              "type": "string",
+              "default": "Tab",
+              "description": "Key for tab navigation through HUD elements"
+            },
+            "shiftTabNavigation": {
+              "type": "string",
+              "default": "Shift+Tab",
+              "description": "Key for reverse tab navigation"
+            },
+            "activateElement": {
+              "type": "string",
+              "default": "Enter",
+              "description": "Key to activate selected HUD element"
+            },
+            "dismissElement": {
+              "type": "string",
+              "default": "Escape",
+              "description": "Key to dismiss or close HUD elements"
+            },
+            "agentNavigation": {
+              "type": "string",
+              "default": "Arrow Keys",
+              "description": "Keys for spatial navigation between agents"
+            },
+            "alertNavigation": {
+              "type": "string",
+              "default": "Arrow Keys",
+              "description": "Keys for spatial navigation between alerts"
+            }
+          },
+          "description": "Keyboard navigation shortcuts for HUD accessibility"
         }
       }
     }
@@ -197,6 +250,7 @@
     "openai": "^4.28.0"
   },
   "devDependencies": {
+    "@types/jsdom": "^27.0.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
     "@types/vscode": "^1.108.0",
@@ -206,7 +260,9 @@
     "@vscode/test-electron": "^2.5.2",
     "esbuild": "^0.25.12",
     "eslint": "^9.25.1",
+    "jsdom": "^20.0.3",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^4.0.17"
   }
 }

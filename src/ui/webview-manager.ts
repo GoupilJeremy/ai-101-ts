@@ -44,4 +44,13 @@ export class WebviewManager {
     public getProvider(): AI101WebviewProvider | undefined {
         return this.provider;
     }
+
+    /**
+     * Posts a message to the webview.
+     */
+    public postMessageToWebview(message: any): void {
+        if (this.provider && this.provider['_view']) {
+            this.provider['_view'].webview.postMessage(message);
+        }
+    }
 }

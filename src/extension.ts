@@ -114,6 +114,18 @@ export function activate(context: vscode.ExtensionContext) {
 			import('./commands/toggle-colorblind.js').then(module => module.toggleColorblind());
 		})
 	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.focusHud', () => {
+			// Focus the HUD for keyboard navigation
+			const webviewManager = WebviewManager.getInstance();
+			// Send message to webview to focus first interactive element
+			webviewManager.postMessageToWebview({
+				type: 'toWebview:focusFirstElement'
+			});
+			vscode.window.showInformationMessage('AI-101: HUD focused for keyboard navigation');
+		})
+	);
 }
 
 // This method is called when your extension is deactivated
