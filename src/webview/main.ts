@@ -211,6 +211,10 @@ window.addEventListener('message', event => {
             console.log('High Contrast update received:', message.enabled);
             updateHighContrastMode(message.enabled, message.config);
             break;
+        case 'toWebview:colorblindUpdate':
+            console.log('Colorblind update received:', message.enabled, message.config);
+            updateColorblindMode(message.enabled, message.config);
+            break;
     }
 });
 
@@ -262,6 +266,51 @@ function updateHighContrastMode(enabled: boolean, config: any): void {
         const annotationsPanel = document.getElementById('annotations-panel');
         if (annotationsPanel) {
             annotationsPanel.classList.toggle('high-contrast-mode', enabled);
+        }
+    }
+}
+
+function updateColorblindMode(enabled: boolean, config: any): void {
+    const hudContainer = document.getElementById('hud-container');
+    if (hudContainer) {
+        if (enabled) {
+            hudContainer.classList.add('colorblind-mode');
+            hudContainer.setAttribute('data-colorblind-type', config.type);
+            console.log('Colorblind Mode enabled in webview:', config.type);
+        } else {
+            hudContainer.classList.remove('colorblind-mode');
+            hudContainer.removeAttribute('data-colorblind-type');
+            console.log('Colorblind Mode disabled in webview');
+        }
+    }
+
+    // Update all existing agents and alerts to reflect Colorblind Mode
+    const agents = document.querySelectorAll('.agent-icon');
+    agents.forEach((el: any) => {
+        el.classList.toggle('colorblind-mode', enabled);
+    });
+
+    const alerts = document.querySelectorAll('.alert-component');
+    alerts.forEach((el: any) => {
+        el.classList.toggle('colorblind-mode', enabled);
+    });
+
+    // Update metrics display
+    const metricsEl = document.getElementById('metrics');
+    if (metricsEl) {
+        metricsEl.classList.toggle('colorblind-mode', enabled);
+    }
+
+    // Update team metrics panel if in Team Mode
+    if (currentMode === 'team') {
+        const teamMetricsPanel = document.getElementById('team-metrics-panel');
+        if (teamMetricsPanel) {
+            teamMetricsPanel.classList.toggle('colorblind-mode', enabled);
+        }
+
+        const annotationsPanel = document.getElementById('annotations-panel');
+        if (annotationsPanel) {
+            annotationsPanel.classList.toggle('colorblind-mode', enabled);
         }
     }
 }
@@ -495,6 +544,7 @@ function executeUpdateAgentHUD(agent: string, state: any) {
     }
 
     agentEl.className = `agent-icon ${state.status} ${performanceMode ? 'low-fx' : ''}`;
+    agentEl.setAttribute('data-agent', agent);
 
     // Update label text with descriptive state (Team Mode)
     const labelEl = agentEl.querySelector('.agent-label-text') as HTMLElement;

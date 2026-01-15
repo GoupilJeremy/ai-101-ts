@@ -52,6 +52,11 @@
         "command": "ai-101-ts.toggleHighContrast",
         "title": "Toggle High Contrast Mode",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.toggleColorblind",
+        "title": "Toggle Colorblind Mode",
+        "category": "AI 101"
       }
     ],
     "keybindings": [
@@ -146,6 +151,28 @@
           "type": "boolean",
           "default": true,
           "description": "Automatically enable High Contrast Mode when VSCode High Contrast theme is active."
+        },
+        "ai101.accessibility.colorblind": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable Colorblind Accessibility Mode"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "none",
+                "deuteranopia",
+                "protanopia",
+                "tritanopia"
+              ],
+              "default": "none",
+              "description": "Type of color blindness to optimize for"
+            }
+          },
+          "description": "Colorblind accessibility settings"
         }
       }
     }

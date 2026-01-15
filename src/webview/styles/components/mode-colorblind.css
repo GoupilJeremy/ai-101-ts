@@ -1,0 +1,208 @@
+/* Colorblind Accessibility Mode Styles */
+/* Story 5.8: Implement Colorblind Accessibility Alternatives */
+
+/* Colorblind-safe color palettes */
+.colorblind-mode {
+    /* Deuteranopia (red-green color blindness) */
+    --agent-color-architect: #0072B2;
+    /* Blue instead of red */
+    --agent-color-coder: #009E73;
+    /* Green safe */
+    --agent-color-reviewer: #D55E00;
+    /* Orange instead of red */
+    --agent-color-context: #CC79A7;
+    /* Pink instead of purple */
+}
+
+.colorblind-mode[data-colorblind-type="deuteranopia"] {
+    --agent-color-architect: #0072B2;
+    --agent-color-coder: #009E73;
+    --agent-color-reviewer: #D55E00;
+    --agent-color-context: #CC79A7;
+}
+
+/* Protanopia (red color blindness) */
+.colorblind-mode[data-colorblind-type="protanopia"] {
+    --agent-color-architect: #56B4E9;
+    /* Light blue */
+    --agent-color-coder: #009E73;
+    /* Green */
+    --agent-color-reviewer: #E69F00;
+    /* Yellow-orange */
+    --agent-color-context: #0072B2;
+    /* Blue */
+}
+
+/* Tritanopia (blue color blindness) */
+.colorblind-mode[data-colorblind-type="tritanopia"] {
+    --agent-color-architect: #D55E00;
+    /* Orange */
+    --agent-color-coder: #E69F00;
+    /* Yellow */
+    --agent-color-reviewer: #009E73;
+    /* Green */
+    --agent-color-context: #56B4E9;
+    /* Light blue */
+}
+
+/* Alert severity patterns (not color-dependent) */
+.colorblind-mode .alert-info {
+    border-style: solid;
+    border-width: 2px;
+    border-color: var(--agent-color-architect);
+}
+
+.colorblind-mode .alert-warning {
+    border-style: dashed;
+    border-width: 2px;
+    border-color: var(--agent-color-reviewer);
+}
+
+.colorblind-mode .alert-critical {
+    border-style: dotted;
+    border-width: 2px;
+    border-color: var(--agent-color-coder);
+}
+
+.colorblind-mode .alert-urgent {
+    border-style: double;
+    border-width: 4px;
+    border-color: var(--agent-color-context);
+}
+
+/* Agent state shape indicators */
+.colorblind-mode .agent-icon.idle::before {
+    content: '○';
+    /* Circle */
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--agent-color-architect);
+}
+
+.colorblind-mode .agent-icon.thinking::before {
+    content: '□';
+    /* Square */
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--agent-color-coder);
+}
+
+.colorblind-mode .agent-icon.working::before {
+    content: '△';
+    /* Triangle */
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--agent-color-reviewer);
+}
+
+.colorblind-mode .agent-icon.alert::before {
+    content: '◆';
+    /* Diamond */
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--agent-color-context);
+}
+
+/* Icon ideogram texture patterns */
+.colorblind-mode .agent-icon[data-agent="architect"]::after {
+    content: '···';
+    /* Dots pattern */
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: var(--agent-color-architect);
+    opacity: 0.7;
+}
+
+.colorblind-mode .agent-icon[data-agent="coder"]::after {
+    content: '///';
+    /* Stripes pattern */
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: var(--agent-color-coder);
+    opacity: 0.7;
+}
+
+.colorblind-mode .agent-icon[data-agent="reviewer"]::after {
+    content: 'XXX';
+    /* Crosshatch pattern */
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: var(--agent-color-reviewer);
+    opacity: 0.7;
+}
+
+.colorblind-mode .agent-icon[data-agent="context"]::after {
+    content: '~~~';
+    /* Waves pattern */
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: var(--agent-color-context);
+    opacity: 0.7;
+}
+
+/* Vital Signs pattern fills */
+.colorblind-mode #metrics {
+    background-image:
+        linear-gradient(45deg, transparent 25%, var(--agent-color-architect) 25%, var(--agent-color-architect) 50%, transparent 50%),
+        linear-gradient(-45deg, transparent 25%, var(--agent-color-architect) 25%, var(--agent-color-architect) 50%, transparent 50%);
+    background-size: 4px 4px;
+    background-position: 0 0, 2px 2px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--agent-color-architect);
+}
+
+/* Enhanced visibility for colorblind mode */
+.colorblind-mode .agent-icon,
+.colorblind-mode .alert-component {
+    border-width: 2px;
+    font-weight: 600;
+}
+
+/* High contrast + colorblind integration */
+.colorblind-mode.high-contrast-mode .alert-info {
+    border-style: solid;
+    border-width: 3px;
+    border-color: #000000;
+}
+
+.colorblind-mode.high-contrast-mode .alert-warning {
+    border-style: dashed;
+    border-width: 3px;
+    border-color: #000000;
+}
+
+.colorblind-mode.high-contrast-mode .alert-critical {
+    border-style: dotted;
+    border-width: 3px;
+    border-color: #000000;
+}
+
+.colorblind-mode.high-contrast-mode .alert-urgent {
+    border-style: double;
+    border-width: 6px;
+    border-color: #000000;
+}

@@ -108,6 +108,12 @@ export function activate(context: vscode.ExtensionContext) {
 			import('./commands/toggle-high-contrast.js').then(module => module.toggleHighContrastCommand());
 		})
 	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.toggleColorblind', () => {
+			import('./commands/toggle-colorblind.js').then(module => module.toggleColorblind());
+		})
+	);
 }
 
 // This method is called when your extension is deactivated
