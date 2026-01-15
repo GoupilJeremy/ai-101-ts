@@ -110,7 +110,7 @@ development_status:
   5-7-implement-high-contrast-mode-for-accessibility: review
   5-8-implement-colorblind-accessibility-alternatives: review
   5-9-implement-keyboard-only-navigation-for-hud: review
-  5-10-verify-accessibility-compliance-with-reference-tools: backlog
+  5-10-verify-accessibility-compliance-with-reference-tools: review
   epic-5-retrospective: optional
 
   # ============================================================

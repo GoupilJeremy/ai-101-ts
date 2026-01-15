@@ -14,14 +14,14 @@
 </head>
 
 <body>
-    <div id="hud-container">
-        <div id="vital-signs-bar">
-            <span id="metrics">Tokens: 0 | Cost: $0.00 | Files: 0</span>
+    <div id="hud-container" role="application" aria-label="AI 101 HUD" aria-live="polite">
+        <div id="vital-signs-bar" role="status" aria-label="Vital Signs" tabindex="0">
+            <span id="metrics" aria-label="Current metrics">Tokens: 0 | Cost: $0.00 | Files: 0</span>
         </div>
-        <div id="agent-hud">
+        <div id="agent-hud" role="region" aria-label="AI Agents" aria-live="polite">
             <!-- Agents will be injected here -->
         </div>
-        <div class="focus-mode-indicator">
+        <div class="focus-mode-indicator" role="status" aria-label="Focus Mode Active" tabindex="0">
             🎯 Focus Mode
         </div>
     </div>

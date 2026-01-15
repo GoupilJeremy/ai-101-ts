@@ -258,6 +258,7 @@
     "@typescript-eslint/parser": "^8.31.1",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
+    "axe-core": "^4.8.2",
     "esbuild": "^0.25.12",
     "eslint": "^9.25.1",
     "jsdom": "^20.0.3",
