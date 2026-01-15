@@ -11,6 +11,10 @@ let performanceMode = false;
 let currentMode = 'learning';
 let currentVerbosity: 'low' | 'high' = 'high';
 
+// Low FPS detection state
+let consecutiveLowFpsCount = 0;
+let fpsReportSent = false;
+
 function monitorFPS() {
     frameCount++;
     const now = performance.now();
@@ -18,8 +22,32 @@ function monitorFPS() {
         fps = frameCount;
         frameCount = 0;
         lastTime = now;
+
+        // Performance Mode: Report low FPS to extension for detection
         if (fps < 30 && !performanceMode) {
+            consecutiveLowFpsCount++;
             console.warn(`Low FPS detected: ${fps}. Recommendation: Enable Performance Mode.`);
+
+            // Report to extension after 3 consecutive low FPS readings
+            if (consecutiveLowFpsCount >= 3 && !fpsReportSent) {
+                fpsReportSent = true;
+                try {
+                    getVsCodeApi().postMessage({
+                        type: 'toExtension:lowFpsDetected',
+                        fps: fps,
+                        consecutiveCount: consecutiveLowFpsCount
+                    });
+                } catch (e) {
+                    // Ignore if VSCode API not available
+                }
+            }
+
+            // Apply no-gpu class if very low FPS
+            if (fps < 20) {
+                document.body.classList.add('no-gpu');
+            }
+        } else {
+            consecutiveLowFpsCount = 0;
         }
     }
     requestAnimationFrame(monitorFPS);
@@ -354,6 +382,33 @@ function addCommentButtonToAlerts(): void {
 }
 
 function executeUpdateMetricsUI(metrics: any) {
+    // Performance Mode: Throttle metrics updates to 1/second (AC: 10)
+    if (performanceMode) {
+        const now = Date.now();
+        pendingMetricsUpdate = metrics; // Store latest update
+
+        if (now - lastMetricsUpdate < METRICS_THROTTLE_MS) {
+            // Schedule update if not already scheduled
+            if (!metricsThrottleTimeout) {
+                metricsThrottleTimeout = setTimeout(() => {
+                    metricsThrottleTimeout = null;
+                    if (pendingMetricsUpdate) {
+                        doUpdateMetricsUI(pendingMetricsUpdate);
+                        pendingMetricsUpdate = null;
+                    }
+                }, METRICS_THROTTLE_MS - (now - lastMetricsUpdate));
+            }
+            return;
+        }
+        lastMetricsUpdate = now;
+    }
+
+    doUpdateMetricsUI(metrics);
+}
+
+let metricsThrottleTimeout: any = null;
+
+function doUpdateMetricsUI(metrics: any) {
     const metricsEl = document.getElementById('metrics');
     if (metricsEl) {
         const formattedCost = new Intl.NumberFormat('en-US', {
@@ -477,9 +532,28 @@ function getDescriptiveStateText(agent: string, state: any): string {
 let currentViewport: any = null;
 let lastCursor: any = null;
 
+// Performance Mode: Throttle collision checks (AC: 8)
+let lastCollisionCheck = 0;
+const COLLISION_THROTTLE_MS = 500; // 500ms throttle in Performance Mode
+
+// Performance Mode: Throttle metrics updates (AC: 10)
+let lastMetricsUpdate = 0;
+const METRICS_THROTTLE_MS = 1000; // 1 second throttle in Performance Mode
+let pendingMetricsUpdate: any = null;
+
 function executeHandleCursorUpdate(cursor: any) {
     lastCursor = cursor;
     currentViewport = cursor.visibleRanges[0];
+
+    // Performance Mode: Throttle collision checks to 500ms
+    if (performanceMode) {
+        const now = Date.now();
+        if (now - lastCollisionCheck < COLLISION_THROTTLE_MS) {
+            return; // Skip this update, throttled
+        }
+        lastCollisionCheck = now;
+    }
+
     repositionAgents();
     repositionAlerts();
 }
@@ -583,6 +657,9 @@ function showToastNotification(message: string, icon: string = '🚨') {
     }, 5000);
 }
 
+// Cache last positions to skip redundant updates (AC: 11)
+const lastAgentPositions: Map<string, { top: number; opacity: number }> = new Map();
+
 function applyRepulsionToAgent(el: HTMLElement, cursor: any) {
     const baseTopPercent = parseFloat(el.dataset.baseTop || '20');
     const baseTopPx = (baseTopPercent / 100) * window.innerHeight;
@@ -590,6 +667,27 @@ function applyRepulsionToAgent(el: HTMLElement, cursor: any) {
     let translateY = baseTopPx;
     let opacity = 1.0;
 
+    // Performance Mode: Skip complex repulsion calculations (AC: 11)
+    if (performanceMode) {
+        // Simple positioning - no repulsion, just base position
+        const agentId = el.id;
+        const lastPos = lastAgentPositions.get(agentId);
+
+        // Skip update if position unchanged (within 1px tolerance)
+        if (lastPos && Math.abs(lastPos.top - baseTopPx) < 1) {
+            return;
+        }
+
+        // Direct positioning without transform (faster)
+        el.style.top = `${baseTopPx}px`;
+        el.style.transform = 'none';
+        el.style.opacity = '0.8'; // Fixed opacity in Performance Mode
+
+        lastAgentPositions.set(agentId, { top: baseTopPx, opacity: 0.8 });
+        return;
+    }
+
+    // Normal mode: Full repulsion calculation
     if (cursor) {
         const cursorYPx = cursor.relativeY * window.innerHeight;
         const dist = Math.abs(baseTopPx - cursorYPx);

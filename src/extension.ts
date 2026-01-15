@@ -13,12 +13,16 @@ import { VitalSignsBar } from './ui/vital-signs-bar.js';
 import { SpatialManager } from './ui/spatial-manager.js';
 import { ModeManager } from './modes/mode-manager.js';
 import { AgentMode } from './modes/mode-types.js';
+import { SystemDetector } from './performance/system-detector.js';
 
 export function activate(context: vscode.ExtensionContext) {
 
 	// Initialize Centralized Error Handler
 	ErrorHandler.initialize();
 	ErrorHandler.log('Extension "ai-101-ts" activation started.');
+
+	// Check for low memory and auto-activate Performance Mode if needed (Story 5.6)
+	SystemDetector.getInstance().checkAndAutoActivate();
 
 	// Initialize LLM Manager and Rate Limiter
 	LLMProviderManager.getInstance().initialize(context.globalStorageUri.fsPath);

@@ -5,6 +5,7 @@ import { ModeManager } from '../modes/mode-manager.js';
 import { AgentMode } from '../modes/mode-types.js';
 import { TeamMetricsTracker } from '../team/team-metrics-tracker.js';
 import { AnnotationsManager } from '../team/annotations-manager.js';
+import { PerformanceDetector } from '../performance/performance-detector.js';
 
 export class AI101WebviewProvider implements vscode.WebviewViewProvider {
     public static readonly viewType = 'ai101.webview';
@@ -56,6 +57,9 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
                 break;
             case 'toExtension:getAnnotations':
                 this.sendAnnotationsToWebview(message.suggestionId);
+                break;
+            case 'toExtension:lowFpsDetected':
+                this.handleLowFpsDetected(message.fps, message.consecutiveCount);
                 break;
             default:
                 console.warn('Unknown message type from webview:', type);
@@ -133,6 +137,15 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
             type: 'toWebview:annotationsUpdate',
             annotations
         });
+    }
+
+    /**
+     * Handle low FPS detection from webview.
+     * Records FPS in PerformanceDetector for trend analysis and suggestions.
+     */
+    private handleLowFpsDetected(fps: number, consecutiveCount: number): void {
+        console.log(`Performance: Low FPS detected (${fps} fps, ${consecutiveCount} consecutive)`);
+        PerformanceDetector.getInstance().recordFps(fps);
     }
 
     private _getHtmlForWebview(webview: vscode.Webview) {

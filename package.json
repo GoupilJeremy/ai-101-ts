@@ -111,6 +111,26 @@
           "type": "boolean",
           "default": false,
           "description": "Enable team comprehension surveys (opt-in)."
+        },
+        "ai101.performanceMode.autoActivate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-activate Performance Mode on low-memory systems (<4GB RAM)."
+        },
+        "ai101.performanceMode.autoSuggest": {
+          "type": "boolean",
+          "default": true,
+          "description": "Suggest Performance Mode when low FPS is detected."
+        },
+        "ai101.performanceMode.collisionThrottleMs": {
+          "type": "number",
+          "default": 500,
+          "description": "Anti-collision check interval in Performance Mode (ms)."
+        },
+        "ai101.performanceMode.metricsThrottleMs": {
+          "type": "number",
+          "default": 1000,
+          "description": "Vital Signs Bar update interval in Performance Mode (ms)."
         }
       }
     }

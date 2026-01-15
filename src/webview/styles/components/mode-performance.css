@@ -1,14 +1,42 @@
 /**
  * Performance Mode Styles
  * Optimized for low-end machines with reduced animations and simplified UI
+ * Story 5.6: Implement Performance Mode for Low-End Machines
  */
 
-/* Performance Mode: Reduce animations and transitions */
+/* ==========================================================================
+   CRITICAL: Disable ALL animations (AC: 3, 4)
+   ========================================================================== */
+
+/* Performance Mode: Completely disable all animations and transitions */
 .performance-mode .agent-icon,
-.performance-mode .alert-component {
-    transition: none;
-    animation: none;
+.performance-mode .agent-icon.thinking,
+.performance-mode .agent-icon.working,
+.performance-mode .agent-icon.idle,
+.performance-mode .agent-icon.success,
+.performance-mode .agent-icon.error,
+.performance-mode .alert-component,
+.performance-mode .alert-urgent,
+.performance-mode .alert-critical {
+    transition: none !important;
+    animation: none !important;
 }
+
+/* Ensure pulse/breathing animations are disabled */
+.performance-mode .agent-icon.thinking {
+    animation: none !important;
+    transform: none !important;
+}
+
+/* Disable urgent alert pulsing */
+.performance-mode .alert-urgent {
+    animation: none !important;
+    border-width: 1px !important;
+}
+
+/* ==========================================================================
+   Simplified Visual Elements
+   ========================================================================== */
 
 /* Performance Mode: Simplified agent icons */
 .performance-mode .agent-icon .agent-symbol {
@@ -24,21 +52,93 @@
 /* Performance Mode: Reduced opacity for non-critical elements */
 .performance-mode #vital-signs-bar {
     opacity: 0.7;
+    backdrop-filter: none;
 }
 
-/* Performance Mode: Disable complex effects */
+/* ==========================================================================
+   GPU Optimization (AC: 7)
+   ========================================================================== */
+
+/* Performance Mode: Disable GPU layer creation */
 .performance-mode {
-    will-change: auto;
-    backdrop-filter: none;
+    will-change: auto !important;
+    backdrop-filter: none !important;
+}
+
+.performance-mode * {
+    will-change: auto !important;
 }
 
 /* Performance Mode: Simplified alert display */
 .performance-mode .alert-component {
     box-shadow: none;
     border: 1px solid rgba(0, 0, 0, 0.3);
+    backdrop-filter: none;
 }
 
-/* Performance Mode: Optimized positioning */
+/* Performance Mode: Static agent positioning */
 .performance-mode .agent-icon {
-    transform: none;
+    transform: none !important;
+}
+
+/* ==========================================================================
+   Simple Spinner for Thinking State (AC: 5)
+   Replaces complex brush stroke animations
+   ========================================================================== */
+
+.performance-mode .agent-icon.thinking::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-top-color: var(--sumi-ink, #1a1a1a);
+    border-radius: 50%;
+    animation: performance-spin 0.8s linear infinite;
+}
+
+@keyframes performance-spin {
+    to {
+        transform: translateX(-50%) rotate(360deg);
+    }
+}
+
+/* ==========================================================================
+   Simplified Fade Transitions (AC: 6)
+   Replaces complex convergence/fusion animations
+   ========================================================================== */
+
+.performance-mode .agent-icon.working {
+    opacity: 1;
+}
+
+.performance-mode .agent-icon.success {
+    opacity: 0.9;
+}
+
+.performance-mode .agent-icon.idle {
+    opacity: 0.6;
+}
+
+/* ==========================================================================
+   GPU Fallback Mode (AC: 7)
+   Applied when GPU causes performance issues
+   ========================================================================== */
+
+.no-gpu .agent-icon {
+    transform: none !important;
+    position: absolute;
+}
+
+.no-gpu * {
+    will-change: auto !important;
+    transform: none !important;
+}
+
+.no-gpu .alert-component {
+    transform: none !important;
 }
