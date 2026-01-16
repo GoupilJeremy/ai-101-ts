@@ -119,8 +119,8 @@ development_status:
   epic-6: in-progress
   6-1-implement-intelligent-file-discovery-and-context-loading: review
   6-2-implement-token-budget-management-and-optimization: review
-  6-3-implement-visible-context-file-tracking-and-display: in-progress
-  6-4-implement-project-architecture-pattern-detection: backlog
+  6-3-implement-visible-context-file-tracking-and-display: review
+  6-4-implement-project-architecture-pattern-detection: review
   6-5-implement-architecture-aligned-suggestion-generation: backlog
   6-6-implement-proactive-edge-case-identification: backlog
   6-7-implement-real-time-security-validation: backlog

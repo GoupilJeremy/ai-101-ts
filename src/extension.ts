@@ -15,6 +15,7 @@ import { ModeManager } from './modes/mode-manager.js';
 import { AgentMode } from './modes/mode-types.js';
 import { AgentOrchestrator } from './agents/orchestrator.js';
 import { ContextAgent } from './agents/context/context-agent.js';
+import { ArchitectAgent } from './agents/architect/architect-agent.js';
 import { SystemDetector } from './performance/system-detector.js';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -36,6 +37,10 @@ export function activate(context: vscode.ExtensionContext) {
 	const contextAgent = new ContextAgent();
 	contextAgent.initialize(llmManager);
 	orchestrator.registerAgent(contextAgent);
+
+	const architectAgent = new ArchitectAgent();
+	architectAgent.initialize(llmManager);
+	orchestrator.registerAgent(architectAgent);
 
 	// Initialize UI Components
 	context.subscriptions.push(VitalSignsBar.getInstance().getDisposable());
@@ -121,6 +126,29 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('ai-101-ts.toggleColorblind', () => {
 			import('./commands/toggle-colorblind.js').then(module => module.toggleColorblind());
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.viewArchitecture', async () => {
+			const architect = AgentOrchestrator.getInstance().getAgent('architect') as ArchitectAgent;
+			if (architect) {
+				const arch = await architect.analyzeProject();
+				const outputChannel = vscode.window.createOutputChannel('AI-101 Architecture');
+				outputChannel.appendLine('Detected Project Architecture:');
+				outputChannel.appendLine('=============================');
+				outputChannel.appendLine(`Frontend: ${arch.techStack.frontend}`);
+				outputChannel.appendLine(`Backend: ${arch.techStack.backend}`);
+				outputChannel.appendLine(`Build Tool: ${arch.techStack.build}`);
+				outputChannel.appendLine(`Testing Framework: ${arch.techStack.testing}`);
+				outputChannel.appendLine(`State Management: ${arch.patterns.stateManagement?.join(', ') || 'None detected'}`);
+				outputChannel.appendLine(`API Style: ${arch.patterns.apiStyle?.join(', ') || 'None detected'}`);
+				outputChannel.appendLine('=============================');
+				outputChannel.appendLine(`Conventions: Naming=${arch.conventions.naming}, Tests=${arch.conventions.testLocation}`);
+				outputChannel.show();
+			} else {
+				vscode.window.showErrorMessage('Architect Agent not found.');
+			}
 		})
 	);
 
