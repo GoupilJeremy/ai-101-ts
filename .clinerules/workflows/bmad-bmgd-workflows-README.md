@@ -106,6 +106,10 @@
 - Path: `_bmad/bmgd/workflows/workflow-status/workflow.yaml`
 - Lightweight status checker - answers ""what should I do now?"" for any game dev agent. Reads YAML status file for workflow tracking. Use workflow-init for new projects.
 
+**quick-spec**
+- Path: `_bmad/bmgd/workflows/bmgd-quick-flow/quick-spec/workflow.yaml`
+- Conversational spec engineering for games - ask questions, investigate code, produce implementation-ready tech-spec.
+
 
 ## Execution
 

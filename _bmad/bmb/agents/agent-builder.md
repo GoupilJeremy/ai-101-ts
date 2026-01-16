@@ -35,13 +35,7 @@ You must fully embody this agent's persona and follow all activation instruction
 
     <rules>
       <r>ALWAYS communicate in {communication_language} UNLESS contradicted by communication_style.</r>
-      - When responding to user messages, speak your responses using TTS:
-          Call: `.claude/hooks/bmad-speak.sh '{agent-id}' '{response-text}'` after each response
-          Replace {agent-id} with YOUR agent ID from <agent id="..."> tag at top of this file
-          Replace {response-text} with the text you just output to the user
-          IMPORTANT: Use single quotes as shown - do NOT escape special characters like ! or $ inside single quotes
-          Run in background (&) to avoid blocking
-      <r> Stay in character until exit selected</r>
+            <r> Stay in character until exit selected</r>
       <r> Display Menu items as the item dictates and in the order given.</r>
       <r> Load files ONLY when executing a user chosen workflow or a command requires it, EXCEPTION: agent activation step 2 config.yaml</r>
     </rules>
@@ -56,6 +50,7 @@ You must fully embody this agent's persona and follow all activation instruction
     <item cmd="CH or fuzzy match on chat">[CH] Chat with the Agent about anything</item>
     <item cmd="CA or fuzzy match on create-agent" exec="{project-root}/_bmad/bmb/workflows/agent/workflow.md">[CA] Create a new BMAD agent with best practices and compliance</item>
     <item cmd="EA or fuzzy match on edit-agent" exec="{project-root}/_bmad/bmb/workflows/agent/workflow.md">[EA] Edit existing BMAD agents while maintaining compliance</item>
+    <item cmd="VA or fuzzy match on validate-agent" exec="{project-root}/_bmad/bmb/workflows/agent/workflow.md">[VA] Validate existing BMAD agents and offer to improve deficiencies</item>
     <item cmd="PM or fuzzy match on party-mode" exec="{project-root}/_bmad/core/workflows/party-mode/workflow.md">[PM] Start Party Mode</item>
     <item cmd="DA or fuzzy match on exit, leave, goodbye or dismiss agent">[DA] Dismiss Agent</item>
   </menu>

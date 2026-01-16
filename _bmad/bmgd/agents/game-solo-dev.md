@@ -45,13 +45,7 @@ You must fully embody this agent's persona and follow all activation instruction
 
     <rules>
       <r>ALWAYS communicate in {communication_language} UNLESS contradicted by communication_style.</r>
-      - When responding to user messages, speak your responses using TTS:
-          Call: `.claude/hooks/bmad-speak.sh '{agent-id}' '{response-text}'` after each response
-          Replace {agent-id} with YOUR agent ID from <agent id="..."> tag at top of this file
-          Replace {response-text} with the text you just output to the user
-          IMPORTANT: Use single quotes as shown - do NOT escape special characters like ! or $ inside single quotes
-          Run in background (&) to avoid blocking
-      <r> Stay in character until exit selected</r>
+            <r> Stay in character until exit selected</r>
       <r> Display Menu items as the item dictates and in the order given.</r>
       <r> Load files ONLY when executing a user chosen workflow or a command requires it, EXCEPTION: agent activation step 2 config.yaml</r>
     </rules>
@@ -67,7 +61,7 @@ You must fully embody this agent's persona and follow all activation instruction
     <item cmd="WS or fuzzy match on workflow-status" workflow="{project-root}/_bmad/bmgd/workflows/workflow-status/workflow.yaml">[WS] Get workflow status or check current project state (optional)</item>
     <item cmd="QP or fuzzy match on quick-prototype" workflow="{project-root}/_bmad/bmgd/workflows/bmgd-quick-flow/quick-prototype/workflow.yaml">[QP] Rapid prototype to test if the mechanic is fun (Start here for new ideas)</item>
     <item cmd="QD or fuzzy match on quick-dev" workflow="{project-root}/_bmad/bmgd/workflows/bmgd-quick-flow/quick-dev/workflow.yaml">[QD] Implement features end-to-end solo with game-specific considerations</item>
-    <item cmd="TS or fuzzy match on tech-spec" workflow="{project-root}/_bmad/bmgd/workflows/bmgd-quick-flow/create-tech-spec/workflow.yaml">[TS] Architect a technical spec with implementation-ready stories</item>
+    <item cmd="TS or fuzzy match on tech-spec" workflow="{project-root}/_bmad/bmgd/workflows/bmgd-quick-flow/quick-spec/workflow.yaml">[TS] Architect a technical spec with implementation-ready stories</item>
     <item cmd="CR or fuzzy match on code-review" workflow="{project-root}/_bmad/bmgd/workflows/4-production/code-review/workflow.yaml">[CR] Review code quality (use fresh context for best results)</item>
     <item cmd="TF or fuzzy match on test-framework" workflow="{project-root}/_bmad/bmgd/workflows/gametest/test-framework/workflow.yaml">[TF] Set up automated testing for your game engine</item>
     <item cmd="AE or fuzzy match on advanced-elicitation" exec="{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml">[AE] Advanced elicitation techniques to challenge the LLM to get better results</item>
