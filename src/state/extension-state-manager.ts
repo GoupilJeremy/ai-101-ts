@@ -122,6 +122,18 @@ export class ExtensionStateManager {
     }
 
     /**
+     * Sends the list of context files to the webview.
+     */
+    public sendContextFiles(files: any[]): void {
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:contextFilesUpdate',
+                files
+            });
+        }
+    }
+
+    /**
      * Updates the status and current task of a specific agent.
      */
     public updateAgentState(agent: AgentType, status: AgentStatus, currentTask?: string, anchorLine?: number): void {

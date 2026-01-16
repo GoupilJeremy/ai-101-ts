@@ -1,5 +1,47 @@
 // Webview Entry Point
+// @ts-ignore
+import ContextPanel from './components/context-panel.js';
+// @ts-ignore
+import VitalSignsBar from './components/vital-signs-bar.js';
+
 console.log('Webview loaded');
+
+// Initialize Components
+let contextPanel: any;
+let vitalSignsBar: any;
+
+const stateManagerAdapter = {
+    subscribe: (callback: any) => { /* No-op, we call update manually for now */ },
+    removeFile: (filePath: string) => {
+        getVsCodeApi().postMessage({
+            type: 'toExtension:removeContextFile',
+            filePath: filePath
+        });
+    },
+    refreshFile: (filePath: string) => {
+        getVsCodeApi().postMessage({
+            type: 'toExtension:refreshContextFile',
+            filePath: filePath
+        });
+    }
+};
+
+function initializeComponents() {
+    // Initialize Vital Signs Bar
+    vitalSignsBar = new VitalSignsBar('vital-signs-bar', stateManagerAdapter, {
+        onFilesClick: () => {
+            if (contextPanel) {
+                contextPanel.toggle();
+            }
+        }
+    });
+
+    // Initialize Context Panel
+    // We want to insert it into hud-container, possibly before agent-hud?
+    // context-panel.js appends to container.
+    contextPanel = new ContextPanel('hud-container', stateManagerAdapter);
+    contextPanel.render();
+}
 
 // Performance Monitoring
 let frameCount = 0;
@@ -369,9 +411,13 @@ function announceToScreenReader(message: string) {
 
 // Initialize keyboard navigation when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeKeyboardNavigation);
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeKeyboardNavigation();
+        initializeComponents();
+    });
 } else {
     initializeKeyboardNavigation();
+    initializeComponents();
 }
 
 // Listen for messages from the extension
@@ -423,6 +469,11 @@ window.addEventListener('message', event => {
         case 'toWebview:colorblindUpdate':
             console.log('Colorblind update received:', message.enabled, message.config);
             updateColorblindMode(message.enabled, message.config);
+            break;
+        case 'toWebview:contextFilesUpdate':
+            if (contextPanel) {
+                contextPanel.updateFiles(message.files);
+            }
             break;
         case 'toWebview:focusFirstElement':
             console.log('Focus first element requested');
@@ -722,20 +773,22 @@ function executeUpdateMetricsUI(metrics: any) {
 let metricsThrottleTimeout: any = null;
 
 function doUpdateMetricsUI(metrics: any) {
-    const metricsEl = document.getElementById('metrics');
-    if (metricsEl) {
-        const formattedCost = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(metrics.cost);
+    if (vitalSignsBar) {
+        vitalSignsBar.updateMetrics(metrics);
 
-        // Team Mode: Show expanded metrics with session time
-        if (currentMode === 'team' && metrics.sessionTime !== undefined) {
-            const minutes = Math.floor(metrics.sessionTime / 60);
-            const seconds = metrics.sessionTime % 60;
-            metricsEl.innerText = `Tokens: ${metrics.tokens.toLocaleString()} | Cost: ${formattedCost} | Files: ${metrics.files} | Time: ${minutes}m ${seconds}s`;
-        } else {
-            // Normal mode: Standard metrics
+        // Also update context panel files if needed, or wait for separate update?
+        // Usually full state includes files.
+        // Assuming context panel gets files via separate message or we can pass here if metrics has file list?
+        // Metrics object currently has `files` (count).
+        // ContextPanel needs actual file list.
+    } else {
+        // Fallback or early init logic
+        const metricsEl = document.getElementById('metrics');
+        if (metricsEl) {
+            const formattedCost = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(metrics.cost);
             metricsEl.innerText = `Tokens: ${metrics.tokens.toLocaleString()} | Cost: ${formattedCost} | Files: ${metrics.files}`;
         }
     }

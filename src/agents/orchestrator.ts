@@ -49,6 +49,13 @@ export class AgentOrchestrator {
     }
 
     /**
+     * Retrieves a registered agent by type.
+     */
+    public getAgent(type: AgentType): IAgent | undefined {
+        return this.agents.get(type);
+    }
+
+    /**
      * Processes a user request by coordinating multiple agents.
      * Flow: Context -> Architect (optional) -> Coder -> Reviewer
      */

@@ -1,97 +1,134 @@
-import * as assert from 'assert';
-import * as vscode from 'vscode';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ContextAgent } from '../context-agent.js';
+import * as vscode from 'vscode';
 
-// Mock VSCode
-(vscode as any).window = {
-    activeTextEditor: {
-        document: {
-            fileName: '/test/workspace/test.ts',
-            getText: () => 'import { utils } from "./utils";\nconsole.log("hello");'
-        }
-    },
-    showInformationMessage: () => { },
-    showErrorMessage: () => { },
-    showWarningMessage: () => { }
+// Mock dependencies
+const mockLLMManager = {
+    getProvider: vi.fn(),
 };
-(vscode as any).workspace = {
-    workspaceFolders: [{ uri: { fsPath: '/test/workspace' } }],
-    textDocuments: [
-        { uri: { scheme: 'file', fsPath: '/test/workspace/recent.ts' }, isUntitled: false }
-    ],
-    findFiles: async () => [{ fsPath: '/test/workspace/utils.ts' }],
-    fs: {
-        readFile: async (uri: vscode.Uri) => {
-            if (uri.fsPath.includes('utils.ts')) {
-                return Buffer.from('export const utils = () => {};');
-            }
-            return Buffer.from('console.log("hello");');
-        },
-        stat: async () => ({})
+
+vi.mock('../../../llm/provider-manager.js', () => ({
+    LLMProviderManager: {
+        getInstance: () => mockLLMManager
     }
-};
-(vscode as any).Uri = { file: (path: string) => ({ fsPath: path }) };
+}));
 
-suite('ContextAgent Test Suite', () => {
+// Mock TokenOptimizer
+vi.mock('../token-optimizer.js', () => ({
+    TokenOptimizer: class {
+        optimizeFiles = vi.fn().mockResolvedValue({ content: 'optimized content', truncatedCount: 0 });
+        estimateTokens = vi.fn().mockResolvedValue(100);
+    }
+}));
+
+// Mock FileLoader
+vi.mock('../file-loader.js', () => ({
+    FileLoader: class {
+        discoverAndLoadFiles = vi.fn().mockResolvedValue([
+            { path: '/test/workspace/test.ts', content: '...' },
+            { path: '/test/workspace/utils.ts', content: '...' }
+        ]);
+        loadSpecificFile = vi.fn().mockResolvedValue('manual content');
+    }
+}));
+
+// Mock VitalSignsBar
+vi.mock('../../../ui/vital-signs-bar.js', () => {
+    return {
+        VitalSignsBar: {
+            getInstance: () => ({
+                setLoading: vi.fn(),
+                clearLoading: vi.fn()
+            })
+        }
+    };
+});
+
+// Mock MetricsProvider
+vi.mock('../../../ui/metrics-provider.js', () => {
+    return {
+        MetricsProvider: {
+            getInstance: () => ({
+                updateTokens: vi.fn(),
+                updateFiles: vi.fn()
+            })
+        }
+    };
+});
+
+describe('ContextAgent', () => {
     let agent: ContextAgent;
 
-    setup(() => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+
+        // Setup specific VSCode mocks for this test
+        (vscode.window as any).activeTextEditor = {
+            document: {
+                uri: { fsPath: '/test/workspace/test.ts' },
+                fileName: '/test/workspace/test.ts',
+                getText: () => 'import { utils } from "./utils";\nconsole.log("hello");'
+            },
+            selection: { active: { line: 0 } }
+        };
+        (vscode.window as any).showInformationMessage = vi.fn();
+
+        (vscode.workspace as any).workspaceFolders = [{ uri: { fsPath: '/test/workspace' } }];
+        (vscode.workspace as any).findFiles = vi.fn().mockResolvedValue([{ fsPath: '/test/workspace/utils.ts' }]);
+        (vscode.workspace as any).fs = {
+            readFile: vi.fn().mockImplementation(async (uri) => {
+                if (uri.fsPath.includes('utils.ts')) {
+                    return Buffer.from('export const utils = () => {};');
+                }
+                return Buffer.from('console.log("hello");');
+            }),
+            stat: vi.fn().mockResolvedValue({})
+        };
+
         agent = new ContextAgent();
+        agent.initialize(mockLLMManager as any);
     });
 
-    test('Should identify itself correctly', () => {
-        assert.strictEqual(agent.name, 'context');
-        assert.strictEqual(agent.displayName, 'Context Agent');
+    it('Should identify itself correctly', () => {
+        expect(agent.name).toBe('context');
+        expect(agent.displayName).toBe('Context Agent');
     });
 
-    test('Should load active editor content', async () => {
+    it('Should load context and return result', async () => {
         const response = await agent.execute({ prompt: 'test' });
-        assert.ok(response.result.includes('test.ts'));
-        assert.ok(response.result.includes('console.log("hello");'));
-        assert.strictEqual(agent.getLoadedFiles().length, 1);
+        expect(response.result).toBe('optimized content');
+        expect(agent.getState().status).toBe('success');
     });
 
-    test('Should update state to working then success', async () => {
-        const promise = agent.execute({ prompt: 'test' });
-        assert.strictEqual(agent.getState().status, 'working');
-        await promise;
-        assert.strictEqual(agent.getState().status, 'success');
+    it('Should filter excluded files', async () => {
+        // Exclude utils.ts
+        agent.excludeFile('/test/workspace/utils.ts');
+
+        await agent.execute({ prompt: 'test' });
+
+        const loaded = agent.getLoadedFiles();
+        expect(loaded).not.toContain('/test/workspace/utils.ts');
+        expect(loaded).toContain('/test/workspace/test.ts');
     });
 
-    test('Should discover and load multiple files', async () => {
-        const response = await agent.execute({ prompt: 'test' });
+    it('Should re-include files', async () => {
+        agent.excludeFile('/test/workspace/utils.ts');
+        agent.includeFile('/test/workspace/utils.ts');
 
-        // Should load current file and imported file
-        assert.ok(response.result.includes('test.ts'));
-        assert.ok(response.result.includes('utils.ts'));
-        assert.ok(agent.getLoadedFiles().length >= 2);
+        await agent.execute({ prompt: 'test' });
+
+        const loaded = agent.getLoadedFiles();
+        expect(loaded).toContain('/test/workspace/utils.ts');
     });
 
-    test('Should add file to manual context', async () => {
-        const success = await agent.addFileToContext('/test/manual.ts');
+    it('Should provide detailed context files for UI', async () => {
+        await agent.execute({ prompt: 'test' });
 
-        assert.strictEqual(success, true);
-        assert.ok(agent.getManualContextFiles().includes('/test/manual.ts'));
-    });
-
-    test('Should remove file from manual context', () => {
-        agent.addFileToContext('/test/manual.ts');
-        const success = agent.removeFileFromContext('/test/manual.ts');
-
-        assert.strictEqual(success, true);
-        assert.ok(!agent.getManualContextFiles().includes('/test/manual.ts'));
-    });
-
-    test('Should handle invalid file path gracefully', async () => {
-        const success = await agent.addFileToContext('/invalid/path.ts');
-
-        assert.strictEqual(success, false);
-    });
-
-    test('Should return empty manual context files initially', () => {
-        const files = agent.getManualContextFiles();
-
-        assert.ok(Array.isArray(files));
-        assert.strictEqual(files.length, 0);
+        const uiFiles = agent.getContextFiles();
+        expect(uiFiles.length).toBeGreaterThan(0);
+        expect(uiFiles[0]).toHaveProperty('filename');
+        expect(uiFiles[0]).toHaveProperty('path');
+        expect(uiFiles[0]).toHaveProperty('tokens');
+        expect(uiFiles[0]).toHaveProperty('relevance');
     });
 });

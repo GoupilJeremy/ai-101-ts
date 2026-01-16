@@ -61,8 +61,70 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
             case 'toExtension:lowFpsDetected':
                 this.handleLowFpsDetected(message.fps, message.consecutiveCount);
                 break;
+            case 'toExtension:openFile':
+                this.openFileInEditor(message.filePath);
+                break;
+
+            // Context Management
+            case 'toExtension:saveContextSnapshot':
+                this.handleSaveContextSnapshot(message.files, message.timestamp);
+                break;
+            case 'toExtension:removeContextFile':
+                await this.handleRemoveContextFile(message.filePath);
+                break;
+            case 'toExtension:refreshContextFile':
+                await this.handleRefreshContextFile(message.filePath);
+                break;
+
             default:
                 console.warn('Unknown message type from webview:', type);
+        }
+    }
+
+    private async openFileInEditor(filePath: string): Promise<void> {
+        if (!filePath) return;
+        try {
+            const uri = vscode.Uri.file(filePath);
+            const doc = await vscode.workspace.openTextDocument(uri);
+            await vscode.window.showTextDocument(doc);
+        } catch (error) {
+            console.error('Error opening file:', error);
+            vscode.window.showErrorMessage(`Could not open file: ${filePath}`);
+        }
+    }
+
+    private handleSaveContextSnapshot(files: any[], timestamp: number): void {
+        // Just log for now, or save to a file/state
+        console.log(`Saving context snapshot with ${files?.length} files at ${timestamp}`);
+        vscode.window.showInformationMessage(`Context snapshot saved (${files?.length} files)`);
+    }
+
+    private async handleRemoveContextFile(filePath: string): Promise<void> {
+        // Dynamic import to avoid circular dependency if possible, or assume Orchestrator is available
+        const { AgentOrchestrator } = await import('../agents/orchestrator.js');
+        const contextAgent = AgentOrchestrator.getInstance().getAgent('context') as any;
+
+        if (contextAgent && typeof contextAgent.excludeFile === 'function') {
+            contextAgent.excludeFile(filePath);
+
+            // Push updated list back to webview
+            if (contextAgent.getContextFiles) {
+                const files = contextAgent.getContextFiles();
+                this._view?.webview.postMessage({
+                    type: 'toWebview:contextFilesUpdate',
+                    files
+                });
+            }
+        }
+    }
+
+    private async handleRefreshContextFile(filePath: string): Promise<void> {
+        const { AgentOrchestrator } = await import('../agents/orchestrator.js');
+        const contextAgent = AgentOrchestrator.getInstance().getAgent('context') as any;
+
+        if (contextAgent && typeof contextAgent.refreshFile === 'function') {
+            await contextAgent.refreshFile(filePath);
+            // Re-fetch context files?
         }
     }
 

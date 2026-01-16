@@ -13,6 +13,8 @@ import { VitalSignsBar } from './ui/vital-signs-bar.js';
 import { SpatialManager } from './ui/spatial-manager.js';
 import { ModeManager } from './modes/mode-manager.js';
 import { AgentMode } from './modes/mode-types.js';
+import { AgentOrchestrator } from './agents/orchestrator.js';
+import { ContextAgent } from './agents/context/context-agent.js';
 import { SystemDetector } from './performance/system-detector.js';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -25,8 +27,15 @@ export function activate(context: vscode.ExtensionContext) {
 	SystemDetector.getInstance().checkAndAutoActivate();
 
 	// Initialize LLM Manager and Rate Limiter
-	LLMProviderManager.getInstance().initialize(context.globalStorageUri.fsPath);
+	const llmManager = LLMProviderManager.getInstance();
+	llmManager.initialize(context.globalStorageUri.fsPath);
 	RateLimiter.getInstance().reset();
+
+	// Initialize Agents
+	const orchestrator = AgentOrchestrator.getInstance();
+	const contextAgent = new ContextAgent();
+	contextAgent.initialize(llmManager);
+	orchestrator.registerAgent(contextAgent);
 
 	// Initialize UI Components
 	context.subscriptions.push(VitalSignsBar.getInstance().getDisposable());
