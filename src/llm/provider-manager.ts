@@ -138,6 +138,46 @@ export class LLMProviderManager {
     }
 
     /**
+     * Estimates the number of tokens in the given text using the preferred provider for the agent.
+     * @param text The text to estimate tokens for.
+     * @param agent The agent type (defaults to 'context').
+     */
+    public async estimateTokens(text: string, agent: AgentType = 'context'): Promise<number> {
+        const config = ConfigurationManager.getInstance().getSettings();
+        const preferredProviderName = config.llm.agentProviders[agent] || config.llm.provider;
+
+        const provider = this.getProvider(preferredProviderName);
+        if (!provider) {
+            throw new LLMProviderError(`Preferred provider '${preferredProviderName}' not registered for token estimation`, 'PROVIDER_NOT_FOUND', false);
+        }
+
+        return await provider.estimateTokens(text);
+    }
+
+    /**
+     * Gets the context window size for the preferred provider and model for the agent.
+     * @param agent The agent type (defaults to 'context').
+     */
+    public getContextWindow(agent: AgentType = 'context'): number {
+        const config = ConfigurationManager.getInstance().getSettings();
+        const preferredProviderName = config.llm.agentProviders[agent] || config.llm.provider;
+
+        const provider = this.getProvider(preferredProviderName);
+        if (!provider) {
+            throw new LLMProviderError(`Preferred provider '${preferredProviderName}' not registered`, 'PROVIDER_NOT_FOUND', false);
+        }
+
+        let model = 'gpt-4'; // default
+        if (preferredProviderName === 'openai') {
+            model = 'gpt-4';
+        } else if (preferredProviderName === 'anthropic') {
+            model = 'claude-3-opus';
+        }
+        const modelInfo = provider.getModelInfo(model);
+        return modelInfo.contextWindow;
+    }
+
+    /**
      * Attempts to call alternative providers in order when the primary choice fails.
      */
     private async callWithFallback(agent: AgentType, prompt: string, options: ILLMOptions, attempted: string[]): Promise<ILLMResponse> {

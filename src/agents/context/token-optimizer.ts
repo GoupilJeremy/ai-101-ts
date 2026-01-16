@@ -1,20 +1,40 @@
+import { LLMProviderManager } from '../../llm/provider-manager.js';
+
 /**
  * TokenOptimizer handles token estimation and optimization for LLM context limits.
  * Ensures context stays within budget while preserving the most important information.
  */
 export class TokenOptimizer {
     private static readonly DEFAULT_MAX_TOKENS = 10000;
-    private static readonly TOKEN_PER_CHAR = 0.25; // Rough estimate
+    private static readonly TOKEN_PER_CHAR = 0.25;
 
-    private encoding: any;
+    private llmManager: LLMProviderManager;
+
+    constructor(llmManager: LLMProviderManager) {
+        this.llmManager = llmManager;
+    }
+
+    /**
+     * Optimizes content by removing comments, collapsing whitespace, etc.
+     */
+    private optimizeContent(content: string): string {
+        // Remove single line comments
+        content = content.replace(/\/\/.*$/gm, '');
+        // Remove multi-line comments
+        content = content.replace(/\/\*[\s\S]*?\*\//g, '');
+        // Collapse multiple whitespace
+        content = content.replace(/\s+/g, ' ');
+        // Remove extra spaces around punctuation
+        content = content.replace(/\s*([{}();,])\s*/g, '$1');
+        return content.trim();
+    }
 
     /**
      * Estimates the number of tokens in a given text.
      */
     public async estimateTokens(text: string): Promise<number> {
         try {
-            const encoding = await this.getEncoding();
-            return encoding.encode(text).length;
+            return await this.llmManager.estimateTokens(text, 'context');
         } catch (error) {
             // Fallback to character-based estimation
             return Math.ceil(text.length * TokenOptimizer.TOKEN_PER_CHAR);
@@ -24,21 +44,27 @@ export class TokenOptimizer {
     /**
      * Optimizes a collection of files to fit within token limits.
      * @param files Array of file objects with path and content
-     * @param maxTokens Maximum allowed tokens
      * @returns Optimized file contents
      */
     public async optimizeFiles(
-        files: Array<{ path: string, content: string }>,
-        maxTokens: number = TokenOptimizer.DEFAULT_MAX_TOKENS
-    ): Promise<string> {
-        if (files.length === 0) return '';
+        files: Array<{ path: string, content: string }>
+    ): Promise<{ content: string, truncatedCount: number }> {
+        if (files.length === 0) return { content: '', truncatedCount: 0 };
+
+        const contextWindow = await this.llmManager.getContextWindow('context');
+        const maxTokens = Math.floor(contextWindow * 0.4);
 
         // Calculate tokens for each file
         const filesWithTokens = await Promise.all(
-            files.map(async (file) => ({
-                ...file,
-                tokens: await this.estimateTokens(file.content)
-            }))
+            files.map(async (file) => {
+                const optimizedContent = this.optimizeContent(file.content);
+                const tokens = await this.estimateTokens(optimizedContent);
+                return {
+                    ...file,
+                    content: optimizedContent,
+                    tokens
+                };
+            })
         );
 
         // Sort by priority (current file first, then by token count ascending for smaller files)
@@ -53,6 +79,7 @@ export class TokenOptimizer {
 
         let totalTokens = 0;
         const optimizedFiles: Array<{ path: string, content: string }> = [];
+        let truncatedCount = 0;
 
         for (const file of filesWithTokens) {
             const newTotal = totalTokens + file.tokens;
@@ -70,6 +97,7 @@ export class TokenOptimizer {
                             path: file.path,
                             content: truncatedContent
                         });
+                        truncatedCount++;
                         break; // No more files after truncation
                     }
                 } else {
@@ -79,7 +107,7 @@ export class TokenOptimizer {
         }
 
         // Format the output
-        return this.formatOptimizedContext(optimizedFiles);
+        return { content: this.formatOptimizedContext(optimizedFiles), truncatedCount };
     }
 
     /**
@@ -142,24 +170,6 @@ export class TokenOptimizer {
         return files.map(file =>
             `--- FILE: ${file.path} ---\n${file.content}\n`
         ).join('\n');
-    }
-
-    /**
-     * Gets the tiktoken encoding for accurate token counting.
-     */
-    private async getEncoding() {
-        if (!this.encoding) {
-            try {
-                const { getEncoding } = await import('js-tiktoken');
-                this.encoding = getEncoding('cl100k_base');
-            } catch (error) {
-                // Return a mock encoding for test environments
-                this.encoding = {
-                    encode: (text: string) => ({ length: Math.ceil(text.length * TokenOptimizer.TOKEN_PER_CHAR) })
-                };
-            }
-        }
-        return this.encoding;
     }
 
     /**

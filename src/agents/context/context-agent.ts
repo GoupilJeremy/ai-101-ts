@@ -22,17 +22,18 @@ export class ContextAgent implements IAgent {
     private loadedFiles: string[] = [];
     private manualContextFiles: Set<string> = new Set();
     private fileLoader: FileLoader;
-    private tokenOptimizer: TokenOptimizer;
+    private tokenOptimizer: TokenOptimizer | undefined;
 
     constructor() {
         this.fileLoader = new FileLoader();
-        this.tokenOptimizer = new TokenOptimizer();
     }
-
     public initialize(llmManager: LLMProviderManager): void {
-        this.llmManager = llmManager;
-    }
 
+        this.llmManager = llmManager;
+
+        this.tokenOptimizer = new TokenOptimizer(llmManager);
+
+    }
     public async execute(request: IAgentRequest): Promise<IAgentResponse> {
         this.updateState('working', 'Loading context files...');
         this.loadedFiles = [];
@@ -66,7 +67,22 @@ export class ContextAgent implements IAgent {
             this.loadedFiles = allFiles.map(f => f.path);
 
             // Optimize for token limits
-            const optimizedContext = await this.tokenOptimizer.optimizeFiles(allFiles);
+
+            if (!this.tokenOptimizer) {
+
+                throw new Error('TokenOptimizer not initialized');
+
+            }
+
+            const result = await this.tokenOptimizer.optimizeFiles(allFiles);
+
+            const optimizedContext = result.content;
+
+            if (result.truncatedCount > 0) {
+
+                vscode.window.showInformationMessage(`Context optimized: ${this.loadedFiles.length} files loaded, ${result.truncatedCount} summarized`);
+
+            }
 
             // Report metrics
             const tokens = await this.tokenOptimizer.estimateTokens(optimizedContext);
