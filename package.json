@@ -62,6 +62,16 @@
         "command": "ai-101-ts.focusHud",
         "title": "Focus HUD for Keyboard Navigation",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.addContextFile",
+        "title": "Add File to Context",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.removeContextFile",
+        "title": "Remove File from Context",
+        "category": "AI 101"
       }
     ],
     "keybindings": [

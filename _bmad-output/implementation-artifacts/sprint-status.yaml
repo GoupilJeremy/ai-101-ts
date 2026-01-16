@@ -100,7 +100,7 @@ development_status:
   # ============================================================
   # Epic 5: User Modes & Customization
   # ============================================================
-  epic-5: in-progress
+  epic-5: review
   5-1-implement-mode-system-infrastructure: review
   5-2-implement-learning-mode-with-pedagogical-explanations: review
   5-3-implement-expert-mode-with-in-depth-technical-details: review
@@ -116,9 +116,9 @@ development_status:
   # ============================================================
   # Epic 6: Context Intelligence & File Management
   # ============================================================
-  epic-6: backlog
-  6-1-implement-intelligent-file-discovery-and-context-loading: backlog
-  6-2-implement-token-budget-management-and-optimization: backlog
+  epic-6: in-progress
+  6-1-implement-intelligent-file-discovery-and-context-loading: review
+  6-2-implement-token-budget-management-and-optimization: in-progress
   6-3-implement-visible-context-file-tracking-and-display: backlog
   6-4-implement-project-architecture-pattern-detection: backlog
   6-5-implement-architecture-aligned-suggestion-generation: backlog

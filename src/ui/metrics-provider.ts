@@ -36,6 +36,20 @@ export class MetricsProvider {
     }
 
     /**
+     * Gets the current token count.
+     */
+    public getCurrentTokens(): number {
+        return this.currentTokens;
+    }
+
+    /**
+     * Gets the current file count.
+     */
+    public getCurrentFiles(): number {
+        return this.currentFiles;
+    }
+
+    /**
      * Synchronizes current metrics with the ExtensionStateManager.
      */
     public sync(): void {
