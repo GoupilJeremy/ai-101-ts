@@ -11,6 +11,10 @@ import SuggestionCard from './components/suggestion-card.js';
 import AlertComponent from './components/alert-component.js';
 // @ts-ignore
 import DropZoneManager from './components/drop-zone-manager.js';
+// @ts-ignore
+import AgentComponent from './components/agent-component.js';
+// @ts-ignore
+import TooltipManager from './components/tooltip-manager.js';
 
 console.log('Webview loaded');
 
@@ -19,6 +23,8 @@ let contextPanel: any;
 let vitalSignsBar: any;
 let timelineComponent: any;
 let dropZoneManager: any;
+const agentComponents: Map<string, any> = new Map();
+let tooltipManager: any;
 
 const stateManagerAdapter = {
     subscribe: (callback: any) => { /* No-op, we call update manually for now */ },
@@ -61,6 +67,9 @@ function initializeComponents() {
     // Initialize Drop Zone Manager
     dropZoneManager = new DropZoneManager('hud-container');
     dropZoneManager.render();
+
+    // Initialize Tooltip Manager
+    tooltipManager = TooltipManager.getInstance();
 }
 
 // Performance Monitoring
@@ -896,20 +905,16 @@ function executeUpdateAgentHUD(agent: string, state: any) {
     const hud = document.getElementById('agent-hud');
     if (!hud) return;
 
-    let agentEl = document.getElementById(`agent-${agent}`);
-    if (!agentEl) {
-        agentEl = document.createElement('div');
-        agentEl.id = `agent-${agent}`;
-        agentEl.className = 'agent-icon';
-        const icons: any = { context: '🔍', architect: '🏗️', coder: '💻', reviewer: '🛡️' };
-        const labelMap: any = { context: 'Context', architect: 'Architect', coder: 'Coder', reviewer: 'Reviewer' };
-
-        agentEl.innerHTML = `
-            <div class="agent-symbol">${icons[agent] || '🤖'}</div>
-            <div class="agent-label-text">${labelMap[agent] || agent}</div>
-        `;
-        hud.appendChild(agentEl);
+    let agentComponent = agentComponents.get(agent);
+    if (!agentComponent) {
+        agentComponent = new AgentComponent(agent, state);
+        agentComponent.render(hud);
+        agentComponents.set(agent, agentComponent);
+    } else {
+        agentComponent.update(state);
     }
+
+    const agentEl = agentComponent.element;
 
     agentEl.className = `agent-icon ${state.status} ${performanceMode ? 'low-fx' : ''}`;
     agentEl.setAttribute('data-agent', agent);

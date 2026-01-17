@@ -250,12 +250,21 @@ export class ExtensionStateManager {
     /**
      * Updates the status and current task of a specific agent.
      */
-    public updateAgentState(agent: AgentType, status: AgentStatus, currentTask?: string, anchorLine?: number): void {
+    public updateAgentState(
+        agent: AgentType,
+        status: AgentStatus,
+        currentTask?: string,
+        anchorLine?: number,
+        activationReason?: string,
+        estimatedCompletion?: number
+    ): void {
         const newState: IAgentState = {
             status,
             currentTask,
             lastUpdate: Date.now(),
-            anchorLine
+            anchorLine,
+            activationReason,
+            estimatedCompletion
         };
 
         this.agentStates.set(agent, newState);

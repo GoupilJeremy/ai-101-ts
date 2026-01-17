@@ -35,6 +35,10 @@ export interface IAgentState {
     lastUpdate: number;
     /** Target line number for spatial anchoring */
     anchorLine?: number;
+    /** Why the agent was activated for this specific context */
+    activationReason?: string;
+    /** Estimated completion timestamp for long-running tasks */
+    estimatedCompletion?: number;
 }
 
 /**
