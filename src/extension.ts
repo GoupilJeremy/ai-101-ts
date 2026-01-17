@@ -175,6 +175,18 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.toggleHUD', () => {
+			import('./commands/toggle-hud.js').then(module => module.toggleHUDCommand());
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.forceAgentState', () => {
+			import('./commands/force-agent-state.js').then(module => module.forceAgentStateCommand());
+		})
+	);
+
+	context.subscriptions.push(
 		vscode.commands.registerCommand('ai-101-ts.acceptSuggestion', (args?: any) => {
 			import('./commands/suggestion-commands.js').then(module => module.handleSuggestionCommand('accepted', args));
 		}),

@@ -16,6 +16,17 @@ For example if there is an image subfolder under your extension project workspac
 
 If you have any requirements or dependencies, add a section describing those and how to install and configure them.
 
+## Default Hotkeys
+
+The following hotkeys are available by default (configurable in VSCode Keyboard Shortcuts):
+
+* **Toggle HUD Visibility**: `Ctrl+Alt+H` (`Cmd+Alt+H` on macOS)
+* **Toggle Focus Mode**: `Ctrl+Shift+Alt+F` (`Cmd+Shift+Alt+F` on macOS)
+* **Accept AI Suggestion**: `Ctrl+Enter` (`Cmd+Enter` on macOS)
+* **Reject AI Suggestion**: `Ctrl+Backspace` (`Cmd+Backspace` on macOS)
+* **Force Agent State (Debug)**: `Ctrl+Shift+Alt+S` (`Cmd+Shift+Alt+S` on macOS)
+* **Focus HUD for Navigation**: `Ctrl+Shift+H` (`Cmd+Shift+H` on macOS)
+
 ## Extension Settings
 
 Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.

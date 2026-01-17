@@ -165,6 +165,9 @@ function applyUpdate(update: any) {
             if (update.mode && update.config) {
                 applyModeUpdate(update.mode, update.config);
             }
+            if (update.hudVisible !== undefined) {
+                updateHUDVisibility(update.hudVisible);
+            }
             Object.entries(update.states).forEach(([agent, state]: any) => {
                 executeUpdateAgentHUD(agent, state);
             });
@@ -543,6 +546,10 @@ window.addEventListener('message', event => {
             console.log('Focus first element requested');
             focusFirstElement();
             break;
+        case 'toWebview:hudVisibilityUpdate':
+            console.log('HUD visibility update received:', message.visible);
+            updateHUDVisibility(message.visible);
+            break;
     }
 
     // Update interactive elements after any DOM changes
@@ -554,6 +561,18 @@ function updateLargeTextMode(enabled: boolean): void {
     if (hudContainer) {
         if (currentMode === 'team') {
             hudContainer.setAttribute('data-large-text', enabled ? 'true' : 'false');
+        }
+    }
+}
+
+function updateHUDVisibility(visible: boolean): void {
+    const hudContainer = document.getElementById('hud-container');
+    if (hudContainer) {
+        hudContainer.classList.toggle('hud-container--hidden', !visible);
+        if (visible) {
+            announceToScreenReader('HUD is now visible');
+        } else {
+            announceToScreenReader('HUD is now hidden');
         }
     }
 }

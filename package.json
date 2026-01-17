@@ -92,21 +92,30 @@
         "command": "ai-101-ts.rejectSuggestion",
         "title": "Reject AI Suggestion",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.toggleHUD",
+        "title": "Toggle HUD Visibility",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.forceAgentState",
+        "title": "Force Agent State (Debug)",
+        "category": "AI 101"
       }
     ],
     "keybindings": [
       {
-        "command": "ai-101-ts.toggleFocusMode",
-        "key": "ctrl+shift+f",
-        "mac": "cmd+shift+f",
+        "command": "ai-101-ts.toggleHUD",
+        "key": "ctrl+alt+h",
+        "mac": "cmd+alt+h",
         "when": "editorTextFocus"
       },
       {
-        "command": "ai-101-ts.focusHud",
-        "key": "ctrl+shift+h",
-        "mac": "cmd+shift+h",
-        "when": "editorTextFocus",
-        "description": "Focus the AI HUD for keyboard navigation"
+        "command": "ai-101-ts.toggleFocusMode",
+        "key": "ctrl+shift+alt+f",
+        "mac": "cmd+shift+alt+f",
+        "when": "editorTextFocus"
       },
       {
         "command": "ai-101-ts.acceptSuggestion",
@@ -118,6 +127,12 @@
         "command": "ai-101-ts.rejectSuggestion",
         "key": "ctrl+backspace",
         "mac": "cmd+backspace",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "ai-101-ts.forceAgentState",
+        "key": "ctrl+shift+alt+s",
+        "mac": "cmd+shift+alt+s",
         "when": "editorTextFocus"
       }
     ],

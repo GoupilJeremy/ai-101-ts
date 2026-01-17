@@ -24,6 +24,10 @@ body {
     box-sizing: border-box;
 }
 
+#hud-container.hud-container--hidden {
+    display: none !important;
+}
+
 #vital-signs-bar {
     height: 24px;
     background-color: rgba(0, 0, 0, 0.05);

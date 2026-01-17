@@ -26,6 +26,7 @@ export class ExtensionStateManager {
     private sessionTimerInterval: NodeJS.Timeout | undefined;
     private history: IDecisionRecord[] = [];
     private currentPhase: DevelopmentPhase = 'prototype';
+    private hudVisible: boolean = true;
 
     private constructor() {
         this.initializeDefaultStates();
@@ -57,9 +58,30 @@ export class ExtensionStateManager {
                 history: this.history,
                 mode: this.currentMode,
                 modeConfig: this.modeConfig,
-                phase: this.currentPhase
+                phase: this.currentPhase,
+                hudVisible: this.hudVisible
             });
         }
+    }
+
+    /**
+     * Toggles HUD visibility.
+     */
+    public toggleHUD(): void {
+        this.hudVisible = !this.hudVisible;
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:hudVisibilityUpdate',
+                visible: this.hudVisible
+            });
+        }
+    }
+
+    /**
+     * Returns whether the HUD is currently visible.
+     */
+    public isHUDVisible(): boolean {
+        return this.hudVisible;
     }
 
     /**
