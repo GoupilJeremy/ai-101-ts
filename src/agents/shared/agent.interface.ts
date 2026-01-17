@@ -46,6 +46,8 @@ export interface IAgentRequest {
     context?: string;
     /** Optional LLM parameters for this specific request */
     options?: ILLMOptions;
+    /** Optional structured data to pass to the agent */
+    data?: any;
 }
 
 /**

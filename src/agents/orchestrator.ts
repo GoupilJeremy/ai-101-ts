@@ -69,19 +69,35 @@ export class AgentOrchestrator {
 
             // 2. Architect Agent - Optional logic (simplified for now)
             let architectReasoning = '';
-            if (this.shouldInvolveArchitect(prompt)) {
-                const architectResponse = await this.runAgent('architect', {
-                    prompt,
-                    context: currentContext
-                });
-                currentContext += `\n\nArchitectural Analysis:\n${architectResponse.result}`;
-                architectReasoning = architectResponse.reasoning;
+            let projectArchitecture;
+
+            const architectAgent = this.getAgent('architect');
+            if (architectAgent) {
+                // Global Architecture Retrieval (Task 1.1)
+                try {
+                    // Check if the agent has analyzeProject method (duck typing)
+                    if (typeof (architectAgent as any).analyzeProject === 'function') {
+                        projectArchitecture = await (architectAgent as any).analyzeProject();
+                    }
+                } catch (error) {
+                    ErrorHandler.log('Failed to retrieve project architecture context', 'WARNING');
+                }
+
+                if (this.shouldInvolveArchitect(prompt)) {
+                    const architectResponse = await this.runAgent('architect', {
+                        prompt,
+                        context: currentContext
+                    });
+                    currentContext += `\n\nArchitectural Analysis:\n${architectResponse.result}`;
+                    architectReasoning = architectResponse.reasoning;
+                }
             }
 
             // 3. Coder Agent - Generate code
             const coderResponse = await this.runAgent('coder', {
                 prompt,
-                context: currentContext
+                context: currentContext,
+                data: { architecture: projectArchitecture }
             });
 
             // 4. Reviewer Agent - Validate code

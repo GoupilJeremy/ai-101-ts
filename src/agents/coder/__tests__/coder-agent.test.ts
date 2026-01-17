@@ -20,29 +20,29 @@ class MockLLMManager {
     }
 }
 
-suite('CoderAgent Test Suite', () => {
+describe('CoderAgent Test Suite', () => {
     let agent: CoderAgent;
     let mockLLM: any;
 
-    setup(() => {
+    beforeEach(() => {
         agent = new CoderAgent();
         mockLLM = new MockLLMManager();
         agent.initialize(mockLLM as any);
     });
 
-    test('Should identify itself correctly', () => {
+    it('Should identify itself correctly', () => {
         assert.strictEqual(agent.name, 'coder');
         assert.strictEqual(agent.displayName, 'Coder Agent');
     });
 
-    test('Should parse LLM response correctly', async () => {
+    it('Should parse LLM response correctly', async () => {
         const response = await agent.execute({ prompt: 'Create a class' });
         assert.strictEqual(response.result, 'export class Test {}');
         assert.strictEqual(response.reasoning, 'I am using a singleton.');
         assert.deepStrictEqual(response.alternatives, ['Use a factory.']);
     });
 
-    test('Should throw error if not initialized', async () => {
+    it('Should throw error if not initialized', async () => {
         const uninitializedAgent = new CoderAgent();
         try {
             await uninitializedAgent.execute({ prompt: 'test' });
@@ -52,7 +52,7 @@ suite('CoderAgent Test Suite', () => {
         }
     });
 
-    test('Expert Mode - Should include [TECH DEBT] and [COMPLEXITY] sections in prompt', async () => {
+    it('Expert Mode - Should include [TECH DEBT] and [COMPLEXITY] sections in prompt', async () => {
         // Mock ModeManager to return Expert mode
         const modeManager = ModeManager.getInstance();
         const originalGetMode = modeManager.getCurrentMode;
@@ -72,7 +72,7 @@ suite('CoderAgent Test Suite', () => {
         }
     });
 
-    test('Expert Mode - Should request time/space complexity analysis', async () => {
+    it('Expert Mode - Should request time/space complexity analysis', async () => {
         const modeManager = ModeManager.getInstance();
         const originalGetMode = modeManager.getCurrentMode;
         modeManager.getCurrentMode = () => AgentMode.Expert;
@@ -88,7 +88,7 @@ suite('CoderAgent Test Suite', () => {
         }
     });
 
-    test('Expert Mode - Should request trade-off analysis', async () => {
+    it('Expert Mode - Should request trade-off analysis', async () => {
         const modeManager = ModeManager.getInstance();
         const originalGetMode = modeManager.getCurrentMode;
         modeManager.getCurrentMode = () => AgentMode.Expert;
@@ -104,7 +104,7 @@ suite('CoderAgent Test Suite', () => {
         }
     });
 
-    test('Expert Mode - Should NOT include [PEDAGOGY] section', async () => {
+    it('Expert Mode - Should NOT include [PEDAGOGY] section', async () => {
         const modeManager = ModeManager.getInstance();
         const originalGetMode = modeManager.getCurrentMode;
         modeManager.getCurrentMode = () => AgentMode.Expert;
@@ -119,5 +119,23 @@ suite('CoderAgent Test Suite', () => {
         } finally {
             modeManager.getCurrentMode = originalGetMode;
         }
+    });
+
+    it('Should include architectural guidance in prompt when provided', async () => {
+        const architecture = {
+            techStack: { frontend: 'react' },
+            patterns: { stateManagement: ['redux'] },
+            conventions: { naming: 'camelCase' }
+        };
+        const mockLLMWithCapture = mockLLM as MockLLMManager;
+
+        await agent.execute({
+            prompt: 'Create component',
+            data: { architecture }
+        });
+
+        assert.ok(mockLLMWithCapture.lastPrompt.includes('[PROJECT ARCHITECTURE & PATTERNS]'), 'Prompt should include architecture section');
+        assert.ok(mockLLMWithCapture.lastPrompt.includes('Frontend: react'), 'Prompt should include frontend tech stack');
+        assert.ok(mockLLMWithCapture.lastPrompt.includes('State Management: redux'), 'Prompt should include state management pattern');
     });
 });

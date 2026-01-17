@@ -7,6 +7,13 @@ import { AgentMode } from '../../modes/mode-types.js';
  * CoderAgent is responsible for generating code suggestions based on context
  * and architectural guidance.
  */
+import { ArchitecturePromptBuilder } from './libs/architecture-prompt-builder.js';
+import { IProjectArchitecture } from '../architect/interfaces/project-architecture.interface.js';
+
+/**
+ * CoderAgent is responsible for generating code suggestions based on context
+ * and architectural guidance.
+ */
 export class CoderAgent implements IAgent {
     public readonly name: AgentType = 'coder';
     public readonly displayName: string = 'Coder Agent';
@@ -50,9 +57,17 @@ Required sections:
 Keep explanations concise and technical. Avoid basic explanations - assume deep technical knowledge.`;
         }
 
+        // Feature 6.5: Architecture Guidance
+        let architectureInstructions = '';
+        if (request.data && request.data.architecture && !request.data.bypassArchitecture) {
+            const architecture = request.data.architecture as IProjectArchitecture;
+            architectureInstructions = ArchitecturePromptBuilder.buildSystemPrompt(architecture);
+        }
+
         const systemPrompt = `You are the Coder Agent for AI-101.
 Your goal is to generate high-quality TypeScript code based on the user's request, project context, and architectural guidance.
 Always follow established project patterns and TypeScript best practices.
+${architectureInstructions}
 ${modeInstructions}
 
 EXPECTED OUTPUT FORMAT:
@@ -63,7 +78,9 @@ ${mode === AgentMode.Expert ? '[TECH DEBT]\n(Only if Expert mode is active) Tech
 [CODE]
 The generated code snippet.
 [ALTERNATIVES]
-Briefly list alternative approaches if applicable.`;
+Briefly list alternative approaches if applicable.
+[CONFIDENCE]
+A single number between 0.0 and 1.0 representing your confidence in the solution's correctness and architectural alignment.`;
 
         const finalPrompt = `${systemPrompt}\n\nPROJECT CONTEXT:\n${request.context || 'No context provided'}\n\nUSER REQUEST: ${request.prompt}`;
 
@@ -78,7 +95,8 @@ Briefly list alternative approaches if applicable.`;
             const complexityMatch = text.match(/\[COMPLEXITY\]([\s\S]*?)(?:\[EDGE CASES\]|\[CODE\])/);
             const edgeCasesMatch = text.match(/\[EDGE CASES\]([\s\S]*?)\[CODE\]/);
             const codeMatch = text.match(/\[CODE\]([\s\S]*?)(\[ALTERNATIVES\]|$)/);
-            const alternativesMatch = text.match(/\[ALTERNATIVES\]([\s\S]*)/);
+            const alternativesMatch = text.match(/\[ALTERNATIVES\]([\s\S]*?)(\[CONFIDENCE\]|$)/);
+            const confidenceMatch = text.match(/\[CONFIDENCE\]\s*([\d\.]+)/);
 
             const result = codeMatch ? codeMatch[1].trim() : text;
             let reasoning = reasoningMatch ? reasoningMatch[1].trim() : 'Reasoning generated from LLM.';
@@ -100,6 +118,7 @@ Briefly list alternative approaches if applicable.`;
             }
 
             const alternatives = alternativesMatch ? alternativesMatch[1].trim().split('\n').map(s => s.trim()).filter(Boolean) : [];
+            const confidence = confidenceMatch ? parseFloat(confidenceMatch[1]) : 0.85;
 
             this.updateState('success', 'Code suggestions generated.');
 
@@ -107,7 +126,7 @@ Briefly list alternative approaches if applicable.`;
                 result: result,
                 reasoning: reasoning,
                 alternatives: alternatives,
-                confidence: 0.85
+                confidence: isNaN(confidence) ? 0.85 : confidence
             };
         } catch (error: any) {
             this.updateState('alert', `Error generating code: ${error.message}`);
