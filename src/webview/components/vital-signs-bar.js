@@ -12,6 +12,7 @@ class VitalSignsBar {
         this.element = null;
         this.metricsElement = null;
         this.filesCountElement = null;
+        this.historyToggleElement = null;
 
         // Initialize if document is ready
         if (typeof document !== 'undefined') {
@@ -88,6 +89,24 @@ class VitalSignsBar {
             timeSpan.textContent = `Time: ${minutes}m ${seconds}s`;
             this.metricsElement.appendChild(timeSpan);
         }
+
+        // History Toggle (Task 5.1)
+        this.metricsElement.appendChild(document.createTextNode(' | '));
+        const historySpan = document.createElement('span');
+        historySpan.id = 'history-toggle-btn';
+        historySpan.className = 'vital-signs__history';
+        historySpan.textContent = `History`;
+        historySpan.title = 'View Decision History';
+        historySpan.style.cursor = 'pointer';
+
+        if (this.options.onHistoryClick) {
+            historySpan.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.options.onHistoryClick();
+            });
+        }
+        this.metricsElement.appendChild(historySpan);
+        this.historyToggleElement = historySpan;
     }
 }
 

@@ -3,12 +3,15 @@
 import ContextPanel from './components/context-panel.js';
 // @ts-ignore
 import VitalSignsBar from './components/vital-signs-bar.js';
+// @ts-ignore
+import TimelineComponent from './components/timeline-component.js';
 
 console.log('Webview loaded');
 
 // Initialize Components
 let contextPanel: any;
 let vitalSignsBar: any;
+let timelineComponent: any;
 
 const stateManagerAdapter = {
     subscribe: (callback: any) => { /* No-op, we call update manually for now */ },
@@ -33,14 +36,20 @@ function initializeComponents() {
             if (contextPanel) {
                 contextPanel.toggle();
             }
+        },
+        onHistoryClick: () => {
+            if (timelineComponent) {
+                timelineComponent.toggle();
+            }
         }
     });
 
     // Initialize Context Panel
-    // We want to insert it into hud-container, possibly before agent-hud?
-    // context-panel.js appends to container.
     contextPanel = new ContextPanel('hud-container', stateManagerAdapter);
     contextPanel.render();
+
+    // Initialize Timeline Component
+    timelineComponent = new TimelineComponent('hud-container', stateManagerAdapter);
 }
 
 // Performance Monitoring
@@ -142,6 +151,11 @@ function applyUpdate(update: any) {
         case 'clearAlerts':
             document.querySelectorAll('.alert-component').forEach(el => el.remove());
             break;
+        case 'history':
+            if (timelineComponent) {
+                timelineComponent.updateHistory(update.history);
+            }
+            break;
         case 'fullState':
             if (update.mode && update.config) {
                 applyModeUpdate(update.mode, update.config);
@@ -151,6 +165,9 @@ function applyUpdate(update: any) {
             });
             if (update.metrics) executeUpdateMetricsUI(update.metrics);
             if (update.alerts) update.alerts.forEach((alert: any) => executeRenderAlert(alert));
+            if (update.history && timelineComponent) {
+                timelineComponent.updateHistory(update.history);
+            }
             break;
     }
 }
@@ -439,12 +456,23 @@ window.addEventListener('message', event => {
         case 'toWebview:clearAlerts':
             requestUpdate({ type: 'clearAlerts' });
             break;
+        case 'toWebview:historyUpdate':
+            requestUpdate({ type: 'history', history: message.history });
+            break;
         case 'toWebview:modeUpdate':
             console.log('Mode update received:', message.mode, message.config);
             applyModeUpdate(message.mode, message.config);
             break;
         case 'toWebview:fullStateUpdate':
-            requestUpdate({ type: 'fullState', states: message.states, metrics: message.metrics, alerts: message.alerts, mode: message.mode, config: message.modeConfig });
+            requestUpdate({
+                type: 'fullState',
+                states: message.states,
+                metrics: message.metrics,
+                alerts: message.alerts,
+                history: message.history,
+                mode: message.mode,
+                config: message.modeConfig
+            });
             break;
         case 'toWebview:largeTextUpdate':
             console.log('Large text update received:', message.enabled);

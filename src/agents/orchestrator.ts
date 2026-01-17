@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { LLMProviderManager } from '../llm/provider-manager.js';
-import { ExtensionStateManager } from '../state/extension-state-manager.js';
+import { ExtensionStateManager, IDecisionRecord } from '../state/index.js';
 import { ErrorHandler } from '../errors/error-handler.js';
 import { IAgent, AgentType, IAgentRequest, IAgentResponse } from './shared/agent.interface.js';
 
@@ -107,7 +107,7 @@ export class AgentOrchestrator {
             });
 
             // 5. Synthesize Final Response
-            return this.synthesizeResponse(coderResponse, reviewerResponse, architectReasoning);
+            return this.synthesizeResponse(coderResponse, reviewerResponse, architectReasoning, prompt);
 
         } catch (error: any) {
             ErrorHandler.handleError(error);
@@ -149,7 +149,7 @@ Please provide the corrected code snippet or file content.`;
             });
 
             // 3. Synthesize
-            return this.synthesizeResponse(coderResponse, reviewerResponse, 'Edge Case Fix implemented');
+            return this.synthesizeResponse(coderResponse, reviewerResponse, 'Edge Case Fix implemented', edgeCase.description);
 
         } catch (error: any) {
             ErrorHandler.handleError(error);
@@ -168,13 +168,32 @@ Please provide the corrected code snippet or file content.`;
     /**
      * Combines outputs from multiple agents into a final response.
      */
-    private synthesizeResponse(coder: IAgentResponse, reviewer: IAgentResponse, architectReasoning: string): IAgentResponse {
+    private synthesizeResponse(coder: IAgentResponse, reviewer: IAgentResponse, architectReasoning: string, originalPrompt: string): IAgentResponse {
         const finalResult = coder.result;
         const combinedReasoning = [
             architectReasoning ? `Architect: ${architectReasoning}` : null,
             `Coder: ${coder.reasoning}`,
             `Reviewer: ${reviewer.reasoning}`
         ].filter(Boolean).join('\n\n');
+
+        // Create and add history record
+        const historyRecord: IDecisionRecord = {
+            id: Date.now().toString(36) + Math.random().toString(36).substring(2),
+            timestamp: Date.now(),
+            type: 'suggestion',
+            summary: originalPrompt.length > 50 ? originalPrompt.substring(0, 47) + '...' : originalPrompt,
+            agent: 'coder',
+            status: 'pending',
+            details: {
+                reasoning: combinedReasoning,
+                code: coder.result,
+                architectReasoning,
+                coderApproach: coder.reasoning,
+                reviewerValidation: reviewer.reasoning
+            }
+        };
+
+        this.stateManager.addHistoryEntry(historyRecord);
 
         return {
             result: finalResult,

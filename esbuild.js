@@ -33,7 +33,7 @@ const copyAssetsPlugin = {
 	setup(build) {
 		build.onEnd(() => {
 			try {
-				const assets = ['index.html', 'index.css', 'sumi-e.css'];
+				const assets = ['index.html', 'index.css', 'sumi-e.css', 'timeline.css'];
 				assets.forEach(asset => {
 					fs.copyFileSync(
 						path.join(__dirname, 'src/webview', asset),

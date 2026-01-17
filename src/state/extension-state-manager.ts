@@ -1,5 +1,6 @@
 import { AgentType, IAgentState, AgentStatus, IAlert } from '../agents/shared/agent.interface.js';
 import { AgentMode, IModeConfig, ModeConfigs } from '../modes/mode-types.js';
+import { IDecisionRecord } from './history.interface.js';
 
 export interface IMetricsState {
     tokens: number;
@@ -22,6 +23,7 @@ export class ExtensionStateManager {
     private webview: { postMessage: (message: any) => Thenable<boolean> } | undefined;
     private sessionStartTime: number = Date.now();
     private sessionTimerInterval: NodeJS.Timeout | undefined;
+    private history: IDecisionRecord[] = [];
 
     private constructor() {
         this.initializeDefaultStates();
@@ -50,6 +52,7 @@ export class ExtensionStateManager {
                 states: this.getAllAgentStates(),
                 metrics: this.metrics,
                 alerts: this.alerts,
+                history: this.history,
                 mode: this.currentMode,
                 modeConfig: this.modeConfig
             });
@@ -137,6 +140,42 @@ export class ExtensionStateManager {
                 type: 'toWebview:contextFilesUpdate',
                 files
             });
+        }
+    }
+
+    /**
+     * Adds a history entry and notifies the webview.
+     */
+    public addHistoryEntry(entry: IDecisionRecord): void {
+        this.history.push(entry);
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:historyUpdate',
+                history: this.getHistory()
+            });
+        }
+    }
+
+    /**
+     * Returns the current list of history entries.
+     */
+    public getHistory(): IDecisionRecord[] {
+        return [...this.history];
+    }
+
+    /**
+     * Updates the status of a specific history entry.
+     */
+    public updateHistoryEntryStatus(id: string, status: 'accepted' | 'rejected' | 'resolved'): void {
+        const entry = this.history.find(e => e.id === id);
+        if (entry) {
+            entry.status = status;
+            if (this.webview) {
+                this.webview.postMessage({
+                    type: 'toWebview:historyUpdate',
+                    history: this.getHistory()
+                });
+            }
         }
     }
 
