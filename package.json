@@ -101,7 +101,7 @@
       {
         "command": "ai-101-ts.forceAgentState",
         "title": "Force Agent State (Debug)",
-        "category": "AI 101"
+        "category": "AI 101 Debug"
       },
       {
         "command": "ai-101-ts.switchToLearningMode",

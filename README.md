@@ -52,13 +52,19 @@ The AI-101 extension provides comprehensive keyboard navigation for all interact
 * **Shift+?**: Show keyboard shortcuts help overlay
 
 ### Accessibility Features
-
-* **Focus Indicators**: Clear visual focus indicators with Sumi-e aesthetic (ink stroke glow effect)
-* **Screen Reader Support**: ARIA live regions announce focus changes and element states
-* **Focus Trap**: Modal panels trap focus for keyboard navigation (Tab cycles within panel, Escape to close)
-* **High Contrast Mode**: Enhanced focus indicators for better visibility
-* **Colorblind Mode**: Pattern-based focus indicators for colorblind users
+...
 * **Reduced Motion**: Respects `prefers-reduced-motion` setting
+
+## Development & Debugging
+
+AI-101 includes built-in tools for developers and contributors:
+
+* **Force Agent State**: Force any agent into a specific state (`thinking`, `working`, `alert`, etc.) to test UI transitions and animations.
+  - Command: `AI 101: Force Agent State (Debug)`
+  - Hotkey: `Ctrl+Shift+Alt+S`
+  - Argument support for automation and testing.
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed technical documentation on debugging tools.
 
 ## Extension Settings
 

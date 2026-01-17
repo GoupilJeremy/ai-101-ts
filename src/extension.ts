@@ -181,8 +181,8 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.forceAgentState', () => {
-			import('./commands/force-agent-state.js').then(module => module.forceAgentStateCommand());
+		vscode.commands.registerCommand('ai-101-ts.forceAgentState', (agentId?: any, state?: any, task?: any) => {
+			import('./commands/force-agent-state.command.js').then(module => module.forceAgentStateCommand(agentId, state, task));
 		})
 	);
 
