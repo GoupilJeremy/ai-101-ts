@@ -116,6 +116,48 @@ export class AgentOrchestrator {
     }
 
     /**
+     * Processes an edge case fix request.
+     * Flow: Coder -> Reviewer
+     */
+    public async processEdgeCaseFix(edgeCase: any): Promise<IAgentResponse> {
+        ErrorHandler.log(`Processing edge case fix: ${edgeCase.type}`);
+
+        try {
+            const activeEditor = vscode.window.activeTextEditor;
+            let currentContext = '';
+            if (activeEditor) {
+                currentContext = activeEditor.document.getText();
+            }
+
+            // 1. Coder Agent - Generate Fix
+            const fixPrompt = `Implement the following edge case fix for the current file:
+Type: ${edgeCase.type}
+Description: ${edgeCase.description}
+Recommended Fix: ${edgeCase.fix}
+
+Please provide the corrected code snippet or file content.`;
+
+            const coderResponse = await this.runAgent('coder', {
+                prompt: fixPrompt,
+                context: currentContext
+            });
+
+            // 2. Reviewer Agent - Validate
+            const reviewerResponse = await this.runAgent('reviewer', {
+                prompt: `Review this edge case fix: ${coderResponse.result}`,
+                context: currentContext
+            });
+
+            // 3. Synthesize
+            return this.synthesizeResponse(coderResponse, reviewerResponse, 'Edge Case Fix implemented');
+
+        } catch (error: any) {
+            ErrorHandler.handleError(error);
+            throw error;
+        }
+    }
+
+    /**
      * Decides if the architect agent should be involved based on prompt complexity.
      */
     private shouldInvolveArchitect(prompt: string): boolean {

@@ -1014,6 +1014,33 @@ function executeRenderAlert(alert: any) {
     if (currentMode === 'team') {
         addCommentButtonToAlerts();
     }
+
+    // Edge Case Handling (Story 6.6)
+    if (alert.data && alert.data.fix) {
+        const fixBtn = document.createElement('button');
+        fixBtn.className = 'fix-btn';
+        fixBtn.style.marginTop = '8px';
+        fixBtn.style.display = 'block';
+        fixBtn.style.padding = '4px 8px';
+        fixBtn.style.backgroundColor = 'var(--vscode-button-background)';
+        fixBtn.style.color = 'var(--vscode-button-foreground)';
+        fixBtn.style.border = 'none';
+        fixBtn.style.borderRadius = '2px';
+        fixBtn.style.cursor = 'pointer';
+        fixBtn.textContent = '⚡ Fix Edge Case';
+
+        fixBtn.onclick = (e) => {
+            e.stopPropagation();
+            getVsCodeApi().postMessage({
+                type: 'toExtension:fixEdgeCase',
+                edgeCase: alert.data
+            });
+            fixBtn.textContent = 'Generating Fix...';
+            fixBtn.disabled = true;
+            fixBtn.style.opacity = '0.7';
+        };
+        alertEl.appendChild(fixBtn);
+    }
 }
 
 /**

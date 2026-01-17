@@ -20,6 +20,7 @@ export interface IAlert {
     message: string;
     anchorLine?: number;
     timestamp: number;
+    data?: any;
 }
 
 /**
@@ -62,6 +63,8 @@ export interface IAgentResponse {
     alternatives?: string[];
     /** Confidence score (0.0 to 1.0) */
     confidence: number;
+    /** Optional structured data returned by the agent */
+    data?: any;
 }
 
 /**

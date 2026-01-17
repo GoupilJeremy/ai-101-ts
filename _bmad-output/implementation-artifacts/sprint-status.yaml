@@ -122,7 +122,7 @@ development_status:
   6-3-implement-visible-context-file-tracking-and-display: review
   6-4-implement-project-architecture-pattern-detection: review
   6-5-implement-architecture-aligned-suggestion-generation: review
-  6-6-implement-proactive-edge-case-identification: backlog
+  6-6-implement-proactive-edge-case-identification: review
   6-7-implement-real-time-security-validation: backlog
   6-8-implement-decision-and-reasoning-history-timeline: backlog
   6-9-implement-development-phase-detection: backlog

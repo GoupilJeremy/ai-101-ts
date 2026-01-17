@@ -64,6 +64,9 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
             case 'toExtension:openFile':
                 this.openFileInEditor(message.filePath);
                 break;
+            case 'toExtension:fixEdgeCase':
+                this.handleFixEdgeCase(message.edgeCase);
+                break;
 
             // Context Management
             case 'toExtension:saveContextSnapshot':
@@ -126,6 +129,31 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
             await contextAgent.refreshFile(filePath);
             // Re-fetch context files?
         }
+    }
+
+    private async handleFixEdgeCase(edgeCase: any): Promise<void> {
+        const { AgentOrchestrator } = await import('../agents/orchestrator.js');
+        const orchestrator = AgentOrchestrator.getInstance();
+
+        vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: `Fixing Edge Case: ${edgeCase.type}`,
+            cancellable: false
+        }, async (progress) => {
+            try {
+                const response = await orchestrator.processEdgeCaseFix(edgeCase);
+                // In a real implementation, we would apply the edit or show a diff.
+                // For now, let's just show the result in a new document or information message.
+                // Or better, let Coder Agent apply edits directly if it supports it (it doesn't yet fully).
+                // We'll show the suggestion in a new untitled document.
+                const doc = await vscode.workspace.openTextDocument({ content: response.result, language: 'typescript' });
+                await vscode.window.showTextDocument(doc, { preview: false, viewColumn: vscode.ViewColumn.Beside });
+
+                vscode.window.showInformationMessage("Edge case fix generated. Please review side-by-side.");
+            } catch (error: any) {
+                vscode.window.showErrorMessage(`Failed to fix edge case: ${error.message}`);
+            }
+        });
     }
 
     private handleConfigurationChange(event: vscode.ConfigurationChangeEvent): void {

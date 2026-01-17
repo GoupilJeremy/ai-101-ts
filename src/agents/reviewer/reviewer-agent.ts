@@ -3,6 +3,8 @@ import { LLMProviderManager } from '../../llm/provider-manager.js';
 import { ExtensionStateManager } from '../../state/extension-state-manager.js';
 import { ModeManager } from '../../modes/mode-manager.js';
 import { AgentMode } from '../../modes/mode-types.js';
+import { EdgeCasePromptBuilder } from './libs/edge-case-prompt-builder.js';
+import { IReviewerResult, IEdgeCase } from './reviewer.interface.js';
 import * as vscode from 'vscode';
 
 /**
@@ -39,12 +41,14 @@ export class ReviewerAgent implements IAgent {
 Provide in-depth security and quality analysis for experienced developers. Keep it concise and signal-focused.
 
 Enhanced focus areas:
-- Reference specific OWASP Top 10 vulnerabilities when applicable (e.g., A01:2021 - Broken Access Control)
+- Reference specific OWASP Top 10 vulnerabilities when applicable
 - Explicitly enumerate edge cases with specific handling recommendations
 - Analyze time/space complexity implications of suggested fixes
 - Flag architectural anti-patterns and long-term maintainability concerns
 - Provide condensed, actionable insights - no hand-holding explanations`;
         }
+
+        const edgeCaseSystemPrompt = EdgeCasePromptBuilder.buildSystemPrompt();
 
         const systemPrompt = `You are the Reviewer Agent for AI-101.
 Your goal is to perform a rigorous security and quality review of the generated code.
@@ -54,71 +58,100 @@ Focus on:
 3. Technical debt and performance issues.
 ${modeInstructions}
 
-EXPECTED OUTPUT FORMAT:
-[STATUS]
-PASS or FAIL
-[RISKS]
-List any identified risks or vulnerabilities.
-[RECOMMENDATIONS]
-List specific improvements or fixes.
-[REASONING]
-Briefly explain your overall assessment.`;
+${edgeCaseSystemPrompt}
+
+Your response must be VALID JSON. Do not include conversational text outside the JSON block if possible.`;
 
         const finalPrompt = `${systemPrompt}\n\nPROJECT CONTEXT:\n${request.context || 'No context provided'}\n\nCODE TO REVIEW:\n${request.prompt}`;
 
         try {
             const llmResponse = await this.llmManager.callLLM(this.name, finalPrompt, request.options);
-
-            // Parse response
             const text = llmResponse.text;
-            const statusMatch = text.match(/\[STATUS\]([\s\S]*?)\[RISKS\]/);
-            const risksMatch = text.match(/\[RISKS\]([\s\S]*?)\[RECOMMENDATIONS\]/);
-            const recsMatch = text.match(/\[RECOMMENDATIONS\]([\s\S]*?)\[REASONING\]/);
-            const reasoningMatch = text.match(/\[REASONING\]([\s\S]*)/);
 
-            const status = statusMatch ? statusMatch[1].trim() : 'PASS';
-            const risks = risksMatch ? risksMatch[1].trim() : '';
-            const recommendations = recsMatch ? recsMatch[1].trim() : '';
-            const reasoning = reasoningMatch ? reasoningMatch[1].trim() : text;
+            // Attempt to extract JSON
+            let reviewerResult: IReviewerResult = {
+                status: 'PASS',
+                risks: '',
+                recommendations: '',
+                edgeCases: []
+            };
 
-            const isFail = status.toUpperCase().includes('FAIL') || risks.length > 20;
-            this.updateState(isFail ? 'alert' : 'success', isFail ? 'Risks detected during review.' : 'Review complete, code looks good.');
-
-            if (isFail) {
-                const activeEditor = vscode.window.activeTextEditor;
-                const anchorLine = activeEditor?.selection.active.line;
-
-                let alertMessage = risks.substring(0, 200);
-                const currentMode = ModeManager.getInstance().getCurrentMode();
-                if (currentMode === AgentMode.Learning) {
-                    alertMessage += '\n\n💡 Learn why this is a risk: https://owasp.org/www-project-top-ten/';
-                } else if (currentMode === AgentMode.Expert) {
-                    // Expert mode: condensed message, no educational links
-                    alertMessage = risks.substring(0, 150); // Shorter for experts
+            try {
+                // Find JSON block start/end if embedded
+                const jsonStart = text.indexOf('{');
+                const jsonEnd = text.lastIndexOf('}');
+                if (jsonStart !== -1 && jsonEnd !== -1) {
+                    const jsonStr = text.substring(jsonStart, jsonEnd + 1);
+                    const parsed = JSON.parse(jsonStr);
+                    if (parsed.status) reviewerResult = parsed;
+                } else {
+                    // Fallback to legacy parsing if JSON fails or not found (for robustness)
+                    const statusMatch = text.match(/\[STATUS\]([\s\S]*?)\[RISKS\]/);
+                    if (statusMatch) reviewerResult.status = statusMatch[1].trim() as any;
+                    // ... other legacy matches could go here, but focusing on JSON path
                 }
-
-                const alert: IAlert = {
-                    id: `review-${Date.now()}`,
-                    agent: this.name,
-                    severity: risks.toLowerCase().includes('critical') || risks.toLowerCase().includes('security') ? 'urgent' : 'warning',
-                    message: alertMessage,
-                    anchorLine,
-                    timestamp: Date.now()
-                };
-                ExtensionStateManager.getInstance().addAlert(alert);
+            } catch (e) {
+                console.warn('Failed to parse Reviewer JSON:', e);
+                // Fallback: treat whole text as reasoning/risks
+                reviewerResult.risks = text.substring(0, 500);
             }
 
-            const result = `Validation Status: ${status}\n\nRisks:\n${risks}\n\nRecommendations:\n${recommendations}`;
+            const isFail = reviewerResult.status === 'FAIL' || reviewerResult.risks.length > 20 || (reviewerResult.edgeCases && reviewerResult.edgeCases.length > 0);
+
+            this.updateState(isFail ? 'alert' : 'success', isFail ? 'Risks/Edge Cases detected.' : 'Review complete, code looks good.');
+
+            const activeEditor = vscode.window.activeTextEditor;
+            // Process risks/alerts
+            if (isFail) {
+                const anchorLine = activeEditor?.selection.active.line;
+
+                // Main Review Alert
+                if (reviewerResult.risks) {
+                    this.createAlert(reviewerResult.risks, 'warning', anchorLine);
+                }
+
+                // Process Edge Cases
+                if (reviewerResult.edgeCases) {
+                    for (const ec of reviewerResult.edgeCases) {
+                        const msg = `Edge Case (${ec.type}): ${ec.description}\nFix: ${ec.fix}`;
+                        this.createAlert(msg, ec.severity || 'warning', ec.lineAnchor || anchorLine);
+                    }
+                }
+            }
+
+            const resultStr = `Validation Status: ${reviewerResult.status}\n\nRisks:\n${reviewerResult.risks}\n\nRecommendations:\n${reviewerResult.recommendations}`;
 
             return {
-                result: result,
-                reasoning: reasoning,
-                confidence: 0.95
+                result: resultStr,
+                reasoning: text, // Keep full text as reasoning
+                confidence: 0.95,
+                data: reviewerResult
             };
         } catch (error: any) {
             this.updateState('alert', `Error during review: ${error.message}`);
             throw error;
         }
+    }
+
+    private createAlert(message: string, severity: 'info' | 'warning' | 'critical' | 'urgent', anchorLine?: number, data?: any) {
+        let alertMessage = message.substring(0, 200);
+        const currentMode = ModeManager.getInstance().getCurrentMode();
+        if (currentMode === AgentMode.Learning && !data) {
+            alertMessage += '\n\n💡 Learn why this is a risk: https://owasp.org/www-project-top-ten/';
+        } else if (currentMode === AgentMode.Expert) {
+            alertMessage = message.substring(0, 150);
+        }
+
+        const alert: IAlert = {
+            id: `review-${Date.now()}-${Math.random()}`,
+            agent: this.name,
+            severity: severity,
+            message: alertMessage,
+            anchorLine,
+            timestamp: Date.now(),
+            data
+        };
+        ExtensionStateManager.getInstance().addAlert(alert);
     }
 
     public getState(): IAgentState {
