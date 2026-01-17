@@ -18,6 +18,9 @@ import { ContextAgent } from './agents/context/context-agent.js';
 import { ArchitectAgent } from './agents/architect/architect-agent.js';
 import { SystemDetector } from './performance/system-detector.js';
 import { PhaseDetector } from './services/phase-detector.js';
+import { TelemetryManager } from './telemetry/telemetry-manager.js';
+import { TelemetryService } from './telemetry/telemetry-service.js';
+import { registerTelemetryCommands } from './commands/telemetry-commands.js';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -30,6 +33,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Initialize Phase Detector (Story 6.9)
 	PhaseDetector.getInstance().initialize(context);
+
+	// Initialize Telemetry
+	const telemetryManager = new TelemetryManager(context);
+	telemetryManager.checkFirstRun();
+	registerTelemetryCommands(context, telemetryManager);
+	TelemetryService.getInstance(context); // Initialize singleton
 
 	// Initialize LLM Manager and Rate Limiter
 	const llmManager = LLMProviderManager.getInstance();

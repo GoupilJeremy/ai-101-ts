@@ -46,6 +46,10 @@ export const commands = {
     executeCommand: async () => { }
 };
 
+export const env = {
+    isTelemetryEnabled: true
+};
+
 export class EventEmitter {
     event = () => { };
     fire() { }
@@ -61,5 +65,8 @@ export default {
     Position,
     StatusBarAlignment,
     commands,
-    EventEmitter
+    EventEmitter,
+    env: {
+        isTelemetryEnabled: true
+    }
 };

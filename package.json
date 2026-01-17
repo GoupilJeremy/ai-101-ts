@@ -134,6 +134,11 @@
         "category": "AI 101"
       },
       {
+        "command": "ai-101-ts.configureTelemetry",
+        "title": "Configure Telemetry Settings",
+        "category": "AI 101"
+      },
+      {
         "command": "ai-101-ts.openDocumentation",
         "title": "Open Documentation",
         "category": "AI 101"
@@ -343,6 +348,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
+    "@vscode/extension-telemetry": "^1.2.0",
     "js-tiktoken": "^1.0.10",
     "openai": "^4.28.0"
   },
