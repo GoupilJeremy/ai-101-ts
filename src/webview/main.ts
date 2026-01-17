@@ -17,6 +17,8 @@ import AgentComponent from './components/agent-component.js';
 import TooltipManager from './components/tooltip-manager.js';
 // @ts-ignore
 import AlertDetailPanel from './components/alert-detail-panel.js';
+// @ts-ignore
+import FocusManager from './accessibility/focus-manager.js';
 
 console.log('Webview loaded');
 
@@ -256,62 +258,24 @@ function applyModeUpdate(mode: string, config: any) {
     console.log(`AI-101 Webview: Mode=${mode}, Verbosity=${currentVerbosity}, HUD Opacity=${config.hudOpacity}`);
 }
 
-// Keyboard Navigation State
-let currentFocusIndex = -1;
-let interactiveElements: HTMLElement[] = [];
+// Focus Manager for keyboard navigation
+let focusManager: any;
 
-// Initialize keyboard navigation
+// Initialize keyboard navigation with FocusManager
 function initializeKeyboardNavigation() {
-    updateInteractiveElements();
+    focusManager = new FocusManager();
+    focusManager.initialize();
 
-    // Add keydown event listener
+    // Add global hotkeys handler
+    document.addEventListener('keydown', handleGlobalHotkeys);
+
+    // Add help overlay handler (Shift+?)
     document.addEventListener('keydown', (e) => {
-        handleKeyDown(e);
-        handleGlobalHotkeys(e);
-    });
-
-    // Add focus event listeners for focus management
-    document.addEventListener('focusin', handleFocusIn);
-    document.addEventListener('focusout', handleFocusOut);
-}
-
-function updateInteractiveElements() {
-    // Get all interactive elements (agents and alerts)
-    interactiveElements = Array.from(document.querySelectorAll('.agent-icon, .alert-component')) as HTMLElement[];
-
-    // Ensure all have tabindex
-    interactiveElements.forEach(el => {
-        if (!el.hasAttribute('tabindex')) {
-            el.setAttribute('tabindex', '0');
+        if (e.shiftKey && e.key === '?') {
+            e.preventDefault();
+            showKeyboardHelpOverlay();
         }
     });
-}
-
-function handleKeyDown(event: KeyboardEvent) {
-    if (interactiveElements.length === 0) return;
-
-    switch (event.key) {
-        case 'Tab':
-            event.preventDefault();
-            handleTabNavigation(event.shiftKey);
-            break;
-        case 'ArrowRight':
-        case 'ArrowLeft':
-        case 'ArrowUp':
-        case 'ArrowDown':
-            event.preventDefault();
-            handleArrowNavigation(event.key);
-            break;
-        case 'Enter':
-        case ' ':
-            event.preventDefault();
-            handleActivation();
-            break;
-        case 'Escape':
-            event.preventDefault();
-            handleEscape();
-            break;
-    }
 }
 
 function handleGlobalHotkeys(event: KeyboardEvent) {
@@ -337,151 +301,147 @@ function handleGlobalHotkeys(event: KeyboardEvent) {
     }
 }
 
-function handleTabNavigation(shiftKey: boolean) {
-    if (currentFocusIndex === -1) {
-        // No current focus, start with first element
-        currentFocusIndex = 0;
-    } else {
-        if (shiftKey) {
-            // Shift+Tab: previous
-            currentFocusIndex = currentFocusIndex > 0 ? currentFocusIndex - 1 : interactiveElements.length - 1;
-        } else {
-            // Tab: next
-            currentFocusIndex = currentFocusIndex < interactiveElements.length - 1 ? currentFocusIndex + 1 : 0;
-        }
-    }
-
-    focusElement(currentFocusIndex);
-}
-
-function handleArrowNavigation(key: string) {
-    if (currentFocusIndex === -1) {
-        currentFocusIndex = 0;
-        focusElement(currentFocusIndex);
-        return;
-    }
-
-    const currentElement = interactiveElements[currentFocusIndex];
-    let nextIndex = currentFocusIndex;
-
-    if (currentElement.classList.contains('agent-icon')) {
-        // Agent navigation
-        if (key === 'ArrowRight') {
-            // Find next agent
-            for (let i = currentFocusIndex + 1; i < interactiveElements.length; i++) {
-                if (interactiveElements[i].classList.contains('agent-icon')) {
-                    nextIndex = i;
-                    break;
-                }
-            }
-        } else if (key === 'ArrowLeft') {
-            // Find previous agent
-            for (let i = currentFocusIndex - 1; i >= 0; i--) {
-                if (interactiveElements[i].classList.contains('agent-icon')) {
-                    nextIndex = i;
-                    break;
-                }
-            }
-        }
-    } else if (currentElement.classList.contains('alert-component')) {
-        // Alert navigation
-        if (key === 'ArrowDown') {
-            // Find next alert
-            for (let i = currentFocusIndex + 1; i < interactiveElements.length; i++) {
-                if (interactiveElements[i].classList.contains('alert-component')) {
-                    nextIndex = i;
-                    break;
-                }
-            }
-        } else if (key === 'ArrowUp') {
-            // Find previous alert
-            for (let i = currentFocusIndex - 1; i >= 0; i--) {
-                if (interactiveElements[i].classList.contains('alert-component')) {
-                    nextIndex = i;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (nextIndex !== currentFocusIndex) {
-        currentFocusIndex = nextIndex;
-        focusElement(currentFocusIndex);
-    }
-}
-
-function handleActivation() {
-    if (currentFocusIndex === -1) return;
-
-    const element = interactiveElements[currentFocusIndex];
-    if (element.classList.contains('agent-icon')) {
-        // Activate agent (could expand details, show menu, etc.)
-        console.log('Activating agent:', element.dataset.agent);
-        // For now, just announce
-        announceToScreenReader(`Agent ${element.dataset.agent} activated`);
-    } else if (element.classList.contains('alert-component')) {
-        // Activate alert (could expand, accept suggestion, etc.)
-        console.log('Activating alert:', element.id);
-        announceToScreenReader('Alert activated');
-    }
-}
-
-function handleEscape() {
-    if (currentFocusIndex === -1) return;
-
-    const element = interactiveElements[currentFocusIndex];
-    if (element.classList.contains('alert-component')) {
-        // Dismiss/collapse alert
-        console.log('Dismissing alert:', element.id);
-        announceToScreenReader('Alert dismissed');
-    }
-}
-
-function focusElement(index: number) {
-    if (index >= 0 && index < interactiveElements.length) {
-        interactiveElements[index].focus();
-    }
-}
-
 function focusFirstElement() {
-    updateInteractiveElements();
-    if (interactiveElements.length > 0) {
-        currentFocusIndex = 0;
-        focusElement(0);
-        announceToScreenReader('HUD focused for keyboard navigation');
+    if (focusManager) {
+        focusManager.focusFirst();
     }
 }
 
-function handleFocusIn(event: FocusEvent) {
-    const target = event.target as HTMLElement;
-    const index = interactiveElements.indexOf(target);
-    if (index !== -1) {
-        currentFocusIndex = index;
-        target.classList.add('keyboard-focus');
-    }
-}
+function showKeyboardHelpOverlay() {
+    // Create help overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'focus-trap-overlay';
 
-function handleFocusOut(event: FocusEvent) {
-    const target = event.target as HTMLElement;
-    target.classList.remove('keyboard-focus');
-}
+    const helpPanel = document.createElement('div');
+    helpPanel.className = 'keyboard-help-overlay';
+    helpPanel.setAttribute('role', 'dialog');
+    helpPanel.setAttribute('aria-labelledby', 'keyboard-help-title');
+    helpPanel.setAttribute('aria-modal', 'true');
 
-function announceToScreenReader(message: string) {
-    // Create a live region for screen reader announcements
-    let liveRegion = document.getElementById('sr-live-region');
-    if (!liveRegion) {
-        liveRegion = document.createElement('div');
-        liveRegion.id = 'sr-live-region';
-        liveRegion.setAttribute('aria-live', 'polite');
-        liveRegion.setAttribute('aria-atomic', 'true');
-        liveRegion.style.position = 'absolute';
-        liveRegion.style.left = '-10000px';
-        liveRegion.style.width = '1px';
-        liveRegion.style.height = '1px';
-        liveRegion.style.overflow = 'hidden';
-        document.body.appendChild(liveRegion);
+    helpPanel.innerHTML = `
+        <div class="keyboard-help-overlay__header">
+            <h2 id="keyboard-help-title" class="keyboard-help-overlay__title">Keyboard Shortcuts</h2>
+            <button class="keyboard-help-overlay__close" aria-label="Close help">✕</button>
+        </div>
+        <div class="keyboard-help-overlay__content">
+            <div class="keyboard-help-section">
+                <h3 class="keyboard-help-section__title">Navigation</h3>
+                <div class="keyboard-help-section__shortcuts">
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Tab</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Cycle through interactive elements</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Shift</span>
+                            <span class="keyboard-shortcut__key">Tab</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Cycle backwards</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">←</span>
+                            <span class="keyboard-shortcut__key">→</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Navigate between agents</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">↑</span>
+                            <span class="keyboard-shortcut__key">↓</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Navigate between alerts</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="keyboard-help-section">
+                <h3 class="keyboard-help-section__title">Actions</h3>
+                <div class="keyboard-help-section__shortcuts">
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Enter</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Activate focused element</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Space</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Toggle focused element</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Esc</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Close panel or dismiss alert</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="keyboard-help-section">
+                <h3 class="keyboard-help-section__title">Suggestions</h3>
+                <div class="keyboard-help-section__shortcuts">
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">${navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'Cmd' : 'Ctrl'}</span>
+                            <span class="keyboard-shortcut__key">Enter</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Accept suggestion</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">${navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'Cmd' : 'Ctrl'}</span>
+                            <span class="keyboard-shortcut__key">Backspace</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Reject suggestion</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="keyboard-help-section">
+                <h3 class="keyboard-help-section__title">Help</h3>
+                <div class="keyboard-help-section__shortcuts">
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Shift</span>
+                            <span class="keyboard-shortcut__key">?</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Show this help</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(helpPanel);
+
+    // Create focus trap
+    if (focusManager) {
+        focusManager.createFocusTrap(helpPanel);
     }
-    liveRegion.textContent = message;
+
+    // Close button handler
+    const closeBtn = helpPanel.querySelector('.keyboard-help-overlay__close') as HTMLButtonElement;
+    closeBtn.addEventListener('click', () => {
+        if (focusManager) {
+            focusManager.releaseFocusTrap();
+        }
+        overlay.remove();
+        helpPanel.remove();
+    });
+
+    // Overlay click handler
+    overlay.addEventListener('click', () => {
+        if (focusManager) {
+            focusManager.releaseFocusTrap();
+        }
+        overlay.remove();
+        helpPanel.remove();
+    });
 }
 
 // Initialize keyboard navigation when DOM is ready
@@ -576,7 +536,9 @@ window.addEventListener('message', event => {
     }
 
     // Update interactive elements after any DOM changes
-    setTimeout(updateInteractiveElements, 0);
+    if (focusManager) {
+        setTimeout(() => focusManager.updateInteractiveElements(), 0);
+    }
 });
 
 function updateLargeTextMode(enabled: boolean): void {
@@ -592,10 +554,12 @@ function updateHUDVisibility(visible: boolean): void {
     const hudContainer = document.getElementById('hud-container');
     if (hudContainer) {
         hudContainer.classList.toggle('hud-container--hidden', !visible);
-        if (visible) {
-            announceToScreenReader('HUD is now visible');
-        } else {
-            announceToScreenReader('HUD is now hidden');
+        if (focusManager) {
+            if (visible) {
+                focusManager.announceToScreenReader('HUD is now visible');
+            } else {
+                focusManager.announceToScreenReader('HUD is now hidden');
+            }
         }
     }
 }
