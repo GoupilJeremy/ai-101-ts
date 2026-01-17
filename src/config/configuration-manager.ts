@@ -117,4 +117,18 @@ export class ConfigurationManager {
             throw new ConfigurationError('Cost budget must be greater than 0');
         }
     }
+
+    /**
+     * Resets all configuration settings to their default values.
+     */
+    public async resetToDefaults(): Promise<void> {
+        const config = vscode.workspace.getConfiguration(this.section);
+
+        // Reset all settings to undefined (which restores defaults)
+        await config.update('llm.provider', undefined, vscode.ConfigurationTarget.Workspace);
+        await config.update('ui.transparency', undefined, vscode.ConfigurationTarget.Workspace);
+        await config.update('ui.mode', undefined, vscode.ConfigurationTarget.Workspace);
+        await config.update('performance.maxTokens', undefined, vscode.ConfigurationTarget.Workspace);
+        await config.update('telemetry.enabled', undefined, vscode.ConfigurationTarget.Workspace);
+    }
 }

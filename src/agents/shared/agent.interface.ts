@@ -39,6 +39,8 @@ export interface IAgentState {
     activationReason?: string;
     /** Estimated completion timestamp for long-running tasks */
     estimatedCompletion?: number;
+    /** Whether the agent is visible in the UI (default: true) */
+    visible?: boolean;
 }
 
 /**

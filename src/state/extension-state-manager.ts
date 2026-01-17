@@ -272,6 +272,21 @@ export class ExtensionStateManager {
     }
 
     /**
+     * Updates the visibility of a specific agent.
+     */
+    public updateAgentVisibility(agent: AgentType, visible: boolean): void {
+        const currentState = this.getAgentState(agent);
+        const newState: IAgentState = {
+            ...currentState,
+            visible,
+            lastUpdate: Date.now()
+        };
+
+        this.agentStates.set(agent, newState);
+        this.notifyStateUpdate(agent, newState);
+    }
+
+    /**
      * Returns the current state of a specific agent.
      */
     public getAgentState(agent: AgentType): IAgentState {

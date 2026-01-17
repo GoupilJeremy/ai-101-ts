@@ -102,6 +102,41 @@
         "command": "ai-101-ts.forceAgentState",
         "title": "Force Agent State (Debug)",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.switchToLearningMode",
+        "title": "Switch to Learning Mode",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.switchToExpertMode",
+        "title": "Switch to Expert Mode",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.switchToTeamMode",
+        "title": "Switch to Team Mode",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.configureApiKeys",
+        "title": "Configure API Keys",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.resetConfig",
+        "title": "Reset Configuration",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.toggleAgentVisibility",
+        "title": "Toggle Agent Visibility",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.openDocumentation",
+        "title": "Open Documentation",
+        "category": "AI 101"
       }
     ],
     "keybindings": [

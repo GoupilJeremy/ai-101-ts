@@ -200,6 +200,39 @@ export function activate(context: vscode.ExtensionContext) {
 			import('./commands/alert-commands.js').then(module => module.dismissAlert(alertId));
 		})
 	);
+
+	// Mode switching commands
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.switchToLearningMode', () => {
+			import('./commands/switch-mode.js').then(module => module.switchToLearningModeCommand());
+		}),
+		vscode.commands.registerCommand('ai-101-ts.switchToExpertMode', () => {
+			import('./commands/switch-mode.js').then(module => module.switchToExpertModeCommand());
+		}),
+		vscode.commands.registerCommand('ai-101-ts.switchToTeamMode', () => {
+			import('./commands/switch-mode.js').then(module => module.switchToTeamModeCommand());
+		})
+	);
+
+	// Configuration commands
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.configureApiKeys', () => {
+			import('./commands/configure-api-keys.js').then(module => module.configureApiKeysCommand(context));
+		}),
+		vscode.commands.registerCommand('ai-101-ts.resetConfig', () => {
+			import('./commands/configure-api-keys.js').then(module => module.resetConfigCommand());
+		})
+	);
+
+	// UI commands
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.toggleAgentVisibility', () => {
+			import('./commands/toggle-agent-visibility.js').then(module => module.toggleAgentVisibilityCommand());
+		}),
+		vscode.commands.registerCommand('ai-101-ts.openDocumentation', () => {
+			import('./commands/toggle-agent-visibility.js').then(module => module.openDocumentationCommand());
+		})
+	);
 }
 
 // This method is called when your extension is deactivated
