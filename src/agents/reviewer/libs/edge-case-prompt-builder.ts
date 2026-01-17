@@ -1,6 +1,6 @@
 export class EdgeCasePromptBuilder {
-    static buildSystemPrompt(userPrompt: string = ''): string {
-        return `
+   static getCriteria(): string {
+      return `
 ### EDGE CASE ANALYSIS
 
 As the Reviewer Agent, you must rigorously analyze the code for the following edge case categories:
@@ -37,15 +37,11 @@ As the Reviewer Agent, you must rigorously analyze the code for the following ed
 
 7. **Internationalization (i18n)**
    - Identify hardcoded strings that should be localized
-   - formatting of dates, numbers, currencies
+   - formatting of dates, numbers, currencies`;
+   }
 
-### JSON OUTPUT FORMAT
-
-You must output the results in a strict JSON format embedded within your response.
-Include specific instances of edge cases found.
-
-Expected JSON Structure:
-\`\`\`json
+   static getJsonFormat(): string {
+      return `
 {
   "status": "PASS" | "FAIL",
   "risks": "Summary string...",
@@ -61,10 +57,23 @@ Expected JSON Structure:
       "lineAnchor": 0
     }
   ]
-}
+}`;
+   }
+
+   static buildSystemPrompt(userPrompt: string = ''): string {
+      return `${this.getCriteria()}
+
+### JSON OUTPUT FORMAT
+
+You must output the results in a strict JSON format embedded within your response.
+Include specific instances of edge cases found.
+
+Expected JSON Structure:
+\`\`\`json
+${this.getJsonFormat()}
 \`\`\`
 
 If no edge cases are found, return an empty "edgeCases" array.
 `;
-    }
+   }
 }

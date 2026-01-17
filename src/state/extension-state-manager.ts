@@ -85,6 +85,13 @@ export class ExtensionStateManager {
     }
 
     /**
+     * Returns the current list of alerts.
+     */
+    public getAlerts(): IAlert[] {
+        return [...this.alerts];
+    }
+
+    /**
      * Clears all alerts.
      */
     public clearAlerts(): void {

@@ -4,6 +4,7 @@ import { ExtensionStateManager } from '../../state/extension-state-manager.js';
 import { ModeManager } from '../../modes/mode-manager.js';
 import { AgentMode } from '../../modes/mode-types.js';
 import { EdgeCasePromptBuilder } from './libs/edge-case-prompt-builder.js';
+import { SecurityPromptBuilder } from './libs/security-prompt-builder.js';
 import { IReviewerResult, IEdgeCase } from './reviewer.interface.js';
 import * as vscode from 'vscode';
 
@@ -39,28 +40,59 @@ export class ReviewerAgent implements IAgent {
             modeInstructions = `
 [EXPERT MODE ACTIVE]
 Provide in-depth security and quality analysis for experienced developers. Keep it concise and signal-focused.
-
-Enhanced focus areas:
-- Reference specific OWASP Top 10 vulnerabilities when applicable
-- Explicitly enumerate edge cases with specific handling recommendations
-- Analyze time/space complexity implications of suggested fixes
-- Flag architectural anti-patterns and long-term maintainability concerns
-- Provide condensed, actionable insights - no hand-holding explanations`;
+- Reference specific OWASP Top 10 vulnerabilities
+- Explicitly enumerate edge cases and security flaws
+- Provide condensed, actionable insights`;
         }
 
-        const edgeCaseSystemPrompt = EdgeCasePromptBuilder.buildSystemPrompt();
+        const edgeCaseCriteria = EdgeCasePromptBuilder.getCriteria();
+        const securityCriteria = SecurityPromptBuilder.getCriteria();
 
         const systemPrompt = `You are the Reviewer Agent for AI-101.
 Your goal is to perform a rigorous security and quality review of the generated code.
-Focus on:
-1. Security Vulnerabilities (SQL injection, XSS, Command injection, hardcoded secrets).
-2. Edge cases (null/undefined, error handling, boundary conditions).
-3. Technical debt and performance issues.
+
 ${modeInstructions}
 
-${edgeCaseSystemPrompt}
+${edgeCaseCriteria}
 
-Your response must be VALID JSON. Do not include conversational text outside the JSON block if possible.`;
+${securityCriteria}
+
+### JSON OUTPUT FORMAT
+
+You must output the results in a strict Valid JSON format embedded within your response.
+Include specific instances of risks found.
+
+Expected JSON Structure:
+\`\`\`json
+{
+  "status": "PASS" | "FAIL",
+  "risks": "Summary string...",
+  "recommendations": "Summary string...",
+  "edgeCases": [
+    {
+      "id": "ec-1",
+      "type": "null_undefined" | "async_error" | "boundary" | "input_validation" | "race_condition" | "ui_state" | "i18n",
+      "description": "...",
+      "fix": "...",
+      "severity": "warning" | "critical",
+      "lineAnchor": 0
+    }
+  ],
+  "securityIssues": [
+    {
+      "id": "sec-1",
+      "type": "sql_injection" | "xss" | "command_injection" | "hardcoded_secret" | "insecure_cryptography" | "csrf" | "auth_bypass",
+      "description": "...",
+      "Severity": "critical" | "urgent",
+      "exploitScenario": "...",
+      "secureFix": "...",
+      "lineAnchor": 0
+    }
+  ]
+}
+\`\`\`
+
+If no issues are found, return empty arrays.`;
 
         const finalPrompt = `${systemPrompt}\n\nPROJECT CONTEXT:\n${request.context || 'No context provided'}\n\nCODE TO REVIEW:\n${request.prompt}`;
 
@@ -73,11 +105,11 @@ Your response must be VALID JSON. Do not include conversational text outside the
                 status: 'PASS',
                 risks: '',
                 recommendations: '',
-                edgeCases: []
+                edgeCases: [],
+                securityIssues: []
             };
 
             try {
-                // Find JSON block start/end if embedded
                 const jsonStart = text.indexOf('{');
                 const jsonEnd = text.lastIndexOf('}');
                 if (jsonStart !== -1 && jsonEnd !== -1) {
@@ -85,20 +117,24 @@ Your response must be VALID JSON. Do not include conversational text outside the
                     const parsed = JSON.parse(jsonStr);
                     if (parsed.status) reviewerResult = parsed;
                 } else {
-                    // Fallback to legacy parsing if JSON fails or not found (for robustness)
                     const statusMatch = text.match(/\[STATUS\]([\s\S]*?)\[RISKS\]/);
                     if (statusMatch) reviewerResult.status = statusMatch[1].trim() as any;
-                    // ... other legacy matches could go here, but focusing on JSON path
                 }
             } catch (e) {
                 console.warn('Failed to parse Reviewer JSON:', e);
-                // Fallback: treat whole text as reasoning/risks
                 reviewerResult.risks = text.substring(0, 500);
             }
 
-            const isFail = reviewerResult.status === 'FAIL' || reviewerResult.risks.length > 20 || (reviewerResult.edgeCases && reviewerResult.edgeCases.length > 0);
+            // Ensure arrays exist if parsing failed or partial
+            if (!reviewerResult.edgeCases) reviewerResult.edgeCases = [];
+            if (!reviewerResult.securityIssues) reviewerResult.securityIssues = [];
 
-            this.updateState(isFail ? 'alert' : 'success', isFail ? 'Risks/Edge Cases detected.' : 'Review complete, code looks good.');
+            const isFail = reviewerResult.status === 'FAIL' ||
+                reviewerResult.risks.length > 20 ||
+                reviewerResult.edgeCases.length > 0 ||
+                reviewerResult.securityIssues.length > 0;
+
+            this.updateState(isFail ? 'alert' : 'success', isFail ? 'Risks/Security Issues detected.' : 'Review complete, code looks good.');
 
             const activeEditor = vscode.window.activeTextEditor;
             // Process risks/alerts
@@ -111,11 +147,15 @@ Your response must be VALID JSON. Do not include conversational text outside the
                 }
 
                 // Process Edge Cases
-                if (reviewerResult.edgeCases) {
-                    for (const ec of reviewerResult.edgeCases) {
-                        const msg = `Edge Case (${ec.type}): ${ec.description}\nFix: ${ec.fix}`;
-                        this.createAlert(msg, ec.severity || 'warning', ec.lineAnchor || anchorLine);
-                    }
+                for (const ec of reviewerResult.edgeCases) {
+                    const msg = `Edge Case (${ec.type}): ${ec.description}\nFix: ${ec.fix}`;
+                    this.createAlert(msg, ec.severity || 'warning', ec.lineAnchor || anchorLine);
+                }
+
+                // Process Security Issues
+                for (const sec of reviewerResult.securityIssues) {
+                    const msg = `SECURITY (${sec.type}): ${sec.description}\nExploit: ${sec.exploitScenario}\nFix: ${sec.secureFix}`;
+                    this.createAlert(msg, sec.severity || 'critical', sec.lineAnchor || anchorLine, sec);
                 }
             }
 

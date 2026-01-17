@@ -14,6 +14,19 @@ export interface IEdgeCase {
 }
 
 /**
+ * Represents a security vulnerability identified during code review.
+ */
+export interface ISecurityIssue {
+    id: string;
+    type: 'sql_injection' | 'xss' | 'command_injection' | 'hardcoded_secret' | 'insecure_cryptography' | 'csrf' | 'auth_bypass';
+    description: string;
+    severity: AlertSeverity;
+    exploitScenario: string;
+    secureFix: string;
+    lineAnchor?: number;
+}
+
+/**
  * Structured result from the Reviewer Agent.
  */
 export interface IReviewerResult {
@@ -21,4 +34,5 @@ export interface IReviewerResult {
     risks: string;
     recommendations: string;
     edgeCases: IEdgeCase[];
+    securityIssues: ISecurityIssue[];
 }
