@@ -176,7 +176,14 @@ Please provide the corrected code snippet or file content.`;
             `Reviewer: ${reviewer.reasoning}`
         ].filter(Boolean).join('\n\n');
 
+        // Record Metrics (Story 8.2)
+        import('../telemetry/metrics-service.js').then(module => {
+            const metrics = module.MetricsService.getInstance();
+            metrics.recordSuggestionRequested();
+        }).catch(() => { });
+
         // Create and add history record
+
         const historyRecord: IDecisionRecord = {
             id: Date.now().toString(36) + Math.random().toString(36).substring(2),
             timestamp: Date.now(),

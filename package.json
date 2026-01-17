@@ -142,6 +142,16 @@
         "command": "ai-101-ts.openDocumentation",
         "title": "Open Documentation",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.viewMetrics",
+        "title": "View My Metrics",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.exportMetrics",
+        "title": "Export Metrics to JSON",
+        "category": "AI 101"
       }
     ],
     "keybindings": [

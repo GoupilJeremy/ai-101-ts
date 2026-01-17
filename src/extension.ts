@@ -21,6 +21,9 @@ import { PhaseDetector } from './services/phase-detector.js';
 import { TelemetryManager } from './telemetry/telemetry-manager.js';
 import { TelemetryService } from './telemetry/telemetry-service.js';
 import { registerTelemetryCommands } from './commands/telemetry-commands.js';
+import { MetricsService } from './telemetry/metrics-service.js';
+import { registerMetricsCommands } from './commands/metrics-commands.js';
+
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -39,6 +42,9 @@ export function activate(context: vscode.ExtensionContext) {
 	telemetryManager.checkFirstRun();
 	registerTelemetryCommands(context, telemetryManager);
 	TelemetryService.getInstance(context); // Initialize singleton
+	MetricsService.getInstance(context); // Initialize metrics tracking
+	registerMetricsCommands(context); // Register metrics commands
+
 
 	// Initialize LLM Manager and Rate Limiter
 	const llmManager = LLMProviderManager.getInstance();
@@ -245,4 +251,12 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() { }
+export function deactivate() {
+	// Finalize metrics session
+	try {
+		MetricsService.getInstance().recordSessionEnd();
+	} catch (error) {
+		// Service might not have been initialized
+	}
+}
+

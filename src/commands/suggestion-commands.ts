@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import { ExtensionStateManager, IDecisionRecord } from '../state/index.js';
 import { ErrorHandler } from '../errors/error-handler.js';
 import { TelemetryManager } from '../services/telemetry-manager.js';
+import { MetricsService } from '../telemetry/metrics-service.js';
+
 
 /**
  * Handles the accept/reject suggestion commands.
@@ -54,6 +56,10 @@ export async function handleSuggestionCommand(action: 'accepted' | 'rejected', a
                     suggestionId,
                     agent: historyRecord?.agent || 'coder'
                 });
+
+                // Record Local Metrics (Story 8.2)
+                const lineCount = codeToApply.split('\n').length;
+                MetricsService.getInstance().recordSuggestionAccepted(lineCount);
             } catch (error: any) {
                 ErrorHandler.handleError(error);
                 vscode.window.showErrorMessage(`Failed to apply suggestion: ${error.message}`);
@@ -71,6 +77,9 @@ export async function handleSuggestionCommand(action: 'accepted' | 'rejected', a
             suggestionId,
             agent: historyRecord?.agent || 'coder'
         });
+
+        // Record Local Metrics (Story 8.2)
+        MetricsService.getInstance().recordSuggestionRejected();
     }
 
     // 3. Cleanup Alerts

@@ -147,7 +147,7 @@ development_status:
   # ============================================================
   epic-8: in-progress
   8-1-implement-opt-in-telemetry-system-with-privacy-controls: review
-  8-2-implement-usage-metrics-collection-and-display: backlog
+  8-2-implement-usage-metrics-collection-and-display: review
   8-3-implement-suggestion-acceptance-rate-tracking: backlog
   8-4-implement-post-session-comprehension-surveys: backlog
   8-5-implement-weekly-learning-progress-surveys: backlog
