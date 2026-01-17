@@ -77,6 +77,11 @@
         "command": "ai-101-ts.viewArchitecture",
         "title": "View Detected Architecture",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.setPhase",
+        "title": "Set Development Phase",
+        "category": "AI 101"
       }
     ],
     "keybindings": [

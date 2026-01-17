@@ -17,6 +17,7 @@ import { AgentOrchestrator } from './agents/orchestrator.js';
 import { ContextAgent } from './agents/context/context-agent.js';
 import { ArchitectAgent } from './agents/architect/architect-agent.js';
 import { SystemDetector } from './performance/system-detector.js';
+import { PhaseDetector } from './services/phase-detector.js';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -26,6 +27,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Check for low memory and auto-activate Performance Mode if needed (Story 5.6)
 	SystemDetector.getInstance().checkAndAutoActivate();
+
+	// Initialize Phase Detector (Story 6.9)
+	PhaseDetector.getInstance().initialize(context);
 
 	// Initialize LLM Manager and Rate Limiter
 	const llmManager = LLMProviderManager.getInstance();
@@ -161,6 +165,12 @@ export function activate(context: vscode.ExtensionContext) {
 				type: 'toWebview:focusFirstElement'
 			});
 			vscode.window.showInformationMessage('AI-101: HUD focused for keyboard navigation');
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.setPhase', () => {
+			import('./commands/set-phase.js').then(module => module.setPhaseCommand());
 		})
 	);
 }

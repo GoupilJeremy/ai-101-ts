@@ -6,6 +6,7 @@ import { AgentMode } from '../../modes/mode-types.js';
 import { EdgeCasePromptBuilder } from './libs/edge-case-prompt-builder.js';
 import { SecurityPromptBuilder } from './libs/security-prompt-builder.js';
 import { IReviewerResult, IEdgeCase } from './reviewer.interface.js';
+import { PhasePromptBuilder } from '../shared/phase-prompt-builder.js';
 import * as vscode from 'vscode';
 
 /**
@@ -48,14 +49,20 @@ Provide in-depth security and quality analysis for experienced developers. Keep 
         const edgeCaseCriteria = EdgeCasePromptBuilder.getCriteria();
         const securityCriteria = SecurityPromptBuilder.getCriteria();
 
+        // Feature 6.9: Development Phase Adaptation
+        let phaseInstructions = '';
+        if (request.data && request.data.currentPhase) {
+            phaseInstructions = PhasePromptBuilder.buildSystemPrompt(request.data.currentPhase);
+        }
+
         const systemPrompt = `You are the Reviewer Agent for AI-101.
 Your goal is to perform a rigorous security and quality review of the generated code.
 
 ${modeInstructions}
 
 ${edgeCaseCriteria}
-
 ${securityCriteria}
+${phaseInstructions}
 
 ### JSON OUTPUT FORMAT
 

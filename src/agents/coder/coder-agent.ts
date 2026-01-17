@@ -9,6 +9,7 @@ import { AgentMode } from '../../modes/mode-types.js';
  */
 import { ArchitecturePromptBuilder } from './libs/architecture-prompt-builder.js';
 import { IProjectArchitecture } from '../architect/interfaces/project-architecture.interface.js';
+import { PhasePromptBuilder } from '../shared/phase-prompt-builder.js';
 
 /**
  * CoderAgent is responsible for generating code suggestions based on context
@@ -64,11 +65,18 @@ Keep explanations concise and technical. Avoid basic explanations - assume deep 
             architectureInstructions = ArchitecturePromptBuilder.buildSystemPrompt(architecture);
         }
 
+        // Feature 6.9: Development Phase Adaptation
+        let phaseInstructions = '';
+        if (request.data && request.data.currentPhase) {
+            phaseInstructions = PhasePromptBuilder.buildSystemPrompt(request.data.currentPhase);
+        }
+
         const systemPrompt = `You are the Coder Agent for AI-101.
 Your goal is to generate high-quality TypeScript code based on the user's request, project context, and architectural guidance.
 Always follow established project patterns and TypeScript best practices.
 ${architectureInstructions}
 ${modeInstructions}
+${phaseInstructions}
 
 EXPECTED OUTPUT FORMAT:
 [REASONING]

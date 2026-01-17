@@ -145,6 +145,9 @@ function applyUpdate(update: any) {
         case 'cursor':
             executeHandleCursorUpdate(update.cursor);
             break;
+        case 'phase':
+            executeUpdatePhaseUI(update.phase);
+            break;
         case 'newAlert':
             executeRenderAlert(update.alert);
             break;
@@ -164,6 +167,7 @@ function applyUpdate(update: any) {
                 executeUpdateAgentHUD(agent, state);
             });
             if (update.metrics) executeUpdateMetricsUI(update.metrics);
+            if (update.phase) executeUpdatePhaseUI(update.phase);
             if (update.alerts) update.alerts.forEach((alert: any) => executeRenderAlert(alert));
             if (update.history && timelineComponent) {
                 timelineComponent.updateHistory(update.history);
@@ -450,6 +454,9 @@ window.addEventListener('message', event => {
         case 'toWebview:cursorUpdate':
             requestUpdate({ type: 'cursor', cursor: message.cursor });
             break;
+        case 'toWebview:phaseUpdate':
+            requestUpdate({ type: 'phase', phase: message.phase });
+            break;
         case 'toWebview:newAlert':
             requestUpdate({ type: 'newAlert', alert: message.alert, alertId: message.alert.id });
             break;
@@ -471,7 +478,8 @@ window.addEventListener('message', event => {
                 alerts: message.alerts,
                 history: message.history,
                 mode: message.mode,
-                config: message.modeConfig
+                config: message.modeConfig,
+                phase: message.phase
             });
             break;
         case 'toWebview:largeTextUpdate':
@@ -796,6 +804,12 @@ function executeUpdateMetricsUI(metrics: any) {
     }
 
     doUpdateMetricsUI(metrics);
+}
+
+function executeUpdatePhaseUI(phase: string) {
+    if (vitalSignsBar) {
+        vitalSignsBar.setPhase(phase);
+    }
 }
 
 let metricsThrottleTimeout: any = null;

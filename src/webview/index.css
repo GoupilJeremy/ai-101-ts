@@ -165,8 +165,33 @@ body {
 .vital-signs__tokens,
 .vital-signs__cost,
 .vital-signs__files,
-.vital-signs__time {
+.vital-signs__time,
+.vital-signs__phase {
     margin: 0 4px;
+}
+
+.vital-signs__phase {
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 1px 6px;
+    border-radius: 2px;
+    background-color: rgba(26, 26, 26, 0.03);
+    transition: all 0.3s ease;
+}
+
+.vital-signs__phase--prototype {
+    color: #ce9178;
+    border-bottom: 1px solid rgba(206, 145, 120, 0.3);
+}
+
+.vital-signs__phase--production {
+    color: #4ec9b0;
+    border-bottom: 1px solid rgba(78, 201, 176, 0.3);
+}
+
+.vital-signs__phase--debug {
+    color: #c586c0;
+    border-bottom: 1px solid rgba(197, 134, 192, 0.3);
 }
 
 .vital-signs__files {
@@ -204,7 +229,8 @@ body {
 }
 
 .context-panel--expanded {
-    max-height: 500px; /* Arbitrary large height for transition */
+    max-height: 500px;
+    /* Arbitrary large height for transition */
     opacity: 1;
 }
 

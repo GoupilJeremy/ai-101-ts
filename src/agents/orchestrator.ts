@@ -216,6 +216,13 @@ Please provide the corrected code snippet or file content.`;
         const activeEditor = vscode.window.activeTextEditor;
         const anchorLine = activeEditor?.selection.active.line;
 
+        // Inject current phase into request
+        const currentPhase = this.stateManager.getPhase();
+        request.data = {
+            ...request.data,
+            currentPhase
+        };
+
         this.stateManager.updateAgentState(type, 'thinking', `Processing request...`, anchorLine);
 
         const eventData: AgentLifecycleEvent = { agent: type, timestamp: Date.now() };

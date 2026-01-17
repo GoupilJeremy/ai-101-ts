@@ -1,6 +1,7 @@
 import { AgentType, IAgentState, AgentStatus, IAlert } from '../agents/shared/agent.interface.js';
 import { AgentMode, IModeConfig, ModeConfigs } from '../modes/mode-types.js';
 import { IDecisionRecord } from './history.interface.js';
+import { DevelopmentPhase } from './types.js';
 
 export interface IMetricsState {
     tokens: number;
@@ -24,6 +25,7 @@ export class ExtensionStateManager {
     private sessionStartTime: number = Date.now();
     private sessionTimerInterval: NodeJS.Timeout | undefined;
     private history: IDecisionRecord[] = [];
+    private currentPhase: DevelopmentPhase = 'prototype';
 
     private constructor() {
         this.initializeDefaultStates();
@@ -54,9 +56,30 @@ export class ExtensionStateManager {
                 alerts: this.alerts,
                 history: this.history,
                 mode: this.currentMode,
-                modeConfig: this.modeConfig
+                modeConfig: this.modeConfig,
+                phase: this.currentPhase
             });
         }
+    }
+
+    /**
+     * Updates the active phase and notifies webview.
+     */
+    public updatePhase(phase: DevelopmentPhase): void {
+        this.currentPhase = phase;
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:phaseUpdate',
+                phase
+            });
+        }
+    }
+
+    /**
+     * Returns the current development phase.
+     */
+    public getPhase(): DevelopmentPhase {
+        return this.currentPhase;
     }
 
     /**

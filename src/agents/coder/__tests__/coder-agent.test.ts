@@ -138,4 +138,32 @@ describe('CoderAgent Test Suite', () => {
         assert.ok(mockLLMWithCapture.lastPrompt.includes('Frontend: react'), 'Prompt should include frontend tech stack');
         assert.ok(mockLLMWithCapture.lastPrompt.includes('State Management: redux'), 'Prompt should include state management pattern');
     });
+
+    it('Should include phase-specific instructions in prompt', async () => {
+        const mockLLMWithCapture = mockLLM as MockLLMManager;
+
+        // Test Production Phase
+        await agent.execute({
+            prompt: 'Update API',
+            data: { currentPhase: 'production' }
+        });
+        assert.ok(mockLLMWithCapture.lastPrompt.includes('[PRODUCTION PHASE ACTIVE]'), 'Prompt should include production phase instructions');
+        assert.ok(mockLLMWithCapture.lastPrompt.includes('security'), 'Production prompt should mention security');
+
+        // Test Debug Phase
+        await agent.execute({
+            prompt: 'Fix crash',
+            data: { currentPhase: 'debug' }
+        });
+        assert.ok(mockLLMWithCapture.lastPrompt.includes('[DEBUG PHASE ACTIVE]'), 'Prompt should include debug phase instructions');
+        assert.ok(mockLLMWithCapture.lastPrompt.includes('logging'), 'Debug prompt should mention logging');
+
+        // Test Prototype Phase
+        await agent.execute({
+            prompt: 'Add button',
+            data: { currentPhase: 'prototype' }
+        });
+        assert.ok(mockLLMWithCapture.lastPrompt.includes('[PROTOTYPE PHASE ACTIVE]'), 'Prompt should include prototype phase instructions');
+        assert.ok(mockLLMWithCapture.lastPrompt.includes('velocity'), 'Prototype prompt should mention velocity');
+    });
 });

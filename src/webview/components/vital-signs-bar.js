@@ -13,6 +13,7 @@ class VitalSignsBar {
         this.metricsElement = null;
         this.filesCountElement = null;
         this.historyToggleElement = null;
+        this.currentPhase = 'prototype';
 
         // Initialize if document is ready
         if (typeof document !== 'undefined') {
@@ -36,6 +37,8 @@ class VitalSignsBar {
         }
         if (!this.metricsElement) return;
 
+        this.lastMetrics = metrics;
+
         // Format cost
         const formattedCost = new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -44,6 +47,18 @@ class VitalSignsBar {
 
         // Clear existing
         this.metricsElement.innerHTML = '';
+
+        // Phase (Story 6.9)
+        const phaseSpan = document.createElement('span');
+        const phaseClass = this.currentPhase || 'prototype';
+        phaseSpan.className = `vital-signs__phase vital-signs__phase--${phaseClass}`;
+        const phaseLabel = this.getPhaseLabel(phaseClass);
+        const phaseIcon = this.getPhaseIcon(phaseClass);
+        phaseSpan.innerHTML = `${phaseIcon} ${phaseLabel}`;
+        phaseSpan.title = `Development Phase: ${phaseLabel}`;
+        this.metricsElement.appendChild(phaseSpan);
+
+        this.metricsElement.appendChild(document.createTextNode(' | '));
 
         // Tokens
         const tokensSpan = document.createElement('span');
@@ -107,6 +122,33 @@ class VitalSignsBar {
         }
         this.metricsElement.appendChild(historySpan);
         this.historyToggleElement = historySpan;
+    }
+
+    setPhase(phase) {
+        this.currentPhase = phase;
+        // The bar will be rerendered on the next metrics update,
+        // but we can force a rerender if we keep the last metrics.
+        if (this.lastMetrics) {
+            this.updateMetrics(this.lastMetrics);
+        }
+    }
+
+    getPhaseLabel(phase) {
+        const labels = {
+            'prototype': 'Prototype',
+            'production': 'Production',
+            'debug': 'Debug'
+        };
+        return labels[phase] || 'Prototype';
+    }
+
+    getPhaseIcon(phase) {
+        const icons = {
+            'prototype': '🧪',
+            'production': '🏗️',
+            'debug': '🐛'
+        };
+        return icons[phase] || '🧪';
     }
 }
 

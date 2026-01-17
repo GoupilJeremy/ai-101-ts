@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { IAgent, AgentType, IAgentRequest, IAgentResponse, IAgentState, AgentStatus } from '../shared/agent.interface.js';
+import { PhasePromptBuilder } from '../shared/phase-prompt-builder.js';
 import { LLMProviderManager } from '../../llm/provider-manager.js';
 import { ModeManager } from '../../modes/mode-manager.js';
 import { AgentMode } from '../../modes/mode-types.js';
@@ -105,9 +106,19 @@ export class ArchitectAgent implements IAgent {
             patterns.push(`Project Stack: ${architecture.techStack.frontend}`);
         }
 
+        // Feature 6.9: Development Phase Adaptation
+        let phaseInstructions = '';
+        if (request.data && request.data.currentPhase) {
+            phaseInstructions = PhasePromptBuilder.buildSystemPrompt(request.data.currentPhase);
+        }
+
         let result = patterns.length > 0
             ? `Detected Patterns:\n- ${patterns.join('\n- ')}\n\nRecommendation: When generating code, follow these established project conventions to ensure consistency and maintainability.`
             : 'No clear architectural patterns detected in the current context. Applying generic clean code principles and TypeScript best practices.';
+
+        if (phaseInstructions) {
+            result += `\n\n${phaseInstructions}`;
+        }
 
         let reasoning = `Analyzed the provided context and overall project architecture. Identified ${patterns.length} distinct patterns.`;
 
