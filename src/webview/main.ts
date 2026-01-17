@@ -15,6 +15,8 @@ import DropZoneManager from './components/drop-zone-manager.js';
 import AgentComponent from './components/agent-component.js';
 // @ts-ignore
 import TooltipManager from './components/tooltip-manager.js';
+// @ts-ignore
+import AlertDetailPanel from './components/alert-detail-panel.js';
 
 console.log('Webview loaded');
 
@@ -70,6 +72,9 @@ function initializeComponents() {
 
     // Initialize Tooltip Manager
     tooltipManager = TooltipManager.getInstance();
+
+    // Initialize Alert Detail Panel
+    const alertDetailPanel = AlertDetailPanel.getInstance();
 }
 
 // Performance Monitoring
@@ -1107,6 +1112,10 @@ function executeRenderAlert(alert: any) {
 
     const alertComponent = new AlertComponent(hud, alert, {
         verbosity: currentVerbosity,
+        onAlertClick: (alertData: any, targetElement: HTMLElement) => {
+            const alertDetailPanel = AlertDetailPanel.getInstance();
+            alertDetailPanel.show(alertData, targetElement);
+        },
         onFix: (data: any) => {
             getVsCodeApi().postMessage({
                 type: 'toExtension:fixEdgeCase',

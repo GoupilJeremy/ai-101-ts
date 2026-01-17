@@ -77,6 +77,18 @@ class AlertComponent {
     }
 
     setupEventListeners() {
+        // Click event to toggle AlertDetailPanel
+        this.element.addEventListener('click', (e) => {
+            // Don't trigger if clicking on fix button
+            if (e.target.classList.contains('fix-btn')) {
+                return;
+            }
+
+            if (this.options.onAlertClick) {
+                this.options.onAlertClick(this.alert, this.element);
+            }
+        });
+
         // Drag events
         this.element.addEventListener('dragstart', (e) => {
             this.element.classList.add('drag-source');
@@ -92,7 +104,13 @@ class AlertComponent {
 
         // Keyboard events
         this.element.addEventListener('keydown', (e) => {
-            if (e.key.toLowerCase() === 't') {
+            // Enter or Space to activate alert detail panel
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (this.options.onAlertClick) {
+                    this.options.onAlertClick(this.alert, this.element);
+                }
+            } else if (e.key.toLowerCase() === 't') {
                 e.preventDefault();
                 this.handleAddToTodo();
             } else if (e.key === 'Delete' || e.key === 'Backspace') {

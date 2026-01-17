@@ -88,6 +88,12 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
             case 'toExtension:dismissAlert':
                 vscode.commands.executeCommand('ai-101-ts.dismissAlert', message.alertId);
                 break;
+            case 'toExtension:applyFix':
+                await this.handleApplyFix(message.alertId, message.fix);
+                break;
+            case 'toExtension:explainAlert':
+                await this.handleExplainAlert(message.alertId);
+                break;
 
             default:
                 console.warn('Unknown message type from webview:', type);
@@ -164,6 +170,89 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
                 vscode.window.showErrorMessage(`Failed to fix edge case: ${error.message}`);
             }
         });
+    }
+
+    private async handleApplyFix(alertId: string, fix: any): Promise<void> {
+        if (!fix || !fix.after) {
+            vscode.window.showErrorMessage('No fix available for this alert');
+            return;
+        }
+
+        try {
+            // Get the active text editor
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showWarningMessage('No active editor to apply fix');
+                return;
+            }
+
+            // Create a workspace edit
+            const edit = new vscode.WorkspaceEdit();
+
+            // For now, we'll replace the entire selection or current line with the fix
+            // In a real implementation, we would need to know the exact range from the alert
+            const document = editor.document;
+            const selection = editor.selection;
+
+            // If there's a selection, replace it; otherwise replace current line
+            const range = selection.isEmpty
+                ? document.lineAt(selection.active.line).range
+                : selection;
+
+            edit.replace(document.uri, range, fix.after);
+
+            // Apply the edit
+            const success = await vscode.workspace.applyEdit(edit);
+
+            if (success) {
+                vscode.window.showInformationMessage('Fix applied successfully');
+
+                // Dismiss the alert
+                vscode.commands.executeCommand('ai-101-ts.dismissAlert', alertId);
+            } else {
+                vscode.window.showErrorMessage('Failed to apply fix');
+            }
+        } catch (error: any) {
+            vscode.window.showErrorMessage(`Error applying fix: ${error.message}`);
+        }
+    }
+
+    private async handleExplainAlert(alertId: string): Promise<void> {
+        try {
+            // Get the alert from state manager
+            const stateManager = ExtensionStateManager.getInstance();
+            // Note: We would need to add a method to retrieve alerts by ID
+            // For now, we'll show a placeholder message
+
+            vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                title: 'Generating detailed explanation...',
+                cancellable: false
+            }, async (progress) => {
+                try {
+                    // In a real implementation, we would:
+                    // 1. Get the alert details from state
+                    // 2. Call ReviewerAgent to generate a deeper explanation
+                    // 3. Send the explanation back to the webview
+
+                    const { AgentOrchestrator } = await import('../agents/orchestrator.js');
+                    const orchestrator = AgentOrchestrator.getInstance();
+
+                    // Placeholder: Show a message for now
+                    // In the future, this would call a method like:
+                    // const explanation = await orchestrator.explainAlert(alertId);
+
+                    vscode.window.showInformationMessage(
+                        'Detailed explanation feature will be implemented in the next iteration. ' +
+                        'This would provide deeper context about the alert and potential solutions.'
+                    );
+                } catch (error: any) {
+                    vscode.window.showErrorMessage(`Failed to generate explanation: ${error.message}`);
+                }
+            });
+        } catch (error: any) {
+            vscode.window.showErrorMessage(`Error explaining alert: ${error.message}`);
+        }
     }
 
     private handleConfigurationChange(event: vscode.ConfigurationChangeEvent): void {
