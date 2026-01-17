@@ -192,6 +192,12 @@ export function activate(context: vscode.ExtensionContext) {
 		}),
 		vscode.commands.registerCommand('ai-101-ts.rejectSuggestion', (args?: any) => {
 			import('./commands/suggestion-commands.js').then(module => module.handleSuggestionCommand('rejected', args));
+		}),
+		vscode.commands.registerCommand('ai-101-ts.createTodoFromAlert', (alertId: string) => {
+			import('./commands/alert-commands.js').then(module => module.createTodoFromAlert(alertId));
+		}),
+		vscode.commands.registerCommand('ai-101-ts.dismissAlert', (alertId: string) => {
+			import('./commands/alert-commands.js').then(module => module.dismissAlert(alertId));
 		})
 	);
 }

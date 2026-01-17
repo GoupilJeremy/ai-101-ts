@@ -81,6 +81,14 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
                 await this.handleRefreshContextFile(message.filePath);
                 break;
 
+            // Alert Interactions
+            case 'toExtension:createTodo':
+                vscode.commands.executeCommand('ai-101-ts.createTodoFromAlert', message.alertId);
+                break;
+            case 'toExtension:dismissAlert':
+                vscode.commands.executeCommand('ai-101-ts.dismissAlert', message.alertId);
+                break;
+
             default:
                 console.warn('Unknown message type from webview:', type);
         }

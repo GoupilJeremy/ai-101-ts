@@ -134,7 +134,7 @@ development_status:
   epic-7: in-progress
   7-1-implement-suggestion-accept-reject-with-visual-feedback: done
   7-2-implement-global-hotkey-configuration-system: review
-  7-3-implement-drag-and-drop-alerts-to-todo-list: backlog
+  7-3-implement-drag-and-drop-alerts-to-todo-list: done
   7-4-implement-contextual-hover-tooltips-on-agents: backlog
   7-5-implement-click-to-expand-for-alert-details-and-fixes: backlog
   7-6-implement-vscode-command-palette-integration: backlog

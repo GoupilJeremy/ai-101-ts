@@ -7,6 +7,10 @@ import VitalSignsBar from './components/vital-signs-bar.js';
 import TimelineComponent from './components/timeline-component.js';
 // @ts-ignore
 import SuggestionCard from './components/suggestion-card.js';
+// @ts-ignore
+import AlertComponent from './components/alert-component.js';
+// @ts-ignore
+import DropZoneManager from './components/drop-zone-manager.js';
 
 console.log('Webview loaded');
 
@@ -14,6 +18,7 @@ console.log('Webview loaded');
 let contextPanel: any;
 let vitalSignsBar: any;
 let timelineComponent: any;
+let dropZoneManager: any;
 
 const stateManagerAdapter = {
     subscribe: (callback: any) => { /* No-op, we call update manually for now */ },
@@ -52,6 +57,10 @@ function initializeComponents() {
 
     // Initialize Timeline Component
     timelineComponent = new TimelineComponent('hud-container', stateManagerAdapter);
+
+    // Initialize Drop Zone Manager
+    dropZoneManager = new DropZoneManager('hud-container');
+    dropZoneManager.render();
 }
 
 // Performance Monitoring
@@ -1091,72 +1100,34 @@ function executeRenderAlert(alert: any) {
     const hud = document.getElementById('agent-hud');
     if (!hud) return;
 
-    let alertEl = document.getElementById(`alert-${alert.id}`);
-    if (!alertEl) {
-        alertEl = document.createElement('div');
-        alertEl.id = `alert-${alert.id}`;
-        hud.appendChild(alertEl);
-    }
+    const alertComponent = new AlertComponent(hud, alert, {
+        verbosity: currentVerbosity,
+        onFix: (data: any) => {
+            getVsCodeApi().postMessage({
+                type: 'toExtension:fixEdgeCase',
+                edgeCase: data
+            });
+        },
+        onAddToTodo: (id: string) => {
+            getVsCodeApi().postMessage({
+                type: 'toExtension:createTodo',
+                alertId: id
+            });
+        },
+        onDismiss: (id: string) => {
+            getVsCodeApi().postMessage({
+                type: 'toExtension:dismissAlert',
+                alertId: id
+            });
+        }
+    });
 
-    alertEl.className = `alert-component alert-${alert.severity}`;
-    alertEl.dataset.anchorLine = alert.anchorLine?.toString() || '';
-
-    // Add ARIA attributes for accessibility
-    alertEl.setAttribute('role', 'alert');
-    alertEl.setAttribute('aria-label', `Alert: ${alert.message}`);
-    alertEl.setAttribute('aria-live', 'polite');
-    alertEl.setAttribute('aria-atomic', 'true');
-
-    // Expert Mode: Condensed rendering (signal > noise)
-    let messageToDisplay = alert.message;
-    if (currentVerbosity === 'low') {
-        // In Expert Mode, render links more compactly and keep message concise
-        messageToDisplay = messageToDisplay
-            .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">🔗</a>')
-            .replace(/\n/g, '<br/>');
-    } else {
-        // Normal mode: Full link display
-        messageToDisplay = messageToDisplay
-            .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>')
-            .replace(/\n/g, '<br/>');
-    }
-
-    alertEl.innerHTML = `
-        <div class="alert-icon-ideogram">${icons[alert.severity] || '❗'}</div>
-        <div class="alert-tooltip">${messageToDisplay}</div>
-    `;
+    alertComponent.render();
     repositionAlerts();
 
     // Team Mode: Add comment button to alerts
     if (currentMode === 'team') {
         addCommentButtonToAlerts();
-    }
-
-    // Edge Case Handling (Story 6.6)
-    if (alert.data && alert.data.fix) {
-        const fixBtn = document.createElement('button');
-        fixBtn.className = 'fix-btn';
-        fixBtn.style.marginTop = '8px';
-        fixBtn.style.display = 'block';
-        fixBtn.style.padding = '4px 8px';
-        fixBtn.style.backgroundColor = 'var(--vscode-button-background)';
-        fixBtn.style.color = 'var(--vscode-button-foreground)';
-        fixBtn.style.border = 'none';
-        fixBtn.style.borderRadius = '2px';
-        fixBtn.style.cursor = 'pointer';
-        fixBtn.textContent = '⚡ Fix Edge Case';
-
-        fixBtn.onclick = (e) => {
-            e.stopPropagation();
-            getVsCodeApi().postMessage({
-                type: 'toExtension:fixEdgeCase',
-                edgeCase: alert.data
-            });
-            fixBtn.textContent = 'Generating Fix...';
-            fixBtn.disabled = true;
-            fixBtn.style.opacity = '0.7';
-        };
-        alertEl.appendChild(fixBtn);
     }
 }
 
