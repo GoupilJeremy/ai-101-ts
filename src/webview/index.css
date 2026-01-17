@@ -383,3 +383,117 @@ body {
     mask-image: url('brush.svg');
     /* Will be added later */
 }
+
+/* Suggestion Card (Story 7.1) */
+.suggestion-card {
+    position: absolute;
+    right: 40px;
+    /* Offset from alerts */
+    width: 250px;
+    background-color: var(--washi-white);
+    border: 1px solid var(--sumi-ink);
+    border-radius: 4px;
+    padding: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    pointer-events: auto;
+    z-index: 100;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    will-change: transform, opacity;
+}
+
+.suggestion-card__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 4px;
+}
+
+.suggestion-card__icon-ideogram {
+    font-size: 16px;
+}
+
+.suggestion-card__title {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--sumi-ink);
+    opacity: 0.7;
+}
+
+.suggestion-card__message {
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--sumi-ink);
+    margin-bottom: 12px;
+}
+
+.suggestion-card__actions {
+    display: flex;
+    gap: 8px;
+}
+
+.suggestion-card__btn {
+    flex: 1;
+    border: 1px solid var(--sumi-ink);
+    background: transparent;
+    color: var(--sumi-ink);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.suggestion-card__btn--accept:hover {
+    background-color: var(--sumi-ink);
+    color: var(--washi-white);
+}
+
+.suggestion-card__btn--reject:hover {
+    background-color: var(--sumi-accent);
+    color: var(--washi-white);
+    border-color: var(--sumi-accent);
+}
+
+/* Animations for Suggestion Card */
+.suggestion-card--accepted {
+    animation: acceptSuccess 0.4s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.suggestion-card--rejected {
+    animation: rejectCancel 0.4s forwards ease-in;
+}
+
+@keyframes acceptSuccess {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.05);
+        background-color: rgba(78, 201, 176, 0.2);
+        border-color: #4ec9b0;
+    }
+
+    100% {
+        transform: scale(1) translateY(-20px);
+        opacity: 0;
+    }
+}
+
+@keyframes rejectCancel {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.95) translateX(30px);
+        opacity: 0;
+    }
+}

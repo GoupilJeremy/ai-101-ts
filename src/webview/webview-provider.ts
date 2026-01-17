@@ -48,9 +48,11 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         switch (type) {
             case 'toExtension:suggestionAccepted':
                 this.handleSuggestionAction(message.agent, 'accepted', message.complexity);
+                vscode.commands.executeCommand('ai-101-ts.acceptSuggestion', { suggestionId: message.suggestionId });
                 break;
             case 'toExtension:suggestionRejected':
                 this.handleSuggestionAction(message.agent, 'rejected', message.complexity);
+                vscode.commands.executeCommand('ai-101-ts.rejectSuggestion', { suggestionId: message.suggestionId });
                 break;
             case 'toExtension:annotationAdded':
                 this.handleAnnotationAdded(message.suggestionId, message.comment, message.author);

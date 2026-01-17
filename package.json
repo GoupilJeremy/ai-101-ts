@@ -82,6 +82,16 @@
         "command": "ai-101-ts.setPhase",
         "title": "Set Development Phase",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.acceptSuggestion",
+        "title": "Accept AI Suggestion",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.rejectSuggestion",
+        "title": "Reject AI Suggestion",
+        "category": "AI 101"
       }
     ],
     "keybindings": [
@@ -97,6 +107,18 @@
         "mac": "cmd+shift+h",
         "when": "editorTextFocus",
         "description": "Focus the AI HUD for keyboard navigation"
+      },
+      {
+        "command": "ai-101-ts.acceptSuggestion",
+        "key": "ctrl+enter",
+        "mac": "cmd+enter",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "ai-101-ts.rejectSuggestion",
+        "key": "ctrl+backspace",
+        "mac": "cmd+backspace",
+        "when": "editorTextFocus"
       }
     ],
     "configuration": {

@@ -5,6 +5,8 @@ import ContextPanel from './components/context-panel.js';
 import VitalSignsBar from './components/vital-signs-bar.js';
 // @ts-ignore
 import TimelineComponent from './components/timeline-component.js';
+// @ts-ignore
+import SuggestionCard from './components/suggestion-card.js';
 
 console.log('Webview loaded');
 
@@ -237,7 +239,10 @@ function initializeKeyboardNavigation() {
     updateInteractiveElements();
 
     // Add keydown event listener
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', (e) => {
+        handleKeyDown(e);
+        handleGlobalHotkeys(e);
+    });
 
     // Add focus event listeners for focus management
     document.addEventListener('focusin', handleFocusIn);
@@ -280,6 +285,29 @@ function handleKeyDown(event: KeyboardEvent) {
             event.preventDefault();
             handleEscape();
             break;
+    }
+}
+
+function handleGlobalHotkeys(event: KeyboardEvent) {
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    const cmdOrCtrl = isMac ? event.metaKey : event.ctrlKey;
+
+    if (cmdOrCtrl && event.key === 'Enter') {
+        event.preventDefault();
+        // Find visible suggestion card
+        const suggestionEl = document.querySelector('.suggestion-card:not(.suggestion-card--accepted):not(.suggestion-card--rejected)') as HTMLElement;
+        if (suggestionEl) {
+            const acceptBtn = suggestionEl.querySelector('.suggestion-card__btn--accept') as HTMLButtonElement;
+            if (acceptBtn) acceptBtn.click();
+        }
+    } else if (cmdOrCtrl && (event.key === 'Backspace' || (isMac && event.key === 'Delete'))) {
+        event.preventDefault();
+        // Find visible suggestion card
+        const suggestionEl = document.querySelector('.suggestion-card:not(.suggestion-card--accepted):not(.suggestion-card--rejected)') as HTMLElement;
+        if (suggestionEl) {
+            const rejectBtn = suggestionEl.querySelector('.suggestion-card__btn--reject') as HTMLButtonElement;
+            if (rejectBtn) rejectBtn.click();
+        }
     }
 }
 
@@ -999,6 +1027,34 @@ function repositionAlerts() {
 }
 
 function executeRenderAlert(alert: any) {
+    // Story 7.1: Specialized Suggestion Rendering
+    if (alert.type === 'suggestion' || (alert.data && alert.data.type === 'suggestion')) {
+        const hud = document.getElementById('agent-hud');
+        if (!hud) return;
+
+        // Force cleanup of existing suggestion if new one arrives?
+        // For now, let's keep it simple.
+        const suggestionCard = new SuggestionCard(hud, alert, {
+            onAccept: (s: any) => {
+                getVsCodeApi().postMessage({
+                    type: 'toExtension:suggestionAccepted',
+                    suggestionId: s.id,
+                    agent: s.agent || 'coder'
+                });
+            },
+            onReject: (s: any) => {
+                getVsCodeApi().postMessage({
+                    type: 'toExtension:suggestionRejected',
+                    suggestionId: s.id,
+                    agent: s.agent || 'coder'
+                });
+            }
+        });
+        suggestionCard.render();
+        repositionAlerts();
+        return;
+    }
+
     const icons: any = { info: '💡', warning: '⚠️', critical: '🚨', urgent: '🔥' };
 
     // Focus Mode: Show only critical/urgent alerts as toast notifications

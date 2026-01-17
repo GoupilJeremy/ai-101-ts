@@ -131,8 +131,8 @@ development_status:
   # ============================================================
   # Epic 7: User Interactions & Commands
   # ============================================================
-  epic-7: backlog
-  7-1-implement-suggestion-accept-reject-with-visual-feedback: backlog
+  epic-7: in-progress
+  7-1-implement-suggestion-accept-reject-with-visual-feedback: done
   7-2-implement-global-hotkey-configuration-system: backlog
   7-3-implement-drag-and-drop-alerts-to-todo-list: backlog
   7-4-implement-contextual-hover-tooltips-on-agents: backlog

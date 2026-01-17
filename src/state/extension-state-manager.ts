@@ -111,6 +111,29 @@ export class ExtensionStateManager {
     }
 
     /**
+     * Removes an alert and notifies the webview.
+     */
+    public removeAlert(id: string): void {
+        this.alerts = this.alerts.filter(a => a.id !== id);
+        // For now we don't have a specific removeAlert message, we can clear and re-sync or add one
+        // A full state sync is safer but heavier. Let's send a clearAlerts and then resend all?
+        // No, let's just clear for now and wait for full state sync on next update, 
+        // OR add a specific toWebview:removeAlert message.
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:clearAlerts'
+            });
+            // Resend remaining
+            this.alerts.forEach(alert => {
+                this.webview?.postMessage({
+                    type: 'toWebview:newAlert',
+                    alert
+                });
+            });
+        }
+    }
+
+    /**
      * Returns the current list of alerts.
      */
     public getAlerts(): IAlert[] {
@@ -189,7 +212,7 @@ export class ExtensionStateManager {
     /**
      * Updates the status of a specific history entry.
      */
-    public updateHistoryEntryStatus(id: string, status: 'accepted' | 'rejected' | 'resolved'): void {
+    public updateHistoryEntryStatus(id: string, status: 'accepted' | 'rejected' | 'resolved' | 'done'): void {
         const entry = this.history.find(e => e.id === id);
         if (entry) {
             entry.status = status;

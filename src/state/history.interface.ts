@@ -4,7 +4,7 @@ export interface IDecisionRecord {
     type: 'suggestion' | 'alert' | 'decision';
     summary: string;
     agent: 'architect' | 'coder' | 'reviewer' | 'context';
-    status: 'pending' | 'accepted' | 'rejected' | 'resolved';
+    status: 'pending' | 'accepted' | 'rejected' | 'resolved' | 'done';
     details: {
         reasoning: string;
         code?: string;

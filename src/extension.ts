@@ -173,6 +173,15 @@ export function activate(context: vscode.ExtensionContext) {
 			import('./commands/set-phase.js').then(module => module.setPhaseCommand());
 		})
 	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.acceptSuggestion', (args?: any) => {
+			import('./commands/suggestion-commands.js').then(module => module.handleSuggestionCommand('accepted', args));
+		}),
+		vscode.commands.registerCommand('ai-101-ts.rejectSuggestion', (args?: any) => {
+			import('./commands/suggestion-commands.js').then(module => module.handleSuggestionCommand('rejected', args));
+		})
+	);
 }
 
 // This method is called when your extension is deactivated

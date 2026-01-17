@@ -195,6 +195,19 @@ Please provide the corrected code snippet or file content.`;
 
         this.stateManager.addHistoryEntry(historyRecord);
 
+        // Also add an alert so the webview can display the suggestion card
+        this.stateManager.addAlert({
+            id: historyRecord.id,
+            agent: 'coder',
+            severity: 'info',
+            message: `Suggestion for: ${historyRecord.summary}`,
+            timestamp: Date.now(),
+            data: {
+                type: 'suggestion',
+                code: coder.result
+            }
+        });
+
         return {
             result: finalResult,
             reasoning: combinedReasoning,
