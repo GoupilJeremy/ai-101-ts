@@ -26,6 +26,37 @@ import { IAI101Config, ConfigurationScope } from './configuration-types.js';
  */
 export interface IAI101API {
     /**
+     * The current version of the AI-101 API.
+     * Follows Semantic Versioning (Major.Minor.Patch).
+     * 
+     * @example "1.2.3"
+     * @since 0.0.1
+     */
+    readonly apiVersion: string;
+
+    /**
+     * Checks if the current API version satisfies the required version range.
+     * 
+     * @param requiredVersion - A semver range (e.g., "^1.0.0", ">=1.2.0")
+     * @returns True if the current version satisfies the range, false otherwise
+     * 
+     * @remarks
+     * Extensions should use this to guard against breaking changes or ensure
+     * required features are available in the installed version of AI-101.
+     * 
+     * @example
+     * ```typescript
+     * if (!api.checkCompatibility('^1.0.0')) {
+     *   vscode.window.showErrorMessage('This extension requires AI-101 version 1.x.x');
+     *   return;
+     * }
+     * ```
+     * 
+     * @since 0.0.1
+     */
+    checkCompatibility(requiredVersion: string): boolean;
+
+    /**
      * Registers a custom LLM provider with the AI-101 extension.
      * 
      * @param name - Unique identifier for the provider (lowercase, URL-safe)

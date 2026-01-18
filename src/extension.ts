@@ -274,7 +274,7 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 
 	// Create and return the public API
 	// LLMProviderManager is already initialized above (line 72-73)
-	const api = createAPI(llmManager);
+	const api = createAPI(llmManager, context.extension.packageJSON.version);
 	return api;
 }
 

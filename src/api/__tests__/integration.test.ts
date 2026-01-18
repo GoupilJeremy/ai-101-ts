@@ -18,7 +18,7 @@ describe('Extension API Integration', () => {
     beforeEach(() => {
         // Simulate what happens when another extension activates AI-101
         providerManager = LLMProviderManager.getInstance();
-        api = createAPI(providerManager);
+        api = createAPI(providerManager, '1.0.0');
     });
 
     describe('Real-world usage scenario', () => {

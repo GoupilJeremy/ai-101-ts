@@ -7,18 +7,32 @@ import { ConfigurationManager } from '../config/configuration-manager.js';
 import { IAI101Config, ConfigurationScope } from './configuration-types.js';
 
 
+import * as semver from 'semver';
+
 /**
  * Creates the public API implementation for the AI-101 extension.
  * 
  * @param providerManager - The LLM provider manager singleton instance
+ * @param version - The version of the extension/API
  * @returns The API object to be exported from activate()
  * 
  * @internal
  */
-export function createAPI(providerManager: LLMProviderManager): IAI101API {
+export function createAPI(providerManager: LLMProviderManager, version: string): IAI101API {
     const configManager = ConfigurationManager.getInstance();
 
     return {
+        apiVersion: version,
+
+        checkCompatibility(requiredVersion: string): boolean {
+            try {
+                return semver.satisfies(version, requiredVersion);
+            } catch (error) {
+                // If the requiredVersion range is invalid, return false
+                return false;
+            }
+        },
+
         registerLLMProvider(name: string, provider: ILLMProvider): void {
             // ... (existing logic)
             // Validation: Name must be non-empty

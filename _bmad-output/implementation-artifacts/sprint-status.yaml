@@ -116,7 +116,7 @@ development_status:
   # ============================================================
   # Epic 6: Context Intelligence & File Management
   # ============================================================
-  epic-6: in-progress
+  epic-6: review
   6-1-implement-intelligent-file-discovery-and-context-loading: review
   6-2-implement-token-budget-management-and-optimization: review
   6-3-implement-visible-context-file-tracking-and-display: review
@@ -131,10 +131,10 @@ development_status:
   # ============================================================
   # Epic 7: User Interactions & Commands
   # ============================================================
-  epic-7: in-progress
-  7-1-implement-suggestion-accept-reject-with-visual-feedback: done
+  epic-7: review
+  7-1-implement-suggestion-accept-reject-with-visual-feedback: review
   7-2-implement-global-hotkey-configuration-system: review
-  7-3-implement-drag-and-drop-alerts-to-todo-list: done
+  7-3-implement-drag-and-drop-alerts-to-todo-list: review
   7-4-implement-contextual-hover-tooltips-on-agents: review
   7-5-implement-click-to-expand-for-alert-details-and-fixes: review
   7-6-implement-vscode-command-palette-integration: review
@@ -145,7 +145,7 @@ development_status:
   # ============================================================
   # Epic 8: Analytics, Telemetry & Metrics
   # ============================================================
-  epic-8: in-progress
+  epic-8: review
   8-1-implement-opt-in-telemetry-system-with-privacy-controls: review
   8-2-implement-usage-metrics-collection-and-display: review
   8-3-implement-suggestion-acceptance-rate-tracking: review
@@ -165,7 +165,7 @@ development_status:
   9-3-define-and-document-iagentrenderer-extension-interface: review
   9-4-implement-lifecycle-event-subscription-api: review
   9-5-implement-typed-configuration-api-for-programmatic-access: review
-  9-6-implement-semantic-versioning-for-api-compatibility: backlog
+  9-6-implement-semantic-versioning-for-api-compatibility: review
   epic-9-retrospective: optional
 
   # ============================================================

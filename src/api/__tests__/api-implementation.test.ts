@@ -45,10 +45,15 @@ describe('API Implementation', () => {
 
             // Create API implementation
             const api: IAI101API = {
+                apiVersion: '1.0.0',
+                checkCompatibility: vi.fn(),
                 registerLLMProvider: (name: string, provider: ILLMProvider) => {
                     manager.registerProvider(name, provider);
                 },
-                on: vi.fn()
+                on: vi.fn(),
+                getConfig: vi.fn(),
+                setConfig: vi.fn(),
+                updateConfig: vi.fn()
             };
 
             api.registerLLMProvider('test-provider', mockProvider);
@@ -60,10 +65,15 @@ describe('API Implementation', () => {
             const manager = LLMProviderManager.getInstance();
 
             const api: IAI101API = {
+                apiVersion: '1.0.0',
+                checkCompatibility: vi.fn(),
                 registerLLMProvider: (name: string, provider: ILLMProvider) => {
                     manager.registerProvider(name, provider);
                 },
-                on: vi.fn()
+                on: vi.fn(),
+                getConfig: vi.fn(),
+                setConfig: vi.fn(),
+                updateConfig: vi.fn()
             };
 
             api.registerLLMProvider('custom-llm', mockProvider);
@@ -76,10 +86,15 @@ describe('API Implementation', () => {
             const manager = LLMProviderManager.getInstance();
 
             const api: IAI101API = {
+                apiVersion: '1.0.0',
+                checkCompatibility: vi.fn(),
                 registerLLMProvider: (name: string, provider: ILLMProvider) => {
                     manager.registerProvider(name, provider);
                 },
-                on: vi.fn()
+                on: vi.fn(),
+                getConfig: vi.fn(),
+                setConfig: vi.fn(),
+                updateConfig: vi.fn()
             };
 
             // Register with a different name
@@ -93,7 +108,8 @@ describe('API Implementation', () => {
 
     describe('on', () => {
         it('should delegate to LifecycleEventManager.on', () => {
-            const api = createAPI(LLMProviderManager.getInstance());
+            const providerManager = LLMProviderManager.getInstance();
+            const api = createAPI(providerManager, '1.0.0');
             const callback = vi.fn();
 
             const unsubscribe = api.on('agentActivated', callback);
@@ -121,13 +137,18 @@ describe('API Implementation', () => {
             const manager = LLMProviderManager.getInstance();
 
             const api: IAI101API = {
+                apiVersion: '1.0.0',
+                checkCompatibility: vi.fn(),
                 registerLLMProvider: (name: string, provider: ILLMProvider) => {
                     if (!name || name.trim() === '') {
                         throw new Error('Provider name cannot be empty');
                     }
                     manager.registerProvider(name, provider);
                 },
-                on: vi.fn()
+                on: vi.fn(),
+                getConfig: vi.fn(),
+                setConfig: vi.fn(),
+                updateConfig: vi.fn()
             };
 
             expect(() => {
@@ -139,6 +160,8 @@ describe('API Implementation', () => {
             const manager = LLMProviderManager.getInstance();
 
             const api: IAI101API = {
+                apiVersion: '1.0.0',
+                checkCompatibility: vi.fn(),
                 registerLLMProvider: (name: string, provider: ILLMProvider) => {
                     // Validate provider has required methods
                     if (!provider.generateCompletion || typeof provider.generateCompletion !== 'function') {
@@ -155,7 +178,10 @@ describe('API Implementation', () => {
                     }
                     manager.registerProvider(name, provider);
                 },
-                on: vi.fn()
+                on: vi.fn(),
+                getConfig: vi.fn(),
+                setConfig: vi.fn(),
+                updateConfig: vi.fn()
             };
 
             const invalidProvider = {
@@ -172,13 +198,18 @@ describe('API Implementation', () => {
             const manager = LLMProviderManager.getInstance();
 
             const api: IAI101API = {
+                apiVersion: '1.0.0',
+                checkCompatibility: vi.fn(),
                 registerLLMProvider: (name: string, provider: ILLMProvider) => {
                     if (!provider) {
                         throw new Error('Provider cannot be null or undefined');
                     }
                     manager.registerProvider(name, provider);
                 },
-                on: vi.fn()
+                on: vi.fn(),
+                getConfig: vi.fn(),
+                setConfig: vi.fn(),
+                updateConfig: vi.fn()
             };
 
             expect(() => {
