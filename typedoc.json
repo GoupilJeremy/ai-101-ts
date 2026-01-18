@@ -1,0 +1,39 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": [
+        "./src/llm/provider.interface.ts"
+    ],
+    "out": "./docs/api",
+    "plugin": [],
+    "excludePrivate": true,
+    "excludeProtected": false,
+    "excludeExternals": true,
+    "readme": "none",
+    "name": "AI-101-TS API Documentation",
+    "includeVersion": true,
+    "sort": [
+        "source-order"
+    ],
+    "validation": {
+        "notExported": true,
+        "invalidLink": true,
+        "notDocumented": false
+    },
+    "categorizeByGroup": true,
+    "defaultCategory": "Other",
+    "categoryOrder": [
+        "Public API",
+        "*"
+    ],
+    "searchInComments": true,
+    "cleanOutputDir": true,
+    "gitRevision": "main",
+    "githubPages": false,
+    "hideGenerator": false,
+    "visibilityFilters": {
+        "protected": false,
+        "private": false,
+        "inherited": true,
+        "external": false
+    }
+}

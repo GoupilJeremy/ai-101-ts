@@ -159,8 +159,8 @@ development_status:
   # ============================================================
   # Epic 9: Extensibility & Public API
   # ============================================================
-  epic-9: backlog
-  9-1-define-and-document-illmprovider-extension-interface: backlog
+  epic-9: in-progress
+  9-1-define-and-document-illmprovider-extension-interface: review
   9-2-implement-llm-provider-registration-api: backlog
   9-3-define-and-document-iagentrenderer-extension-interface: backlog
   9-4-implement-lifecycle-event-subscription-api: backlog
