@@ -1,14 +1,16 @@
 import * as vscode from 'vscode';
-import { IUsageMetrics, IDailyMetrics, DEFAULT_METRICS } from './metrics.interface';
+import { IUsageMetrics, IDailyMetrics, DEFAULT_METRICS, ISuggestionContext, IDimensionalMetrics } from './metrics.interface';
 import { MetricsStorage } from './metrics-storage';
+import { TelemetryService } from './telemetry-service';
 
 /**
  * Service for tracking extension usage metrics locally.
- * Focuses on user-facing value like "Time Saved".
+ * Focuses on user-facing value like "Time Saved" and acceptance rates.
  */
 export class MetricsService implements vscode.Disposable {
     private static instance: MetricsService;
     private storage: MetricsStorage;
+    private telemetryService: TelemetryService | undefined;
     private currentMetrics: IUsageMetrics = { ...DEFAULT_METRICS };
     private sessionStartTime: number = Date.now();
 
@@ -17,6 +19,8 @@ export class MetricsService implements vscode.Disposable {
 
     private constructor(context: vscode.ExtensionContext) {
         this.storage = new MetricsStorage(context);
+        // Initialize telemetry service (will only send if opted in)
+        this.telemetryService = TelemetryService.getInstance(context);
         this.initialize();
     }
 
@@ -53,7 +57,7 @@ export class MetricsService implements vscode.Disposable {
         this.save();
     }
 
-    public recordSuggestionAccepted(linesCount: number): void {
+    public recordSuggestionAccepted(linesCount: number, context?: ISuggestionContext): void {
         this.currentMetrics.suggestionsAccepted++;
         this.currentMetrics.linesAccepted += linesCount;
 
@@ -65,13 +69,128 @@ export class MetricsService implements vscode.Disposable {
         today.linesAccepted += linesCount;
         today.timeSavedMs += timeSaved;
 
+        // Track dimensional stats if context provided
+        if (context) {
+            this.updateDimensionalStats(context, 'accepted', linesCount);
+
+            // Send telemetry event if opted in (NO user code, only metadata)
+            this.telemetryService?.sendEvent('suggestion.accepted', {
+                agent: context.agent,
+                mode: context.mode,
+                type: context.type
+            }, {
+                linesCount: linesCount,
+                timeSavedMs: timeSaved
+            });
+        }
+
         this.save();
     }
 
-    public recordSuggestionRejected(): void {
+    public recordSuggestionRejected(context?: ISuggestionContext): void {
         this.currentMetrics.suggestionsRejected++;
         this.getTodayStats().suggestionsRejected++;
+
+        // Track dimensional stats if context provided
+        if (context) {
+            this.updateDimensionalStats(context, 'rejected', 0);
+
+            // Send telemetry event if opted in (NO user code, only metadata)
+            this.telemetryService?.sendEvent('suggestion.rejected', {
+                agent: context.agent,
+                mode: context.mode,
+                type: context.type
+            });
+        }
+
         this.save();
+    }
+
+    private updateDimensionalStats(context: ISuggestionContext, action: 'accepted' | 'rejected', linesCount: number): void {
+        const { agent, mode, type } = context;
+
+        // Initialize if not exists
+        if (!this.currentMetrics.dimensionalStats.byAgent[agent]) {
+            this.currentMetrics.dimensionalStats.byAgent[agent] = { accepted: 0, rejected: 0, linesAccepted: 0 };
+        }
+        if (!this.currentMetrics.dimensionalStats.byMode[mode]) {
+            this.currentMetrics.dimensionalStats.byMode[mode] = { accepted: 0, rejected: 0, linesAccepted: 0 };
+        }
+        if (!this.currentMetrics.dimensionalStats.byType[type]) {
+            this.currentMetrics.dimensionalStats.byType[type] = { accepted: 0, rejected: 0, linesAccepted: 0 };
+        }
+
+        // Update counts
+        if (action === 'accepted') {
+            this.currentMetrics.dimensionalStats.byAgent[agent].accepted++;
+            this.currentMetrics.dimensionalStats.byAgent[agent].linesAccepted += linesCount;
+            this.currentMetrics.dimensionalStats.byMode[mode].accepted++;
+            this.currentMetrics.dimensionalStats.byMode[mode].linesAccepted += linesCount;
+            this.currentMetrics.dimensionalStats.byType[type].accepted++;
+            this.currentMetrics.dimensionalStats.byType[type].linesAccepted += linesCount;
+        } else {
+            this.currentMetrics.dimensionalStats.byAgent[agent].rejected++;
+            this.currentMetrics.dimensionalStats.byMode[mode].rejected++;
+            this.currentMetrics.dimensionalStats.byType[type].rejected++;
+        }
+    }
+
+    /**
+     * Calculate acceptance rate: accepted / (accepted + rejected) × 100
+     * @param filter Optional filter for specific dimension
+     * @returns Acceptance rate as percentage (0-100), or 0 if no data
+     */
+    public async getAcceptanceRate(filter?: { dimension: 'agent' | 'mode' | 'type'; value: string }): Promise<number> {
+        let accepted: number;
+        let rejected: number;
+
+        if (filter) {
+            const dimensionKey = `by${filter.dimension.charAt(0).toUpperCase() + filter.dimension.slice(1)}` as keyof typeof this.currentMetrics.dimensionalStats;
+            const stats = this.currentMetrics.dimensionalStats[dimensionKey][filter.value] as IDimensionalMetrics | undefined;
+
+            if (!stats) {
+                return 0;
+            }
+
+            accepted = stats.accepted;
+            rejected = stats.rejected;
+        } else {
+            accepted = this.currentMetrics.suggestionsAccepted;
+            rejected = this.currentMetrics.suggestionsRejected;
+        }
+
+        const total = accepted + rejected;
+        if (total === 0) {
+            return 0;
+        }
+
+        return Math.round((accepted / total) * 100 * 100) / 100; // Round to 2 decimal places
+    }
+
+    /**
+     * Get breakdown of acceptance rates by dimension
+     * @param dimension The dimension to break down by
+     * @returns Object mapping dimension values to their stats and acceptance rates
+     */
+    public async getDimensionalBreakdown(dimension: 'agent' | 'mode' | 'type'): Promise<{
+        [key: string]: IDimensionalMetrics & { acceptanceRate: number };
+    }> {
+        const dimensionKey = `by${dimension.charAt(0).toUpperCase() + dimension.slice(1)}` as keyof typeof this.currentMetrics.dimensionalStats;
+        const dimensionStats = this.currentMetrics.dimensionalStats[dimensionKey];
+
+        const breakdown: { [key: string]: IDimensionalMetrics & { acceptanceRate: number } } = {};
+
+        for (const [key, stats] of Object.entries(dimensionStats)) {
+            const total = stats.accepted + stats.rejected;
+            const acceptanceRate = total === 0 ? 0 : Math.round((stats.accepted / total) * 100 * 100) / 100;
+
+            breakdown[key] = {
+                ...stats,
+                acceptanceRate
+            };
+        }
+
+        return breakdown;
     }
 
     public async getMetrics(): Promise<IUsageMetrics> {
@@ -110,3 +229,4 @@ export class MetricsService implements vscode.Disposable {
         this.recordSessionEnd();
     }
 }
+

@@ -1,72 +1,65 @@
-// Mock VS Code API for unit tests
-export const window = {
-    activeTextEditor: undefined,
-    showInformationMessage: () => { },
-    showErrorMessage: () => { },
-    showWarningMessage: () => { },
-    createOutputChannel: () => ({ appendLine: () => { } }),
-    createStatusBarItem: () => ({ show: () => { } }),
+// Mock VSCode API for unit tests
+export const Uri = {
+    file: (path: string) => ({ fsPath: path, path, scheme: 'file' }),
+    parse: (value: string) => ({ fsPath: value, path: value, scheme: 'file' })
 };
 
 export const workspace = {
-    workspaceFolders: [],
     fs: {
-        readFile: async () => Buffer.from(''),
-        stat: async () => ({})
+        readFile: async () => Buffer.from('{}'),
+        writeFile: async () => undefined,
+        createDirectory: async () => undefined,
+        stat: async () => ({ type: 1, ctime: 0, mtime: 0, size: 0 })
     },
     getConfiguration: () => ({
+        get: (key: string, defaultValue?: any) => defaultValue,
+        has: () => true,
+        inspect: () => undefined,
+        update: async () => undefined
+    })
+};
+
+export const window = {
+    showInformationMessage: async () => undefined,
+    showErrorMessage: async () => undefined,
+    showWarningMessage: async () => undefined,
+    showQuickPick: async () => undefined,
+    showInputBox: async () => undefined,
+    createOutputChannel: () => ({
+        appendLine: () => undefined,
+        append: () => undefined,
+        clear: () => undefined,
+        show: () => undefined,
+        hide: () => undefined,
+        dispose: () => undefined
+    })
+};
+
+export const ExtensionContext = class {
+    subscriptions: any[] = [];
+    globalState: any = {
         get: () => undefined,
-        update: async () => { }
-    }),
-    findFiles: async () => [],
-    textDocuments: []
+        update: async () => undefined
+    };
+    globalStorageUri = Uri.file('/mock/storage');
+    secrets = {
+        get: async () => undefined,
+        store: async () => undefined,
+        delete: async () => undefined
+    };
 };
 
-export const Uri = {
-    file: (path: string) => ({ fsPath: path, path, scheme: 'file' }),
-    parse: (path: string) => ({ fsPath: path, path, scheme: 'file' }),
-    joinPath: (...args: any[]) => ({ fsPath: args.join('/') })
+export const FileType = {
+    Unknown: 0,
+    File: 1,
+    Directory: 2,
+    SymbolicLink: 64
 };
 
-export class Range {
-    constructor(public start: any, public end: any) { }
-}
-
-export class Position {
-    constructor(public line: number, public character: number) { }
-}
-
-export enum StatusBarAlignment {
-    Left = 1,
-    Right = 2
-}
-
-export const commands = {
-    registerCommand: () => ({ dispose: () => { } }),
-    executeCommand: async () => { }
-};
-
-export const env = {
-    isTelemetryEnabled: true
-};
-
-export class EventEmitter {
-    event = () => { };
-    fire() { }
-}
-
-export const ExtensionContext = {};
-
-export default {
-    window,
-    workspace,
-    Uri,
-    Range,
-    Position,
-    StatusBarAlignment,
-    commands,
-    EventEmitter,
-    env: {
-        isTelemetryEnabled: true
+export const Disposable = class {
+    static from(...disposables: any[]) {
+        return {
+            dispose: () => disposables.forEach(d => d.dispose?.())
+        };
     }
 };

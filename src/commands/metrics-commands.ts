@@ -37,8 +37,18 @@ async function showMetricsDashboard(context: vscode.ExtensionContext) {
 
     const metricsService = MetricsService.getInstance();
     const metrics = await metricsService.getMetrics();
+    const acceptanceRate = await metricsService.getAcceptanceRate();
+    const agentBreakdown = await metricsService.getDimensionalBreakdown('agent');
+    const modeBreakdown = await metricsService.getDimensionalBreakdown('mode');
+    const typeBreakdown = await metricsService.getDimensionalBreakdown('type');
 
-    panel.webview.html = getDashboardHtml(panel.webview, context.extensionUri, metrics);
+    panel.webview.html = getDashboardHtml(panel.webview, context.extensionUri, {
+        ...metrics,
+        acceptanceRate,
+        agentBreakdown,
+        modeBreakdown,
+        typeBreakdown
+    });
 
     // Handle messages from the webview
     panel.webview.onDidReceiveMessage(
@@ -49,7 +59,21 @@ async function showMetricsDashboard(context: vscode.ExtensionContext) {
                     break;
                 case 'refresh':
                     const updatedMetrics = await metricsService.getMetrics();
-                    panel.webview.postMessage({ type: 'updateMetrics', data: updatedMetrics });
+                    const updatedRate = await metricsService.getAcceptanceRate();
+                    const updatedAgentBreakdown = await metricsService.getDimensionalBreakdown('agent');
+                    const updatedModeBreakdown = await metricsService.getDimensionalBreakdown('mode');
+                    const updatedTypeBreakdown = await metricsService.getDimensionalBreakdown('type');
+
+                    panel.webview.postMessage({
+                        type: 'updateMetrics',
+                        data: {
+                            ...updatedMetrics,
+                            acceptanceRate: updatedRate,
+                            agentBreakdown: updatedAgentBreakdown,
+                            modeBreakdown: updatedModeBreakdown,
+                            typeBreakdown: updatedTypeBreakdown
+                        }
+                    });
                     break;
             }
         },
@@ -252,11 +276,32 @@ function getDashboardHtml(webview: vscode.Webview, extensionUri: vscode.Uri, met
         </div>
         <div class="metric-card">
             <div class="metric-label">Acceptance Rate</div>
-            <div class="metric-value">${metrics.suggestionsRequested > 0 ? ((metrics.suggestionsAccepted / metrics.suggestionsRequested) * 100).toFixed(0) : 0}%</div>
+            <div class="metric-value">${metrics.acceptanceRate.toFixed(1)}%</div>
         </div>
     </div>
 
     <div class="charts">
+        <div class="chart-container">
+            <div class="metric-label" style="margin-bottom: 20px;">Acceptance Rate by Agent</div>
+            <div id="agentBreakdown">
+                ${Object.entries(metrics.agentBreakdown || {}).map(([agent, stats]: [string, any]) => `
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span style="text-transform: capitalize;">${agent}</span>
+                            <span style="font-weight: bold;">${stats.acceptanceRate.toFixed(1)}%</span>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.1); height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div style="background: var(--accent-color); height: 100%; width: ${stats.acceptanceRate}%; transition: width 0.3s;"></div>
+                        </div>
+                        <div style="font-size: 0.8rem; opacity: 0.6; margin-top: 3px;">
+                            ${stats.accepted} accepted / ${stats.rejected} rejected
+                        </div>
+                    </div>
+                `).join('')}
+                ${Object.keys(metrics.agentBreakdown || {}).length === 0 ? '<div style="opacity: 0.5; text-align: center;">No agent data yet</div>' : ''}
+            </div>
+        </div>
+
         <div class="chart-container">
             <div class="metric-label" style="margin-bottom: 20px;">Recent Activity (Last 7 Days)</div>
             <div class="simple-bar-chart" id="activityChart">

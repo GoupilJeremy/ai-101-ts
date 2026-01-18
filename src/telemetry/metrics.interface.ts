@@ -6,6 +6,24 @@ export interface IDailyMetrics {
     timeSavedMs: number;
 }
 
+export interface IDimensionalMetrics {
+    accepted: number;
+    rejected: number;
+    linesAccepted: number;
+}
+
+export interface IDimensionalStats {
+    byAgent: { [agentId: string]: IDimensionalMetrics };
+    byMode: { [mode: string]: IDimensionalMetrics };
+    byType: { [type: string]: IDimensionalMetrics };
+}
+
+export interface ISuggestionContext {
+    agent: string;
+    mode: string;
+    type: string;
+}
+
 export interface IUsageMetrics {
     totalSessions: number;
     totalSessionDurationMs: number;
@@ -16,6 +34,7 @@ export interface IUsageMetrics {
     timeSavedMs: number;
     lastUpdated: number;
     dailyStats: { [date: string]: IDailyMetrics };
+    dimensionalStats: IDimensionalStats;
 }
 
 export const DEFAULT_METRICS: IUsageMetrics = {
@@ -27,5 +46,11 @@ export const DEFAULT_METRICS: IUsageMetrics = {
     linesAccepted: 0,
     timeSavedMs: 0,
     lastUpdated: Date.now(),
-    dailyStats: {}
+    dailyStats: {},
+    dimensionalStats: {
+        byAgent: {},
+        byMode: {},
+        byType: {}
+    }
 };
+
