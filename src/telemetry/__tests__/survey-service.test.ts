@@ -386,5 +386,151 @@ describe('SurveyService', () => {
 
             showWeeklySpy.mockRestore();
         });
+
+        it('should prioritize NPS survey over weekly survey', async () => {
+            const now = Date.now();
+            const thirtyOneDaysAgo = now - (31 * 24 * 60 * 60 * 1000);
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return thirtyOneDaysAgo;
+                if (key === 'survey.pendingSurvey') return true; // Post-session pending
+                return undefined;
+            });
+
+            mockTelemetryService.isEnabled.mockReturnValue(true);
+
+            // Mock showNPSSurvey to track if it was called
+            const showNPSSpy = vi.spyOn(surveyService as any, 'showNPSSurvey').mockResolvedValue(undefined);
+            const showWeeklySpy = vi.spyOn(surveyService as any, 'showWeeklyLearningSurvey').mockResolvedValue(undefined);
+
+            await surveyService.checkAndPrompt();
+
+            // NPS survey should be called, weekly should not
+            expect(showNPSSpy).toHaveBeenCalled();
+            expect(showWeeklySpy).not.toHaveBeenCalled();
+
+            showNPSSpy.mockRestore();
+            showWeeklySpy.mockRestore();
+        });
+    });
+
+    describe('NPS Survey Eligibility', () => {
+        it('should not be eligible if user has used extension for less than 30 days', async () => {
+            const now = Date.now();
+            const twentyNineDaysAgo = now - (29 * 24 * 60 * 60 * 1000);
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return twentyNineDaysAgo;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkNPSEligibility']();
+            expect(isEligible).toBe(false);
+        });
+
+        it('should be eligible if user has used extension for at least 30 days', async () => {
+            const now = Date.now();
+            const thirtyOneDaysAgo = now - (31 * 24 * 60 * 60 * 1000);
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return thirtyOneDaysAgo;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkNPSEligibility']();
+            expect(isEligible).toBe(true);
+        });
+
+        it('should not be eligible if less than 30 days since last NPS survey', async () => {
+            const now = Date.now();
+            const sixtyDaysAgo = now - (60 * 24 * 60 * 60 * 1000);
+            const fifteenDaysAgo = now - (15 * 24 * 60 * 60 * 1000);
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return sixtyDaysAgo;
+                if (key === 'survey.nps.lastShown') return fifteenDaysAgo;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkNPSEligibility']();
+            expect(isEligible).toBe(false);
+        });
+
+        it('should be eligible if at least 30 days since last NPS survey', async () => {
+            const now = Date.now();
+            const sixtyDaysAgo = now - (60 * 24 * 60 * 60 * 1000);
+            const thirtyOneDaysAgo = now - (31 * 24 * 60 * 60 * 1000);
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return sixtyDaysAgo;
+                if (key === 'survey.nps.lastShown') return thirtyOneDaysAgo;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkNPSEligibility']();
+            expect(isEligible).toBe(true);
+        });
+
+        it('should not be eligible if NPS survey is snoozed', async () => {
+            const now = Date.now();
+            const thirtyOneDaysAgo = now - (31 * 24 * 60 * 60 * 1000);
+            const futureTime = now + (12 * 60 * 60 * 1000); // 12 hours from now
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return thirtyOneDaysAgo;
+                if (key === 'survey.nps.snoozedUntil') return futureTime;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkNPSEligibility']();
+            expect(isEligible).toBe(false);
+        });
+
+        it('should be eligible if snooze period has passed', async () => {
+            const now = Date.now();
+            const thirtyOneDaysAgo = now - (31 * 24 * 60 * 60 * 1000);
+            const pastTime = now - (1 * 60 * 60 * 1000); // 1 hour ago
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return thirtyOneDaysAgo;
+                if (key === 'survey.nps.snoozedUntil') return pastTime;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkNPSEligibility']();
+            expect(isEligible).toBe(true);
+        });
+
+        it('should not be eligible if user has opted out of NPS', async () => {
+            const now = Date.now();
+            const thirtyOneDaysAgo = now - (31 * 24 * 60 * 60 * 1000);
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return thirtyOneDaysAgo;
+                if (key === 'survey.nps.optOut') return true;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkNPSEligibility']();
+            expect(isEligible).toBe(false);
+        });
+    });
+
+    describe('NPS Categorization', () => {
+        it('should categorize score 0-6 as Detractor', () => {
+            expect(surveyService['categorizeNPS'](0)).toBe('Detractor');
+            expect(surveyService['categorizeNPS'](3)).toBe('Detractor');
+            expect(surveyService['categorizeNPS'](6)).toBe('Detractor');
+        });
+
+        it('should categorize score 7-8 as Passive', () => {
+            expect(surveyService['categorizeNPS'](7)).toBe('Passive');
+            expect(surveyService['categorizeNPS'](8)).toBe('Passive');
+        });
+
+        it('should categorize score 9-10 as Promoter', () => {
+            expect(surveyService['categorizeNPS'](9)).toBe('Promoter');
+            expect(surveyService['categorizeNPS'](10)).toBe('Promoter');
+        });
     });
 });

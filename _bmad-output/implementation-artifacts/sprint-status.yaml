@@ -151,7 +151,7 @@ development_status:
   8-3-implement-suggestion-acceptance-rate-tracking: review
   8-4-implement-post-session-comprehension-surveys: review
   8-5-implement-weekly-learning-progress-surveys: review
-  8-6-implement-nps-net-promoter-score-collection: backlog
+  8-6-implement-nps-net-promoter-score-collection: review
   8-7-implement-too-distracting-detection-and-mitigation: backlog
   8-8-implement-team-adoption-and-comprehension-tracking-for-tech-leads: backlog
   epic-8-retrospective: optional

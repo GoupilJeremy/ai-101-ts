@@ -25,6 +25,10 @@ export class SurveyService {
     private static readonly SNOOZE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in ms
     private static readonly MIN_USAGE_DAYS = 7 * 24 * 60 * 60 * 1000; // 7 days in ms
 
+    // NPS survey constants
+    private static readonly NPS_INTERVAL = 30 * 24 * 60 * 60 * 1000; // 30 days in ms
+    private static readonly NPS_MIN_USAGE_DAYS = 30 * 24 * 60 * 60 * 1000; // 30 days in ms
+
     private currentSession: ISessionStats | null = null;
     private telemetryService: TelemetryService;
 
@@ -118,7 +122,14 @@ export class SurveyService {
             return;
         }
 
-        // Check weekly survey first (higher priority as it's rarer)
+        // Check NPS survey first (highest priority - rarest, monthly)
+        const isNPSEligible = await this.checkNPSEligibility();
+        if (isNPSEligible) {
+            await this.showNPSSurvey();
+            return; // Don't show other surveys if NPS was shown
+        }
+
+        // Check weekly survey second (higher priority than post-session)
         const isWeeklyEligible = await this.checkWeeklySurveyEligibility();
         if (isWeeklyEligible) {
             await this.showWeeklyLearningSurvey();
@@ -163,6 +174,40 @@ export class SurveyService {
 
         // Check if at least 7 days have passed since last survey
         if (lastShown && (now - lastShown) < SurveyService.WEEKLY_INTERVAL) {
+            return false;
+        }
+
+        // Check if survey is snoozed
+        if (snoozedUntil && now < snoozedUntil) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if user is eligible for NPS survey
+     */
+    private async checkNPSEligibility(): Promise<boolean> {
+        const firstUsageDate = await this.context.globalState.get<number>('survey.firstUsageDate');
+        const lastShown = await this.context.globalState.get<number>('survey.nps.lastShown') || 0;
+        const snoozedUntil = await this.context.globalState.get<number>('survey.nps.snoozedUntil') || 0;
+        const optOut = await this.context.globalState.get<boolean>('survey.nps.optOut') || false;
+
+        const now = Date.now();
+
+        // Check if user has opted out
+        if (optOut) {
+            return false;
+        }
+
+        // Check if user has been using the extension for at least 30 days
+        if (!firstUsageDate || (now - firstUsageDate) < SurveyService.NPS_MIN_USAGE_DAYS) {
+            return false;
+        }
+
+        // Check if at least 30 days have passed since last survey
+        if (lastShown && (now - lastShown) < SurveyService.NPS_INTERVAL) {
             return false;
         }
 
@@ -327,6 +372,111 @@ export class SurveyService {
 
         // Show thank you message
         vscode.window.showInformationMessage('AI-101: Thank you for sharing your progress!');
+    }
+
+    /**
+     * Show the NPS survey
+     */
+    private async showNPSSurvey(): Promise<void> {
+        // Step 1: Ask if user wants to participate
+        const participate = await vscode.window.showInformationMessage(
+            'AI-101: Quick question: How likely are you to recommend AI-101 to a colleague?',
+            { modal: false },
+            'Answer',
+            'Snooze',
+            'Never'
+        );
+
+        const now = Date.now();
+
+        if (participate === 'Snooze') {
+            await this.context.globalState.update(
+                'survey.nps.snoozedUntil',
+                now + SurveyService.SNOOZE_DURATION
+            );
+            return;
+        }
+
+        if (participate === 'Never') {
+            // Opt out of NPS permanently
+            await this.context.globalState.update('survey.nps.optOut', true);
+            return;
+        }
+
+        if (participate !== 'Answer') {
+            // Mark as shown so we don't pester until next month
+            await this.context.globalState.update('survey.nps.lastShown', now);
+            return;
+        }
+
+        // Step 2: Get NPS score (0-10)
+        const scoreOptions = [
+            { label: '10 (Very Likely)', value: 10 },
+            { label: '9', value: 9 },
+            { label: '8', value: 8 },
+            { label: '7', value: 7 },
+            { label: '6', value: 6 },
+            { label: '5', value: 5 },
+            { label: '4', value: 4 },
+            { label: '3', value: 3 },
+            { label: '2', value: 2 },
+            { label: '1', value: 1 },
+            { label: '0 (Not Likely)', value: 0 },
+        ];
+
+        const selectedScore = await vscode.window.showQuickPick(scoreOptions, {
+            placeHolder: 'How likely are you to recommend AI-101? (0-10)',
+            title: 'AI-101 Net Promoter Score',
+        });
+
+        if (!selectedScore) {
+            return;
+        }
+
+        // Step 3: Get optional reason
+        const reason = await vscode.window.showInputBox({
+            prompt: 'What is the primary reason for your score? (Optional)',
+            placeHolder: 'Please do not include personal data or code snippets',
+            ignoreFocusOut: true,
+        });
+
+        // Calculate category and days since install
+        const category = this.categorizeNPS(selectedScore.value);
+        const firstUsageDate = await this.context.globalState.get<number>('survey.firstUsageDate') || now;
+        const daysSinceInstall = Math.floor((now - firstUsageDate) / (24 * 60 * 60 * 1000));
+
+        // Send telemetry
+        const sanitizedReason = this.sanitizeFeedback(reason || '');
+        this.telemetryService.trackEvent(
+            'survey.nps',
+            {
+                score: selectedScore.value.toString(),
+                reason: sanitizedReason,
+                category: category,
+            },
+            {
+                days_since_install: daysSinceInstall,
+            }
+        );
+
+        // Update last shown timestamp
+        await this.context.globalState.update('survey.nps.lastShown', now);
+
+        // Show thank you message
+        vscode.window.showInformationMessage('AI-101: Thank you for your feedback!');
+    }
+
+    /**
+     * Categorize NPS score into Promoter, Passive, or Detractor
+     */
+    private categorizeNPS(score: number): 'Promoter' | 'Passive' | 'Detractor' {
+        if (score >= 9) {
+            return 'Promoter';
+        } else if (score >= 7) {
+            return 'Passive';
+        } else {
+            return 'Detractor';
+        }
     }
 
     /**
