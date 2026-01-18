@@ -3,6 +3,8 @@ import { ILLMProvider } from '../llm/provider.interface.js';
 import { LLMProviderManager } from '../llm/provider-manager.js';
 import { AI101Events, Unsubscribe } from './events.js';
 import { LifecycleEventManager } from './lifecycle-event-manager.js';
+import { ConfigurationManager } from '../config/configuration-manager.js';
+import { IAI101Config, ConfigurationScope } from './configuration-types.js';
 
 
 /**
@@ -14,8 +16,11 @@ import { LifecycleEventManager } from './lifecycle-event-manager.js';
  * @internal
  */
 export function createAPI(providerManager: LLMProviderManager): IAI101API {
+    const configManager = ConfigurationManager.getInstance();
+
     return {
         registerLLMProvider(name: string, provider: ILLMProvider): void {
+            // ... (existing logic)
             // Validation: Name must be non-empty
             if (!name || name.trim() === '') {
                 throw new Error('Provider name cannot be empty');
@@ -40,7 +45,7 @@ export function createAPI(providerManager: LLMProviderManager): IAI101API {
                 throw new Error('Provider must implement isAvailable method');
             }
 
-            // Validation: Check for reserved names (optional - can be added later)
+            // Validation: Check for reserved names
             const reservedNames = ['openai', 'anthropic'];
             if (reservedNames.includes(name.toLowerCase())) {
                 throw new Error(`Provider name '${name}' is reserved and cannot be used`);
@@ -58,6 +63,18 @@ export function createAPI(providerManager: LLMProviderManager): IAI101API {
 
         on<K extends keyof AI101Events>(event: K, callback: (payload: AI101Events[K]) => void): Unsubscribe {
             return LifecycleEventManager.getInstance().on(event, callback);
+        },
+
+        getConfig<K extends keyof IAI101Config>(key: K): IAI101Config[K] {
+            return configManager.getConfig(key);
+        },
+
+        async setConfig<K extends keyof IAI101Config>(key: K, value: IAI101Config[K], scope?: ConfigurationScope): Promise<void> {
+            return configManager.setConfig(key, value, scope);
+        },
+
+        async updateConfig(config: Partial<IAI101Config>, scope?: ConfigurationScope): Promise<void> {
+            return configManager.updateConfig(config, scope);
         }
     };
 }

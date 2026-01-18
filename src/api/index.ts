@@ -46,3 +46,14 @@ export {
     Unsubscribe,
     EventCallback
 } from './events.js';
+// Export configuration types
+export {
+    IAI101Config,
+    ConfigurationScope,
+    LLMProvider,
+    UITransparency,
+    UIMode,
+    ColorblindType,
+    IColorblindSettings,
+    IKeyboardShortcuts
+} from './configuration-types.js';

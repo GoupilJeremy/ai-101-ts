@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { ConfigurationError } from '../errors/configuration-error';
+import { ConfigurationError } from '../errors/configuration-error.js';
+import { IAI101Config, ConfigurationScope } from '../api/configuration-types.js';
 
 export interface IConfiguration {
     llm: {
@@ -48,6 +49,115 @@ export class ConfigurationManager {
                 }
             })
         );
+    }
+
+    /**
+     * Gets a typed configuration value.
+     */
+    public getConfig<K extends keyof IAI101Config>(key: K): IAI101Config[K] {
+        const config = vscode.workspace.getConfiguration(this.section);
+        const value = config.get(key);
+        return value as IAI101Config[K];
+    }
+
+    /**
+     * Sets a configuration value with validation and scope support.
+     */
+    public async setConfig<K extends keyof IAI101Config>(
+        key: K,
+        value: IAI101Config[K],
+        scope: ConfigurationScope = 'user'
+    ): Promise<void> {
+        this.validateValue(key, value);
+        const config = vscode.workspace.getConfiguration(this.section);
+        const target = this.mapScopeToTarget(scope);
+        await config.update(key, value, target);
+    }
+
+    /**
+     * Performs a bulk update of multiple configuration keys.
+     */
+    public async updateConfig(
+        partialConfig: Partial<IAI101Config>,
+        scope: ConfigurationScope = 'user'
+    ): Promise<void> {
+        const target = this.mapScopeToTarget(scope);
+        const config = vscode.workspace.getConfiguration(this.section);
+
+        // First validate all values
+        for (const [key, value] of Object.entries(partialConfig)) {
+            this.validateValue(key as keyof IAI101Config, value);
+        }
+
+        // Then apply all updates sequentially
+        for (const [key, value] of Object.entries(partialConfig)) {
+            await config.update(key, value, target);
+        }
+    }
+
+    private mapScopeToTarget(scope: ConfigurationScope): vscode.ConfigurationTarget {
+        switch (scope) {
+            case 'workspace':
+                return vscode.ConfigurationTarget.Workspace;
+            case 'workspaceFolder':
+                return vscode.ConfigurationTarget.WorkspaceFolder;
+            case 'user':
+            default:
+                return vscode.ConfigurationTarget.Global;
+        }
+    }
+
+    private validateValue(key: string, value: any): void {
+        const validProviders = ['openai', 'anthropic', 'custom'];
+        const validTransparency = ['minimal', 'medium', 'full'];
+        const validModes = ['learning', 'expert', 'focus', 'team', 'performance'];
+        const validColorblindTypes = ['none', 'deuteranopia', 'protanopia', 'tritanopia'];
+
+        switch (key) {
+            case 'llm.provider':
+                if (!validProviders.includes(value)) {
+                    throw new ConfigurationError(`Invalid LLM provider: ${value}`);
+                }
+                break;
+            case 'ui.transparency':
+                if (!validTransparency.includes(value)) {
+                    throw new ConfigurationError(`Invalid UI transparency: ${value}`);
+                }
+                break;
+            case 'ui.mode':
+                if (!validModes.includes(value)) {
+                    throw new ConfigurationError(`Invalid UI mode: ${value}`);
+                }
+                break;
+            case 'performance.maxTokens':
+            case 'performanceMode.collisionThrottleMs':
+            case 'performanceMode.metricsThrottleMs':
+                if (typeof value !== 'number' || value <= 0) {
+                    throw new ConfigurationError(`${key} must be a positive number`);
+                }
+                break;
+            case 'telemetry.enabled':
+            case 'teamMode.largeText':
+            case 'teamMode.surveyEnabled':
+            case 'performanceMode.autoActivate':
+            case 'performanceMode.autoSuggest':
+            case 'accessibility.autoDetectHighContrast':
+                if (typeof value !== 'boolean') {
+                    throw new ConfigurationError(`${key} must be a boolean`);
+                }
+                break;
+            case 'accessibility.colorblind':
+                if (typeof value !== 'object' || value === null) {
+                    throw new ConfigurationError(`${key} must be an object`);
+                }
+                if (typeof value.enabled !== 'boolean') {
+                    throw new ConfigurationError(`${key}.enabled must be a boolean`);
+                }
+                if (!validColorblindTypes.includes(value.type)) {
+                    throw new ConfigurationError(`Invalid colorblind type: ${value.type}`);
+                }
+                break;
+        }
     }
 
     public getSettings(): IConfiguration {
@@ -125,10 +235,10 @@ export class ConfigurationManager {
         const config = vscode.workspace.getConfiguration(this.section);
 
         // Reset all settings to undefined (which restores defaults)
-        await config.update('llm.provider', undefined, vscode.ConfigurationTarget.Workspace);
-        await config.update('ui.transparency', undefined, vscode.ConfigurationTarget.Workspace);
-        await config.update('ui.mode', undefined, vscode.ConfigurationTarget.Workspace);
-        await config.update('performance.maxTokens', undefined, vscode.ConfigurationTarget.Workspace);
-        await config.update('telemetry.enabled', undefined, vscode.ConfigurationTarget.Workspace);
+        await config.update('llm.provider', undefined, vscode.ConfigurationTarget.Global);
+        await config.update('ui.transparency', undefined, vscode.ConfigurationTarget.Global);
+        await config.update('ui.mode', undefined, vscode.ConfigurationTarget.Global);
+        await config.update('performance.maxTokens', undefined, vscode.ConfigurationTarget.Global);
+        await config.update('telemetry.enabled', undefined, vscode.ConfigurationTarget.Global);
     }
 }

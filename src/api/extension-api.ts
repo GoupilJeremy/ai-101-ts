@@ -1,5 +1,6 @@
 import { ILLMProvider } from '../llm/provider.interface.js';
 import { AI101Events, Unsubscribe } from './events.js';
+import { IAI101Config, ConfigurationScope } from './configuration-types.js';
 
 
 /**
@@ -80,5 +81,42 @@ export interface IAI101API {
      * @since 0.0.1
      */
     on<K extends keyof AI101Events>(event: K, callback: (payload: AI101Events[K]) => void): Unsubscribe;
+
+    /**
+     * Gets the value of an AI-101 configuration setting.
+     * 
+     * @param key - The configuration key (e.g., 'ui.mode')
+     * @returns The current value of the configuration setting
+     * 
+     * @since 0.0.1
+     */
+    getConfig<K extends keyof IAI101Config>(key: K): IAI101Config[K];
+
+    /**
+     * Sets the value of an AI-101 configuration setting.
+     * 
+     * @param key - The configuration key (e.g., 'ui.mode')
+     * @param value - The new value to set
+     * @param scope - The configuration scope (default: 'user')
+     * @returns A promise that resolves when the update is complete
+     * 
+     * @throws {Error} If the value is invalid for the specified key
+     * 
+     * @since 0.0.1
+     */
+    setConfig<K extends keyof IAI101Config>(key: K, value: IAI101Config[K], scope?: ConfigurationScope): Promise<void>;
+
+    /**
+     * Updates multiple AI-101 configuration settings simultaneously.
+     * 
+     * @param config - A partial configuration object containing keys to update
+     * @param scope - The configuration scope (default: 'user')
+     * @returns A promise that resolves when all updates are complete
+     * 
+     * @throws {Error} If any value is invalid
+     * 
+     * @since 0.0.1
+     */
+    updateConfig(config: Partial<IAI101Config>, scope?: ConfigurationScope): Promise<void>;
 
 }
