@@ -28,11 +28,13 @@ import { DistractionDetectorService } from './telemetry/distraction-detector.js'
 import { TeamMetricsService } from './telemetry/team-metrics-service.js';
 import { ReportGeneratorService } from './telemetry/report-generator-service.js';
 import { registerReportCommands } from './commands/report-commands.js';
+import { IAI101API } from './api/extension-api.js';
+import { createAPI } from './api/api-implementation.js';
 
 // Global reference to survey service for deactivate
 let surveyService: SurveyService | null = null;
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext): IAI101API {
 
 	// Initialize Centralized Error Handler
 	ErrorHandler.initialize();
@@ -269,6 +271,11 @@ export function activate(context: vscode.ExtensionContext) {
 			import('./commands/toggle-agent-visibility.js').then(module => module.openDocumentationCommand());
 		})
 	);
+
+	// Create and return the public API
+	// LLMProviderManager is already initialized above (line 72-73)
+	const api = createAPI(llmManager);
+	return api;
 }
 
 // This method is called when your extension is deactivated
