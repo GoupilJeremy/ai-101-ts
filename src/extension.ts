@@ -24,6 +24,7 @@ import { registerTelemetryCommands } from './commands/telemetry-commands.js';
 import { MetricsService } from './telemetry/metrics-service.js';
 import { registerMetricsCommands } from './commands/metrics-commands.js';
 import { SurveyService } from './telemetry/survey-service.js';
+import { DistractionDetectorService } from './telemetry/distraction-detector.js';
 
 // Global reference to survey service for deactivate
 let surveyService: SurveyService | null = null;
@@ -52,6 +53,10 @@ export function activate(context: vscode.ExtensionContext) {
 	surveyService = new SurveyService(context);
 	surveyService.startSession(); // Start tracking session
 	surveyService.checkAndPrompt(); // Check for pending surveys from previous session
+
+	// Initialize Distraction Detector (Story 8.7)
+	const distractionDetector = DistractionDetectorService.getInstance(context);
+	context.subscriptions.push(distractionDetector);
 
 
 	// Initialize LLM Manager and Rate Limiter

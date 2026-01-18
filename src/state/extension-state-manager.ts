@@ -10,11 +10,13 @@ export interface IMetricsState {
     sessionTime?: number; // Session duration in seconds (Team Mode)
 }
 
+import { EventEmitter } from 'events';
+
 /**
  * Manages the state of all AI agents in the extension.
  * Serves as the single source of truth for agent activity.
  */
-export class ExtensionStateManager {
+export class ExtensionStateManager extends EventEmitter {
     private static instance: ExtensionStateManager;
     private agentStates: Map<AgentType, IAgentState> = new Map();
     private metrics: IMetricsState = { tokens: 0, files: 0, cost: 0, sessionTime: 0 };
@@ -29,6 +31,7 @@ export class ExtensionStateManager {
     private hudVisible: boolean = true;
 
     private constructor() {
+        super();
         this.initializeDefaultStates();
         this.startSessionTimer();
     }
@@ -69,6 +72,7 @@ export class ExtensionStateManager {
      */
     public toggleHUD(): void {
         this.hudVisible = !this.hudVisible;
+        this.emit('hudVisibilityUpdate', this.hudVisible);
         if (this.webview) {
             this.webview.postMessage({
                 type: 'toWebview:hudVisibilityUpdate',
@@ -110,6 +114,7 @@ export class ExtensionStateManager {
     public updateMode(mode: AgentMode, config: IModeConfig): void {
         this.currentMode = mode;
         this.modeConfig = config;
+        this.emit('modeUpdate', mode, config);
         if (this.webview) {
             this.webview.postMessage({
                 type: 'toWebview:modeUpdate',
