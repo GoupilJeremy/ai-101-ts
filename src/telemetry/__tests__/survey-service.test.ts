@@ -236,4 +236,155 @@ describe('SurveyService', () => {
             expect(payload.properties.feedback).not.toContain('sk-1234567890');
         });
     });
+
+    describe('Weekly Survey Eligibility', () => {
+        it('should not be eligible if user has used extension for less than 7 days', async () => {
+            const now = Date.now();
+            const sixDaysAgo = now - (6 * 24 * 60 * 60 * 1000); // 6 days
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return sixDaysAgo;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkWeeklySurveyEligibility']();
+            expect(isEligible).toBe(false);
+        });
+
+        it('should be eligible if user has used extension for at least 7 days', async () => {
+            const now = Date.now();
+            const eightDaysAgo = now - (8 * 24 * 60 * 60 * 1000); // 8 days
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return eightDaysAgo;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkWeeklySurveyEligibility']();
+            expect(isEligible).toBe(true);
+        });
+
+        it('should not be eligible if less than 7 days since last survey', async () => {
+            const now = Date.now();
+            const eightDaysAgo = now - (8 * 24 * 60 * 60 * 1000);
+            const fiveDaysAgo = now - (5 * 24 * 60 * 60 * 1000);
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return eightDaysAgo;
+                if (key === 'survey.weekly.lastShown') return fiveDaysAgo;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkWeeklySurveyEligibility']();
+            expect(isEligible).toBe(false);
+        });
+
+        it('should be eligible if at least 7 days since last survey', async () => {
+            const now = Date.now();
+            const fifteenDaysAgo = now - (15 * 24 * 60 * 60 * 1000);
+            const eightDaysAgo = now - (8 * 24 * 60 * 60 * 1000);
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return fifteenDaysAgo;
+                if (key === 'survey.weekly.lastShown') return eightDaysAgo;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkWeeklySurveyEligibility']();
+            expect(isEligible).toBe(true);
+        });
+
+        it('should not be eligible if survey is snoozed', async () => {
+            const now = Date.now();
+            const eightDaysAgo = now - (8 * 24 * 60 * 60 * 1000);
+            const futureTime = now + (12 * 60 * 60 * 1000); // 12 hours from now
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return eightDaysAgo;
+                if (key === 'survey.weekly.snoozedUntil') return futureTime;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkWeeklySurveyEligibility']();
+            expect(isEligible).toBe(false);
+        });
+
+        it('should be eligible if snooze period has passed', async () => {
+            const now = Date.now();
+            const eightDaysAgo = now - (8 * 24 * 60 * 60 * 1000);
+            const pastTime = now - (1 * 60 * 60 * 1000); // 1 hour ago
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return eightDaysAgo;
+                if (key === 'survey.weekly.snoozedUntil') return pastTime;
+                return undefined;
+            });
+
+            const isEligible = await surveyService['checkWeeklySurveyEligibility']();
+            expect(isEligible).toBe(true);
+        });
+    });
+
+    describe('Feature Discovery', () => {
+        it('should return a tip for unused features', async () => {
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.featuresUsed') return { 'mode:learning': true };
+                return undefined;
+            });
+
+            const tip = await surveyService['getUnusedFeatureTip']();
+            expect(tip).toBeTruthy();
+            expect(tip).not.toContain('Learning Mode'); // Should not suggest already used feature
+        });
+
+        it('should return null if all features have been used', async () => {
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.featuresUsed') return {
+                    'mode:learning': true,
+                    'mode:expert': true,
+                    'command:explain': true,
+                    'command:refactor': true,
+                    'agent:reviewer': true,
+                };
+                return undefined;
+            });
+
+            const tip = await surveyService['getUnusedFeatureTip']();
+            expect(tip).toBeNull();
+        });
+
+        it('should mark features as used', async () => {
+            await surveyService.markFeatureUsed('mode:learning');
+
+            expect(mockContext.globalState.update).toHaveBeenCalledWith(
+                'survey.featuresUsed',
+                expect.objectContaining({ 'mode:learning': true })
+            );
+        });
+    });
+
+    describe('Survey Priority', () => {
+        it('should prioritize weekly survey over post-session survey', async () => {
+            const now = Date.now();
+            const eightDaysAgo = now - (8 * 24 * 60 * 60 * 1000);
+
+            (mockContext.globalState.get as any).mockImplementation((key: string) => {
+                if (key === 'survey.firstUsageDate') return eightDaysAgo;
+                if (key === 'survey.pendingSurvey') return true; // Post-session pending
+                return undefined;
+            });
+
+            mockTelemetryService.isEnabled.mockReturnValue(true);
+
+            // Mock showWeeklyLearningSurvey to track if it was called
+            const showWeeklySpy = vi.spyOn(surveyService as any, 'showWeeklyLearningSurvey').mockResolvedValue(undefined);
+
+            await surveyService.checkAndPrompt();
+
+            // Weekly survey should be called
+            expect(showWeeklySpy).toHaveBeenCalled();
+
+            showWeeklySpy.mockRestore();
+        });
+    });
 });
