@@ -162,7 +162,7 @@ development_status:
   epic-9: in-progress
   9-1-define-and-document-illmprovider-extension-interface: review
   9-2-implement-llm-provider-registration-api: review
-  9-3-define-and-document-iagentrenderer-extension-interface: backlog
+  9-3-define-and-document-iagentrenderer-extension-interface: review
   9-4-implement-lifecycle-event-subscription-api: backlog
   9-5-implement-typed-configuration-api-for-programmatic-access: backlog
   9-6-implement-semantic-versioning-for-api-compatibility: backlog

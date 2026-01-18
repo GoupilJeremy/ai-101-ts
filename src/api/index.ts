@@ -25,3 +25,15 @@ export {
     ILLMResponse,
     IModelInfo
 } from '../llm/provider.interface.js';
+
+// Export Agent Renderer types
+export {
+    IAgentRenderer,
+    AgentRenderContext,
+    RenderTransition,
+    RenderOptions,
+    StateUpdateCallback,
+    IDisposable,
+    AgentType,
+    IAgentState
+} from '../ui/renderer.interface.js';
