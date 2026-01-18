@@ -68,6 +68,23 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 	const distractionDetector = DistractionDetectorService.getInstance(context);
 	context.subscriptions.push(distractionDetector);
 
+	// First-run welcome screen (Story 10.1)
+	const hasShownWelcome = context.globalState.get<boolean>('ai101.hasShownWelcome', false);
+	if (!hasShownWelcome) {
+		// Show getting started walkthrough on first activation
+		vscode.commands.executeCommand(
+			'workbench.action.openWalkthrough',
+			'GoupilJeremy.ai-101-ts#ai101.gettingStarted',
+			false
+		).then(() => {
+			// Mark welcome as shown
+			context.globalState.update('ai101.hasShownWelcome', true);
+		}, (error) => {
+			// Silently fail - don't block activation
+			ErrorHandler.log(`Failed to show welcome walkthrough: ${error}`);
+		});
+	}
+
 
 	// Initialize LLM Manager and Rate Limiter
 	const llmManager = LLMProviderManager.getInstance();
@@ -269,6 +286,9 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 		}),
 		vscode.commands.registerCommand('ai-101-ts.openDocumentation', () => {
 			import('./commands/toggle-agent-visibility.js').then(module => module.openDocumentationCommand());
+		}),
+		vscode.commands.registerCommand('ai-101-ts.showGettingStarted', () => {
+			import('./commands/show-getting-started.js').then(module => module.showGettingStartedCommand());
 		})
 	);
 

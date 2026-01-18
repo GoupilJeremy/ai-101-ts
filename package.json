@@ -152,6 +152,11 @@
         "command": "ai-101-ts.exportMetrics",
         "title": "Export Metrics to JSON",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.showGettingStarted",
+        "title": "Show Getting Started",
+        "category": "AI 101"
       }
     ],
     "keybindings": [
@@ -340,7 +345,61 @@
           "description": "Override detected project architecture patterns (e.g., techStack, patterns, conventions)."
         }
       }
-    }
+    },
+    "walkthroughs": [
+      {
+        "id": "ai101.gettingStarted",
+        "title": "%walkthrough.gettingStarted.title%",
+        "description": "%walkthrough.gettingStarted.description%",
+        "steps": [
+          {
+            "id": "welcome",
+            "title": "%walkthrough.welcome.title%",
+            "description": "%walkthrough.welcome.description%",
+            "media": {
+              "svg": "media/walkthrough/welcome.svg",
+              "altText": "%walkthrough.welcome.altText%"
+            }
+          },
+          {
+            "id": "quickTour",
+            "title": "%walkthrough.quickTour.title%",
+            "description": "%walkthrough.quickTour.description%",
+            "media": {
+              "svg": "media/walkthrough/quick-tour.svg",
+              "altText": "%walkthrough.quickTour.altText%"
+            }
+          },
+          {
+            "id": "modes",
+            "title": "%walkthrough.modes.title%",
+            "description": "%walkthrough.modes.description%",
+            "media": {
+              "svg": "media/walkthrough/modes.svg",
+              "altText": "%walkthrough.modes.altText%"
+            },
+            "completionEvents": [
+              "onCommand:ai-101-ts.switchToLearningMode",
+              "onCommand:ai-101-ts.switchToExpertMode",
+              "onCommand:ai-101-ts.switchToTeamMode"
+            ]
+          },
+          {
+            "id": "firstSuggestion",
+            "title": "%walkthrough.firstSuggestion.title%",
+            "description": "%walkthrough.firstSuggestion.description%",
+            "media": {
+              "svg": "media/walkthrough/first-suggestion.svg",
+              "altText": "%walkthrough.firstSuggestion.altText%"
+            },
+            "completionEvents": [
+              "onCommand:ai-101-ts.acceptSuggestion",
+              "onCommand:ai-101-ts.rejectSuggestion"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
