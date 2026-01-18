@@ -23,8 +23,9 @@ export class ErrorHandler {
 
     /**
      * Handles an error by logging it and optionally showing a message to the user.
+     * If the error has an associated troubleshooting article, provides a link to it.
      */
-    public static handleError(error: any): void {
+    public static handleError(error: any, troubleshootingArticle?: string): void {
         const message = error instanceof Error ? error.message : String(error);
         const code = error instanceof AI101Error ? ` (Code: ${error.code})` : '';
 
@@ -35,12 +36,53 @@ export class ErrorHandler {
 
         // Only show critical or authentication errors to the user via UI
         if (error instanceof AI101Error && !error.isTransient) {
-            vscode.window.showErrorMessage(`AI 101 Error: ${message}`, 'Open Logs').then(selection => {
+            // Determine troubleshooting article from error code or provided article
+            const articleId = troubleshootingArticle || this.getArticleIdFromErrorCode(code);
+
+            const actions = ['Open Logs'];
+            if (articleId) {
+                actions.unshift('Troubleshoot');
+            }
+
+            vscode.window.showErrorMessage(`AI 101 Error: ${message}`, ...actions).then(selection => {
                 if (selection === 'Open Logs') {
                     this.outputChannel?.show();
+                } else if (selection === 'Troubleshoot' && articleId) {
+                    // Open troubleshooting article
+                    vscode.commands.executeCommand('ai-101-ts.openTroubleshootingArticle', articleId);
                 }
             });
         }
+    }
+
+    /**
+     * Map error codes to troubleshooting article IDs
+     */
+    private static getArticleIdFromErrorCode(errorCode: string): string | undefined {
+        const errorCodeMap: Record<string, string> = {
+            'AI101-PERF-001': 'performance-slow-ui',
+            'AI101-PERF-002': 'performance-high-memory',
+            'AI101-LLM-001': 'connectivity-llm-timeout',
+            'AI101-LLM-002': 'connectivity-llm-timeout',
+            'AI101-NET-001': 'connectivity-network-errors',
+            'AI101-NET-002': 'connectivity-network-errors',
+            'AI101-UI-001': 'display-hud-not-showing',
+            'AI101-UI-002': 'display-blank-webview',
+            'AI101-AUTH-001': 'api-key-invalid',
+            'AI101-AUTH-002': 'api-key-invalid',
+            'AI101-AUTH-003': 'api-key-not-found',
+            'AI101-CFG-001': 'config-preset-issues',
+            'AI101-AGENT-001': 'agents-not-responding',
+            'AI101-AGENT-002': 'agents-not-responding'
+        };
+
+        // Extract error code from string (e.g., " (Code: AI101-PERF-001)" -> "AI101-PERF-001")
+        const match = errorCode.match(/AI101-[A-Z]+-\d+/);
+        if (match) {
+            return errorCodeMap[match[0]];
+        }
+
+        return undefined;
     }
 
     /**

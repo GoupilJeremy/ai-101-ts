@@ -157,6 +157,23 @@
         "command": "ai-101-ts.showGettingStarted",
         "title": "Show Getting Started",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.showTroubleshooting",
+        "title": "Show Troubleshooting",
+        "category": "AI 101",
+        "icon": "$(question)"
+      },
+      {
+        "command": "ai-101-ts.openTroubleshootingArticle",
+        "title": "Open Troubleshooting Article",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.searchTroubleshooting",
+        "title": "Search Troubleshooting",
+        "category": "AI 101",
+        "icon": "$(search)"
       }
     ],
     "keybindings": [
@@ -399,7 +416,18 @@
           }
         ]
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "ai101.troubleshootingView",
+          "name": "AI-101 Troubleshooting",
+          "icon": "$(question)",
+          "contextualTitle": "AI-101 Troubleshooting"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

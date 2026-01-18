@@ -30,6 +30,14 @@ import { ReportGeneratorService } from './telemetry/report-generator-service.js'
 import { registerReportCommands } from './commands/report-commands.js';
 import { IAI101API } from './api/extension-api.js';
 import { createAPI } from './api/api-implementation.js';
+import { KnowledgeBaseService } from './troubleshooting/knowledge-base-service.js';
+import { TroubleshootingWebviewProvider } from './troubleshooting/troubleshooting-webview.js';
+import {
+	registerShowTroubleshootingCommand,
+	registerOpenTroubleshootingArticleCommand,
+	registerSearchTroubleshootingCommand,
+	registerSendToTroubleshootingCommand
+} from './commands/show-troubleshooting.js';
 
 // Global reference to survey service for deactivate
 let surveyService: SurveyService | null = null;
@@ -85,6 +93,28 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 		});
 	}
 
+	// Initialize Troubleshooting Knowledge Base (Story 10.2)
+	const knowledgeBaseService = new KnowledgeBaseService(context);
+	const troubleshootingProvider = new TroubleshootingWebviewProvider(context, knowledgeBaseService);
+
+	// Register troubleshooting webview provider
+	context.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(
+			TroubleshootingWebviewProvider.viewType,
+			troubleshootingProvider
+		)
+	);
+
+	// Register troubleshooting commands
+	context.subscriptions.push(
+		registerShowTroubleshootingCommand(context, troubleshootingProvider),
+		registerOpenTroubleshootingArticleCommand(context),
+		registerSearchTroubleshootingCommand(context),
+		registerSendToTroubleshootingCommand(context, troubleshootingProvider)
+	);
+
+	// Dispose knowledge base on deactivation
+	context.subscriptions.push(knowledgeBaseService);
 
 	// Initialize LLM Manager and Rate Limiter
 	const llmManager = LLMProviderManager.getInstance();
