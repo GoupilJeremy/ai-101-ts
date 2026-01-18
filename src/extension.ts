@@ -25,6 +25,9 @@ import { MetricsService } from './telemetry/metrics-service.js';
 import { registerMetricsCommands } from './commands/metrics-commands.js';
 import { SurveyService } from './telemetry/survey-service.js';
 import { DistractionDetectorService } from './telemetry/distraction-detector.js';
+import { TeamMetricsService } from './telemetry/team-metrics-service.js';
+import { ReportGeneratorService } from './telemetry/report-generator-service.js';
+import { registerReportCommands } from './commands/report-commands.js';
 
 // Global reference to survey service for deactivate
 let surveyService: SurveyService | null = null;
@@ -46,13 +49,18 @@ export function activate(context: vscode.ExtensionContext) {
 	telemetryManager.checkFirstRun();
 	registerTelemetryCommands(context, telemetryManager);
 	TelemetryService.getInstance(context); // Initialize singleton
-	MetricsService.getInstance(context); // Initialize metrics tracking
+	const metricsService = MetricsService.getInstance(context); // Initialize metrics tracking
 	registerMetricsCommands(context); // Register metrics commands
 
 	// Initialize Survey Service (Story 8.4)
 	surveyService = new SurveyService(context);
 	surveyService.startSession(); // Start tracking session
 	surveyService.checkAndPrompt(); // Check for pending surveys from previous session
+
+	// Initialize Team Metrics and Report Generation (Story 8.8)
+	const teamMetricsService = new TeamMetricsService(context, metricsService, surveyService);
+	const reportGenerator = new ReportGeneratorService();
+	registerReportCommands(context, teamMetricsService, reportGenerator, TelemetryService.getInstance(context));
 
 	// Initialize Distraction Detector (Story 8.7)
 	const distractionDetector = DistractionDetectorService.getInstance(context);
