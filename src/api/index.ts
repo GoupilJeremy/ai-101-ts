@@ -37,3 +37,12 @@ export {
     AgentType,
     IAgentState
 } from '../ui/renderer.interface.js';
+// Export event types
+export {
+    AI101Events,
+    IAgentLifecycleEvent,
+    IAgentStateChangedEvent,
+    ISuggestionLifecycleEvent,
+    Unsubscribe,
+    EventCallback
+} from './events.js';

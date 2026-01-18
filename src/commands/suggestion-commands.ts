@@ -3,6 +3,9 @@ import { ExtensionStateManager, IDecisionRecord } from '../state/index.js';
 import { ErrorHandler } from '../errors/error-handler.js';
 import { TelemetryManager } from '../services/telemetry-manager.js';
 import { MetricsService } from '../telemetry/metrics-service.js';
+import { LifecycleEventManager } from '../api/lifecycle-event-manager.js';
+import { AgentType } from '../agents/shared/agent.interface.js';
+
 
 
 /**
@@ -60,7 +63,16 @@ export async function handleSuggestionCommand(action: 'accepted' | 'rejected', a
                 // Record Local Metrics (Story 8.2)
                 const lineCount = codeToApply.split('\n').length;
                 MetricsService.getInstance().recordSuggestionAccepted(lineCount);
+
+                // Emit Lifecycle Event: suggestionAccepted
+                LifecycleEventManager.getInstance().emit('suggestionAccepted', {
+                    id: suggestionId,
+                    agent: (historyRecord?.agent as AgentType) || 'coder',
+                    code: codeToApply,
+                    timestamp: Date.now()
+                });
             } catch (error: any) {
+
                 ErrorHandler.handleError(error);
                 vscode.window.showErrorMessage(`Failed to apply suggestion: ${error.message}`);
                 return;
@@ -80,7 +92,15 @@ export async function handleSuggestionCommand(action: 'accepted' | 'rejected', a
 
         // Record Local Metrics (Story 8.2)
         MetricsService.getInstance().recordSuggestionRejected();
+
+        // Emit Lifecycle Event: suggestionRejected
+        LifecycleEventManager.getInstance().emit('suggestionRejected', {
+            id: suggestionId,
+            agent: (historyRecord?.agent as AgentType) || 'coder',
+            timestamp: Date.now()
+        });
     }
+
 
     // 3. Cleanup Alerts
     stateManager.removeAlert(suggestionId);

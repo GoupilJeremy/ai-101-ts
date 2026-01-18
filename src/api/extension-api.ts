@@ -1,4 +1,6 @@
 import { ILLMProvider } from '../llm/provider.interface.js';
+import { AI101Events, Unsubscribe } from './events.js';
+
 
 /**
  * Public API exposed by the AI-101 extension to other extensions.
@@ -53,4 +55,30 @@ export interface IAI101API {
      * @since 0.0.1
      */
     registerLLMProvider(name: string, provider: ILLMProvider): void;
+
+    /**
+     * Subscribes to AI-101 lifecycle events.
+     * 
+     * @param event - The name of the event to subscribe to
+     * @param callback - Function called when the event occurs
+     * @returns An unsubscribe function to stop receiving events
+     * 
+     * @remarks
+     * Supported events include agent activation, state changes, and suggestion lifecycle.
+     * Multiple subscribers can listen to the same event.
+     * 
+     * @example
+     * ```typescript
+     * const unsubscribe = api.on('suggestionAccepted', (event) => {
+     *   console.log(`User accepted suggestion ${event.id} from ${event.agent}`);
+     * });
+     * 
+     * // Later, to stop listening:
+     * unsubscribe();
+     * ```
+     * 
+     * @since 0.0.1
+     */
+    on<K extends keyof AI101Events>(event: K, callback: (payload: AI101Events[K]) => void): Unsubscribe;
+
 }

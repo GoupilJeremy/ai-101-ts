@@ -1,6 +1,9 @@
 import { IAI101API } from './extension-api.js';
 import { ILLMProvider } from '../llm/provider.interface.js';
 import { LLMProviderManager } from '../llm/provider-manager.js';
+import { AI101Events, Unsubscribe } from './events.js';
+import { LifecycleEventManager } from './lifecycle-event-manager.js';
+
 
 /**
  * Creates the public API implementation for the AI-101 extension.
@@ -51,6 +54,11 @@ export function createAPI(providerManager: LLMProviderManager): IAI101API {
 
             // Delegate to LLMProviderManager
             providerManager.registerProvider(name, provider);
+        },
+
+        on<K extends keyof AI101Events>(event: K, callback: (payload: AI101Events[K]) => void): Unsubscribe {
+            return LifecycleEventManager.getInstance().on(event, callback);
         }
     };
 }
+

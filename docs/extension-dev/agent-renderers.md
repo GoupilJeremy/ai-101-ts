@@ -11,6 +11,8 @@ This guide explains how to create and register custom visual representations for
 - [Performance Guidelines](#performance-guidelines)
 - [Styling & Opting Out](#styling--opting-out)
 - [Semantic Versioning and Deprecation Policy](#semantic-versioning-and-deprecation-policy)
+- [See Also: Lifecycle Events](./lifecycle-events.md)
+
 
 ## Overview
 

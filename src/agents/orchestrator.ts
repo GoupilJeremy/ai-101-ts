@@ -3,6 +3,8 @@ import { LLMProviderManager } from '../llm/provider-manager.js';
 import { ExtensionStateManager, IDecisionRecord } from '../state/index.js';
 import { ErrorHandler } from '../errors/error-handler.js';
 import { IAgent, AgentType, IAgentRequest, IAgentResponse } from './shared/agent.interface.js';
+import { LifecycleEventManager } from '../api/lifecycle-event-manager.js';
+
 
 export interface AgentLifecycleEvent {
     agent: AgentType;
@@ -215,7 +217,20 @@ Please provide the corrected code snippet or file content.`;
             }
         });
 
+        // Emit Lifecycle Event: suggestionGenerated
+        LifecycleEventManager.getInstance().emit('suggestionGenerated', {
+            id: historyRecord.id,
+            agent: historyRecord.agent as AgentType,
+            code: coder.result,
+            timestamp: Date.now(),
+            data: {
+                reasoning: combinedReasoning,
+                confidence: (coder.confidence + reviewer.confidence) / 2
+            }
+        });
+
         return {
+
             result: finalResult,
             reasoning: combinedReasoning,
             confidence: (coder.confidence + reviewer.confidence) / 2,
@@ -248,7 +263,15 @@ Please provide the corrected code snippet or file content.`;
         const eventData: AgentLifecycleEvent = { agent: type, timestamp: Date.now() };
         this._onAgentStart.fire({ ...eventData, data: { request } });
 
+        // Emit Lifecycle Event: agentActivated
+        LifecycleEventManager.getInstance().emit('agentActivated', {
+            agent: type,
+            timestamp: Date.now(),
+            data: { request }
+        });
+
         try {
+
             const response = await agent.execute(request);
             this.stateManager.updateAgentState(type, 'success', `Task complete.`, anchorLine);
 

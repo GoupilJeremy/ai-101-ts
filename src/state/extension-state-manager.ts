@@ -2,6 +2,8 @@ import { AgentType, IAgentState, AgentStatus, IAlert } from '../agents/shared/ag
 import { AgentMode, IModeConfig, ModeConfigs } from '../modes/mode-types.js';
 import { IDecisionRecord } from './history.interface.js';
 import { DevelopmentPhase } from './types.js';
+import { LifecycleEventManager } from '../api/lifecycle-event-manager.js';
+
 
 export interface IMetricsState {
     tokens: number;
@@ -274,7 +276,15 @@ export class ExtensionStateManager extends EventEmitter {
 
         this.agentStates.set(agent, newState);
         this.notifyStateUpdate(agent, newState);
+
+        // Emit Lifecycle Event: agentStateChanged
+        LifecycleEventManager.getInstance().emit('agentStateChanged', {
+            agent,
+            state: newState,
+            timestamp: newState.lastUpdate
+        });
     }
+
 
     /**
      * Updates the visibility of a specific agent.
@@ -289,7 +299,15 @@ export class ExtensionStateManager extends EventEmitter {
 
         this.agentStates.set(agent, newState);
         this.notifyStateUpdate(agent, newState);
+
+        // Emit Lifecycle Event: agentStateChanged
+        LifecycleEventManager.getInstance().emit('agentStateChanged', {
+            agent,
+            state: newState,
+            timestamp: newState.lastUpdate
+        });
     }
+
 
     /**
      * Returns the current state of a specific agent.

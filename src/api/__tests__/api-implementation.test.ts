@@ -2,6 +2,9 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { IAI101API } from '../extension-api.js';
 import { ILLMProvider, ILLMResponse, ILLMOptions, IModelInfo } from '../../llm/provider.interface.js';
 import { LLMProviderManager } from '../../llm/provider-manager.js';
+import { createAPI } from '../api-implementation.js';
+import { LifecycleEventManager } from '../lifecycle-event-manager.js';
+
 
 describe('API Implementation', () => {
     let mockProvider: ILLMProvider;
@@ -44,7 +47,8 @@ describe('API Implementation', () => {
             const api: IAI101API = {
                 registerLLMProvider: (name: string, provider: ILLMProvider) => {
                     manager.registerProvider(name, provider);
-                }
+                },
+                on: vi.fn()
             };
 
             api.registerLLMProvider('test-provider', mockProvider);
@@ -58,7 +62,8 @@ describe('API Implementation', () => {
             const api: IAI101API = {
                 registerLLMProvider: (name: string, provider: ILLMProvider) => {
                     manager.registerProvider(name, provider);
-                }
+                },
+                on: vi.fn()
             };
 
             api.registerLLMProvider('custom-llm', mockProvider);
@@ -73,7 +78,8 @@ describe('API Implementation', () => {
             const api: IAI101API = {
                 registerLLMProvider: (name: string, provider: ILLMProvider) => {
                     manager.registerProvider(name, provider);
-                }
+                },
+                on: vi.fn()
             };
 
             // Register with a different name
@@ -85,6 +91,31 @@ describe('API Implementation', () => {
         });
     });
 
+    describe('on', () => {
+        it('should delegate to LifecycleEventManager.on', () => {
+            const api = createAPI(LLMProviderManager.getInstance());
+            const callback = vi.fn();
+
+            const unsubscribe = api.on('agentActivated', callback);
+            expect(typeof unsubscribe).toBe('function');
+
+            // Verify it actually works through the manager
+            const manager = (api as any).lifecycleEventManager || (LifecycleEventManager as any).getInstance();
+            const payload = { agent: 'coder' as any, timestamp: Date.now() };
+            manager.emit('agentActivated', payload);
+
+            // Note: LifecycleEventManager uses setTimeout(..., 0) for emission
+            // In vitest we might need to wait or use fake timers
+            vi.useFakeTimers();
+            manager.emit('agentActivated', payload);
+            vi.runAllTimers();
+
+            expect(callback).toHaveBeenCalledWith(payload);
+            vi.useRealTimers();
+        });
+    });
+
+
     describe('Validation', () => {
         it('should validate provider name is non-empty', () => {
             const manager = LLMProviderManager.getInstance();
@@ -95,7 +126,8 @@ describe('API Implementation', () => {
                         throw new Error('Provider name cannot be empty');
                     }
                     manager.registerProvider(name, provider);
-                }
+                },
+                on: vi.fn()
             };
 
             expect(() => {
@@ -122,7 +154,8 @@ describe('API Implementation', () => {
                         throw new Error('Provider must implement isAvailable method');
                     }
                     manager.registerProvider(name, provider);
-                }
+                },
+                on: vi.fn()
             };
 
             const invalidProvider = {
@@ -144,7 +177,8 @@ describe('API Implementation', () => {
                         throw new Error('Provider cannot be null or undefined');
                     }
                     manager.registerProvider(name, provider);
-                }
+                },
+                on: vi.fn()
             };
 
             expect(() => {
