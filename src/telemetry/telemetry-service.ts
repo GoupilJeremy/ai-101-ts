@@ -78,6 +78,20 @@ export class TelemetryService implements ITelemetryService {
     }
 
     /**
+     * Alias for sendEvent to support different naming conventions
+     */
+    public trackEvent(eventName: string, properties?: { [key: string]: string }, measurements?: { [key: string]: number }): void {
+        this.sendEvent(eventName, properties, measurements);
+    }
+
+    /**
+     * Check if telemetry is currently enabled
+     */
+    public isEnabled(): boolean {
+        return this.isOptedIn;
+    }
+
+    /**
      * Sends an error event after sanitizing properties.
      */
     public sendError(error: Error, properties?: { [key: string]: string }, measurements?: { [key: string]: number }): void {

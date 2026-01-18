@@ -23,7 +23,10 @@ import { TelemetryService } from './telemetry/telemetry-service.js';
 import { registerTelemetryCommands } from './commands/telemetry-commands.js';
 import { MetricsService } from './telemetry/metrics-service.js';
 import { registerMetricsCommands } from './commands/metrics-commands.js';
+import { SurveyService } from './telemetry/survey-service.js';
 
+// Global reference to survey service for deactivate
+let surveyService: SurveyService | null = null;
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -44,6 +47,11 @@ export function activate(context: vscode.ExtensionContext) {
 	TelemetryService.getInstance(context); // Initialize singleton
 	MetricsService.getInstance(context); // Initialize metrics tracking
 	registerMetricsCommands(context); // Register metrics commands
+
+	// Initialize Survey Service (Story 8.4)
+	surveyService = new SurveyService(context);
+	surveyService.startSession(); // Start tracking session
+	surveyService.checkAndPrompt(); // Check for pending surveys from previous session
 
 
 	// Initialize LLM Manager and Rate Limiter
@@ -252,6 +260,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 // This method is called when your extension is deactivated
 export function deactivate() {
+	// End survey session (Story 8.4)
+	if (surveyService) {
+		surveyService.endSession().catch(error => {
+			// Silently fail - don't block deactivation
+			console.error('Failed to end survey session:', error);
+		});
+	}
+
 	// Finalize metrics session
 	try {
 		MetricsService.getInstance().recordSessionEnd();
