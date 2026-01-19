@@ -32,7 +32,7 @@ class FocusManager {
      * Initialize the focus manager and set up event listeners.
      */
     initialize() {
-        if (this.initialized) return;
+        if (this.initialized) {return;}
 
         this.updateInteractiveElements();
         this.attachEventListeners();
@@ -47,7 +47,7 @@ class FocusManager {
      */
     createSkipLinks() {
         const hudContainer = document.getElementById('hud-container');
-        if (!hudContainer) return;
+        if (!hudContainer) {return;}
 
         // Create skip links container
         const skipLinksContainer = document.createElement('div');
@@ -58,19 +58,19 @@ class FocusManager {
         // Skip to agents
         const skipToAgents = this.createSkipLink('Skip to Agents', () => {
             const firstAgent = document.querySelector('.agent-icon');
-            if (firstAgent) this.focusElement(firstAgent);
+            if (firstAgent) {this.focusElement(firstAgent);}
         });
 
         // Skip to alerts
         const skipToAlerts = this.createSkipLink('Skip to Alerts', () => {
             const firstAlert = document.querySelector('.alert-component');
-            if (firstAlert) this.focusElement(firstAlert);
+            if (firstAlert) {this.focusElement(firstAlert);}
         });
 
         // Skip to suggestions
         const skipToSuggestions = this.createSkipLink('Skip to Suggestions', () => {
             const firstSuggestion = document.querySelector('.suggestion-card');
-            if (firstSuggestion) this.focusElement(firstSuggestion);
+            if (firstSuggestion) {this.focusElement(firstSuggestion);}
         });
 
         skipLinksContainer.appendChild(skipToAgents);
@@ -185,7 +185,7 @@ class FocusManager {
     handleTabNavigation(shiftKey) {
         this.updateInteractiveElements();
 
-        if (this.interactiveElements.length === 0) return;
+        if (this.interactiveElements.length === 0) {return;}
 
         if (this.currentFocusIndex === -1) {
             // No current focus, start with first element
@@ -218,7 +218,7 @@ class FocusManager {
         }
 
         const currentElement = this.interactiveElements[this.currentFocusIndex];
-        if (!currentElement) return;
+        if (!currentElement) {return;}
 
         let nextIndex = this.currentFocusIndex;
 
@@ -233,7 +233,7 @@ class FocusManager {
             } else if (event.key === 'ArrowDown') {
                 // Move to first alert or next section
                 nextIndex = this.findFirstOfType('alert-component');
-                if (nextIndex !== -1) event.preventDefault();
+                if (nextIndex !== -1) {event.preventDefault();}
             }
         }
         // Alert spatial navigation (up/down)
@@ -247,7 +247,7 @@ class FocusManager {
             } else if (event.key === 'ArrowRight') {
                 // Move to suggestion if available
                 nextIndex = this.findFirstOfType('suggestion-card__btn');
-                if (nextIndex !== -1) event.preventDefault();
+                if (nextIndex !== -1) {event.preventDefault();}
             }
         }
 
@@ -297,10 +297,10 @@ class FocusManager {
      * Handle Enter/Space activation.
      */
     handleActivation(event) {
-        if (this.currentFocusIndex === -1) return;
+        if (this.currentFocusIndex === -1) {return;}
 
         const element = this.interactiveElements[this.currentFocusIndex];
-        if (!element) return;
+        if (!element) {return;}
 
         // Prevent default for Space on buttons to avoid scrolling
         if (event.key === ' ' && element.tagName !== 'INPUT') {
@@ -356,7 +356,7 @@ class FocusManager {
      * Focus a specific element.
      */
     focusElement(element) {
-        if (!element) return;
+        if (!element) {return;}
 
         element.focus();
 
@@ -416,7 +416,7 @@ class FocusManager {
      * @param {HTMLElement} container - The container element to trap focus within.
      */
     createFocusTrap(container) {
-        if (!container) return;
+        if (!container) {return;}
 
         const focusableElements = container.querySelectorAll(
             'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -443,7 +443,7 @@ class FocusManager {
      */
     handleFocusTrapKeyDown(event) {
         const trap = this.focusTrapStack[this.focusTrapStack.length - 1];
-        if (!trap || trap.elements.length === 0) return;
+        if (!trap || trap.elements.length === 0) {return;}
 
         if (event.key === 'Tab') {
             event.preventDefault();
@@ -471,7 +471,7 @@ class FocusManager {
      */
     releaseFocusTrap() {
         const trap = this.focusTrapStack.pop();
-        if (!trap) return;
+        if (!trap) {return;}
 
         // Restore focus to previous element
         if (trap.previousFocus && trap.previousFocus.focus) {

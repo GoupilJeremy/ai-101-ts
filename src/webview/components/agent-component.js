@@ -52,13 +52,15 @@ class AgentComponent {
      * Attach hover and keyboard events for tooltips.
      */
     attachEvents() {
-        this.tooltipManager.attach(this.element, () => this.generateTooltipContent());
+        // Add data-tooltip-id for automatic tooltip delegation
+        const tooltipId = `agent-${this.agentId}`;
+        this.element.setAttribute('data-tooltip-id', tooltipId);
 
         // Keyboard support for tooltip (Shift+F10 as per AC)
         this.element.addEventListener('keydown', (e) => {
             if (e.shiftKey && (e.key === 'F10' || e.code === 'F10')) {
                 e.preventDefault();
-                this.tooltipManager.show(this.element, this.generateTooltipContent());
+                // Tooltip will be shown automatically via global delegation
             }
         });
     }
@@ -114,18 +116,18 @@ class AgentComponent {
     }
 
     formatLastUpdate(timestamp) {
-        if (!timestamp) return 'Just now';
+        if (!timestamp) { return 'Just now'; }
         const seconds = Math.floor((Date.now() - timestamp) / 1000);
-        if (seconds < 5) return 'Just now';
-        if (seconds < 60) return `${seconds}s ago`;
+        if (seconds < 5) { return 'Just now'; }
+        if (seconds < 60) { return `${seconds}s ago`; }
         return `${Math.floor(seconds / 60)}m ago`;
     }
 
     formatETA(timestamp) {
-        if (!timestamp) return 'n/a';
+        if (!timestamp) { return 'n/a'; }
         const seconds = Math.floor((timestamp - Date.now()) / 1000);
-        if (seconds < 0) return 'Any moment';
-        if (seconds < 60) return `${seconds}s`;
+        if (seconds < 0) { return 'Any moment'; }
+        if (seconds < 60) { return `${seconds}s`; }
         return `${Math.floor(seconds / 60)}m ${seconds % 60}s`;
     }
 }

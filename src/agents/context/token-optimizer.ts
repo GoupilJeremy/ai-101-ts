@@ -49,7 +49,7 @@ export class TokenOptimizer {
     public async optimizeFiles(
         files: Array<{ path: string, content: string }>
     ): Promise<{ content: string, truncatedCount: number }> {
-        if (files.length === 0) return { content: '', truncatedCount: 0 };
+        if (files.length === 0) {return { content: '', truncatedCount: 0 };}
 
         const contextWindow = await this.llmManager.getContextWindow('context');
         const maxTokens = Math.floor(contextWindow * 0.4);
@@ -70,8 +70,8 @@ export class TokenOptimizer {
         // Sort by priority (current file first, then by token count ascending for smaller files)
         filesWithTokens.sort((a, b) => {
             // Current file has highest priority
-            if (a.path.includes('active') || a.path.includes('current')) return -1;
-            if (b.path.includes('active') || b.path.includes('current')) return 1;
+            if (a.path.includes('active') || a.path.includes('current')) {return -1;}
+            if (b.path.includes('active') || b.path.includes('current')) {return 1;}
 
             // Then prioritize smaller files to fit more
             return a.tokens - b.tokens;

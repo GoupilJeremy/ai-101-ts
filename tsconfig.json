@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
-		"module": "Node16",
+		"module": "ES2022",
+		"moduleResolution": "bundler",
 		"target": "ES2022",
 		"lib": [
 			"ES2022",
@@ -19,6 +20,8 @@
 	],
 	"exclude": [
 		"node_modules",
-		"**/*.test.ts"
+		"src/**/__tests__/**/*",
+		"src/test/alert.test.ts",
+		"src/test/hotkey-commands.test.ts"
 	]
 }

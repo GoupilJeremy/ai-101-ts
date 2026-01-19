@@ -12,7 +12,7 @@ suite('HybridLLMCache Test Suite', () => {
 
     beforeEach(() => {
         tempDir = path.join(os.tmpdir(), `ai101-cache-test-${Date.now()}`);
-        if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
+        if (!fs.existsSync(tempDir)) {fs.mkdirSync(tempDir);}
         cache = new HybridLLMCache(tempDir);
     });
 

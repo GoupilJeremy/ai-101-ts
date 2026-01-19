@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { toggleHUDCommand } from '../commands/toggle-hud.js';
-import { forceAgentStateCommand } from '../commands/force-agent-state.js';
+import { forceAgentStateCommand } from '../commands/force-agent-state.command.js';
 import { ExtensionStateManager } from '../state/index.js';
 import { AgentType, AgentStatus } from '../agents/shared/agent.interface.js';
 

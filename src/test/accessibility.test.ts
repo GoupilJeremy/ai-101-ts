@@ -7,7 +7,7 @@ import * as path from 'path';
 suite('Accessibility Tests', () => {
     test('Webview HTML passes axe-core accessibility audit', async () => {
         // Load the webview HTML template
-        const htmlPath = path.join(__dirname, '../webview/index.html');
+        const htmlPath = path.join(__dirname, '../../src/webview/index.html');
         let htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
         // Replace template variables with mock values for testing
@@ -36,11 +36,15 @@ suite('Accessibility Tests', () => {
         document.head.appendChild(axeScript);
 
         // Wait for axe to be available
-        await new Promise(resolve => {
+        await new Promise((resolve, reject) => {
+            let attempts = 0;
             const checkAxe = () => {
                 if (window.axe) {
                     resolve(void 0);
+                } else if (attempts > 500) { // 5 seconds timeout
+                    reject(new Error('Axe-core failed to load in JSDOM'));
                 } else {
+                    attempts++;
                     setTimeout(checkAxe, 10);
                 }
             };
@@ -89,7 +93,7 @@ suite('Accessibility Tests', () => {
 
     test('Webview supports keyboard navigation', () => {
         // Load HTML
-        const htmlPath = path.join(__dirname, '../webview/index.html');
+        const htmlPath = path.join(__dirname, '../../src/webview/index.html');
         let htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
         // Replace template variables
@@ -117,7 +121,7 @@ suite('Accessibility Tests', () => {
     });
 
     test('Webview has proper ARIA labels and roles', () => {
-        const htmlPath = path.join(__dirname, '../webview/index.html');
+        const htmlPath = path.join(__dirname, '../../src/webview/index.html');
         let htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
         htmlContent = htmlContent

@@ -1,7 +1,16 @@
+import { getTooltipContent, formatTooltipHTML } from '../data/tooltips.js';
+
 /**
  * TooltipManager - Manages contextual hover tooltips for agents and other HUD elements.
  * Follows the Singleton pattern to ensure only one tooltip is visible at a time.
  * Adheres to Sumi-e aesthetic and 60fps performance requirements.
+ * 
+ * Features:
+ * - Mode-aware content (learning/expert/default)
+ * - Configurable delay
+ * - Anti-collision positioning
+ * - Glossary term linking
+ * - Accessibility (ARIA, keyboard support)
  */
 class TooltipManager {
     static instance = null;
@@ -16,12 +25,14 @@ class TooltipManager {
         this.hideTimeout = null;
         this.currentTarget = null;
         this.content = null;
+        this.currentMode = 'default'; // Will be updated from state
 
-        // Constants from AC
+        // Constants from AC (configurable)
         this.SHOW_DELAY_MS = 500;
         this.HIDE_DELAY_MS = 200;
 
         this.init();
+        this.setupGlobalListeners();
         TooltipManager.instance = this;
     }
 
@@ -39,7 +50,7 @@ class TooltipManager {
      * Initialize the tooltip DOM element.
      */
     init() {
-        if (this.tooltipEl) return;
+        if (this.tooltipEl) { return; }
 
         this.tooltipEl = document.createElement('div');
         this.tooltipEl.id = 'hud-tooltip';
@@ -55,6 +66,76 @@ class TooltipManager {
         this.tooltipEl.style.willChange = 'transform, opacity';
 
         document.body.appendChild(this.tooltipEl);
+    }
+
+    /**
+     * Setup global event listeners for data-tooltip-id delegation.
+     */
+    setupGlobalListeners() {
+        // Global mouseover delegation
+        document.addEventListener('mouseover', (e) => {
+            const target = e.target.closest('[data-tooltip-id]');
+            if (target) {
+                const tooltipId = target.dataset.tooltipId;
+                this.showById(target, tooltipId);
+            }
+        });
+
+        // Global mouseout delegation
+        document.addEventListener('mouseout', (e) => {
+            const target = e.target.closest('[data-tooltip-id]');
+            if (target) {
+                this.hide();
+            }
+        });
+
+        // Global focus delegation (accessibility)
+        document.addEventListener('focusin', (e) => {
+            const target = e.target.closest('[data-tooltip-id]');
+            if (target) {
+                const tooltipId = target.dataset.tooltipId;
+                this.showById(target, tooltipId);
+            }
+        });
+
+        // Global blur delegation
+        document.addEventListener('focusout', (e) => {
+            const target = e.target.closest('[data-tooltip-id]');
+            if (target) {
+                this.hide();
+            }
+        });
+
+        // Escape key to dismiss tooltip
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.tooltipEl.style.opacity !== '0') {
+                this.hideImmediately();
+            }
+        });
+
+        // Handle glossary link clicks
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tooltip__link') && e.target.dataset.glossaryTerm) {
+                e.preventDefault();
+                this.handleGlossaryClick(e.target.dataset.glossaryTerm);
+            }
+        });
+    }
+
+    /**
+     * Show tooltip using content registry.
+     * @param {HTMLElement} target - The element being hovered.
+     * @param {string} tooltipId - The tooltip content ID from registry.
+     */
+    showById(target, tooltipId) {
+        const content = getTooltipContent(tooltipId, this.currentMode);
+        if (!content) {
+            console.warn(`No tooltip content found for ID: ${tooltipId}`);
+            return;
+        }
+
+        const htmlContent = formatTooltipHTML(content);
+        this.show(target, htmlContent);
     }
 
     /**
@@ -128,7 +209,7 @@ class TooltipManager {
      * Render the tooltip content and position it.
      */
     render() {
-        if (!this.currentTarget || !this.tooltipEl) return;
+        if (!this.currentTarget || !this.tooltipEl) { return; }
 
         // Set content
         if (typeof this.content === 'string') {
@@ -137,6 +218,9 @@ class TooltipManager {
             this.tooltipEl.innerHTML = '';
             this.tooltipEl.appendChild(this.content);
         }
+
+        // Apply mode-specific class
+        this.tooltipEl.className = `tooltip tooltip--${this.currentMode}`;
 
         // Position tooltip
         this.position();
@@ -201,7 +285,49 @@ class TooltipManager {
     }
 
     /**
+     * Update the current user mode for tooltip content.
+     * @param {string} mode - 'learning', 'expert', or 'default'
+     */
+    setMode(mode) {
+        if (['learning', 'expert', 'default'].includes(mode)) {
+            this.currentMode = mode;
+            console.log(`Tooltip mode updated to: ${mode}`);
+        } else {
+            console.warn(`Invalid tooltip mode: ${mode}. Using 'default'.`);
+            this.currentMode = 'default';
+        }
+    }
+
+    /**
+     * Configure tooltip delay.
+     * @param {number} delayMs - Delay in milliseconds (default: 500ms)
+     */
+    setDelay(delayMs) {
+        if (typeof delayMs === 'number' && delayMs >= 0) {
+            this.SHOW_DELAY_MS = delayMs;
+        }
+    }
+
+    /**
+     * Handle glossary term clicks.
+     * @param {string} term - The glossary term to look up
+     */
+    handleGlossaryClick(term) {
+        // Send message to extension to open glossary/documentation
+        if (typeof vscode !== 'undefined') {
+            vscode.postMessage({
+                type: 'toExtension:openGlossary',
+                term: term,
+                timestamp: Date.now(),
+            });
+        } else {
+            console.log(`Glossary term clicked: ${term}`);
+        }
+    }
+
+    /**
      * Global event delegation or individual binding helper.
+     * @deprecated Use data-tooltip-id attributes instead for automatic delegation.
      */
     attach(element, contentGenerator) {
         element.addEventListener('mouseenter', () => this.show(element, contentGenerator()));

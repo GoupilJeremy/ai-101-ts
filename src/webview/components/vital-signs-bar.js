@@ -22,7 +22,7 @@ class VitalSignsBar {
     }
 
     init() {
-        if (!document) return;
+        if (!document) { return; }
         this.element = document.getElementById(this.elementId);
         this.metricsElement = document.getElementById('metrics');
 
@@ -35,7 +35,7 @@ class VitalSignsBar {
         if (!this.metricsElement && typeof document !== 'undefined') {
             this.metricsElement = document.getElementById('metrics');
         }
-        if (!this.metricsElement) return;
+        if (!this.metricsElement) { return; }
 
         this.lastMetrics = metrics;
 
@@ -55,7 +55,8 @@ class VitalSignsBar {
         const phaseLabel = this.getPhaseLabel(phaseClass);
         const phaseIcon = this.getPhaseIcon(phaseClass);
         phaseSpan.innerHTML = `${phaseIcon} ${phaseLabel}`;
-        phaseSpan.title = `Development Phase: ${phaseLabel}`;
+        phaseSpan.setAttribute('data-tooltip-id', 'vital-signs-phase');
+        phaseSpan.setAttribute('tabindex', '0');
         this.metricsElement.appendChild(phaseSpan);
 
         this.metricsElement.appendChild(document.createTextNode(' | '));
@@ -64,6 +65,8 @@ class VitalSignsBar {
         const tokensSpan = document.createElement('span');
         tokensSpan.className = 'vital-signs__tokens';
         tokensSpan.textContent = `Tokens: ${(metrics.tokens || 0).toLocaleString()}`;
+        tokensSpan.setAttribute('data-tooltip-id', 'vital-signs-tokens');
+        tokensSpan.setAttribute('tabindex', '0');
         this.metricsElement.appendChild(tokensSpan);
 
         this.metricsElement.appendChild(document.createTextNode(' | '));
@@ -72,6 +75,8 @@ class VitalSignsBar {
         const costSpan = document.createElement('span');
         costSpan.className = 'vital-signs__cost';
         costSpan.textContent = `Cost: ${formattedCost}`;
+        costSpan.setAttribute('data-tooltip-id', 'vital-signs-cost');
+        costSpan.setAttribute('tabindex', '0');
         this.metricsElement.appendChild(costSpan);
 
         this.metricsElement.appendChild(document.createTextNode(' | '));
@@ -80,11 +85,12 @@ class VitalSignsBar {
         const filesSpan = document.createElement('span');
         filesSpan.className = 'vital-signs__files';
         filesSpan.textContent = `Files: ${metrics.files || 0}`;
+        filesSpan.setAttribute('data-tooltip-id', 'vital-signs-files');
+        filesSpan.setAttribute('tabindex', '0');
 
         // Add click handler for files
         if (this.options.onFilesClick) {
             filesSpan.style.cursor = 'pointer';
-            filesSpan.title = 'View Context Files';
             filesSpan.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this.options.onFilesClick();

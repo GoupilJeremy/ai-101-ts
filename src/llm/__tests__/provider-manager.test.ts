@@ -111,7 +111,7 @@ suite('LLMProviderManager Test Suite', () => {
 
         // Initialize cache for manager
         tempDir = path.join(os.tmpdir(), `ai101-manager-test-${Date.now()}`);
-        if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
+        if (!fs.existsSync(tempDir)) {fs.mkdirSync(tempDir);}
         manager.initialize(tempDir);
 
         // Default settings

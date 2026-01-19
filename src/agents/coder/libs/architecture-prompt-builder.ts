@@ -14,10 +14,10 @@ export class ArchitecturePromptBuilder {
         // Tech Stack
         const { techStack } = architecture;
         if (techStack) {
-            if (techStack.frontend && techStack.frontend !== 'unknown') lines.push(`- Frontend: ${techStack.frontend}`);
-            if (techStack.backend && techStack.backend !== 'unknown') lines.push(`- Backend: ${techStack.backend}`);
-            if (techStack.build && techStack.build !== 'unknown') lines.push(`- Build: ${techStack.build}`);
-            if (techStack.testing && techStack.testing !== 'unknown') lines.push(`- Testing: ${techStack.testing}`);
+            if (techStack.frontend && techStack.frontend !== 'unknown') {lines.push(`- Frontend: ${techStack.frontend}`);}
+            if (techStack.backend && techStack.backend !== 'unknown') {lines.push(`- Backend: ${techStack.backend}`);}
+            if (techStack.build && techStack.build !== 'unknown') {lines.push(`- Build: ${techStack.build}`);}
+            if (techStack.testing && techStack.testing !== 'unknown') {lines.push(`- Testing: ${techStack.testing}`);}
         }
 
         // Patterns
@@ -34,8 +34,8 @@ export class ArchitecturePromptBuilder {
         // Conventions
         const { conventions } = architecture;
         if (conventions) {
-            if (conventions.naming) lines.push(`- Naming Convention: ${conventions.naming}`);
-            if (conventions.testLocation) lines.push(`- Test Location: ${conventions.testLocation}`);
+            if (conventions.naming) {lines.push(`- Naming Convention: ${conventions.naming}`);}
+            if (conventions.testLocation) {lines.push(`- Test Location: ${conventions.testLocation}`);}
         }
 
         lines.push('');

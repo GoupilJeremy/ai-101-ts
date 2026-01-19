@@ -176,12 +176,12 @@ describe('SurveyService', () => {
     describe('Survey Prompt Check', () => {
         it('should detect pending survey on activation', async () => {
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.pendingSurvey') return true;
-                if (key === 'session.stats') return {
+                if (key === 'survey.pendingSurvey') {return true;}
+                if (key === 'session.stats') {return {
                     startTime: Date.now() - 600000,
                     interactionCount: 10,
                     featureUsage: { coder: 5 },
-                };
+                };}
                 return undefined;
             });
 
@@ -243,7 +243,7 @@ describe('SurveyService', () => {
             const sixDaysAgo = now - (6 * 24 * 60 * 60 * 1000); // 6 days
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return sixDaysAgo;
+                if (key === 'survey.firstUsageDate') {return sixDaysAgo;}
                 return undefined;
             });
 
@@ -256,7 +256,7 @@ describe('SurveyService', () => {
             const eightDaysAgo = now - (8 * 24 * 60 * 60 * 1000); // 8 days
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return eightDaysAgo;
+                if (key === 'survey.firstUsageDate') {return eightDaysAgo;}
                 return undefined;
             });
 
@@ -270,8 +270,8 @@ describe('SurveyService', () => {
             const fiveDaysAgo = now - (5 * 24 * 60 * 60 * 1000);
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return eightDaysAgo;
-                if (key === 'survey.weekly.lastShown') return fiveDaysAgo;
+                if (key === 'survey.firstUsageDate') {return eightDaysAgo;}
+                if (key === 'survey.weekly.lastShown') {return fiveDaysAgo;}
                 return undefined;
             });
 
@@ -285,8 +285,8 @@ describe('SurveyService', () => {
             const eightDaysAgo = now - (8 * 24 * 60 * 60 * 1000);
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return fifteenDaysAgo;
-                if (key === 'survey.weekly.lastShown') return eightDaysAgo;
+                if (key === 'survey.firstUsageDate') {return fifteenDaysAgo;}
+                if (key === 'survey.weekly.lastShown') {return eightDaysAgo;}
                 return undefined;
             });
 
@@ -300,8 +300,8 @@ describe('SurveyService', () => {
             const futureTime = now + (12 * 60 * 60 * 1000); // 12 hours from now
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return eightDaysAgo;
-                if (key === 'survey.weekly.snoozedUntil') return futureTime;
+                if (key === 'survey.firstUsageDate') {return eightDaysAgo;}
+                if (key === 'survey.weekly.snoozedUntil') {return futureTime;}
                 return undefined;
             });
 
@@ -315,8 +315,8 @@ describe('SurveyService', () => {
             const pastTime = now - (1 * 60 * 60 * 1000); // 1 hour ago
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return eightDaysAgo;
-                if (key === 'survey.weekly.snoozedUntil') return pastTime;
+                if (key === 'survey.firstUsageDate') {return eightDaysAgo;}
+                if (key === 'survey.weekly.snoozedUntil') {return pastTime;}
                 return undefined;
             });
 
@@ -328,7 +328,7 @@ describe('SurveyService', () => {
     describe('Feature Discovery', () => {
         it('should return a tip for unused features', async () => {
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.featuresUsed') return { 'mode:learning': true };
+                if (key === 'survey.featuresUsed') {return { 'mode:learning': true };}
                 return undefined;
             });
 
@@ -339,13 +339,13 @@ describe('SurveyService', () => {
 
         it('should return null if all features have been used', async () => {
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.featuresUsed') return {
+                if (key === 'survey.featuresUsed') {return {
                     'mode:learning': true,
                     'mode:expert': true,
                     'command:explain': true,
                     'command:refactor': true,
                     'agent:reviewer': true,
-                };
+                };}
                 return undefined;
             });
 
@@ -369,8 +369,8 @@ describe('SurveyService', () => {
             const eightDaysAgo = now - (8 * 24 * 60 * 60 * 1000);
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return eightDaysAgo;
-                if (key === 'survey.pendingSurvey') return true; // Post-session pending
+                if (key === 'survey.firstUsageDate') {return eightDaysAgo;}
+                if (key === 'survey.pendingSurvey') {return true;} // Post-session pending
                 return undefined;
             });
 
@@ -392,8 +392,8 @@ describe('SurveyService', () => {
             const thirtyOneDaysAgo = now - (31 * 24 * 60 * 60 * 1000);
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return thirtyOneDaysAgo;
-                if (key === 'survey.pendingSurvey') return true; // Post-session pending
+                if (key === 'survey.firstUsageDate') {return thirtyOneDaysAgo;}
+                if (key === 'survey.pendingSurvey') {return true;} // Post-session pending
                 return undefined;
             });
 
@@ -420,7 +420,7 @@ describe('SurveyService', () => {
             const twentyNineDaysAgo = now - (29 * 24 * 60 * 60 * 1000);
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return twentyNineDaysAgo;
+                if (key === 'survey.firstUsageDate') {return twentyNineDaysAgo;}
                 return undefined;
             });
 
@@ -433,7 +433,7 @@ describe('SurveyService', () => {
             const thirtyOneDaysAgo = now - (31 * 24 * 60 * 60 * 1000);
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return thirtyOneDaysAgo;
+                if (key === 'survey.firstUsageDate') {return thirtyOneDaysAgo;}
                 return undefined;
             });
 
@@ -447,8 +447,8 @@ describe('SurveyService', () => {
             const fifteenDaysAgo = now - (15 * 24 * 60 * 60 * 1000);
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return sixtyDaysAgo;
-                if (key === 'survey.nps.lastShown') return fifteenDaysAgo;
+                if (key === 'survey.firstUsageDate') {return sixtyDaysAgo;}
+                if (key === 'survey.nps.lastShown') {return fifteenDaysAgo;}
                 return undefined;
             });
 
@@ -462,8 +462,8 @@ describe('SurveyService', () => {
             const thirtyOneDaysAgo = now - (31 * 24 * 60 * 60 * 1000);
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return sixtyDaysAgo;
-                if (key === 'survey.nps.lastShown') return thirtyOneDaysAgo;
+                if (key === 'survey.firstUsageDate') {return sixtyDaysAgo;}
+                if (key === 'survey.nps.lastShown') {return thirtyOneDaysAgo;}
                 return undefined;
             });
 
@@ -477,8 +477,8 @@ describe('SurveyService', () => {
             const futureTime = now + (12 * 60 * 60 * 1000); // 12 hours from now
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return thirtyOneDaysAgo;
-                if (key === 'survey.nps.snoozedUntil') return futureTime;
+                if (key === 'survey.firstUsageDate') {return thirtyOneDaysAgo;}
+                if (key === 'survey.nps.snoozedUntil') {return futureTime;}
                 return undefined;
             });
 
@@ -492,8 +492,8 @@ describe('SurveyService', () => {
             const pastTime = now - (1 * 60 * 60 * 1000); // 1 hour ago
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return thirtyOneDaysAgo;
-                if (key === 'survey.nps.snoozedUntil') return pastTime;
+                if (key === 'survey.firstUsageDate') {return thirtyOneDaysAgo;}
+                if (key === 'survey.nps.snoozedUntil') {return pastTime;}
                 return undefined;
             });
 
@@ -506,8 +506,8 @@ describe('SurveyService', () => {
             const thirtyOneDaysAgo = now - (31 * 24 * 60 * 60 * 1000);
 
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'survey.firstUsageDate') return thirtyOneDaysAgo;
-                if (key === 'survey.nps.optOut') return true;
+                if (key === 'survey.firstUsageDate') {return thirtyOneDaysAgo;}
+                if (key === 'survey.nps.optOut') {return true;}
                 return undefined;
             });
 

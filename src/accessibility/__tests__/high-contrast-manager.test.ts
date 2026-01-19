@@ -56,8 +56,8 @@ describe('HighContrastManager', () => {
 
         it('should load settings from VSCode configuration', () => {
             mockConfig.get.mockImplementation((key: string) => {
-                if (key === 'highContrast') return null;
-                if (key === 'autoDetectHighContrast') return true;
+                if (key === 'highContrast') {return null;}
+                if (key === 'autoDetectHighContrast') {return true;}
                 return undefined;
             });
 
@@ -90,8 +90,8 @@ describe('HighContrastManager', () => {
     describe('Auto-Detection', () => {
         it('should detect High Contrast theme and enable HC mode', () => {
             mockConfig.get.mockImplementation((key: string) => {
-                if (key === 'highContrast') return null;
-                if (key === 'autoDetectHighContrast') return true;
+                if (key === 'highContrast') {return null;}
+                if (key === 'autoDetectHighContrast') {return true;}
                 return undefined;
             });
 
@@ -111,8 +111,8 @@ describe('HighContrastManager', () => {
 
         it('should not auto-detect when manual override is set', () => {
             mockConfig.get.mockImplementation((key: string) => {
-                if (key === 'highContrast') return true; // Manual override
-                if (key === 'autoDetectHighContrast') return true;
+                if (key === 'highContrast') {return true;} // Manual override
+                if (key === 'autoDetectHighContrast') {return true;}
                 return undefined;
             });
 
@@ -123,8 +123,8 @@ describe('HighContrastManager', () => {
 
         it('should not auto-detect when autoDetectionEnabled is false', () => {
             mockConfig.get.mockImplementation((key: string) => {
-                if (key === 'highContrast') return null;
-                if (key === 'autoDetectHighContrast') return false;
+                if (key === 'highContrast') {return null;}
+                if (key === 'autoDetectHighContrast') {return false;}
                 return undefined;
             });
 
@@ -136,8 +136,8 @@ describe('HighContrastManager', () => {
     describe('Theme Change Handling', () => {
         it('should handle theme changes when auto-detection is enabled', () => {
             mockConfig.get.mockImplementation((key: string) => {
-                if (key === 'highContrast') return null;
-                if (key === 'autoDetectHighContrast') return true;
+                if (key === 'highContrast') {return null;}
+                if (key === 'autoDetectHighContrast') {return true;}
                 return undefined;
             });
 
@@ -154,8 +154,8 @@ describe('HighContrastManager', () => {
 
         it('should not handle theme changes when manual override is set', () => {
             mockConfig.get.mockImplementation((key: string) => {
-                if (key === 'highContrast') return false; // Manual override
-                if (key === 'autoDetectHighContrast') return true;
+                if (key === 'highContrast') {return false;} // Manual override
+                if (key === 'autoDetectHighContrast') {return true;}
                 return undefined;
             });
 

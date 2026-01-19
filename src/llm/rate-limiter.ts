@@ -75,7 +75,7 @@ export class RateLimiter {
     }
 
     private checkWarnings(): void {
-        if (this.hasWarned80) return;
+        if (this.hasWarned80) {return;}
 
         const stats = this.getStats();
         if (stats.tokenPercent >= 80 || stats.costPercent >= 80) {

@@ -32,6 +32,7 @@ import { IAI101API } from './api/extension-api.js';
 import { createAPI } from './api/api-implementation.js';
 import { KnowledgeBaseService } from './troubleshooting/knowledge-base-service.js';
 import { TroubleshootingWebviewProvider } from './troubleshooting/troubleshooting-webview.js';
+import { VersionManager } from './state/version-manager.js';
 import {
 	registerShowTroubleshootingCommand,
 	registerOpenTroubleshootingArticleCommand,
@@ -49,10 +50,14 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 	ErrorHandler.log('Extension "ai-101-ts" activation started.');
 
 	// Check for low memory and auto-activate Performance Mode if needed (Story 5.6)
-	SystemDetector.getInstance().checkAndAutoActivate();
+	if (context.extensionMode !== vscode.ExtensionMode.Test) {
+		SystemDetector.getInstance().checkAndAutoActivate();
+	}
 
 	// Initialize Phase Detector (Story 6.9)
-	PhaseDetector.getInstance().initialize(context);
+	if (context.extensionMode !== vscode.ExtensionMode.Test) {
+		PhaseDetector.getInstance().initialize(context);
+	}
 
 	// Initialize Telemetry
 	const telemetryManager = new TelemetryManager(context);
@@ -64,8 +69,10 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 
 	// Initialize Survey Service (Story 8.4)
 	surveyService = new SurveyService(context);
-	surveyService.startSession(); // Start tracking session
-	surveyService.checkAndPrompt(); // Check for pending surveys from previous session
+	if (context.extensionMode !== vscode.ExtensionMode.Test) {
+		surveyService.startSession(); // Start tracking session
+		surveyService.checkAndPrompt(); // Check for pending surveys from previous session
+	}
 
 	// Initialize Team Metrics and Report Generation (Story 8.8)
 	const teamMetricsService = new TeamMetricsService(context, metricsService, surveyService);
@@ -78,7 +85,7 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 
 	// First-run welcome screen (Story 10.1)
 	const hasShownWelcome = context.globalState.get<boolean>('ai101.hasShownWelcome', false);
-	if (!hasShownWelcome) {
+	if (!hasShownWelcome && context.extensionMode !== vscode.ExtensionMode.Test) {
 		// Show getting started walkthrough on first activation
 		vscode.commands.executeCommand(
 			'workbench.action.openWalkthrough',
@@ -91,6 +98,12 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 			// Silently fail - don't block activation
 			ErrorHandler.log(`Failed to show welcome walkthrough: ${error}`);
 		});
+	}
+
+	// Check for extension updates (Story 10.6)
+	if (context.extensionMode !== vscode.ExtensionMode.Test) {
+		const versionManager = new VersionManager(context);
+		versionManager.checkVersionUpdate();
 	}
 
 	// Initialize Troubleshooting Knowledge Base (Story 10.2)
@@ -319,6 +332,9 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 		}),
 		vscode.commands.registerCommand('ai-101-ts.showGettingStarted', () => {
 			import('./commands/show-getting-started.js').then(module => module.showGettingStartedCommand());
+		}),
+		vscode.commands.registerCommand('ai-101-ts.viewChangelog', () => {
+			import('./commands/view-changelog.js').then(module => module.viewChangelogCommand(context));
 		})
 	);
 

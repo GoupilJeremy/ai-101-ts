@@ -36,7 +36,7 @@ class AlertDetailPanel {
      * Initialize the panel DOM element.
      */
     init() {
-        if (this.panelEl) return;
+        if (this.panelEl) {return;}
 
         this.panelEl = document.createElement('div');
         this.panelEl.id = 'alert-detail-panel';
@@ -89,7 +89,7 @@ class AlertDetailPanel {
      * @param {HTMLElement} targetElement - The element that triggered the panel
      */
     show(alertData, targetElement) {
-        if (!alertData || !targetElement) return;
+        if (!alertData || !targetElement) {return;}
 
         this.currentAlert = alertData;
         this.currentTarget = targetElement;
@@ -110,7 +110,7 @@ class AlertDetailPanel {
      * Hide the panel.
      */
     hide() {
-        if (!this.isVisible) return;
+        if (!this.isVisible) {return;}
 
         this.isVisible = false;
 
@@ -128,7 +128,7 @@ class AlertDetailPanel {
      * Render the panel content.
      */
     render() {
-        if (!this.currentAlert) return;
+        if (!this.currentAlert) {return;}
 
         const { id, severity, message, reasoning, codeSnippet, fix } = this.currentAlert;
 
@@ -248,13 +248,13 @@ class AlertDetailPanel {
             'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
 
-        if (focusableElements.length === 0) return;
+        if (focusableElements.length === 0) {return;}
 
         const firstElement = focusableElements[0];
         const lastElement = focusableElements[focusableElements.length - 1];
 
         this.panelEl.addEventListener('keydown', (e) => {
-            if (e.key !== 'Tab') return;
+            if (e.key !== 'Tab') {return;}
 
             if (e.shiftKey) {
                 // Shift + Tab
@@ -281,7 +281,7 @@ class AlertDetailPanel {
      * Handle Apply Fix button click.
      */
     handleApplyFix() {
-        if (!this.currentAlert || !window.vscode) return;
+        if (!this.currentAlert || !window.vscode) {return;}
 
         // Send message to extension
         window.vscode.postMessage({
@@ -302,7 +302,7 @@ class AlertDetailPanel {
      * Handle Explain More button click.
      */
     handleExplainMore() {
-        if (!this.currentAlert || !window.vscode) return;
+        if (!this.currentAlert || !window.vscode) {return;}
 
         // Send message to extension
         window.vscode.postMessage({
@@ -323,7 +323,7 @@ class AlertDetailPanel {
      * Implements anti-collision and viewport boundary respect.
      */
     position() {
-        if (!this.currentTarget) return;
+        if (!this.currentTarget) {return;}
 
         const targetRect = this.currentTarget.getBoundingClientRect();
         const panelRect = this.panelEl.getBoundingClientRect();

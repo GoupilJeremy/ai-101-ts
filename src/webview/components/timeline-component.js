@@ -16,10 +16,10 @@ class TimelineComponent {
     }
 
     init() {
-        if (typeof document === 'undefined') return;
+        if (typeof document === 'undefined') {return;}
 
         const container = document.getElementById(this.containerId);
-        if (!container) return;
+        if (!container) {return;}
 
         // Create the timeline panel
         this.element = document.createElement('div');
@@ -82,7 +82,7 @@ class TimelineComponent {
     }
 
     render() {
-        if (!this.listElement) return;
+        if (!this.listElement) {return;}
         this.listElement.innerHTML = '';
 
         if (this.history.length === 0) {

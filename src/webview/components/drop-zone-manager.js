@@ -15,7 +15,7 @@ class DropZoneManager {
      * @param {Document} doc - The document object (default to global document)
      */
     render(doc = document) {
-        if (!this.container) return;
+        if (!this.container) {return;}
 
         // Create Container for zones if not already present
         let zonesContainer = doc.getElementById('drop-zones-container');

@@ -33,7 +33,7 @@ export class TelemetryManager {
      * Tracks whether a suggestion was accepted or rejected.
      */
     public trackAcceptance(accepted: boolean, metadata?: any): void {
-        if (!this.enabled) return;
+        if (!this.enabled) {return;}
 
         // Mock analytics logging (Console only for this task)
         const timestamp = new Date().toISOString();
@@ -45,7 +45,7 @@ export class TelemetryManager {
      * Tracks general usage events.
      */
     public trackEvent(eventName: string, metadata?: any): void {
-        if (!this.enabled) return;
+        if (!this.enabled) {return;}
         console.log(`[TELEMETRY] Event: ${eventName}`, metadata || '');
     }
 }

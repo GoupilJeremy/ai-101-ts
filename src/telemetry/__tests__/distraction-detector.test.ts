@@ -75,8 +75,8 @@ describe('DistractionDetectorService', () => {
 
         it('should trigger distraction help after 3 quick closes', async () => {
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'distraction.quickCloseCount') return 2;
-                if (key === 'distraction.suppressHelp') return false;
+                if (key === 'distraction.quickCloseCount') {return 2;}
+                if (key === 'distraction.suppressHelp') {return false;}
                 return undefined;
             });
 
@@ -104,9 +104,9 @@ describe('DistractionDetectorService', () => {
     describe('Focus Mode Usage Detection', () => {
         it('should track focus mode activation and check thresholds', async () => {
             (mockContext.globalState.get as any).mockImplementation((key: string) => {
-                if (key === 'distraction.focusSessions') return 2;
-                if (key === 'distraction.totalSessions') return 4;
-                if (key === 'distraction.suppressHelp') return false;
+                if (key === 'distraction.focusSessions') {return 2;}
+                if (key === 'distraction.totalSessions') {return 4;}
+                if (key === 'distraction.suppressHelp') {return false;}
                 return undefined;
             });
 

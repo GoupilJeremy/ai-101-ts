@@ -18,14 +18,14 @@ class ContextPanel {
      * Render the context panel in the DOM
      */
     render(doc) {
-        if (!doc) doc = typeof document !== 'undefined' ? document : null;
-        if (!doc) return;
+        if (!doc) {doc = typeof document !== 'undefined' ? document : null;}
+        if (!doc) {return;}
 
         // Store document reference for internal use
         this.document = doc;
 
         const container = doc.getElementById(this.containerId);
-        if (!container) return;
+        if (!container) {return;}
 
         // Create main panel element
         this.element = doc.createElement('div');
@@ -107,12 +107,12 @@ class ContextPanel {
      */
     updateDisplay(doc) {
         // Use passed doc, or stored doc, or global document
-        if (!doc) doc = this.document || (typeof document !== 'undefined' ? document : null);
-        if (!doc) return;
-        if (!this.element) return;
+        if (!doc) {doc = this.document || (typeof document !== 'undefined' ? document : null);}
+        if (!doc) {return;}
+        if (!this.element) {return;}
 
         const fileList = this.element.querySelector('.context-panel__file-list');
-        if (!fileList) return;
+        if (!fileList) {return;}
 
         // Clear existing content
         fileList.innerHTML = '';
@@ -227,11 +227,11 @@ class ContextPanel {
         const diff = now - timestamp;
         const minutes = Math.floor(diff / 60000);
 
-        if (minutes < 1) return 'just now';
-        if (minutes < 60) return `${minutes}m ago`;
+        if (minutes < 1) {return 'just now';}
+        if (minutes < 60) {return `${minutes}m ago`;}
 
         const hours = Math.floor(minutes / 60);
-        if (hours < 24) return `${hours}h ago`;
+        if (hours < 24) {return `${hours}h ago`;}
 
         const days = Math.floor(hours / 24);
         return `${days}d ago`;
@@ -250,13 +250,13 @@ class ContextPanel {
             if (this.isExpanded) {
                 this.element.classList.remove('context-panel--collapsed');
                 this.element.classList.add('context-panel--expanded');
-                if (toggleButton) toggleButton.textContent = '▲';
-                if (fileList) fileList.style.display = 'block';
+                if (toggleButton) {toggleButton.textContent = '▲';}
+                if (fileList) {fileList.style.display = 'block';}
             } else {
                 this.element.classList.remove('context-panel--expanded');
                 this.element.classList.add('context-panel--collapsed');
-                if (toggleButton) toggleButton.textContent = '▼';
-                if (fileList) fileList.style.display = 'none';
+                if (toggleButton) {toggleButton.textContent = '▼';}
+                if (fileList) {fileList.style.display = 'none';}
             }
         }
     }

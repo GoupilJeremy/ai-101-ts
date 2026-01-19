@@ -12,7 +12,7 @@ class AlertComponent {
     }
 
     render(doc = document) {
-        if (!this.container) return;
+        if (!this.container) { return; }
 
         this.element = doc.getElementById(`alert-${this.alert.id}`);
         if (!this.element) {
@@ -33,6 +33,10 @@ class AlertComponent {
         this.element.setAttribute('role', 'alert');
         this.element.setAttribute('aria-label', `Alert: ${this.alert.message}`);
         this.element.setAttribute('tabindex', '0');
+
+        // Tooltip support - map severity to tooltip ID
+        const tooltipId = `alert-${this.alert.severity}`;
+        this.element.setAttribute('data-tooltip-id', tooltipId);
 
         let messageToDisplay = this.alert.message;
         const verbosity = this.options.verbosity || 'high';

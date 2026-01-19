@@ -72,8 +72,18 @@ function initializeComponents() {
     dropZoneManager = new DropZoneManager('hud-container');
     dropZoneManager.render();
 
-    // Initialize Tooltip Manager
+    // Initialize Tooltip Manager and sync with current mode
     tooltipManager = TooltipManager.getInstance();
+    // Fix race condition: Sync TooltipManager with current mode on init
+    if (currentMode) {
+        let tooltipMode = 'default';
+        if (currentMode === 'learning') {
+            tooltipMode = 'learning';
+        } else if (currentMode === 'expert') {
+            tooltipMode = 'expert';
+        }
+        tooltipManager.setMode(tooltipMode);
+    }
 
     // Initialize Alert Detail Panel
     const alertDetailPanel = AlertDetailPanel.getInstance();
@@ -196,9 +206,9 @@ function applyUpdate(update: any) {
             Object.entries(update.states).forEach(([agent, state]: any) => {
                 executeUpdateAgentHUD(agent, state);
             });
-            if (update.metrics) executeUpdateMetricsUI(update.metrics);
-            if (update.phase) executeUpdatePhaseUI(update.phase);
-            if (update.alerts) update.alerts.forEach((alert: any) => executeRenderAlert(alert));
+            if (update.metrics) { executeUpdateMetricsUI(update.metrics); }
+            if (update.phase) { executeUpdatePhaseUI(update.phase); }
+            if (update.alerts) { update.alerts.forEach((alert: any) => executeRenderAlert(alert)); }
             if (update.history && timelineComponent) {
                 timelineComponent.updateHistory(update.history);
             }
@@ -212,6 +222,18 @@ function applyModeUpdate(mode: string, config: any) {
     // Track current mode and verbosity for condensed rendering (Expert Mode)
     currentMode = mode;
     currentVerbosity = config.explanationVerbositiy || 'high';
+
+    // Sync mode with TooltipManager for mode-aware content
+    if (tooltipManager) {
+        // Map mode to tooltip content mode
+        let tooltipMode = 'default';
+        if (mode === 'learning') {
+            tooltipMode = 'learning';
+        } else if (mode === 'expert') {
+            tooltipMode = 'expert';
+        }
+        tooltipManager.setMode(tooltipMode);
+    }
 
     // Performance Mode: Apply additional optimizations
     if (mode === 'performance') {
@@ -255,8 +277,9 @@ function applyModeUpdate(mode: string, config: any) {
         metricsEl.setAttribute('data-mode', mode);
     }
 
-    console.log(`AI-101 Webview: Mode=${mode}, Verbosity=${currentVerbosity}, HUD Opacity=${config.hudOpacity}`);
+    console.log(`AI-101 Webview: Mode=${mode}, Verbosity=${currentVerbosity}, HUD Opacity=${config.hudOpacity}, TooltipMode=${tooltipManager ? tooltipManager.currentMode : 'not initialized'}`);
 }
+
 
 // Focus Manager for keyboard navigation
 let focusManager: any;
@@ -288,7 +311,7 @@ function handleGlobalHotkeys(event: KeyboardEvent) {
         const suggestionEl = document.querySelector('.suggestion-card:not(.suggestion-card--accepted):not(.suggestion-card--rejected)') as HTMLElement;
         if (suggestionEl) {
             const acceptBtn = suggestionEl.querySelector('.suggestion-card__btn--accept') as HTMLButtonElement;
-            if (acceptBtn) acceptBtn.click();
+            if (acceptBtn) { acceptBtn.click(); }
         }
     } else if (cmdOrCtrl && (event.key === 'Backspace' || (isMac && event.key === 'Delete'))) {
         event.preventDefault();
@@ -296,7 +319,7 @@ function handleGlobalHotkeys(event: KeyboardEvent) {
         const suggestionEl = document.querySelector('.suggestion-card:not(.suggestion-card--accepted):not(.suggestion-card--rejected)') as HTMLElement;
         if (suggestionEl) {
             const rejectBtn = suggestionEl.querySelector('.suggestion-card__btn--reject') as HTMLButtonElement;
-            if (rejectBtn) rejectBtn.click();
+            if (rejectBtn) { rejectBtn.click(); }
         }
     }
 }
@@ -715,7 +738,7 @@ let currentAnnotations: any[] = [];
  * Render a single annotation in the annotation panel
  */
 function renderAnnotation(annotation: any): void {
-    if (currentMode !== 'team') return;
+    if (currentMode !== 'team') { return; }
 
     currentAnnotations.push(annotation);
 
@@ -736,7 +759,7 @@ function renderAnnotation(annotation: any): void {
  * Update all annotations display
  */
 function updateAnnotationsDisplay(annotations: any[]): void {
-    if (currentMode !== 'team') return;
+    if (currentMode !== 'team') { return; }
 
     currentAnnotations = annotations;
 
@@ -797,11 +820,11 @@ function showAddCommentDialog(suggestionId: string): void {
  * Add "Add Comment" button to alert elements (suggestions) in Team Mode
  */
 function addCommentButtonToAlerts(): void {
-    if (currentMode !== 'team') return;
+    if (currentMode !== 'team') { return; }
 
     const alerts = document.querySelectorAll('.alert-component');
     alerts.forEach((alertEl: any) => {
-        if (alertEl.querySelector('.add-comment-btn')) return; // Already has button
+        if (alertEl.querySelector('.add-comment-btn')) { return; } // Already has button
 
         const btn = document.createElement('button');
         btn.className = 'add-comment-btn';
@@ -872,7 +895,7 @@ function doUpdateMetricsUI(metrics: any) {
 
 function executeUpdateAgentHUD(agent: string, state: any) {
     const hud = document.getElementById('agent-hud');
-    if (!hud) return;
+    if (!hud) { return; }
 
     let agentComponent = agentComponents.get(agent);
     if (!agentComponent) {
@@ -926,8 +949,8 @@ function executeUpdateAgentHUD(agent: string, state: any) {
         const totalLines = end - start;
         const relativePos = (state.anchorLine - start) / Math.max(1, totalLines);
         targetTop = relativePos * 100;
-        if (targetTop < 5) targetTop = 5;
-        if (targetTop > 95) targetTop = 95;
+        if (targetTop < 5) { targetTop = 5; }
+        if (targetTop > 95) { targetTop = 95; }
     }
 
     agentEl.style.left = `${positions[agent]?.left || 10}%`;
@@ -1011,7 +1034,7 @@ function repositionAgents() {
 }
 
 function repositionAlerts() {
-    if (!currentViewport) return;
+    if (!currentViewport) { return; }
     const alerts = document.querySelectorAll('.alert-component');
     alerts.forEach((el: any) => {
         const anchorLine = parseInt(el.dataset.anchorLine);
@@ -1019,8 +1042,8 @@ function repositionAlerts() {
             const { start, end } = currentViewport;
             const totalLines = end - start;
             let relativePos = (anchorLine - start) / Math.max(1, totalLines);
-            if (relativePos < 0.05) relativePos = 0.05;
-            if (relativePos > 0.95) relativePos = 0.95;
+            if (relativePos < 0.05) { relativePos = 0.05; }
+            if (relativePos > 0.95) { relativePos = 0.95; }
 
             const targetY = relativePos * window.innerHeight;
             el.style.transform = `translate3d(0, ${targetY}px, 0)`;
@@ -1032,7 +1055,7 @@ function executeRenderAlert(alert: any) {
     // Story 7.1: Specialized Suggestion Rendering
     if (alert.type === 'suggestion' || (alert.data && alert.data.type === 'suggestion')) {
         const hud = document.getElementById('agent-hud');
-        if (!hud) return;
+        if (!hud) { return; }
 
         // Force cleanup of existing suggestion if new one arrives?
         // For now, let's keep it simple.
@@ -1072,7 +1095,7 @@ function executeRenderAlert(alert: any) {
 
     // Normal/Expert Mode: Render as standard alert
     const hud = document.getElementById('agent-hud');
-    if (!hud) return;
+    if (!hud) { return; }
 
     const alertComponent = new AlertComponent(hud, alert, {
         verbosity: currentVerbosity,

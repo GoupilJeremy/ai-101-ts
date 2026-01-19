@@ -122,10 +122,10 @@ If no issues are found, return empty arrays.`;
                 if (jsonStart !== -1 && jsonEnd !== -1) {
                     const jsonStr = text.substring(jsonStart, jsonEnd + 1);
                     const parsed = JSON.parse(jsonStr);
-                    if (parsed.status) reviewerResult = parsed;
+                    if (parsed.status) {reviewerResult = parsed;}
                 } else {
                     const statusMatch = text.match(/\[STATUS\]([\s\S]*?)\[RISKS\]/);
-                    if (statusMatch) reviewerResult.status = statusMatch[1].trim() as any;
+                    if (statusMatch) {reviewerResult.status = statusMatch[1].trim() as any;}
                 }
             } catch (e) {
                 console.warn('Failed to parse Reviewer JSON:', e);
@@ -133,8 +133,8 @@ If no issues are found, return empty arrays.`;
             }
 
             // Ensure arrays exist if parsing failed or partial
-            if (!reviewerResult.edgeCases) reviewerResult.edgeCases = [];
-            if (!reviewerResult.securityIssues) reviewerResult.securityIssues = [];
+            if (!reviewerResult.edgeCases) {reviewerResult.edgeCases = [];}
+            if (!reviewerResult.securityIssues) {reviewerResult.securityIssues = [];}
 
             const isFail = reviewerResult.status === 'FAIL' ||
                 reviewerResult.risks.length > 20 ||

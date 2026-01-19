@@ -186,10 +186,10 @@ export class LLMProviderManager {
 
         for (const providerName of fallbackOrder) {
             // Skip if already attempted
-            if (attempted.includes(providerName)) continue;
+            if (attempted.includes(providerName)) {continue;}
 
             const provider = this.getProvider(providerName);
-            if (!provider) continue;
+            if (!provider) {continue;}
 
             // Check availability before call
             if (!(await provider.isAvailable())) {

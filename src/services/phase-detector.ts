@@ -120,8 +120,8 @@ export class PhaseDetector {
         for (let i = 0; i < 3; i++) {
             const n1 = parts1[i] || 0;
             const n2 = parts2[i] || 0;
-            if (n1 > n2) return true;
-            if (n1 < n2) return false;
+            if (n1 > n2) {return true;}
+            if (n1 < n2) {return false;}
         }
         return true;
     }

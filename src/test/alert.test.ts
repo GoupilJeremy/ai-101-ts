@@ -41,7 +41,9 @@ describe('Alert Commands', () => {
             id: 'test-1',
             severity: 'critical' as any,
             message: 'Problem found',
-            anchorLine: 5
+            anchorLine: 5,
+            agent: 'reviewer',
+            timestamp: Date.now()
         };
         stateManager.addAlert(testAlert);
 
@@ -60,7 +62,9 @@ describe('Alert Commands', () => {
         const testAlert = {
             id: 'test-2',
             severity: 'warning' as any,
-            message: 'Minor issue'
+            message: 'Minor issue',
+            agent: 'reviewer',
+            timestamp: Date.now()
         };
         stateManager.addAlert(testAlert);
 

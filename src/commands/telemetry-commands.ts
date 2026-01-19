@@ -21,7 +21,7 @@ export function registerTelemetryCommands(context: vscode.ExtensionContext, tele
             placeHolder: `Telemetry is currently: ${currentStatus}`
         });
 
-        if (!selection) return;
+        if (!selection) {return;}
 
         switch (selection.action) {
             case 'enable':

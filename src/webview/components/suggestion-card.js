@@ -15,7 +15,7 @@ class SuggestionCard {
      * Render the suggestion card
      */
     render() {
-        if (!this.container) return;
+        if (!this.container) {return;}
 
         this.element = document.createElement('div');
         this.element.id = `alert-${this.suggestion.id}`;

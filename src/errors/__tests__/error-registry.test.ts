@@ -9,7 +9,7 @@ vi.mock('vscode', () => ({
     workspace: {
         getConfiguration: vi.fn(() => ({
             get: vi.fn((key) => {
-                if (key === 'errors.openLinksIn') return 'SimpleBrowser';
+                if (key === 'errors.openLinksIn') {return 'SimpleBrowser';}
                 return undefined;
             })
         }))

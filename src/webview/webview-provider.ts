@@ -95,13 +95,18 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
                 await this.handleExplainAlert(message.alertId);
                 break;
 
+            // Glossary/Documentation
+            case 'toExtension:openGlossary':
+                await this.handleOpenGlossary(message.term);
+                break;
+
             default:
                 console.warn('Unknown message type from webview:', type);
         }
     }
 
     private async openFileInEditor(filePath: string): Promise<void> {
-        if (!filePath) return;
+        if (!filePath) { return; }
         try {
             const uri = vscode.Uri.file(filePath);
             const doc = await vscode.workspace.openTextDocument(uri);
@@ -255,6 +260,56 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         }
     }
 
+    /**
+     * Handle opening glossary/documentation for a term clicked in a tooltip.
+     * @param term - The glossary term to look up
+     */
+    private async handleOpenGlossary(term: string): Promise<void> {
+        if (!term) {
+            return;
+        }
+
+        // Map glossary terms to documentation or knowledge base articles
+        const glossaryUrls: Record<string, string> = {
+            'context': 'https://ai-101.dev/docs/concepts/context',
+            'token-budget': 'https://ai-101.dev/docs/concepts/tokens',
+            'tokens': 'https://ai-101.dev/docs/concepts/tokens',
+            'architecture': 'https://ai-101.dev/docs/concepts/architecture',
+            'design-patterns': 'https://ai-101.dev/docs/concepts/patterns',
+            'code-generation': 'https://ai-101.dev/docs/concepts/code-generation',
+            'llm-provider': 'https://ai-101.dev/docs/concepts/llm-providers',
+            'code-review': 'https://ai-101.dev/docs/concepts/code-review',
+            'security': 'https://ai-101.dev/docs/concepts/security',
+            'edge-cases': 'https://ai-101.dev/docs/concepts/edge-cases',
+            'cost-tracking': 'https://ai-101.dev/docs/concepts/costs',
+            'budget': 'https://ai-101.dev/docs/concepts/budget',
+            'development-phase': 'https://ai-101.dev/docs/concepts/phases',
+            'user-modes': 'https://ai-101.dev/docs/concepts/modes',
+            'focus-mode': 'https://ai-101.dev/docs/concepts/focus-mode',
+            'team-mode': 'https://ai-101.dev/docs/concepts/team-mode',
+            'alert-system': 'https://ai-101.dev/docs/concepts/alerts',
+            'severity-levels': 'https://ai-101.dev/docs/concepts/severity',
+            'code-smells': 'https://ai-101.dev/docs/concepts/code-smells',
+        };
+
+        const url = glossaryUrls[term];
+
+        if (url) {
+            // Open the documentation URL in external browser
+            vscode.env.openExternal(vscode.Uri.parse(url));
+        } else {
+            // Try to open knowledge base view if term not in URL map
+            try {
+                await vscode.commands.executeCommand('ai-101-ts.openKnowledgeBase', { searchTerm: term });
+            } catch (e) {
+                // Fallback: Show information message with the term
+                vscode.window.showInformationMessage(
+                    `Glossary term: "${term}". Documentation coming soon!`
+                );
+            }
+        }
+    }
+
     private handleConfigurationChange(event: vscode.ConfigurationChangeEvent): void {
         if (event.affectsConfiguration('ai101.teamMode.largeText')) {
             const config = vscode.workspace.getConfiguration('ai101.teamMode');
@@ -315,7 +370,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
     }
 
     private sendAnnotationsToWebview(suggestionId?: string): void {
-        if (!this._view) return;
+        if (!this._view) { return; }
 
         const annotationsManager = AnnotationsManager.getInstance();
         const annotations = suggestionId
