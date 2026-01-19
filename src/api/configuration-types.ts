@@ -74,7 +74,27 @@ export interface IKeyboardShortcuts {
  * Comprehensive interface for all AI-101 configuration settings.
  * This represents the internal schema of settings under the 'ai101' namespace.
  * Keys match the property names in package.json (without the 'ai101.' prefix).
+ * 
  * @public
+ * @category Configuration
+ * @since 0.0.1
+ * 
+ * @example
+ * ```typescript
+ * // Get configuration values
+ * const currentMode = api.getConfig('ui.mode');
+ * const maxTokens = api.getConfig('performance.maxTokens');
+ * 
+ * // Set a single configuration value
+ * await api.setConfig('ui.mode', UIMode.Expert, 'user');
+ * 
+ * // Update multiple configuration values at once
+ * await api.updateConfig({
+ *   'ui.mode': UIMode.Learning,
+ *   'ui.transparency': UITransparency.Medium,
+ *   'telemetry.enabled': true
+ * }, 'workspace');
+ * ```
  */
 export interface IAI101Config {
     'llm.provider': LLMProvider | string;

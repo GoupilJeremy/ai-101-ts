@@ -1,7 +1,12 @@
 {
     "$schema": "https://typedoc.org/schema.json",
     "entryPoints": [
-        "./src/llm/provider.interface.ts"
+        "./src/api/index.ts",
+        "./src/api/extension-api.ts",
+        "./src/api/events.ts",
+        "./src/api/configuration-types.ts",
+        "./src/llm/provider.interface.ts",
+        "./src/ui/renderer.interface.ts"
     ],
     "out": "./docs/api",
     "plugin": [],
@@ -22,13 +27,17 @@
     "categorizeByGroup": true,
     "defaultCategory": "Other",
     "categoryOrder": [
+        "LLM Providers",
+        "Agent Renderers",
+        "Events",
+        "Configuration",
         "Public API",
         "*"
     ],
     "searchInComments": true,
     "cleanOutputDir": true,
     "gitRevision": "main",
-    "githubPages": false,
+    "githubPages": true,
     "hideGenerator": false,
     "visibilityFilters": {
         "protected": false,

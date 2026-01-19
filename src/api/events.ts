@@ -56,7 +56,28 @@ export interface ISuggestionLifecycleEvent extends ILifecycleEvent {
  * Map of all supported event names to their payload types.
  * 
  * @public
+ * @category Events
  * @since 0.0.1
+ * 
+ * @example
+ * ```typescript
+ * // Subscribe to agent activation events
+ * const unsubscribe = api.on('agentActivated', (event) => {
+ *   console.log(`Agent ${event.agent} activated at ${new Date(event.timestamp)}`);
+ * });
+ * 
+ * // Subscribe to suggestion events
+ * api.on('suggestionGenerated', (event) => {
+ *   console.log(`New suggestion from ${event.agent}: ${event.code}`);
+ * });
+ * 
+ * api.on('suggestionAccepted', (event) => {
+ *   console.log(`User accepted suggestion ${event.id}`);
+ * });
+ * 
+ * // Clean up when done
+ * unsubscribe();
+ * ```
  */
 export interface AI101Events {
     /** Triggered when an agent starts working or thinking */
