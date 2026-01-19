@@ -56,9 +56,9 @@ so that I can learn the interface without consulting external documentation.
   - [x] Implement logic to detect links in tooltip content.
   - [x] Handle clicks to open external documentation or internal glossary view (via `vscode.postMessage`).
 
-- [ ] **Task 6: Tests** (AC: 12)
+- [x] **Task 6: Tests** (AC: 12)
   - [x] Write unit tests for `TooltipManager` logic (timers, positioning).
-  - [ ] Verify content loading for different modes.
+  - [x] Verify content loading for different modes.
 
 ## Dev Notes
 
@@ -135,6 +135,7 @@ so that I can learn the interface without consulting external documentation.
 
 ### File List
 - `src/webview/components/tooltip-manager.js` (enhanced)
+- `src/webview/styles/components/tooltip.css` (created)
 - `src/webview/data/tooltips.ts` (created)
 - `src/webview/data/__tests__/tooltips.test.ts` (created)
 - `src/webview/components/vital-signs-bar.js` (updated)

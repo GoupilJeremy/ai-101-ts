@@ -599,73 +599,7 @@ body {
     transform: scale(0.95);
 }
 
-/* Tooltip Component (Story 7.4) */
-.tooltip {
-    background-color: var(--washi-white);
-    border: 1px solid var(--sumi-ink);
-    border-radius: 2px;
-    padding: 10px 14px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    max-width: 280px;
-    pointer-events: none;
-    transition: opacity 0.2s ease-in-out;
-    z-index: 10000;
-    font-family: var(--brush-font, 'Outfit', 'Inter', sans-serif);
-    color: var(--sumi-ink);
-    line-height: 1.5;
-    backdrop-filter: blur(8px);
-}
-
-.tooltip__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(26, 26, 26, 0.1);
-    padding-bottom: 4px;
-    margin-bottom: 6px;
-}
-
-.tooltip__agent-name {
-    font-weight: 700;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-.tooltip__state {
-    font-size: 9px;
-    padding: 2px 5px;
-    border-radius: 2px;
-    background-color: rgba(26, 26, 26, 0.05);
-    text-transform: uppercase;
-    font-weight: 500;
-}
-
-.tooltip__task-desc {
-    font-size: 11px;
-    font-weight: 400;
-    margin-bottom: 8px;
-    color: rgba(26, 26, 26, 0.9);
-}
-
-.tooltip__reason {
-    font-size: 10px;
-    font-style: italic;
-    opacity: 0.8;
-    margin-bottom: 8px;
-    border-left: 2px solid var(--sumi-accent);
-    padding-left: 8px;
-}
-
-.tooltip__footer {
-    display: flex;
-    justify-content: space-between;
-    font-size: 9px;
-    opacity: 0.6;
-    margin-top: 4px;
-    padding-top: 4px;
-    border-top: 1px dashed rgba(26, 26, 26, 0.1);
-}
+/* Tooltip Component moved to styles/components/tooltip.css */
 
 /* Alert Detail Panel (Story 7.5) */
 .alert-panel {

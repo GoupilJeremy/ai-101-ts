@@ -38,22 +38,8 @@ class AlertComponent {
         const tooltipId = `alert-${this.alert.severity}`;
         this.element.setAttribute('data-tooltip-id', tooltipId);
 
-        let messageToDisplay = this.alert.message;
-        const verbosity = this.options.verbosity || 'high';
-
-        if (verbosity === 'low') {
-            messageToDisplay = messageToDisplay
-                .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">🔗</a>')
-                .replace(/\n/g, '<br/>');
-        } else {
-            messageToDisplay = messageToDisplay
-                .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>')
-                .replace(/\n/g, '<br/>');
-        }
-
         this.element.innerHTML = `
             <div class="alert-icon-ideogram">${icons[this.alert.severity] || '❗'}</div>
-            <div class="alert-tooltip">${messageToDisplay}</div>
         `;
 
         if (this.alert.data && this.alert.data.fix) {

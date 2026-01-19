@@ -66,7 +66,7 @@ describe('TooltipManager', () => {
         // Ensure showTimeout is set
         expect(manager.showTimeout).toBeDefined();
 
-        vi.advanceTimersByTime(500);
+        vi.advanceTimersByTime(510);
 
         const tooltip = document.getElementById('hud-tooltip');
         expect(tooltip.innerHTML).toBe(content);
@@ -80,13 +80,13 @@ describe('TooltipManager', () => {
 
         vi.useFakeTimers();
         manager.show(target, 'content');
-        vi.advanceTimersByTime(500);
+        vi.advanceTimersByTime(510);
 
         manager.hide();
         // Ensure hideTimeout is set
         expect(manager.hideTimeout).toBeDefined();
 
-        vi.advanceTimersByTime(200);
+        vi.advanceTimersByTime(210);
         const tooltip = document.getElementById('hud-tooltip');
         expect(tooltip.style.opacity).toBe('0');
         vi.useRealTimers();
@@ -101,7 +101,7 @@ describe('TooltipManager', () => {
 
         vi.useFakeTimers();
         manager.show(target, 'content');
-        vi.advanceTimersByTime(500);
+        vi.advanceTimersByTime(510);
 
         const tooltip = document.getElementById('hud-tooltip');
         // Default position is target.right + padding

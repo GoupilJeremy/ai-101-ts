@@ -1,0 +1,126 @@
+/* Tooltip Component (Story 7.4 + Story 10.7) */
+.tooltip {
+    background-color: var(--washi-white);
+    border: 1px solid var(--sumi-ink);
+    border-radius: 2px;
+    padding: 10px 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    max-width: 280px;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 10000;
+    font-family: var(--brush-font, 'Outfit', 'Inter', sans-serif);
+    color: var(--sumi-ink);
+    line-height: 1.5;
+    backdrop-filter: blur(8px);
+}
+
+.tooltip__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+}
+
+.tooltip__agent-name {
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.tooltip__state {
+    font-size: 9px;
+    padding: 2px 5px;
+    border-radius: 2px;
+    background-color: rgba(26, 26, 26, 0.05);
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.tooltip__task-desc {
+    font-size: 11px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    color: rgba(26, 26, 26, 0.9);
+}
+
+.tooltip__reason {
+    font-size: 10px;
+    font-style: italic;
+    opacity: 0.8;
+    margin-bottom: 8px;
+    border-left: 2px solid var(--sumi-accent);
+    padding-left: 8px;
+}
+
+.tooltip__footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    opacity: 0.6;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px dashed rgba(26, 26, 26, 0.1);
+}
+
+/* Tooltip Extras for Contextual Help */
+.tooltip__title {
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--sumi-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tooltip__description {
+    font-size: 11px;
+    margin-top: 4px;
+    color: var(--sumi-ink);
+}
+
+.tooltip__when-to-use {
+    margin-top: 8px;
+    font-size: 10px;
+    font-style: italic;
+    color: var(--sumi-ink);
+    opacity: 0.8;
+    padding-left: 6px;
+    border-left: 2px solid var(--sumi-accent);
+}
+
+.tooltip__shortcuts {
+    margin-top: 8px;
+    font-size: 10px;
+    color: var(--sumi-ink);
+    opacity: 0.9;
+}
+
+.tooltip__shortcut {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 1px 4px;
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    font-family: monospace;
+    font-size: 9px;
+}
+
+.tooltip__glossary {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px dotted rgba(0, 0, 0, 0.1);
+}
+
+.tooltip__link {
+    color: var(--sumi-accent);
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.tooltip__link:hover {
+    text-decoration: underline;
+}

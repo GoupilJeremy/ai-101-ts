@@ -68,35 +68,7 @@
     z-index: 10;
 }
 
-.alert-component:hover {
-    transform: scale(1.2);
-    opacity: 1;
-}
-
-.alert-component:hover .alert-tooltip {
-    display: block;
-}
-
-.alert-tooltip {
-    display: none;
-    position: absolute;
-    right: 35px;
-    background-color: var(--sumi-ink);
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 11px;
-    width: 200px;
-    white-space: normal;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    z-index: 20;
-    pointer-events: auto;
-}
-
-.alert-tooltip a {
-    color: #3498db;
-    text-decoration: underline;
-}
+/* Alert tooltip removed - using global TooltipManager instead */
 
 .alert-urgent {
     border-color: var(--sumi-accent);
