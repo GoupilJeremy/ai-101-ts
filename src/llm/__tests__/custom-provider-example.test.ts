@@ -233,16 +233,22 @@ describe('MyCustomLLMProvider Example', () => {
         });
 
         it('should handle timeout', async () => {
-            (global.fetch as any).mockImplementationOnce(() =>
-                new Promise((resolve) => {
-                    // Never resolve to simulate timeout
+            (global.fetch as any).mockImplementationOnce((url: string, options: any) =>
+                new Promise((resolve, reject) => {
+                    if (options?.signal) {
+                        options.signal.addEventListener('abort', () => {
+                            const error = new Error('The operation was aborted');
+                            error.name = 'AbortError';
+                            reject(error);
+                        });
+                    }
                 })
             );
 
             await expect(
                 provider.generateCompletion('Test', { timeout: 100 })
-            ).rejects.toThrow(/timeout/i);
-        }, 10000); // Increase test timeout
+            ).rejects.toThrow(/timed out/i);
+        });
 
         it('should use default options when not provided', async () => {
             const mockResponse = {
@@ -299,32 +305,38 @@ describe('MyCustomLLMProvider Example', () => {
         });
 
         it('should timeout health check after 5 seconds', async () => {
-            (global.fetch as any).mockImplementationOnce(() =>
-                new Promise((resolve) => {
-                    // Simulate slow response
-                    setTimeout(() => resolve({ ok: true }), 10000);
+            (global.fetch as any).mockImplementationOnce((url: string, options: any) =>
+                new Promise((resolve, reject) => {
+                    if (options?.signal) {
+                        options.signal.addEventListener('abort', () => {
+                            const error = new Error('The operation was aborted');
+                            error.name = 'AbortError';
+                            reject(error);
+                        });
+                    }
                 })
             );
 
             const available = await provider.isAvailable();
-            expect(typeof available).toBe('boolean');
+            expect(available).toBe(false);
         }, 10000);
     });
 
     describe('LLMProviderError', () => {
         it('should create error with message and code', () => {
-            const error = new LLMProviderError('Test error', 'TEST_CODE');
+            const error = new LLMProviderError('Test error', 'AI101-LLM-001', false, { provider: 'test' });
 
             expect(error).toBeInstanceOf(Error);
             expect(error.message).toBe('Test error');
-            expect(error.code).toBe('TEST_CODE');
+            expect(error.code).toBe('AI101-LLM-001');
             expect(error.name).toBe('LLMProviderError');
+            expect(error.data.provider).toBe('test');
         });
 
-        it('should create error with status code', () => {
-            const error = new LLMProviderError('HTTP error', 'HTTP_ERROR', 500);
+        it('should create error with transient flag', () => {
+            const error = new LLMProviderError('HTTP error', 'AI101-LLM-001', true);
 
-            expect(error.statusCode).toBe(500);
+            expect(error.isTransient).toBe(true);
         });
 
         it('should be catchable as Error', () => {

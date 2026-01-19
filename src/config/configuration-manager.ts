@@ -116,24 +116,24 @@ export class ConfigurationManager {
         switch (key) {
             case 'llm.provider':
                 if (!validProviders.includes(value)) {
-                    throw new ConfigurationError(`Invalid LLM provider: ${value}`);
+                    throw new ConfigurationError({ setting: 'llm.provider' });
                 }
                 break;
             case 'ui.transparency':
                 if (!validTransparency.includes(value)) {
-                    throw new ConfigurationError(`Invalid UI transparency: ${value}`);
+                    throw new ConfigurationError({ setting: 'ui.transparency' });
                 }
                 break;
             case 'ui.mode':
                 if (!validModes.includes(value)) {
-                    throw new ConfigurationError(`Invalid UI mode: ${value}`);
+                    throw new ConfigurationError({ setting: 'ui.mode' });
                 }
                 break;
             case 'performance.maxTokens':
             case 'performanceMode.collisionThrottleMs':
             case 'performanceMode.metricsThrottleMs':
                 if (typeof value !== 'number' || value <= 0) {
-                    throw new ConfigurationError(`${key} must be a positive number`);
+                    throw new ConfigurationError({ setting: key });
                 }
                 break;
             case 'telemetry.enabled':
@@ -143,18 +143,18 @@ export class ConfigurationManager {
             case 'performanceMode.autoSuggest':
             case 'accessibility.autoDetectHighContrast':
                 if (typeof value !== 'boolean') {
-                    throw new ConfigurationError(`${key} must be a boolean`);
+                    throw new ConfigurationError({ setting: key });
                 }
                 break;
             case 'accessibility.colorblind':
                 if (typeof value !== 'object' || value === null) {
-                    throw new ConfigurationError(`${key} must be an object`);
+                    throw new ConfigurationError({ setting: 'accessibility.colorblind' });
                 }
                 if (typeof value.enabled !== 'boolean') {
-                    throw new ConfigurationError(`${key}.enabled must be a boolean`);
+                    throw new ConfigurationError({ setting: 'accessibility.colorblind.enabled' });
                 }
                 if (!validColorblindTypes.includes(value.type)) {
-                    throw new ConfigurationError(`Invalid colorblind type: ${value.type}`);
+                    throw new ConfigurationError({ setting: 'accessibility.colorblind.type' });
                 }
                 break;
         }
@@ -196,35 +196,35 @@ export class ConfigurationManager {
     private validateSettings(config: IConfiguration): void {
         const validProviders = ['openai', 'anthropic', 'custom'];
         if (!validProviders.includes(config.llm.provider)) {
-            throw new ConfigurationError(`Invalid LLM provider: ${config.llm.provider}`);
+            throw new ConfigurationError({ setting: 'llm.provider' });
         }
 
         for (const [agent, provider] of Object.entries(config.llm.agentProviders)) {
-            if (!validProviders.includes(provider)) {
-                throw new ConfigurationError(`Invalid LLM provider for agent ${agent}: ${provider}`);
+            if (!validProviders.includes(provider as any)) {
+                throw new ConfigurationError({ setting: `llm.agentProviders.${agent}` });
             }
         }
 
         const validTransparency = ['minimal', 'medium', 'full'];
         if (!validTransparency.includes(config.ui.transparency)) {
-            throw new ConfigurationError(`Invalid UI transparency: ${config.ui.transparency}`);
+            throw new ConfigurationError({ setting: 'ui.transparency' });
         }
 
         const validModes = ['learning', 'expert', 'focus', 'team', 'performance'];
         if (!validModes.includes(config.ui.mode)) {
-            throw new ConfigurationError(`Invalid UI mode: ${config.ui.mode}`);
+            throw new ConfigurationError({ setting: 'ui.mode' });
         }
 
         if (config.performance.maxTokens <= 0) {
-            throw new ConfigurationError('Max tokens must be greater than 0');
+            throw new ConfigurationError({ setting: 'performance.maxTokens' });
         }
 
         if (config.performance.tokenBudget <= 0) {
-            throw new ConfigurationError('Token budget must be greater than 0');
+            throw new ConfigurationError({ setting: 'performance.tokenBudget' });
         }
 
         if (config.performance.costBudget <= 0) {
-            throw new ConfigurationError('Cost budget must be greater than 0');
+            throw new ConfigurationError({ setting: 'performance.costBudget' });
         }
     }
 

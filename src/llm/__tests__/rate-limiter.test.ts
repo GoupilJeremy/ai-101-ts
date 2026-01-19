@@ -1,3 +1,4 @@
+import { describe, test, suite, beforeEach, afterEach, vi } from 'vitest';
 import * as assert from 'assert';
 import * as vscode from 'vscode';
 import { RateLimiter } from '../rate-limiter.js';
@@ -6,14 +7,14 @@ import { BudgetExceededError } from '../../errors/budget-exceeded-error.js';
 
 // Mock ConfigurationManager
 class MockConfigManager {
-    public static settings = {
+    public static settings: any = {
         performance: {
             tokenBudget: 100,
             costBudget: 1.00,
             maxTokens: 4096
         }
     };
-    public static getInstance() { return { getSettings: () => this.settings }; }
+    public static getInstance() { return { getSettings: () => MockConfigManager.settings }; }
 }
 
 // Intercept ConfigurationManager.getInstance
@@ -29,7 +30,7 @@ const warnings: string[] = [];
 suite('RateLimiter Test Suite', () => {
     let limiter: RateLimiter;
 
-    setup(() => {
+    beforeEach(() => {
         limiter = RateLimiter.getInstance();
         limiter.reset();
         warnings.length = 0;

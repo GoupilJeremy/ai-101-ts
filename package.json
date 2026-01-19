@@ -360,6 +360,15 @@
           "type": "object",
           "default": {},
           "description": "Override detected project architecture patterns (e.g., techStack, patterns, conventions)."
+        },
+        "ai101.errors.openLinksIn": {
+          "type": "string",
+          "default": "SimpleBrowser",
+          "enum": [
+            "SimpleBrowser",
+            "ExternalBrowser"
+          ],
+          "description": "Specify where documentation links should be opened."
         }
       }
     },

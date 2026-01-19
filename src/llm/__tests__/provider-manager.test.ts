@@ -1,3 +1,4 @@
+import { describe, test, suite, beforeEach, afterEach, vi } from 'vitest';
 import * as assert from 'assert';
 import { LLMProviderManager, AgentType } from '../provider-manager.js';
 import { ILLMProvider, ILLMOptions, ILLMResponse, IModelInfo } from '../provider.interface.js';
@@ -7,13 +8,51 @@ import * as os from 'os';
 import * as fs from 'fs';
 import * as path from 'path';
 
+// Mock vscode
+vi.mock('vscode', () => ({
+    StatusBarAlignment: {
+        Left: 1,
+        Right: 2
+    },
+    window: {
+        createStatusBarItem: vi.fn(() => ({
+            show: vi.fn(),
+            hide: vi.fn(),
+            dispose: vi.fn()
+        })),
+        showWarningMessage: vi.fn()
+    },
+    workspace: {
+        getConfiguration: vi.fn(() => ({
+            get: vi.fn()
+        }))
+    }
+}));
+
+// Mock UI components to avoid side effects
+vi.mock('../ui/vital-signs-bar.js', () => ({
+    VitalSignsBar: {
+        getInstance: vi.fn(() => ({
+            update: vi.fn()
+        }))
+    }
+}));
+
+vi.mock('../ui/metrics-provider.js', () => ({
+    MetricsProvider: {
+        getInstance: vi.fn(() => ({
+            sync: vi.fn()
+        }))
+    }
+}));
+
 // Mock Provider
 class MockProvider implements ILLMProvider {
     constructor(public readonly name: string, private available: boolean = true, private shouldFail: boolean = false) { }
 
     async generateCompletion(prompt: string, options?: ILLMOptions): Promise<ILLMResponse> {
         if (this.shouldFail) {
-            throw new LLMProviderError(`${this.name} failed`, 'TEST_ERROR', true);
+            throw new LLMProviderError(`${this.name} failed`, 'AI101-LLM-001', true);
         }
         return {
             text: `Response from ${this.name}`,
@@ -31,7 +70,7 @@ class MockProvider implements ILLMProvider {
 
 // Mock ConfigurationManager
 class MockConfigManager {
-    public static settings = {
+    public static settings: any = {
         llm: {
             provider: 'openai' as 'openai' | 'anthropic' | 'custom',
             agentProviders: {
@@ -40,9 +79,21 @@ class MockConfigManager {
                 reviewer: 'openai' as 'openai' | 'anthropic' | 'custom',
                 context: 'openai' as 'openai' | 'anthropic' | 'custom'
             }
+        },
+        ui: {
+            transparency: 'medium' as 'minimal' | 'medium' | 'full',
+            mode: 'learning' as 'learning' | 'expert' | 'focus' | 'team' | 'performance'
+        },
+        performance: {
+            maxTokens: 4096,
+            tokenBudget: 50000,
+            costBudget: 0.10
+        },
+        telemetry: {
+            enabled: true
         }
     };
-    public static getInstance() { return { getSettings: () => this.settings }; }
+    public static getInstance() { return { getSettings: () => MockConfigManager.settings }; }
 }
 
 // Intercept ConfigurationManager.getInstance
@@ -53,7 +104,7 @@ suite('LLMProviderManager Test Suite', () => {
 
     let tempDir: string;
 
-    setup(() => {
+    beforeEach(() => {
         // Reset singleton for tests if possible, or just clear providers
         manager = LLMProviderManager.getInstance();
         (manager as any).providers.clear();
@@ -73,11 +124,23 @@ suite('LLMProviderManager Test Suite', () => {
                     reviewer: 'openai',
                     context: 'openai'
                 }
+            },
+            ui: {
+                transparency: 'medium',
+                mode: 'learning'
+            },
+            performance: {
+                maxTokens: 4096,
+                tokenBudget: 50000,
+                costBudget: 0.10
+            },
+            telemetry: {
+                enabled: true
             }
         };
     });
 
-    teardown(() => {
+    afterEach(() => {
         if (fs.existsSync(tempDir)) {
             fs.rmSync(tempDir, { recursive: true, force: true });
         }
@@ -141,7 +204,7 @@ suite('LLMProviderManager Test Suite', () => {
             assert.fail('Should have thrown LLMProviderError');
         } catch (error: any) {
             assert.ok(error instanceof LLMProviderError);
-            assert.strictEqual(error.code, 'ALL_PROVIDERS_FAILED');
+            assert.strictEqual(error.code, 'AI101-LLM-001');
         }
     });
 

@@ -175,8 +175,8 @@ development_status:
   10-1-implement-integrated-getting-started-documentation: review
   10-2-implement-searchable-troubleshooting-knowledge-base: review
   10-3-create-comprehensive-architecture-documentation-for-contributors: review
-  10-4-generate-api-documentation-with-code-examples: in-progress
-  10-5-implement-clear-error-messages-with-documentation-links: backlog
+  10-4-generate-api-documentation-with-code-examples: review
+  10-5-implement-clear-error-messages-with-documentation-links: review
   10-6-create-detailed-changelog-with-contributor-recognition: backlog
   10-7-implement-contextual-tooltips-throughout-ui: backlog
   epic-10-retrospective: optional

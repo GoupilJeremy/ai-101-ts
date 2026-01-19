@@ -1,6 +1,38 @@
+import { describe, test, suite, beforeEach, afterEach, vi } from 'vitest';
 import * as assert from 'assert';
+import * as vscode from 'vscode';
 import { ConfigurationManager } from '../configuration-manager.js';
 import { UIMode } from '../../api/configuration-types.js';
+
+// Mock vscode
+vi.mock('vscode', () => {
+    let mockStore: Record<string, any> = {
+        'ui.mode': 'learning',
+        'performance.maxTokens': 4096,
+        'llm.provider': 'openai'
+    };
+
+    const mockConfig = {
+        get: vi.fn((key, defaultValue) => {
+            return mockStore[key] !== undefined ? mockStore[key] : defaultValue;
+        }),
+        update: vi.fn((key, value) => {
+            mockStore[key] = value;
+            return Promise.resolve();
+        })
+    };
+
+    return {
+        ConfigurationTarget: {
+            Global: 1,
+            Workspace: 2,
+            WorkspaceFolder: 3
+        },
+        workspace: {
+            getConfiguration: vi.fn(() => mockConfig)
+        }
+    };
+});
 
 suite('ConfigurationManager Suite', () => {
 
@@ -53,7 +85,7 @@ suite('ConfigurationManager Suite', () => {
             await manager.setConfig('ui.mode', 'invalid-mode');
         }, {
             name: 'ConfigurationError',
-            message: /Invalid UI mode/
+            message: /Configuration Error: ui.mode/
         });
     });
 
@@ -64,7 +96,7 @@ suite('ConfigurationManager Suite', () => {
             await manager.setConfig('performance.maxTokens', -1);
         }, {
             name: 'ConfigurationError',
-            message: /must be a positive number/
+            message: /Configuration Error: performance.maxTokens/
         });
     });
 

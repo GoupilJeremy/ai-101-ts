@@ -29,7 +29,7 @@ export class OpenAIProvider implements ILLMProvider {
 
         const apiKey = await SecretManager.getInstance().getApiKey('openai');
         if (!apiKey) {
-            throw new LLMProviderError('OpenAI API key not found in SecretStorage', 'AUTH_FAILED', false);
+            throw new LLMProviderError('OpenAI API key not found in SecretStorage', 'AI101-AUTH-002', false, { provider: 'openai' });
         }
 
         this.client = new OpenAI({
@@ -70,8 +70,7 @@ export class OpenAIProvider implements ILLMProvider {
             };
         } catch (error: any) {
             const isTransient = error.status === 429 || error.status >= 500;
-            const code = error.code || 'OPENAI_ERROR';
-            throw new LLMProviderError(`OpenAI API Error: ${error.message}`, code, isTransient);
+            throw new LLMProviderError(`OpenAI API Error: ${error.message}`, 'AI101-LLM-001', isTransient, { provider: 'openai' });
         }
     }
 
@@ -83,7 +82,7 @@ export class OpenAIProvider implements ILLMProvider {
     public getModelInfo(model: string): IModelInfo {
         const info = this.models[model];
         if (!info) {
-            throw new LLMProviderError(`Unsupported OpenAI model: ${model}`, 'INVALID_MODEL', false);
+            throw new LLMProviderError(`Unsupported OpenAI model: ${model}`, 'AI101-LLM-001', false, { provider: 'openai' });
         }
         return info;
     }

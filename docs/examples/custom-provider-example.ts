@@ -35,7 +35,8 @@ export class LLMProviderError extends Error {
     constructor(
         message: string,
         public readonly code: string,
-        public readonly statusCode?: number
+        public readonly isTransient: boolean = false,
+        public readonly data: Record<string, string> = {}
     ) {
         super(message);
         this.name = 'LLMProviderError';
@@ -84,7 +85,7 @@ export class MyCustomLLMProvider implements ILLMProvider {
         defaultModel: string = 'custom-model-v1'
     ) {
         if (!apiKey || apiKey.trim() === '') {
-            throw new LLMProviderError('API key is required', 'MISSING_API_KEY');
+            throw new LLMProviderError('API key is required', 'AI101-AUTH-002', false, { provider: this.name });
         }
 
         this.apiKey = apiKey;
@@ -104,7 +105,7 @@ export class MyCustomLLMProvider implements ILLMProvider {
     async generateCompletion(prompt: string, options?: ILLMOptions): Promise<ILLMResponse> {
         // Validate input
         if (!prompt || prompt.trim() === '') {
-            throw new LLMProviderError('Prompt cannot be empty', 'INVALID_PROMPT');
+            throw new LLMProviderError('Prompt cannot be empty', 'AI101-LLM-001', false, { provider: this.name });
         }
 
         const model = options?.model || this.defaultModel;
@@ -140,10 +141,12 @@ export class MyCustomLLMProvider implements ILLMProvider {
             // Handle HTTP errors
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
+                const isTransient = response.status === 429 || response.status >= 500;
                 throw new LLMProviderError(
                     errorData.message || `HTTP ${response.status}: ${response.statusText}`,
-                    errorData.code || 'API_ERROR',
-                    response.status
+                    'AI101-LLM-001',
+                    isTransient,
+                    { provider: this.name, statusCode: response.status.toString() }
                 );
             }
 
@@ -173,7 +176,9 @@ export class MyCustomLLMProvider implements ILLMProvider {
             if (error instanceof Error && error.name === 'AbortError') {
                 throw new LLMProviderError(
                     `Request timed out after ${timeout}ms`,
-                    'TIMEOUT'
+                    'AI101-LLM-001',
+                    true,
+                    { provider: this.name }
                 );
             }
 
@@ -185,7 +190,9 @@ export class MyCustomLLMProvider implements ILLMProvider {
             // Wrap other errors
             throw new LLMProviderError(
                 `Failed to generate completion: ${error instanceof Error ? error.message : String(error)}`,
-                'GENERATION_FAILED'
+                'AI101-LLM-001',
+                false,
+                { provider: this.name }
             );
         }
     }

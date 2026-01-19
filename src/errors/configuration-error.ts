@@ -1,17 +1,8 @@
-export class AI101Error extends Error {
-    constructor(
-        message: string,
-        public readonly code: string,
-        public readonly isTransient: boolean = false
-    ) {
-        super(message);
-        this.name = 'AI101Error';
-    }
-}
+import { AI101Error } from './base-error.js';
 
 export class ConfigurationError extends AI101Error {
-    constructor(message: string) {
-        super(message, 'CONFIGURATION_ERROR', false);
+    constructor(data: Record<string, string>) {
+        super(`Configuration Error: ${data.setting || 'unknown'}`, 'AI101-CFG-001', false, data);
         this.name = 'ConfigurationError';
     }
 }

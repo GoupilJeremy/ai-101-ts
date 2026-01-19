@@ -1,3 +1,4 @@
+import { describe, test, suite, beforeEach, afterEach, vi } from 'vitest';
 import * as assert from 'assert';
 import { CostTracker } from '../cost-tracker.js';
 import { RateLimiter } from '../rate-limiter.js';
@@ -5,14 +6,14 @@ import { ConfigurationManager } from '../../config/configuration-manager.js';
 
 // Mock ConfigurationManager
 class MockConfigManager {
-    public static settings = {
+    public static settings: any = {
         performance: {
             tokenBudget: 1000,
             costBudget: 1.00,
             maxTokens: 4096
         }
     };
-    public static getInstance() { return { getSettings: () => this.settings }; }
+    public static getInstance() { return { getSettings: () => MockConfigManager.settings }; }
 }
 
 // Intercept ConfigurationManager.getInstance
@@ -21,7 +22,7 @@ class MockConfigManager {
 suite('CostTracker Test Suite', () => {
     let tracker: CostTracker;
 
-    setup(() => {
+    beforeEach(() => {
         tracker = CostTracker.getInstance();
         RateLimiter.getInstance().reset();
     });
@@ -41,6 +42,6 @@ suite('CostTracker Test Suite', () => {
     test('Should accumulate cost correctly across calls', () => {
         RateLimiter.getInstance().recordUsage(100, 0.05);
         RateLimiter.getInstance().recordUsage(200, 0.10);
-        assert.strictEqual(tracker.getCurrentSessionCost(), 0.15);
+        assert.ok(Math.abs(tracker.getCurrentSessionCost() - 0.15) < 0.0001);
     });
 });

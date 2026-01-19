@@ -1,3 +1,4 @@
+import { describe, test, suite, beforeEach, afterEach, vi } from 'vitest';
 import * as assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -9,13 +10,13 @@ suite('HybridLLMCache Test Suite', () => {
     let cache: HybridLLMCache;
     let tempDir: string;
 
-    setup(() => {
+    beforeEach(() => {
         tempDir = path.join(os.tmpdir(), `ai101-cache-test-${Date.now()}`);
         if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
         cache = new HybridLLMCache(tempDir);
     });
 
-    teardown(() => {
+    afterEach(() => {
         if (fs.existsSync(tempDir)) {
             fs.rmSync(tempDir, { recursive: true, force: true });
         }
@@ -84,8 +85,11 @@ suite('HybridLLMCache Test Suite', () => {
         const entry = (cache as any).l1Cache.get(key);
         entry.timestamp = Date.now() - (8 * 24 * 60 * 60 * 1000); // 8 days ago
 
+        // Also ensure L2 is deleted or expired. For this test, deleting is simpler to verify L1 logic.
+        (cache as any).deleteFromL2(key);
+
         const result = await cache.get(key);
-        assert.strictEqual(result, null); // Should be expired
+        assert.strictEqual(result, null); // Should be expired in L1 and missing in L2
         assert.strictEqual((cache as any).l1Cache.has(key), false);
     });
 

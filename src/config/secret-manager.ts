@@ -29,12 +29,12 @@ export class SecretManager {
 
     public async storeApiKey(provider: LLMProvider, key: string): Promise<void> {
         if (!key) {
-            throw new AuthenticationError('API Key cannot be empty');
+            throw new AuthenticationError('AI101-AUTH-002', { provider });
         }
         try {
             await this.secrets.store(this.getKeyName(provider), key);
         } catch (error) {
-            throw new AuthenticationError(`Failed to store API key for ${provider}: ${error}`);
+            throw new AuthenticationError('AI101-AUTH-001', { provider });
         }
     }
 
@@ -42,7 +42,7 @@ export class SecretManager {
         try {
             return await this.secrets.get(this.getKeyName(provider));
         } catch (error) {
-            throw new AuthenticationError(`Failed to retrieve API key for ${provider}: ${error}`);
+            throw new AuthenticationError('AI101-AUTH-001', { provider });
         }
     }
 
@@ -50,7 +50,7 @@ export class SecretManager {
         try {
             await this.secrets.delete(this.getKeyName(provider));
         } catch (error) {
-            throw new AuthenticationError(`Failed to delete API key for ${provider}: ${error}`);
+            throw new AuthenticationError('AI101-AUTH-001', { provider });
         }
     }
 }
