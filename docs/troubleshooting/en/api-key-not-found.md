@@ -28,18 +28,18 @@ Extension prompts for API key configuration. Agents cannot function because no L
    
 3. **Check configuration**
    ```
-   Settings > Search "ai101.llm.provider"
+   Settings > Search "suika.llm.provider"
    ```
 
 ## Solutions
 
 ### Solution 1: First-Time Setup
 
-If this is your first time using AI-101:
+If this is your first time using Suika:
 
 ```
 1. Open Command Palette (Ctrl+Shift+P / Cmd+Shift+P)
-2. Run "AI 101: Configure API Keys"
+2. Run "Suika: Configure API Keys"
 3. Select provider (OpenAI or Anthropic)
 4. Paste your API key
 5. Click "Save"
@@ -53,7 +53,7 @@ If this is your first time using AI-101:
 3. Go to https://platform.openai.com/api-keys
 4. Click "Create new secret key"
 5. Copy key (shown only once!)
-6. Configure in AI-101
+6. Configure in Suika
 
 **For Anthropic:**
 1. Visit https://console.anthropic.com/signup
@@ -61,7 +61,7 @@ If this is your first time using AI-101:
 3. Go to https://console.anthropic.com/settings/keys
 4. Click "Create Key"
 5. Copy key
-6. Configure in AI-101
+6. Configure in Suika
 
 ### Solution 3: Switch Provider
 
@@ -69,7 +69,7 @@ If you have key for different provider:
 
 ```json
 {
-  "ai101.llm.provider": "anthropic"  // or "openai"
+  "suika.llm.provider": "anthropic"  // or "openai"
 }
 ```
 
@@ -81,7 +81,7 @@ Follow the interactive walkthrough:
 
 ```
 1. Open Command Palette
-2. Run "AI 101: Show Getting Started"
+2. Run "Suika: Show Getting Started"
 3. Follow setup steps
 4. Configure API key when prompted
 ```

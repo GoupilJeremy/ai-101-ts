@@ -77,7 +77,7 @@ So that I can clearly see the HUD elements without straining.
   - [ ] 8.4: Auto-disable when switching to non-HC theme (user can override)
 
 - [ ] Task 9: Manual Toggle Command (AC: 11)
-  - [ ] 9.1: Add 'ai-101-ts.toggleHighContrast' command to package.json
+  - [ ] 9.1: Add 'suika.toggleHighContrast' command to package.json
   - [ ] 9.2: Create toggle-high-contrast.ts command handler
   - [ ] 9.3: Store manual override preference in workspace settings
   - [ ] 9.4: Manual setting takes precedence over auto-detection
@@ -313,12 +313,12 @@ const WCAG_AAA_RATIO = 7;
 **Package.json Settings to Add:**
 ```json
 {
-  "ai101.accessibility.highContrast": {
+  "suika.accessibility.highContrast": {
     "type": "boolean",
     "default": null,
     "description": "Enable High Contrast Mode. Set to null for auto-detection based on VSCode theme."
   },
-  "ai101.accessibility.autoDetectHighContrast": {
+  "suika.accessibility.autoDetectHighContrast": {
     "type": "boolean",
     "default": true,
     "description": "Automatically enable High Contrast Mode when VSCode High Contrast theme is active."

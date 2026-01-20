@@ -16,8 +16,8 @@ export async function configureApiKeysCommand(context: vscode.ExtensionContext):
         });
 
         if (openaiKey) {
-            await context.secrets.store('ai101.openai.apiKey', openaiKey);
-            vscode.window.showInformationMessage('AI-101: OpenAI API Key saved securely');
+            await context.secrets.store('suika.openai.apiKey', openaiKey);
+            vscode.window.showInformationMessage('Suika: OpenAI API Key saved securely');
         }
 
         // Prompt for Anthropic API Key
@@ -29,12 +29,12 @@ export async function configureApiKeysCommand(context: vscode.ExtensionContext):
         });
 
         if (anthropicKey) {
-            await context.secrets.store('ai101.anthropic.apiKey', anthropicKey);
-            vscode.window.showInformationMessage('AI-101: Anthropic API Key saved securely');
+            await context.secrets.store('suika.anthropic.apiKey', anthropicKey);
+            vscode.window.showInformationMessage('Suika: Anthropic API Key saved securely');
         }
 
         if (!openaiKey && !anthropicKey) {
-            vscode.window.showInformationMessage('AI-101: No API keys were configured');
+            vscode.window.showInformationMessage('Suika: No API keys were configured');
         }
     } catch (error) {
         vscode.window.showErrorMessage(`Failed to configure API keys: ${error}`);
@@ -48,7 +48,7 @@ export async function configureApiKeysCommand(context: vscode.ExtensionContext):
 export async function resetConfigCommand(): Promise<void> {
     try {
         const confirmation = await vscode.window.showWarningMessage(
-            'Are you sure you want to reset all AI-101 configuration to defaults? This cannot be undone.',
+            'Are you sure you want to reset all Suika configuration to defaults? This cannot be undone.',
             { modal: true },
             'Reset',
             'Cancel'
@@ -56,7 +56,7 @@ export async function resetConfigCommand(): Promise<void> {
 
         if (confirmation === 'Reset') {
             await ConfigurationManager.getInstance().resetToDefaults();
-            vscode.window.showInformationMessage('AI-101: Configuration reset to defaults');
+            vscode.window.showInformationMessage('Suika: Configuration reset to defaults');
         }
     } catch (error) {
         vscode.window.showErrorMessage(`Failed to reset configuration: ${error}`);

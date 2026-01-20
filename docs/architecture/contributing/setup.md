@@ -11,8 +11,8 @@
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-org/ai-101-ts.git
-cd ai-101-ts
+git clone https://github.com/your-org/suika.git
+cd suika
 ```
 
 ### 2. Install Dependencies
@@ -26,7 +26,7 @@ npm install
 For LLM provider testing:
 
 1. Open VSCode Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`)
-2. Run "AI-101: Configure API Keys"
+2. Run "Suika: Configure API Keys"
 3. Enter your OpenAI or Anthropic API key
 
 Keys are stored securely in VSCode SecretStorage.
@@ -46,8 +46,8 @@ Press `F5` in VSCode to launch Extension Development Host with the extension loa
 ## Verify Installation
 
 1. Extension should activate automatically
-2. Check Output panel for "AI-101" logs
-3. Try running "AI-101: Get Suggestion" command
+2. Check Output panel for "Suika" logs
+3. Try running "Suika: Get Suggestion" command
 
 ## Troubleshooting
 

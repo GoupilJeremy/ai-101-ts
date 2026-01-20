@@ -1,16 +1,16 @@
-# Getting Started with AI-101
+# Getting Started with Suika
 
-Welcome to AI-101, your transparent AI assistant for VSCode! This guide will help you get started with the extension and learn about its keyboard navigation features for accessibility.
+Welcome to Suika, your transparent AI assistant for VSCode! This guide will help you get started with the extension and learn about its keyboard navigation features for accessibility.
 
 ## Installation
 
-1. Install the AI-101 extension from the VSCode marketplace
+1. Install the Suika extension from the VSCode marketplace
 2. Configure your LLM provider in settings (OpenAI, Anthropic, or custom)
 3. Start coding with AI assistance!
 
 ## Keyboard Navigation
 
-AI-101 supports full keyboard navigation for accessibility and assistive technology users. All interactive elements in the HUD can be accessed without a mouse.
+Suika supports full keyboard navigation for accessibility and assistive technology users. All interactive elements in the HUD can be accessed without a mouse.
 
 ### Basic Navigation
 
@@ -45,7 +45,7 @@ You can customize keyboard shortcuts in VSCode settings:
 
 ```json
 {
-  "ai101.keyboard.shortcuts": {
+  "suika.keyboard.shortcuts": {
     "enableHudNavigation": true,
     "tabNavigation": "Tab",
     "shiftTabNavigation": "Shift+Tab",
@@ -66,7 +66,7 @@ You can customize keyboard shortcuts in VSCode settings:
 
 ## Modes
 
-AI-101 offers different operating modes:
+Suika offers different operating modes:
 
 - **Learning Mode**: Pedagogical explanations (default)
 - **Expert Mode**: Technical details and trade-offs
@@ -76,7 +76,7 @@ AI-101 offers different operating modes:
 
 ## Getting Help
 
-- Use `Ctrl+Shift+P` and search for "AI 101" commands
+- Use `Ctrl+Shift+P` and search for "Suika" commands
 - Check the VSCode output panel for extension logs
 - Report issues on the extension's GitHub repository
 

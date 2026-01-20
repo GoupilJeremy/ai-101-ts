@@ -1,15 +1,15 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
 
-suite('AI 101 Extension Integration Test Suite', () => {
-	vscode.window.showInformationMessage('Starting AI 101 Integration Tests...');
+suite('Suika Extension Integration Test Suite', () => {
+	vscode.window.showInformationMessage('Starting Suika Integration Tests...');
 
 	test('Extension should be present', () => {
-		assert.ok(vscode.extensions.getExtension('GoupilJeremy.ai-101-ts'));
+		assert.ok(vscode.extensions.getExtension('GoupilJeremy.suika'));
 	});
 
 	test('Extension should activate', async () => {
-		const extension = vscode.extensions.getExtension('GoupilJeremy.ai-101-ts');
+		const extension = vscode.extensions.getExtension('GoupilJeremy.suika');
 		if (extension) {
 			await extension.activate();
 			assert.strictEqual(extension.isActive, true);
@@ -21,10 +21,10 @@ suite('AI 101 Extension Integration Test Suite', () => {
 	test('Commands should be registered', async () => {
 		const commands = await vscode.commands.getCommands(true);
 		const ai101Commands = [
-			'ai-101-ts.helloWorld',
-			'ai-101-ts.applyPreset',
-			'ai-101-ts.exportConfig',
-			'ai-101-ts.importConfig'
+			'suika.helloWorld',
+			'suika.applyPreset',
+			'suika.exportConfig',
+			'suika.importConfig'
 		];
 
 		for (const cmd of ai101Commands) {

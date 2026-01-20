@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 
 	// Initialize Centralized Error Handler
 	ErrorHandler.initialize();
-	ErrorHandler.log('Extension "ai-101-ts" activation started.');
+	ErrorHandler.log('Extension "suika" activation started.');
 
 	// Check for low memory and auto-activate Performance Mode if needed (Story 5.6)
 	if (context.extensionMode !== vscode.ExtensionMode.Test) {
@@ -84,16 +84,16 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 	context.subscriptions.push(distractionDetector);
 
 	// First-run welcome screen (Story 10.1)
-	const hasShownWelcome = context.globalState.get<boolean>('ai101.hasShownWelcome', false);
+	const hasShownWelcome = context.globalState.get<boolean>('suika.hasShownWelcome', false);
 	if (!hasShownWelcome && context.extensionMode !== vscode.ExtensionMode.Test) {
 		// Show getting started walkthrough on first activation
 		vscode.commands.executeCommand(
 			'workbench.action.openWalkthrough',
-			'GoupilJeremy.ai-101-ts#ai101.gettingStarted',
+			'GoupilJeremy.suika#suika.gettingStarted',
 			false
 		).then(() => {
 			// Mark welcome as shown
-			context.globalState.update('ai101.hasShownWelcome', true);
+			context.globalState.update('suika.hasShownWelcome', true);
 		}, (error) => {
 			// Silently fail - don't block activation
 			ErrorHandler.log(`Failed to show welcome walkthrough: ${error}`);
@@ -153,16 +153,16 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('ai-101-ts.helloWorld', () => {
+	const disposable = vscode.commands.registerCommand('suika.helloWorld', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from ai-101-ts!');
+		vscode.window.showInformationMessage('Hello World from suika!');
 	});
 
 	context.subscriptions.push(disposable);
 
 	// Command to switch modes
-	let switchModeDisposable = vscode.commands.registerCommand('ai101.switchMode', async () => {
+	let switchModeDisposable = vscode.commands.registerCommand('suika.switchMode', async () => {
 		const modes = [
 			{ label: 'Learning', value: AgentMode.Learning, detail: 'Pedagogical explanations and pattern annotations' },
 			{ label: 'Expert', value: AgentMode.Expert, detail: 'In-depth technical details and trade-offs' },
@@ -172,71 +172,71 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 		];
 
 		const selected = await vscode.window.showQuickPick(modes, {
-			placeHolder: 'Select AI-101 Mode'
+			placeHolder: 'Select Suika Mode'
 		});
 
 		if (selected) {
 			await ModeManager.getInstance().setMode(selected.value as AgentMode);
-			vscode.window.showInformationMessage(`AI-101: Switched to ${selected.label} mode`);
+			vscode.window.showInformationMessage(`Suika: Switched to ${selected.label} mode`);
 		}
 	});
 
 	context.subscriptions.push(switchModeDisposable);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.applyPreset', () => {
+		vscode.commands.registerCommand('suika.applyPreset', () => {
 			import('./commands/apply-preset.js').then(module => module.applyPresetCommand());
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.exportConfig', () => {
+		vscode.commands.registerCommand('suika.exportConfig', () => {
 			import('./commands/export-config.js').then(module => module.exportConfigCommand());
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.importConfig', () => {
+		vscode.commands.registerCommand('suika.importConfig', () => {
 			import('./commands/import-config.js').then(module => module.importConfigCommand());
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.toggleFocusMode', () => {
+		vscode.commands.registerCommand('suika.toggleFocusMode', () => {
 			import('./commands/toggle-focus-mode.js').then(module => module.toggleFocusModeCommand());
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.togglePerformanceMode', () => {
+		vscode.commands.registerCommand('suika.togglePerformanceMode', () => {
 			import('./commands/toggle-performance-mode.js').then(module => module.togglePerformanceModeCommand());
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.toggleLargeText', () => {
+		vscode.commands.registerCommand('suika.toggleLargeText', () => {
 			import('./commands/toggle-large-text.js').then(module => module.toggleLargeTextCommand());
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.toggleHighContrast', () => {
+		vscode.commands.registerCommand('suika.toggleHighContrast', () => {
 			import('./commands/toggle-high-contrast.js').then(module => module.toggleHighContrastCommand());
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.toggleColorblind', () => {
+		vscode.commands.registerCommand('suika.toggleColorblind', () => {
 			import('./commands/toggle-colorblind.js').then(module => module.toggleColorblind());
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.viewArchitecture', async () => {
+		vscode.commands.registerCommand('suika.viewArchitecture', async () => {
 			const architect = AgentOrchestrator.getInstance().getAgent('architect') as ArchitectAgent;
 			if (architect) {
 				const arch = await architect.analyzeProject();
-				const outputChannel = vscode.window.createOutputChannel('AI-101 Architecture');
+				const outputChannel = vscode.window.createOutputChannel('Suika Architecture');
 				outputChannel.appendLine('Detected Project Architecture:');
 				outputChannel.appendLine('=============================');
 				outputChannel.appendLine(`Frontend: ${arch.techStack.frontend}`);
@@ -255,85 +255,85 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.focusHud', () => {
+		vscode.commands.registerCommand('suika.focusHud', () => {
 			// Focus the HUD for keyboard navigation
 			const webviewManager = WebviewManager.getInstance();
 			// Send message to webview to focus first interactive element
 			webviewManager.postMessageToWebview({
 				type: 'toWebview:focusFirstElement'
 			});
-			vscode.window.showInformationMessage('AI-101: HUD focused for keyboard navigation');
+			vscode.window.showInformationMessage('Suika: HUD focused for keyboard navigation');
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.setPhase', () => {
+		vscode.commands.registerCommand('suika.setPhase', () => {
 			import('./commands/set-phase.js').then(module => module.setPhaseCommand());
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.toggleHUD', () => {
+		vscode.commands.registerCommand('suika.toggleHUD', () => {
 			import('./commands/toggle-hud.js').then(module => module.toggleHUDCommand());
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.forceAgentState', (agentId?: any, state?: any, task?: any) => {
+		vscode.commands.registerCommand('suika.forceAgentState', (agentId?: any, state?: any, task?: any) => {
 			import('./commands/force-agent-state.command.js').then(module => module.forceAgentStateCommand(agentId, state, task));
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.acceptSuggestion', (args?: any) => {
+		vscode.commands.registerCommand('suika.acceptSuggestion', (args?: any) => {
 			import('./commands/suggestion-commands.js').then(module => module.handleSuggestionCommand('accepted', args));
 		}),
-		vscode.commands.registerCommand('ai-101-ts.rejectSuggestion', (args?: any) => {
+		vscode.commands.registerCommand('suika.rejectSuggestion', (args?: any) => {
 			import('./commands/suggestion-commands.js').then(module => module.handleSuggestionCommand('rejected', args));
 		}),
-		vscode.commands.registerCommand('ai-101-ts.createTodoFromAlert', (alertId: string) => {
+		vscode.commands.registerCommand('suika.createTodoFromAlert', (alertId: string) => {
 			import('./commands/alert-commands.js').then(module => module.createTodoFromAlert(alertId));
 		}),
-		vscode.commands.registerCommand('ai-101-ts.dismissAlert', (alertId: string) => {
+		vscode.commands.registerCommand('suika.dismissAlert', (alertId: string) => {
 			import('./commands/alert-commands.js').then(module => module.dismissAlert(alertId));
 		})
 	);
 
 	// Mode switching commands
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.switchToLearningMode', () => {
+		vscode.commands.registerCommand('suika.switchToLearningMode', () => {
 			import('./commands/switch-mode.js').then(module => module.switchToLearningModeCommand());
 		}),
-		vscode.commands.registerCommand('ai-101-ts.switchToExpertMode', () => {
+		vscode.commands.registerCommand('suika.switchToExpertMode', () => {
 			import('./commands/switch-mode.js').then(module => module.switchToExpertModeCommand());
 		}),
-		vscode.commands.registerCommand('ai-101-ts.switchToTeamMode', () => {
+		vscode.commands.registerCommand('suika.switchToTeamMode', () => {
 			import('./commands/switch-mode.js').then(module => module.switchToTeamModeCommand());
 		})
 	);
 
 	// Configuration commands
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.configureApiKeys', () => {
+		vscode.commands.registerCommand('suika.configureApiKeys', () => {
 			import('./commands/configure-api-keys.js').then(module => module.configureApiKeysCommand(context));
 		}),
-		vscode.commands.registerCommand('ai-101-ts.resetConfig', () => {
+		vscode.commands.registerCommand('suika.resetConfig', () => {
 			import('./commands/configure-api-keys.js').then(module => module.resetConfigCommand());
 		})
 	);
 
 	// UI commands
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ai-101-ts.toggleAgentVisibility', () => {
+		vscode.commands.registerCommand('suika.toggleAgentVisibility', () => {
 			import('./commands/toggle-agent-visibility.js').then(module => module.toggleAgentVisibilityCommand());
 		}),
-		vscode.commands.registerCommand('ai-101-ts.openDocumentation', () => {
+		vscode.commands.registerCommand('suika.openDocumentation', () => {
 			import('./commands/toggle-agent-visibility.js').then(module => module.openDocumentationCommand());
 		}),
-		vscode.commands.registerCommand('ai-101-ts.showGettingStarted', () => {
+		vscode.commands.registerCommand('suika.showGettingStarted', () => {
 			import('./commands/show-getting-started.js').then(module => module.showGettingStartedCommand());
 		}),
-		vscode.commands.registerCommand('ai-101-ts.viewChangelog', () => {
+		vscode.commands.registerCommand('suika.viewChangelog', () => {
 			import('./commands/view-changelog.js').then(module => module.viewChangelogCommand(context));
 		})
 	);

@@ -419,11 +419,11 @@ Exposed in VSCode settings:
 
 ```json
 {
-  "ai101.cache.enabled": true,
-  "ai101.cache.l1MaxSize": 100,
-  "ai101.cache.l1TtlHours": 1,
-  "ai101.cache.l2TtlHours": 24,
-  "ai101.cache.directory": "~/.ai-101/cache"
+  "suika.cache.enabled": true,
+  "suika.cache.l1MaxSize": 100,
+  "suika.cache.l1TtlHours": 1,
+  "suika.cache.l2TtlHours": 24,
+  "suika.cache.directory": "~/.ai-101/cache"
 }
 ```
 

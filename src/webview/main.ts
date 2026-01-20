@@ -277,7 +277,7 @@ function applyModeUpdate(mode: string, config: any) {
         metricsEl.setAttribute('data-mode', mode);
     }
 
-    console.log(`AI-101 Webview: Mode=${mode}, Verbosity=${currentVerbosity}, HUD Opacity=${config.hudOpacity}, TooltipMode=${tooltipManager ? tooltipManager.currentMode : 'not initialized'}`);
+    console.log(`Suika Webview: Mode=${mode}, Verbosity=${currentVerbosity}, HUD Opacity=${config.hudOpacity}, TooltipMode=${tooltipManager ? tooltipManager.currentMode : 'not initialized'}`);
 }
 
 

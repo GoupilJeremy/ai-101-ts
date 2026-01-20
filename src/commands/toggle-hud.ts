@@ -10,5 +10,5 @@ export async function toggleHUDCommand(): Promise<void> {
     stateManager.toggleHUD();
 
     const isVisible = stateManager.isHUDVisible();
-    vscode.window.showInformationMessage(`AI-101: HUD ${isVisible ? 'visible' : 'hidden'}`);
+    vscode.window.showInformationMessage(`Suika: HUD ${isVisible ? 'visible' : 'hidden'}`);
 }

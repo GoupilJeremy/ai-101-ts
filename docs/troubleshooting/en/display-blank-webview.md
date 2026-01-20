@@ -41,7 +41,7 @@ The HUD webview panel opens but displays only a blank/white screen. No agents, v
 ```
 1. Close the webview panel
 2. Open Command Palette
-3. Run "AI 101: Toggle HUD"
+3. Run "Suika: Toggle HUD"
 4. Or reload VSCode window (Ctrl+R / Cmd+R)
 ```
 
@@ -49,7 +49,7 @@ The HUD webview panel opens but displays only a blank/white screen. No agents, v
 
 ```bash
 # Clear webview cache
-rm -rf ~/.vscode/extensions/ai-101-ts/dist/webview/*
+rm -rf ~/.vscode/extensions/suika/dist/webview/*
 ```
 
 Then reload VSCode.
@@ -60,7 +60,7 @@ Verify extension files are intact:
 
 ```
 1. Open Extensions view
-2. Right-click AI-101 extension
+2. Right-click Suika extension
 3. Select "Reinstall Extension"
 4. Reload window
 ```

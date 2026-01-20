@@ -10,11 +10,11 @@ lastModified: '2026-01-12'
 modificationType: 'critical-fixes-applied'
 ---
 
-# ai-101-ts - Epic Breakdown
+# suika - Epic Breakdown
 
 ## Overview
 
-This document provides the complete epic and story breakdown for ai-101-ts, decomposing the requirements from the PRD, UX Design, and Architecture into implementable stories.
+This document provides the complete epic and story breakdown for suika, decomposing the requirements from the PRD, UX Design, and Architecture into implementable stories.
 
 ## Requirements Inventory
 
@@ -254,7 +254,7 @@ This document provides the complete epic and story breakdown for ai-101-ts, deco
 
 **Technical Requirements from Architecture:**
 
-- **CRITICAL: Starter Template** - Use Microsoft Yeoman Generator (`yo code`) with prompts: Extension type (New Extension TypeScript), Name (ai-101-ts), Bundler (esbuild - NOT webpack), Package manager (npm)
+- **CRITICAL: Starter Template** - Use Microsoft Yeoman Generator (`yo code`) with prompts: Extension type (New Extension TypeScript), Name (suika), Bundler (esbuild - NOT webpack), Package manager (npm)
 - Build tool: esbuild (latest) with dual-build configuration (extension CJS + webview IIFE)
 - Build performance: Development <1s, Watch mode <200ms, Production <3s
 - Runtime: Node.js 16+, TypeScript 5.3.3 (strict mode), VSCode API 1.75+
@@ -695,7 +695,7 @@ So that I have a production-ready foundation with optimal build performance.
 **And** I select "New Extension (TypeScript)" as the extension type
 **And** I select "esbuild" as the bundler (NOT webpack)
 **And** I select "npm" as the package manager
-**And** I provide "ai-101-ts" as the extension name
+**And** I provide "suika" as the extension name
 **Then** A complete VSCode extension project structure is generated
 **And** The project includes `src/extension.ts` entry point
 **And** The project includes `package.json` with VSCode engine >=1.75.0
@@ -765,8 +765,8 @@ So that sensitive credentials are encrypted at rest and never logged.
 **Given** The extension is activated with `ExtensionContext`
 **When** I create `src/config/secret-manager.ts`
 **And** I implement methods: `storeApiKey()`, `getApiKey()`, `deleteApiKey()`
-**Then** API keys are stored via `context.secrets.store('ai101.{provider}.apiKey', key)`
-**And** API keys are retrieved via `context.secrets.get('ai101.{provider}.apiKey')`
+**Then** API keys are stored via `context.secrets.store('suika.{provider}.apiKey', key)`
+**And** API keys are retrieved via `context.secrets.get('suika.{provider}.apiKey')`
 **And** SecretStorage encryption is handled by VSCode platform automatically
 **And** API keys are NEVER logged to console or files
 **And** API keys are NEVER stored in `settings.json` or environment variables
@@ -789,7 +789,7 @@ So that users can quickly set up optimal defaults for their workflow.
 **Then** "Solo Developer" preset optimizes for: Learning Mode, single user, detailed explanations
 **And** "Team" preset optimizes for: visible labels, team metrics, pair programming
 **And** "Enterprise" preset optimizes for: on-premise LLMs, strict security, compliance logging
-**And** Users can select preset via Command Palette: "AI-101: Apply Configuration Preset"
+**And** Users can select preset via Command Palette: "Suika: Apply Configuration Preset"
 **And** Preset application updates VSCode settings with template values
 **And** Users can customize preset values after application
 **And** Preset selection is tracked in telemetry (opt-in)
@@ -805,12 +805,12 @@ So that settings are portable between machines and team members can share config
 **Acceptance Criteria:**
 
 **Given** ConfigurationManager is implemented
-**When** User invokes "AI-101: Export Configuration" command
+**When** User invokes "Suika: Export Configuration" command
 **Then** All non-secret settings are serialized to JSON file
 **And** User selects save location via VSCode file picker
 **And** Exported file excludes API keys and secrets
 **And** Exported file includes version number for compatibility checking
-**When** User invokes "AI-101: Import Configuration" command
+**When** User invokes "Suika: Import Configuration" command
 **Then** User selects configuration JSON file via file picker
 **And** Settings are validated before application
 **And** Incompatible versions show warning with migration options
@@ -1687,7 +1687,7 @@ So that the interface matches my personal preferences and workflow.
 **Acceptance Criteria:**
 
 **Given** Visual system and mode system are implemented
-**When** User opens customization settings (Command: "AI-101: Customize Appearance")
+**When** User opens customization settings (Command: "Suika: Customize Appearance")
 **Then** Settings UI allows color palette selection (8 predefined palettes + custom)
 **And** Transparency level slider with 3 presets: Minimal (80%), Medium (50%), Full (20%)
 **And** Agent size slider: Small (16px), Medium (24px), Large (32px)
@@ -1788,7 +1788,7 @@ So that AI suggestions align with existing codebase conventions.
 **And** Architect identifies build tools and configuration (webpack, vite, esbuild)
 **And** Architect recognizes code style conventions (naming, file organization, module patterns)
 **And** Architecture analysis results cached for current workspace session
-**And** Architecture summary accessible via command: "AI-101: View Detected Architecture"
+**And** Architecture summary accessible via command: "Suika: View Detected Architecture"
 **And** User can override detected patterns via settings if detection incorrect
 **And** Architecture analysis completes in <5 seconds for typical projects
 **And** Unit tests verify pattern detection accuracy with sample projects
@@ -1876,7 +1876,7 @@ So that I understand how suggestions evolved and learn from the decision process
 **Acceptance Criteria:**
 
 **Given** Multiple agent interactions have occurred
-**When** I open the History Timeline (Command: "AI-101: Show Decision History")
+**When** I open the History Timeline (Command: "Suika: Show Decision History")
 **Then** Timeline displays chronological list of all AI interactions in current session
 **And** Each entry shows: timestamp, agent(s) involved, action taken, user decision (accept/reject)
 **And** Click entry expands full reasoning and alternatives considered
@@ -1951,7 +1951,7 @@ So that I can integrate the extension into my existing keyboard workflow.
 **Acceptance Criteria:**
 
 **Given** Extension is activated
-**When** I open hotkey configuration (Command: "AI-101: Configure Hotkeys")
+**When** I open hotkey configuration (Command: "Suika: Configure Hotkeys")
 **Then** Configurable hotkeys listed: HUD toggle, Focus Mode, Force agent states, Accept/Reject
 **And** Hotkey editor shows current binding and allows custom key combination input
 **And** Conflict detection warns if hotkey already bound to VSCode or other extension
@@ -2047,7 +2047,7 @@ So that I can discover and trigger actions using VSCode's standard interface.
 
 **Given** Extension is activated
 **When** I open VSCode Command Palette (Cmd+Shift+P / Ctrl+Shift+P)
-**Then** All extension commands listed with "AI-101:" prefix for discoverability
+**Then** All extension commands listed with "Suika:" prefix for discoverability
 **And** Commands include: Toggle HUD, Change Mode, Configure Hotkeys, Show History, etc.
 **And** Commands have descriptive text explaining what they do
 **And** Commands organized logically: View, Mode, Configure, Debug, Help categories
@@ -2122,7 +2122,7 @@ So that I can share usage data to improve the product without compromising sensi
 **Then** Telemetry consent dialog explains data collection clearly
 **And** Dialog details: what data is collected, how it's used, who has access
 **And** Consent is opt-in (default is NO collection until user explicitly agrees)
-**And** User can change consent anytime via "AI-101: Telemetry Settings" command
+**And** User can change consent anytime via "Suika: Telemetry Settings" command
 **And** No user code is logged without explicit consent (NFR13 compliance)
 **And** No API keys, secrets, or sensitive data ever transmitted (strict filtering)
 **And** Telemetry data encrypted in transit (HTTPS/TLS)
@@ -2147,7 +2147,7 @@ So that I understand how I'm using the tool and the value it provides.
 **And** Metrics include: suggestions accepted, suggestions rejected, acceptance rate
 **And** Metrics include: estimated time saved (based on accepted suggestions)
 **And** Time saved calculation: average typing speed × code lines generated
-**And** User can view metrics dashboard: "AI-101: View My Metrics"
+**And** User can view metrics dashboard: "Suika: View My Metrics"
 **And** Dashboard shows: daily/weekly/monthly trends, totals, acceptance rate graph
 **And** Dashboard respects user privacy (local display, not shared unless consented)
 **And** Metrics persist across extension updates (migration strategy)
@@ -2213,7 +2213,7 @@ So that I track whether the tool is improving my understanding of AI and coding 
 **Given** User has used extension for at least 7 days
 **When** One week has passed since last learning survey
 **Then** Survey prompt appears at convenient time (low activity detection)
-**And** Survey asks: "This week, how much did AI-101 improve your understanding?" (1-10 scale)
+**And** Survey asks: "This week, how much did Suika improve your understanding?" (1-10 scale)
 **And** Survey asks: "What patterns or concepts did you learn?" (optional freeform)
 **And** Target learning impact score documented: 7/10 average (NFR29)
 **And** Survey reminds user of features they haven't tried yet
@@ -2235,7 +2235,7 @@ So that I understand user satisfaction and likelihood to recommend the tool.
 
 **Given** User has used extension for at least 30 days
 **When** 30 days have passed since installation or last NPS survey
-**Then** NPS survey prompt appears with standard question: "How likely are you to recommend AI-101 to a colleague?" (0-10 scale)
+**Then** NPS survey prompt appears with standard question: "How likely are you to recommend Suika to a colleague?" (0-10 scale)
 **And** Follow-up question: "What is the primary reason for your score?" (freeform text)
 **And** NPS calculation: % Promoters (9-10) - % Detractors (0-6) = NPS
 **And** Target NPS documented for product goals
@@ -2280,7 +2280,7 @@ So that I can identify who needs support and measure team-wide value.
 **Acceptance Criteria:**
 
 **Given** Team telemetry mode is enabled (organization setting)
-**When** Tech lead opens team dashboard: "AI-101: View Team Metrics"
+**When** Tech lead opens team dashboard: "Suika: View Team Metrics"
 **Then** Dashboard shows aggregate metrics: team adoption rate, active users, suggestion usage
 **And** Dashboard shows team average comprehension score (from post-session surveys)
 **And** Dashboard shows team average acceptance rate (anonymous, no individual attribution)
@@ -2397,7 +2397,7 @@ So that I can build custom analytics, notifications, or integrations.
 ### Story 9.5: Implement Typed Configuration API for Programmatic Access
 
 As an extension developer,
-I want programmatic access to AI-101 configuration,
+I want programmatic access to Suika configuration,
 So that I can read/write settings from my custom extension.
 
 **Acceptance Criteria:**
@@ -2450,7 +2450,7 @@ So that my extensions don't break unexpectedly on updates.
 
 As a new user,
 I want getting-started documentation accessible within the extension,
-So that I can learn how to use AI-101 without leaving VSCode.
+So that I can learn how to use Suika without leaving VSCode.
 
 **Acceptance Criteria:**
 
@@ -2460,7 +2460,7 @@ So that I can learn how to use AI-101 without leaving VSCode.
 **And** Guide includes: quick tour, first suggestion walkthrough, mode explanations
 **And** Guide is interactive with "Try it now" buttons that trigger real features
 **And** Guide uses screenshots and animations to demonstrate concepts
-**And** Guide accessible anytime via "AI-101: Show Getting Started" command
+**And** Guide accessible anytime via "Suika: Show Getting Started" command
 **And** Guide tracks completion progress (which sections viewed)
 **And** Guide includes video tutorials (linked, not embedded for size)
 **And** Guide supports search within content
@@ -2479,7 +2479,7 @@ So that I can self-diagnose and resolve problems quickly.
 **Acceptance Criteria:**
 
 **Given** Extension is installed
-**When** I open troubleshooting: "AI-101: Troubleshooting"
+**When** I open troubleshooting: "Suika: Troubleshooting"
 **Then** Knowledge base opens with search input and symptom categories
 **And** Categories include: Performance, Connectivity, Display Issues, API Key Problems
 **And** Search finds articles by symptom keywords (e.g., "slow", "doesn't work", "blank screen")
@@ -2523,7 +2523,7 @@ So that I can understand the codebase and contribute effectively.
 
 As an extension developer,
 I want comprehensive API documentation with runnable examples,
-So that I can integrate with AI-101 quickly and correctly.
+So that I can integrate with Suika quickly and correctly.
 
 **Acceptance Criteria:**
 
@@ -2585,7 +2585,7 @@ So that I know what's new, what's fixed, and who contributed.
 **And** Changelog includes "Thank you" section recognizing all contributors
 **And** Changelog auto-generated from conventional commit messages (tooling)
 **And** Manual changelog editing supported for clarity and organization
-**And** Changelog accessible via "AI-101: View Changelog" command
+**And** Changelog accessible via "Suika: View Changelog" command
 **And** Changelog displayed after extension updates (highlights new features)
 **And** Changelog maintained in repository root for GitHub visibility
 

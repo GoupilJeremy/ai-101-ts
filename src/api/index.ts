@@ -1,12 +1,12 @@
 /**
- * Public API module for AI-101 extension.
+ * Public API module for Suika extension.
  * 
  * @packageDocumentation
  * @module api
  * 
  * @remarks
  * This module exports all public types and interfaces that external extensions
- * can use to integrate with AI-101.
+ * can use to integrate with Suika.
  * 
  * **Semantic Versioning:**
  * All exports follow semantic versioning (semver). Breaking changes require

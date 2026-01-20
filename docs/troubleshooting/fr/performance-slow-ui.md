@@ -22,7 +22,7 @@ Les animations du HUD apparaissent saccadées, l'interface répond lentement, ou
 ## Étapes de Diagnostic
 
 1. **Vérifier l'utilisation du CPU** dans les Outils de Développement VSCode (Aide > Basculer les Outils de Développement)
-   - Rechercher une utilisation élevée du CPU (>80%) quand AI-101 est actif
+   - Rechercher une utilisation élevée du CPU (>80%) quand Suika est actif
    
 2. **Vérifier le compteur FPS** (si disponible en mode debug)
    - L'objectif est 60fps pour des animations fluides
@@ -43,16 +43,16 @@ Le Mode Performance réduit la complexité des animations et limite les mises à
 
 ```
 1. Ouvrir la Palette de Commandes (Ctrl+Shift+P / Cmd+Shift+P)
-2. Exécuter "AI 101: Toggle Performance Mode"
+2. Exécuter "Suika: Toggle Performance Mode"
 3. Redémarrer VSCode si les problèmes persistent
 ```
 
 **Paramètres:**
 ```json
 {
-  "ai101.performanceMode.autoActivate": true,
-  "ai101.performanceMode.collisionThrottleMs": 500,
-  "ai101.performanceMode.metricsThrottleMs": 1000
+  "suika.performanceMode.autoActivate": true,
+  "suika.performanceMode.collisionThrottleMs": 500,
+  "suika.performanceMode.metricsThrottleMs": 1000
 }
 ```
 
@@ -62,7 +62,7 @@ Des niveaux de transparence plus bas réduisent la charge GPU.
 
 ```
 1. Ouvrir les Paramètres (Ctrl+, / Cmd+,)
-2. Rechercher "ai101.ui.transparency"
+2. Rechercher "suika.ui.transparency"
 3. Définir sur "minimal" au lieu de "full"
 ```
 
@@ -88,7 +88,7 @@ Des pilotes graphiques obsolètes peuvent causer des problèmes de rendu.
 ## Prévention
 
 - **Garder peu d'extensions** - N'installer que les extensions que vous utilisez activement
-- **Activer le Mode Performance automatique** - Définir `ai101.performanceMode.autoActivate: true`
+- **Activer le Mode Performance automatique** - Définir `suika.performanceMode.autoActivate: true`
 - **Utiliser le Mode Focus lors du codage** - Cache les agents pour réduire la complexité visuelle
 - **Fermer les fenêtres VSCode inutilisées** - Chaque fenêtre consomme des ressources
 - **Redémarrer VSCode quotidiennement** - Efface les fuites mémoire des sessions longues

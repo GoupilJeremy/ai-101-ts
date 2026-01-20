@@ -52,7 +52,7 @@ export class MetricsStorage {
     public async exportMetrics(): Promise<void> {
         const metrics = await this.loadMetrics();
         const saveUri = await vscode.window.showSaveDialog({
-            defaultUri: vscode.Uri.file('ai-101-metrics.json'),
+            defaultUri: vscode.Uri.file('suika-metrics.json'),
             filters: { 'JSON': ['json'] },
             title: 'Export Usage Metrics'
         });

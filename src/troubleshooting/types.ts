@@ -1,5 +1,5 @@
 /**
- * Knowledge Base Types for AI-101 Troubleshooting System
+ * Knowledge Base Types for Suika Troubleshooting System
  * 
  * Defines the data structures for the searchable troubleshooting knowledge base.
  * Articles are stored as markdown files with YAML frontmatter and loaded at runtime.

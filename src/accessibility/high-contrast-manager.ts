@@ -73,7 +73,7 @@ export class HighContrastManager {
      * Load settings from VSCode configuration.
      */
     private loadSettings(): void {
-        const config = vscode.workspace.getConfiguration('ai101.accessibility');
+        const config = vscode.workspace.getConfiguration('suika.accessibility');
 
         // Check for manual override setting
         const manualSetting = config.get<boolean | null>('highContrast', null);
@@ -129,7 +129,7 @@ export class HighContrastManager {
         this.setHighContrastMode(isHighContrast);
 
         if (isHighContrast) {
-            console.log('AI-101: High Contrast theme detected, enabling High Contrast Mode');
+            console.log('Suika: High Contrast theme detected, enabling High Contrast Mode');
         }
     }
 
@@ -157,7 +157,7 @@ export class HighContrastManager {
         // Emit change event
         this.onHighContrastChangedEmitter.fire(enabled);
 
-        console.log(`AI-101: High Contrast Mode ${enabled ? 'enabled' : 'disabled'}`);
+        console.log(`Suika: High Contrast Mode ${enabled ? 'enabled' : 'disabled'}`);
     }
 
     /**
@@ -169,13 +169,13 @@ export class HighContrastManager {
         this.manualOverride = newState;
 
         // Persist manual override to settings
-        await vscode.workspace.getConfiguration('ai101.accessibility')
+        await vscode.workspace.getConfiguration('suika.accessibility')
             .update('highContrast', newState, vscode.ConfigurationTarget.Workspace);
 
         this.setHighContrastMode(newState);
 
         vscode.window.showInformationMessage(
-            `AI-101: High Contrast Mode ${newState ? 'enabled' : 'disabled'}`
+            `Suika: High Contrast Mode ${newState ? 'enabled' : 'disabled'}`
         );
     }
 
@@ -186,7 +186,7 @@ export class HighContrastManager {
         this.manualOverride = undefined;
 
         // Clear setting
-        await vscode.workspace.getConfiguration('ai101.accessibility')
+        await vscode.workspace.getConfiguration('suika.accessibility')
             .update('highContrast', null, vscode.ConfigurationTarget.Workspace);
 
         // Re-check current theme

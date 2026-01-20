@@ -15,7 +15,7 @@ So that I have a production-ready foundation with optimal build performance.
 **And** I select "New Extension (TypeScript)" as the extension type
 **And** I select "esbuild" as the bundler (NOT webpack)
 **And** I select "npm" as the package manager
-**And** I provide "ai-101-ts" as the extension name
+**And** I provide "suika" as the extension name
 **Then** A complete VSCode extension project structure is generated
 **And** The project includes `src/extension.ts` entry point
 **And** The project includes `package.json` with VSCode engine >=1.75.0
@@ -80,8 +80,8 @@ So that sensitive credentials are encrypted at rest and never logged.
 **Given** The extension is activated with `ExtensionContext`
 **When** I create `src/config/secret-manager.ts`
 **And** I implement methods: `storeApiKey()`, `getApiKey()`, `deleteApiKey()`
-**Then** API keys are stored via `context.secrets.store('ai101.{provider}.apiKey', key)`
-**And** API keys are retrieved via `context.secrets.get('ai101.{provider}.apiKey')`
+**Then** API keys are stored via `context.secrets.store('suika.{provider}.apiKey', key)`
+**And** API keys are retrieved via `context.secrets.get('suika.{provider}.apiKey')`
 **And** SecretStorage encryption is handled by VSCode platform automatically
 **And** API keys are NEVER logged to console or files
 **And** API keys are NEVER stored in `settings.json` or environment variables
@@ -104,7 +104,7 @@ So that users can quickly set up optimal defaults for their workflow.
 **Then** "Solo Developer" preset optimizes for: Learning Mode, single user, detailed explanations
 **And** "Team" preset optimizes for: visible labels, team metrics, pair programming
 **And** "Enterprise" preset optimizes for: on-premise LLMs, strict security, compliance logging
-**And** Users can select preset via Command Palette: "AI-101: Apply Configuration Preset"
+**And** Users can select preset via Command Palette: "Suika: Apply Configuration Preset"
 **And** Preset application updates VSCode settings with template values
 **And** Users can customize preset values after application
 **And** Preset selection is tracked in telemetry (opt-in)
@@ -120,12 +120,12 @@ So that settings are portable between machines and team members can share config
 **Acceptance Criteria:**
 
 **Given** ConfigurationManager is implemented
-**When** User invokes "AI-101: Export Configuration" command
+**When** User invokes "Suika: Export Configuration" command
 **Then** All non-secret settings are serialized to JSON file
 **And** User selects save location via VSCode file picker
 **And** Exported file excludes API keys and secrets
 **And** Exported file includes version number for compatibility checking
-**When** User invokes "AI-101: Import Configuration" command
+**When** User invokes "Suika: Import Configuration" command
 **Then** User selects configuration JSON file via file picker
 **And** Settings are validated before application
 **And** Incompatible versions show warning with migration options

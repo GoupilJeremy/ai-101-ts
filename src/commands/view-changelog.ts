@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 
 /**
- * Command handler for "AI-101: View Changelog"
+ * Command handler for "Suika: View Changelog"
  * Opens the CHANGELOG.md file in Markdown Preview mode.
  */
 export async function viewChangelogCommand(context: vscode.ExtensionContext) {

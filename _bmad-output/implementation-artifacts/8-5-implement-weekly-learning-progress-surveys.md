@@ -1,6 +1,6 @@
 # Story 8.5: Implement Weekly Learning Progress Surveys
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -15,7 +15,7 @@ so that I track whether the tool is improving my understanding of AI and coding 
 1. **Given** User has used extension for at least 7 days
 2. **When** One week has passed since last learning survey
 3. **Then** Survey prompt appears at convenient time (low activity detection) - *Implementation Note: Use "Next Launch" strategy established in Story 8.4 as "convenient time"*
-4. **And** Survey asks: "This week, how much did AI-101 improve your understanding?" (1-10 scale)
+4. **And** Survey asks: "This week, how much did Suika improve your understanding?" (1-10 scale)
 5. **And** Survey asks: "What patterns or concepts did you learn?" (optional freeform)
 6. **And** Target learning impact score documented: 7/10 average (NFR29)
 7. **And** Survey reminds user of features they haven't tried yet (Smart Feature Discovery)

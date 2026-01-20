@@ -13,7 +13,7 @@ export class ErrorHandler {
 
     public static initialize() {
         if (!this.outputChannel) {
-            this.outputChannel = vscode.window.createOutputChannel('AI 101');
+            this.outputChannel = vscode.window.createOutputChannel('Suika');
         }
     }
 
@@ -77,7 +77,7 @@ export class ErrorHandler {
 
     private static showFallbackNotification(message: string, code: string): void {
         const actions = ['Open Logs'];
-        vscode.window.showErrorMessage(`AI 101 Error: ${message} (Code: ${code})`, ...actions).then(selection => {
+        vscode.window.showErrorMessage(`Suika Error: ${message} (Code: ${code})`, ...actions).then(selection => {
             if (selection === 'Open Logs') {
                 this.outputChannel?.show();
             }

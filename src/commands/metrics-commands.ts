@@ -7,13 +7,13 @@ import { WebviewManager } from '../ui/webview-manager';
  */
 export function registerMetricsCommands(context: vscode.ExtensionContext) {
     context.subscriptions.push(
-        vscode.commands.registerCommand('ai-101-ts.viewMetrics', async () => {
+        vscode.commands.registerCommand('suika.viewMetrics', async () => {
             await showMetricsDashboard(context);
         })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('ai-101-ts.exportMetrics', async () => {
+        vscode.commands.registerCommand('suika.exportMetrics', async () => {
             const metricsService = MetricsService.getInstance();
             await metricsService.exportMetrics();
         })
@@ -23,7 +23,7 @@ export function registerMetricsCommands(context: vscode.ExtensionContext) {
 async function showMetricsDashboard(context: vscode.ExtensionContext) {
     const panel = vscode.window.createWebviewPanel(
         'ai101Metrics',
-        'AI-101 Usage Metrics',
+        'Suika Usage Metrics',
         vscode.ViewColumn.One,
         {
             enableScripts: true,
@@ -89,7 +89,7 @@ function getDashboardHtml(webview: vscode.Webview, extensionUri: vscode.Uri, met
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-101 Usage Metrics</title>
+    <title>Suika Usage Metrics</title>
     <style>
         :root {
             --bg-color: #f4f1ea;

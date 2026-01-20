@@ -1,6 +1,6 @@
 # Story 5.2: Implement Learning Mode with Pedagogical Explanations
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

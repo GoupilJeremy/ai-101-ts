@@ -1,6 +1,6 @@
 # Story 6.5: Implement Architecture-Aligned Suggestion Generation
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

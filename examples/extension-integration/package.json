@@ -1,7 +1,7 @@
 {
     "name": "ai-101-integration-example",
-    "displayName": "AI-101 Integration Example",
-    "description": "Example extension demonstrating AI-101 API integration",
+    "displayName": "Suika Integration Example",
+    "description": "Example extension demonstrating Suika API integration",
     "version": "1.0.0",
     "publisher": "example",
     "engines": {
@@ -18,16 +18,16 @@
         "commands": [
             {
                 "command": "example.toggleAI101Mode",
-                "title": "Toggle AI-101 Mode"
+                "title": "Toggle Suika Mode"
             },
             {
                 "command": "example.showAI101Info",
-                "title": "Show AI-101 Info"
+                "title": "Show Suika Info"
             }
         ]
     },
     "extensionDependencies": [
-        "GoupilJeremy.ai-101-ts"
+        "GoupilJeremy.suika"
     ],
     "scripts": {
         "vscode:prepublish": "npm run compile",

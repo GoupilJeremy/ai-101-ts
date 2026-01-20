@@ -8,7 +8,7 @@ techniques_used: ['Mind Mapping', 'Cross-Pollination', 'SCAMPER Method']
 ideas_generated: 85+
 session_active: false
 workflow_completed: true
-context_file: '/home/jeregoupix/dev/ai-101-ts/_bmad/bmm/data/project-context-template.md'
+context_file: '/home/jeregoupix/dev/suika/_bmad/bmm/data/project-context-template.md'
 ---
 
 # Brainstorming Session Results

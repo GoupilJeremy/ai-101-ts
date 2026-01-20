@@ -16,7 +16,7 @@ relatedDocs:
 
 ## Symptom Description
 
-VSCode consumes excessive memory (>2GB), becomes slow over time, or crashes with out-of-memory errors. The AI-101 extension may contribute to high memory usage through caching or state management.
+VSCode consumes excessive memory (>2GB), becomes slow over time, or crashes with out-of-memory errors. The Suika extension may contribute to high memory usage through caching or state management.
 
 ## Diagnosis Steps
 
@@ -25,7 +25,7 @@ VSCode consumes excessive memory (>2GB), becomes slow over time, or crashes with
    - Look for memory growth over time
    
 2. **Check cache size**
-   - Cache is stored in `~/.vscode/extensions/ai-101-ts/cache/`
+   - Cache is stored in `~/.vscode/extensions/suika/cache/`
    - Check folder size (should be <100MB typically)
    
 3. **Monitor over time**
@@ -41,13 +41,13 @@ The hybrid cache (L1 memory + L2 file system) may grow too large.
 
 ```bash
 # Clear cache manually
-rm -rf ~/.vscode/extensions/ai-101-ts/cache/*
+rm -rf ~/.vscode/extensions/suika/cache/*
 ```
 
 Or use the command:
 ```
 1. Open Command Palette
-2. Run "AI 101: Clear Cache"
+2. Run "Suika: Clear Cache"
 3. Restart VSCode
 ```
 
@@ -57,7 +57,7 @@ Lower the maximum token limit to reduce memory usage.
 
 ```json
 {
-  "ai101.performance.maxTokens": 2048  // Default is 4096
+  "suika.performance.maxTokens": 2048  // Default is 4096
 }
 ```
 
@@ -67,7 +67,7 @@ Performance Mode limits memory-intensive features.
 
 ```
 1. Open Command Palette
-2. Run "AI 101: Toggle Performance Mode"
+2. Run "Suika: Toggle Performance Mode"
 ```
 
 ### Solution 4: Restart VSCode Regularly

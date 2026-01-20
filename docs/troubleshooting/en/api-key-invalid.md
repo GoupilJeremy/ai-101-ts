@@ -50,7 +50,7 @@ Extension shows "Invalid API Key" or "Authentication Failed" errors. LLM provide
 
 ```
 1. Open Command Palette
-2. Run "AI 101: Configure API Keys"
+2. Run "Suika: Configure API Keys"
 3. Paste API key carefully (no extra spaces)
 4. Save and test
 ```
@@ -63,13 +63,13 @@ If key is compromised or expired:
 1. Visit https://platform.openai.com/api-keys
 2. Click "Create new secret key"
 3. Copy key immediately (shown only once)
-4. Configure in AI-101
+4. Configure in Suika
 
 **Anthropic:**
 1. Visit https://console.anthropic.com/settings/keys
 2. Click "Create Key"
 3. Copy key
-4. Configure in AI-101
+4. Configure in Suika
 
 ### Solution 3: Check Key Permissions
 
@@ -92,7 +92,7 @@ Remove and re-add API key:
 
 ```
 1. Open Command Palette
-2. Run "AI 101: Reset Configuration"
+2. Run "Suika: Reset Configuration"
 3. Reconfigure API key
 4. Test connection
 ```

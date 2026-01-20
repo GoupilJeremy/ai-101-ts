@@ -40,7 +40,7 @@ export class SurveyManager {
      * Load survey configuration from VSCode settings.
      */
     private loadConfiguration(): void {
-        const config = vscode.workspace.getConfiguration('ai101.teamMode');
+        const config = vscode.workspace.getConfiguration('suika.teamMode');
         this.surveyEnabled = config.get<boolean>('surveyEnabled', false); // Default: disabled (opt-in)
         console.log(`SurveyManager: Survey enabled = ${this.surveyEnabled}`);
     }
@@ -142,7 +142,7 @@ export class SurveyManager {
      * Store survey response in workspace state (anonymized).
      */
     private async storeSurveyResponse(response: ISurveyResponse): Promise<void> {
-        const config = vscode.workspace.getConfiguration('ai101.teamMode');
+        const config = vscode.workspace.getConfiguration('suika.teamMode');
         const existingResponses = config.get<ISurveyResponse[]>('surveyResponses', []);
 
         existingResponses.push(response);
@@ -159,7 +159,7 @@ export class SurveyManager {
      * Get average comprehension score from stored responses.
      */
     public getAverageComprehensionScore(): number {
-        const config = vscode.workspace.getConfiguration('ai101.teamMode');
+        const config = vscode.workspace.getConfiguration('suika.teamMode');
         const responses = config.get<ISurveyResponse[]>('surveyResponses', []);
 
         if (responses.length === 0) {return 0;}

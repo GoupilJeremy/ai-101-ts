@@ -27,7 +27,7 @@ describe('VersionManager', () => {
 
         await versionManager.checkVersionUpdate();
 
-        expect(context.globalState.update).toHaveBeenCalledWith('ai101.lastKnownVersion', '1.1.0');
+        expect(context.globalState.update).toHaveBeenCalledWith('suika.lastKnownVersion', '1.1.0');
         expect(vscode.window.showInformationMessage).not.toHaveBeenCalled();
     });
 
@@ -37,7 +37,7 @@ describe('VersionManager', () => {
         await versionManager.checkVersionUpdate();
 
         expect(vscode.window.showInformationMessage).toHaveBeenCalled();
-        expect(context.globalState.update).toHaveBeenCalledWith('ai101.lastKnownVersion', '1.1.0');
+        expect(context.globalState.update).toHaveBeenCalledWith('suika.lastKnownVersion', '1.1.0');
     });
 
     it('should not show notification if version is same', async () => {
@@ -54,6 +54,6 @@ describe('VersionManager', () => {
 
         await versionManager.checkVersionUpdate();
 
-        expect(vscode.commands.executeCommand).toHaveBeenCalledWith('ai-101-ts.viewChangelog');
+        expect(vscode.commands.executeCommand).toHaveBeenCalledWith('suika.viewChangelog');
     });
 });

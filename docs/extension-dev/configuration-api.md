@@ -1,18 +1,18 @@
 # Configuration API Guide
 
-The AI-101 extension provides a typed API for programmatic access to its configuration. This allows other extensions to read and write AI-101 settings with full type safety and validation.
+The Suika extension provides a typed API for programmatic access to its configuration. This allows other extensions to read and write Suika settings with full type safety and validation.
 
 ## Accessing the API
 
-To use the Configuration API, you first need to get the `IAI101API` instance from the AI-101 extension.
+To use the Configuration API, you first need to get the `IAI101API` instance from the Suika extension.
 
 ```typescript
 import * as vscode from 'vscode';
-// Note: You should depend on the ai-101-ts npm package or copy the types
+// Note: You should depend on the suika npm package or copy the types
 import { IAI101API, UIMode } from './api'; 
 
 async function configureAI101() {
-    const ai101Extension = vscode.extensions.getExtension('GoupilJeremy.ai-101-ts');
+    const ai101Extension = vscode.extensions.getExtension('GoupilJeremy.suika');
     if (ai101Extension) {
         const api: IAI101API = await ai101Extension.activate();
         

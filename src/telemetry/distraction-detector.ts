@@ -53,8 +53,8 @@ export class DistractionDetectorService implements vscode.Disposable {
         // Listen to Config changes
         this.subscriptions.push(
             vscode.workspace.onDidChangeConfiguration(e => {
-                if (e.affectsConfiguration('ai101.ui.transparency') ||
-                    e.affectsConfiguration('ai101.ui.mode')) {
+                if (e.affectsConfiguration('suika.ui.transparency') ||
+                    e.affectsConfiguration('suika.ui.mode')) {
                     this.recordSettingsChange();
                 }
             })
@@ -157,22 +157,22 @@ export class DistractionDetectorService implements vscode.Disposable {
         ];
 
         const selection = await vscode.window.showQuickPick(items, {
-            placeHolder: "How can we make AI-101 less distracting?"
+            placeHolder: "How can we make Suika less distracting?"
         });
 
         if (selection) {
             switch (selection.action) {
                 case "toggleFocusMode":
-                    vscode.commands.executeCommand('ai-101-ts.toggleFocusMode');
+                    vscode.commands.executeCommand('suika.toggleFocusMode');
                     break;
                 case "adjustTransparency":
-                    vscode.commands.executeCommand('workbench.action.openSettings', 'ai101.ui.transparency');
+                    vscode.commands.executeCommand('workbench.action.openSettings', 'suika.ui.transparency');
                     break;
                 case "toggleAnimations":
-                    vscode.commands.executeCommand('ai-101-ts.togglePerformanceMode');
+                    vscode.commands.executeCommand('suika.togglePerformanceMode');
                     break;
                 case "configureHotkeys":
-                    vscode.commands.executeCommand('workbench.action.openGlobalKeybindings', 'ai-101-ts');
+                    vscode.commands.executeCommand('workbench.action.openGlobalKeybindings', 'suika');
                     break;
             }
         }

@@ -5,7 +5,7 @@ import * as semver from 'semver';
  * Service to manage extension version tracking and update notifications.
  */
 export class VersionManager {
-    private static readonly LAST_KNOWN_VERSION_KEY = 'ai101.lastKnownVersion';
+    private static readonly LAST_KNOWN_VERSION_KEY = 'suika.lastKnownVersion';
 
     constructor(private context: vscode.ExtensionContext) { }
 
@@ -31,13 +31,13 @@ export class VersionManager {
     }
 
     private async showUpdateNotification(version: string) {
-        const message = `AI-101 has been updated to v${version}! Check out what's new in the changelog.`;
+        const message = `Suika has been updated to v${version}! Check out what's new in the changelog.`;
         const action = 'View Changelog';
 
         const selection = await vscode.window.showInformationMessage(message, action);
 
         if (selection === action) {
-            vscode.commands.executeCommand('ai-101-ts.viewChangelog');
+            vscode.commands.executeCommand('suika.viewChangelog');
         }
     }
 }

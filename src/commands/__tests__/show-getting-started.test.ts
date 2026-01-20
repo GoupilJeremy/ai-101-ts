@@ -25,7 +25,7 @@ describe('showGettingStartedCommand', () => {
 
         expect(executeCommandMock).toHaveBeenCalledWith(
             'workbench.action.openWalkthrough',
-            'GoupilJeremy.ai-101-ts#ai101.gettingStarted',
+            'GoupilJeremy.suika#suika.gettingStarted',
             false
         );
         expect(executeCommandMock).toHaveBeenCalledTimes(1);

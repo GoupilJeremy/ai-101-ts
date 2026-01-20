@@ -1,8 +1,8 @@
 {
-  "name": "ai-101-ts",
+  "name": "suika",
   "publisher": "GoupilJeremy",
-  "displayName": "ai-101-ts",
-  "description": "VSCode AI agents with transparent HUD",
+  "displayName": "Suika",
+  "description": "Transparent AI assistant with sumi-e inspired HUD - see how AI thinks",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.108.0"
@@ -15,209 +15,209 @@
   "contributes": {
     "commands": [
       {
-        "command": "ai-101-ts.helloWorld",
+        "command": "suika.helloWorld",
         "title": "Hello World"
       },
       {
-        "command": "ai-101-ts.applyPreset",
+        "command": "suika.applyPreset",
         "title": "Apply Configuration Preset",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.exportConfig",
+        "command": "suika.exportConfig",
         "title": "Export Configuration",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.importConfig",
+        "command": "suika.importConfig",
         "title": "Import Configuration",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.toggleFocusMode",
+        "command": "suika.toggleFocusMode",
         "title": "Toggle Focus Mode",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.togglePerformanceMode",
+        "command": "suika.togglePerformanceMode",
         "title": "Toggle Performance Mode",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.toggleLargeText",
+        "command": "suika.toggleLargeText",
         "title": "Toggle Large Text Mode",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.toggleHighContrast",
+        "command": "suika.toggleHighContrast",
         "title": "Toggle High Contrast Mode",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.toggleColorblind",
+        "command": "suika.toggleColorblind",
         "title": "Toggle Colorblind Mode",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.focusHud",
+        "command": "suika.focusHud",
         "title": "Focus HUD for Keyboard Navigation",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.addContextFile",
+        "command": "suika.addContextFile",
         "title": "Add File to Context",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.removeContextFile",
+        "command": "suika.removeContextFile",
         "title": "Remove File from Context",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.viewArchitecture",
+        "command": "suika.viewArchitecture",
         "title": "View Detected Architecture",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.setPhase",
+        "command": "suika.setPhase",
         "title": "Set Development Phase",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.acceptSuggestion",
+        "command": "suika.acceptSuggestion",
         "title": "Accept AI Suggestion",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.rejectSuggestion",
+        "command": "suika.rejectSuggestion",
         "title": "Reject AI Suggestion",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.toggleHUD",
+        "command": "suika.toggleHUD",
         "title": "Toggle HUD Visibility",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.forceAgentState",
+        "command": "suika.forceAgentState",
         "title": "Force Agent State (Debug)",
-        "category": "AI 101 Debug"
+        "category": "Suika Debug"
       },
       {
-        "command": "ai-101-ts.switchToLearningMode",
+        "command": "suika.switchToLearningMode",
         "title": "Switch to Learning Mode",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.switchToExpertMode",
+        "command": "suika.switchToExpertMode",
         "title": "Switch to Expert Mode",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.switchToTeamMode",
+        "command": "suika.switchToTeamMode",
         "title": "Switch to Team Mode",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.configureApiKeys",
+        "command": "suika.configureApiKeys",
         "title": "Configure API Keys",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.resetConfig",
+        "command": "suika.resetConfig",
         "title": "Reset Configuration",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.toggleAgentVisibility",
+        "command": "suika.toggleAgentVisibility",
         "title": "Toggle Agent Visibility",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.configureTelemetry",
+        "command": "suika.configureTelemetry",
         "title": "Configure Telemetry Settings",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.openDocumentation",
+        "command": "suika.openDocumentation",
         "title": "Open Documentation",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.viewMetrics",
+        "command": "suika.viewMetrics",
         "title": "View My Metrics",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.exportMetrics",
+        "command": "suika.exportMetrics",
         "title": "Export Metrics to JSON",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.showGettingStarted",
+        "command": "suika.showGettingStarted",
         "title": "Show Getting Started",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.showTroubleshooting",
+        "command": "suika.showTroubleshooting",
         "title": "Show Troubleshooting",
-        "category": "AI 101",
+        "category": "Suika",
         "icon": "$(question)"
       },
       {
-        "command": "ai-101-ts.openTroubleshootingArticle",
+        "command": "suika.openTroubleshootingArticle",
         "title": "Open Troubleshooting Article",
-        "category": "AI 101"
+        "category": "Suika"
       },
       {
-        "command": "ai-101-ts.searchTroubleshooting",
+        "command": "suika.searchTroubleshooting",
         "title": "Search Troubleshooting",
-        "category": "AI 101",
+        "category": "Suika",
         "icon": "$(search)"
       },
       {
-        "command": "ai-101-ts.viewChangelog",
+        "command": "suika.viewChangelog",
         "title": "View Changelog",
-        "category": "AI 101",
+        "category": "Suika",
         "icon": "$(history)"
       }
     ],
     "keybindings": [
       {
-        "command": "ai-101-ts.toggleHUD",
+        "command": "suika.toggleHUD",
         "key": "ctrl+alt+h",
         "mac": "cmd+alt+h",
         "when": "editorTextFocus"
       },
       {
-        "command": "ai-101-ts.toggleFocusMode",
+        "command": "suika.toggleFocusMode",
         "key": "ctrl+shift+alt+f",
         "mac": "cmd+shift+alt+f",
         "when": "editorTextFocus"
       },
       {
-        "command": "ai-101-ts.acceptSuggestion",
+        "command": "suika.acceptSuggestion",
         "key": "ctrl+enter",
         "mac": "cmd+enter",
         "when": "editorTextFocus"
       },
       {
-        "command": "ai-101-ts.rejectSuggestion",
+        "command": "suika.rejectSuggestion",
         "key": "ctrl+backspace",
         "mac": "cmd+backspace",
         "when": "editorTextFocus"
       },
       {
-        "command": "ai-101-ts.forceAgentState",
+        "command": "suika.forceAgentState",
         "key": "ctrl+shift+alt+s",
         "mac": "cmd+shift+alt+s",
         "when": "editorTextFocus"
       }
     ],
     "configuration": {
-      "title": "AI 101",
+      "title": "Suika",
       "properties": {
-        "ai101.llm.provider": {
+        "suika.llm.provider": {
           "type": "string",
           "default": "openai",
           "enum": [
@@ -227,7 +227,7 @@
           ],
           "description": "Select the LLM provider to use."
         },
-        "ai101.ui.transparency": {
+        "suika.ui.transparency": {
           "type": "string",
           "default": "medium",
           "enum": [
@@ -237,7 +237,7 @@
           ],
           "description": "Set the transparency level of the HUD."
         },
-        "ai101.ui.mode": {
+        "suika.ui.mode": {
           "type": "string",
           "default": "learning",
           "enum": [
@@ -249,57 +249,57 @@
           ],
           "description": "Set the operating mode of the extension."
         },
-        "ai101.performance.maxTokens": {
+        "suika.performance.maxTokens": {
           "type": "number",
           "default": 4096,
           "description": "Maximum number of tokens to use for context."
         },
-        "ai101.telemetry.enabled": {
+        "suika.telemetry.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Enable opt-in telemetry for diagnostics."
         },
-        "ai101.teamMode.largeText": {
+        "suika.teamMode.largeText": {
           "type": "boolean",
           "default": false,
           "description": "Enable 125% scale for Team Mode screen sharing visibility."
         },
-        "ai101.teamMode.surveyEnabled": {
+        "suika.teamMode.surveyEnabled": {
           "type": "boolean",
           "default": false,
           "description": "Enable team comprehension surveys (opt-in)."
         },
-        "ai101.performanceMode.autoActivate": {
+        "suika.performanceMode.autoActivate": {
           "type": "boolean",
           "default": true,
           "description": "Auto-activate Performance Mode on low-memory systems (<4GB RAM)."
         },
-        "ai101.performanceMode.autoSuggest": {
+        "suika.performanceMode.autoSuggest": {
           "type": "boolean",
           "default": true,
           "description": "Suggest Performance Mode when low FPS is detected."
         },
-        "ai101.performanceMode.collisionThrottleMs": {
+        "suika.performanceMode.collisionThrottleMs": {
           "type": "number",
           "default": 500,
           "description": "Anti-collision check interval in Performance Mode (ms)."
         },
-        "ai101.performanceMode.metricsThrottleMs": {
+        "suika.performanceMode.metricsThrottleMs": {
           "type": "number",
           "default": 1000,
           "description": "Vital Signs Bar update interval in Performance Mode (ms)."
         },
-        "ai101.accessibility.highContrast": {
+        "suika.accessibility.highContrast": {
           "type": "boolean",
           "default": null,
           "description": "Enable High Contrast Mode. Set to null for auto-detection based on VSCode theme."
         },
-        "ai101.accessibility.autoDetectHighContrast": {
+        "suika.accessibility.autoDetectHighContrast": {
           "type": "boolean",
           "default": true,
           "description": "Automatically enable High Contrast Mode when VSCode High Contrast theme is active."
         },
-        "ai101.accessibility.colorblind": {
+        "suika.accessibility.colorblind": {
           "type": "object",
           "properties": {
             "enabled": {
@@ -321,7 +321,7 @@
           },
           "description": "Colorblind accessibility settings"
         },
-        "ai101.keyboard.shortcuts": {
+        "suika.keyboard.shortcuts": {
           "type": "object",
           "properties": {
             "enableHudNavigation": {
@@ -362,12 +362,12 @@
           },
           "description": "Keyboard navigation shortcuts for HUD accessibility"
         },
-        "ai101.architecture.overrides": {
+        "suika.architecture.overrides": {
           "type": "object",
           "default": {},
           "description": "Override detected project architecture patterns (e.g., techStack, patterns, conventions)."
         },
-        "ai101.errors.openLinksIn": {
+        "suika.errors.openLinksIn": {
           "type": "string",
           "default": "SimpleBrowser",
           "enum": [
@@ -380,7 +380,7 @@
     },
     "walkthroughs": [
       {
-        "id": "ai101.gettingStarted",
+        "id": "suika.gettingStarted",
         "title": "%walkthrough.gettingStarted.title%",
         "description": "%walkthrough.gettingStarted.description%",
         "steps": [
@@ -411,9 +411,9 @@
               "altText": "%walkthrough.modes.altText%"
             },
             "completionEvents": [
-              "onCommand:ai-101-ts.switchToLearningMode",
-              "onCommand:ai-101-ts.switchToExpertMode",
-              "onCommand:ai-101-ts.switchToTeamMode"
+              "onCommand:suika.switchToLearningMode",
+              "onCommand:suika.switchToExpertMode",
+              "onCommand:suika.switchToTeamMode"
             ]
           },
           {
@@ -425,8 +425,8 @@
               "altText": "%walkthrough.firstSuggestion.altText%"
             },
             "completionEvents": [
-              "onCommand:ai-101-ts.acceptSuggestion",
-              "onCommand:ai-101-ts.rejectSuggestion"
+              "onCommand:suika.acceptSuggestion",
+              "onCommand:suika.rejectSuggestion"
             ]
           }
         ]
@@ -436,10 +436,10 @@
       "explorer": [
         {
           "type": "webview",
-          "id": "ai101.troubleshootingView",
-          "name": "AI-101 Troubleshooting",
+          "id": "suika.troubleshootingView",
+          "name": "Suika Troubleshooting",
           "icon": "$(question)",
-          "contextualTitle": "AI-101 Troubleshooting"
+          "contextualTitle": "Suika Troubleshooting"
         }
       ]
     }

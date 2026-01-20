@@ -1,6 +1,6 @@
 # LLM Provider Extension Guide
 
-This guide explains how to create and register custom LLM providers for the AI-101-TS extension.
+This guide explains how to create and register custom LLM providers for the Suika-TS extension.
 
 ## Table of Contents
 
@@ -15,7 +15,7 @@ This guide explains how to create and register custom LLM providers for the AI-1
 
 ## Overview
 
-The AI-101-TS extension uses the **Adapter Pattern** to support multiple LLM providers. This allows you to integrate:
+The Suika-TS extension uses the **Adapter Pattern** to support multiple LLM providers. This allows you to integrate:
 
 - Custom LLM APIs
 - On-premise LLM deployments
@@ -210,10 +210,10 @@ The upcoming registration API will provide a cleaner interface:
 
 ```typescript
 // Future API (coming in Story 9.2)
-import * as ai101 from 'ai-101-ts';
+import * as ai101 from 'suika';
 
 export function activate(context: vscode.ExtensionContext) {
-    ai101.providers.register({
+    suika.providers.register({
         name: 'my-custom-provider',
         factory: async () => {
             const apiKey = await context.secrets.get('my-custom-llm.apiKey');
@@ -485,7 +485,7 @@ See [custom-provider-example.ts](../examples/custom-provider-example.ts) for a c
 ## Support
 
 For questions or issues:
-- Open an issue on [GitHub](https://github.com/GoupilJeremy/ai-101-ts)
+- Open an issue on [GitHub](https://github.com/GoupilJeremy/suika)
 - Check the [API documentation](../api/index.html)
 - Review existing provider implementations in `src/llm/providers/`
 

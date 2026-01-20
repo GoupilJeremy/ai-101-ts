@@ -1,4 +1,4 @@
-# AI-101 Architecture Documentation
+# Suika Architecture Documentation
 
 **Last Updated:** 2026-01-19  
 **Version:** 1.0.0  
@@ -62,7 +62,7 @@
 
 ## Version Compatibility
 
-| AI-101 Version | VSCode Version | Node Version | Documentation Version |
+| Suika Version | VSCode Version | Node Version | Documentation Version |
 |----------------|----------------|--------------|----------------------|
 | 1.0.0+         | 1.75.0+        | 16.0.0+      | 1.0.0                |
 

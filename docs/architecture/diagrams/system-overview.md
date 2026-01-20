@@ -2,7 +2,7 @@
 
 ## High-Level Architecture
 
-AI-101 is a VSCode extension that provides AI-powered coding assistance through a transparent HUD overlay. The system consists of three main layers:
+Suika is a VSCode extension that provides AI-powered coding assistance through a transparent HUD overlay. The system consists of three main layers:
 
 1. **VSCode Extension Layer** (Node.js context)
 2. **Webview UI Layer** (Browser context)

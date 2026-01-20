@@ -1,7 +1,7 @@
 # User Stories - Epics 1-5
-## ai-101-ts Project
+## suika Project
 
-This document contains detailed user stories with acceptance criteria for Epics 1-5 of the ai-101-ts VSCode extension project.
+This document contains detailed user stories with acceptance criteria for Epics 1-5 of the suika VSCode extension project.
 
 ---
 
@@ -24,7 +24,7 @@ So that I have a production-ready foundation that follows VSCode extension best 
 **Given** I have Node.js 16+ and npm installed
 **When** I run `npx --package yo --package generator-code -- yo code`
 **And** I select "New Extension (TypeScript)" as extension type
-**And** I provide "ai-101-ts" as the extension name
+**And** I provide "suika" as the extension name
 **And** I select "esbuild" as the bundler (NOT webpack)
 **And** I select "npm" as the package manager
 **Then** A complete VSCode extension project structure is generated
@@ -75,7 +75,7 @@ So that my API keys are encrypted and never exposed in plain text configuration 
 **Then** The service provides `storeApiKey(provider: string, apiKey: string): Promise<void>` method
 **And** The service provides `getApiKey(provider: string): Promise<string | undefined>` method
 **And** The service provides `deleteApiKey(provider: string): Promise<void>` method
-**And** API keys are stored using keys like "ai-101-ts.apiKey.openai" and "ai-101-ts.apiKey.anthropic"
+**And** API keys are stored using keys like "suika.apiKey.openai" and "suika.apiKey.anthropic"
 **And** Stored keys persist across VSCode sessions
 **And** Stored keys are encrypted by VSCode's SecretStorage API
 **And** No API keys appear in workspace settings or user settings JSON files
@@ -94,7 +94,7 @@ So that I can customize extension behavior globally or per-project with proper d
 
 **Given** The extension is activated
 **When** I implement a `ConfigurationManager` class
-**Then** The manager reads settings from `vscode.workspace.getConfiguration('ai-101-ts')`
+**Then** The manager reads settings from `vscode.workspace.getConfiguration('suika')`
 **And** Configuration includes settings for:
   - `llmProvider.default`: Default LLM provider (openai | anthropic)
   - `llmProvider.openai.model`: OpenAI model name (default: "gpt-4")
@@ -137,7 +137,7 @@ So that I can quickly apply optimal settings without manual configuration.
   - security.strictMode: true
   - cache.ttlSeconds: 7200 (longer cache for cost optimization)
   - telemetry.enabled: true (with privacy compliance)
-**And** A command `ai-101-ts.applyPreset` allows users to select and apply a preset
+**And** A command `suika.applyPreset` allows users to select and apply a preset
 **And** Applying a preset updates workspace configuration
 **And** A confirmation prompt appears before applying preset
 **And** The command is registered in `package.json` contributes.commands
@@ -155,11 +155,11 @@ So that I can share configurations across machines or with team members.
 
 **Given** The ConfigurationManager is implemented
 **When** I implement export/import functionality
-**Then** A command `ai-101-ts.exportConfiguration` allows users to save configuration to a JSON file
-**And** The export includes all ai-101-ts settings from workspace configuration
+**Then** A command `suika.exportConfiguration` allows users to save configuration to a JSON file
+**And** The export includes all suika settings from workspace configuration
 **And** The export excludes sensitive data (API keys stored in SecretStorage)
 **And** The exported JSON has a version field for compatibility tracking
-**And** A command `ai-101-ts.importConfiguration` allows users to load configuration from a JSON file
+**And** A command `suika.importConfiguration` allows users to load configuration from a JSON file
 **And** Import validates JSON structure and version compatibility
 **And** Import prompts for confirmation before overwriting existing settings
 **And** Import applies settings to workspace configuration level
@@ -184,7 +184,7 @@ So that transient failures are handled gracefully and errors are consistently lo
 **And** The handler provides `handleErrorWithRetry<T>(operation: () => Promise<T>, options: RetryOptions): Promise<T>` method
 **And** RetryOptions includes: maxRetries (default: 3), initialDelayMs (default: 1000), maxDelayMs (default: 30000), exponentialBackoff (default: true)
 **And** Retry logic implements exponential backoff: delay = min(initialDelay * 2^attempt, maxDelay)
-**And** Errors are logged to VSCode Output Channel named "ai-101-ts"
+**And** Errors are logged to VSCode Output Channel named "suika"
 **And** Error logs include: timestamp, error message, stack trace, context information
 **And** Logged errors follow structured format: `[TIMESTAMP] [LEVEL] [CONTEXT] Message`
 **And** The handler differentiates error types: NetworkError, RateLimitError, AuthenticationError, ConfigurationError
@@ -431,7 +431,7 @@ So that I can monitor my spending and stay within budget.
 **And** The tracker persists session history to workspace storage
 **And** The tracker provides `getSessionHistory(): SessionCostSummary[]` method
 **And** SessionCostSummary includes: date, totalCost, completionCount, providerBreakdown
-**And** A command `ai-101-ts.showCostReport` displays cost history in webview
+**And** A command `suika.showCostReport` displays cost history in webview
 **And** Cost is formatted with 2 decimal places: "$0.05"
 **And** Unit tests verify cost calculation accuracy
 **And** Unit tests verify session accumulation and reset
@@ -460,7 +460,7 @@ So that I don't accidentally exceed my spending limits.
 **And** If rate limit exceeded, manager waits until tokens available (up to 10s max)
 **And** If wait time >10s, manager throws RateLimitExceededError
 **And** Budget exceeded errors show user notification with cost details
-**And** User can temporarily override budget via command `ai-101-ts.overrideBudget`
+**And** User can temporarily override budget via command `suika.overrideBudget`
 **And** Override requires confirmation dialog showing risk
 **And** Budget status is visible in Vital Signs Bar (Epic 4 integration point)
 **And** Unit tests verify budget enforcement with mock completions
@@ -719,7 +719,7 @@ So that I can understand why an agent made a particular suggestion.
 **And** LLM prompt: "Based on your previous analysis: {reasoning}, answer this question: {question}"
 **And** Query responses are concise (max 500 tokens)
 **And** Agent state transitions to THINKING during query, returns to previous state after
-**And** A command `ai-101-ts.queryAgent` prompts user to select agent and enter question
+**And** A command `suika.queryAgent` prompts user to select agent and enter question
 **And** Query interface appears in webview as clickable "Ask {AgentName}" button
 **And** Query results display in webview dialog with agent's visual identity
 **And** Query history is maintained per agent (last 5 queries)
@@ -750,7 +750,7 @@ So that I can see agent visualizations without switching views.
 **Given** VSCode supports webview panels and custom editors
 **When** I implement `HUDWebviewProvider` in `src/webview/hudWebviewProvider.ts`
 **Then** The provider extends `vscode.WebviewViewProvider`
-**And** The provider registers a webview view with ID "ai-101-ts.hudView"
+**And** The provider registers a webview view with ID "suika.hudView"
 **And** The webview is configured as a transparent overlay (position: fixed in CSS)
 **And** The webview has CSP (Content Security Policy): `script-src 'nonce-{random}'; style-src 'unsafe-inline'`
 **And** The HTML template includes viewport meta tag for proper scaling
@@ -1009,7 +1009,7 @@ So that the extension adapts to my current workflow and skill level.
 **Given** Different workflows require different levels of detail and distraction
 **When** I implement mode management in ConfigurationManager and webview
 **Then** Configuration includes `mode.current`: learning | expert | focus | team | performance
-**And** A command `ai-101-ts.setMode` allows mode selection via Quick Pick menu
+**And** A command `suika.setMode` allows mode selection via Quick Pick menu
 **And** Mode changes are applied immediately without reloading extension
 **And** Mode transitions use smooth animation (500ms) for UI changes
 **And** **Learning Mode** behavior:
@@ -1056,7 +1056,7 @@ So that I can customize the overlay intensity.
 **Given** Users have different preferences for UI opacity
 **When** I implement transparency level controls
 **Then** Configuration includes `ui.transparency`: minimal | medium | full
-**And** A command `ai-101-ts.setTransparency` allows selection via Quick Pick
+**And** A command `suika.setTransparency` allows selection via Quick Pick
 **And** **Minimal transparency** (default: 20%):
   - Agents: 20% opacity when idle, 40% when active
   - Vital Signs Bar: 30% opacity
@@ -1135,7 +1135,7 @@ So that the HUD matches my personal aesthetic preferences.
 **And** Color validation ensures contrast ratio >4.5:1 with background for accessibility
 **And** Size multiplier scales agent icons proportionally (32px base × multiplier)
 **And** Vital Signs Bar position change includes smooth slide transition (400ms)
-**And** A command `ai-101-ts.customizeAppearance` opens webview customization panel
+**And** A command `suika.customizeAppearance` opens webview customization panel
 **And** Customization panel includes live preview of changes before applying
 **And** Customization panel has "Reset to Defaults" button
 **And** Custom colors are validated for sumi-e aesthetic consistency (optional warning if colors too vibrant)
@@ -1156,7 +1156,7 @@ So that I can easily see and distinguish UI elements.
 **Given** Some users require higher contrast for accessibility
 **When** I implement High Contrast mode
 **Then** Configuration includes `accessibility.highContrast`: boolean (default: false)
-**And** A command `ai-101-ts.toggleHighContrast` enables/disables High Contrast mode
+**And** A command `suika.toggleHighContrast` enables/disables High Contrast mode
 **And** **High Contrast mode** adjustments:
   - All elements minimum 60% opacity (overrides transparency settings)
   - Agent icons have 2px black stroke outline for definition
@@ -1186,7 +1186,7 @@ So that I can distinguish agents and alerts by more than color alone.
 **Given** Color-only differentiation excludes users with color vision deficiency
 **When** I implement colorblind accessibility features
 **Then** Configuration includes `accessibility.colorblindMode`: none | deuteranopia | protanopia | tritanopia (default: none)
-**And** A command `ai-101-ts.setColorblindMode` allows mode selection via Quick Pick
+**And** A command `suika.setColorblindMode` allows mode selection via Quick Pick
 **And** In colorblind mode, agents include pattern overlays in addition to colors:
   - Architect: Diagonal stripe pattern
   - Coder: Dotted pattern

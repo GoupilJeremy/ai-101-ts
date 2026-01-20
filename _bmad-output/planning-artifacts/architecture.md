@@ -4,7 +4,7 @@ inputDocuments:
   - '_bmad-output/planning-artifacts/prd.md'
   - '_bmad-output/planning-artifacts/ux-design-specification.md'
 workflowType: 'architecture'
-project_name: 'ai-101-ts'
+project_name: 'suika'
 user_name: 'Jeregoupix'
 date: '2026-01-10'
 lastStep: 8
@@ -285,8 +285,8 @@ npx --package yo --package generator-code -- yo code
 
 **Prompts à sélectionner:**
 - Type: New Extension (TypeScript)
-- Name: ai-101-ts
-- Identifier: ai-101-ts
+- Name: suika
+- Identifier: suika
 - Description: VSCode AI agents with transparent HUD
 - Bundler: esbuild (critical choice)
 - Package manager: npm
@@ -350,7 +350,7 @@ npx --package yo --package generator-code -- yo code
 
 # Sélections prompts:
 # - Type: New Extension (TypeScript)
-# - Name: ai-101-ts
+# - Name: suika
 # - Bundler: esbuild (CRITICAL)
 # - Package manager: npm
 ```
@@ -418,7 +418,7 @@ npx --package yo --package generator-code -- yo code
 #### Project Structure (Standard VSCode)
 
 ```
-ai-101-ts/
+suika/
 ├── .vscode/
 │   ├── launch.json          # F5 debug config Extension Development Host
 │   ├── tasks.json           # Build tasks (Cmd+Shift+B)
@@ -2770,7 +2770,7 @@ Ces 35 patterns garantissent la cohérence de code entre tous les agents IA trav
 ### Complete Project Directory Structure
 
 ```
-ai-101-ts/
+suika/
 ├── README.md
 ├── CHANGELOG.md
 ├── LICENSE
@@ -3426,7 +3426,7 @@ ai-101-ts/
 **Example:**
 ```typescript
 // src/extension.ts - Dependency setup
-const outputChannel = vscode.window.createOutputChannel('AI-101');
+const outputChannel = vscode.window.createOutputChannel('Suika');
 const logger = new Logger('Extension', outputChannel, LogLevel.Info);
 const errorHandler = new ErrorHandler(logger);
 
@@ -3826,7 +3826,7 @@ npm run package
 **VSCode Marketplace Packaging:**
 ```bash
 npx vsce package
-# → Creates ai-101-ts-{version}.vsix
+# → Creates suika-{version}.vsix
 # → Includes: package.json, dist/, README.md, LICENSE, CHANGELOG.md
 # → Excludes: src/, tests/, .cache/, node_modules/ (via .vscodeignore)
 ```
@@ -3834,10 +3834,10 @@ npx vsce package
 **Installation:**
 ```bash
 # From marketplace
-code --install-extension ai-101-ts
+code --install-extension suika
 
 # From VSIX
-code --install-extension ai-101-ts-1.0.0.vsix
+code --install-extension suika-1.0.0.vsix
 ```
 
 **Update Strategy:**
@@ -3849,7 +3849,7 @@ code --install-extension ai-101-ts-1.0.0.vsix
 
 **🎉 Project Structure Complete!**
 
-Cette structure complète définit tous les fichiers, dossiers, boundaries, et integration points pour l'implémentation du projet ai-101-ts.
+Cette structure complète définit tous les fichiers, dossiers, boundaries, et integration points pour l'implémentation du projet suika.
 
 
 ## Architecture Validation Results
@@ -4287,8 +4287,8 @@ npx --package yo --package generator-code -- yo code
 
 # Sélections prompts:
 # - Type: New Extension (TypeScript)
-# - Name: ai-101-ts
-# - Identifier: ai-101-ts
+# - Name: suika
+# - Identifier: suika
 # - Description: VSCode AI agents with transparent HUD
 # - Bundler: esbuild (CRITICAL CHOICE)
 # - Package manager: npm
@@ -4326,7 +4326,7 @@ npx --package yo --package generator-code -- yo code
 
 **🎉 Architecture Document Complete & Validated!**
 
-Cette architecture est prête à guider l'implémentation consistante du projet ai-101-ts par des agents IA multiples travaillant en parallèle.
+Cette architecture est prête à guider l'implémentation consistante du projet suika par des agents IA multiples travaillant en parallèle.
 
 ---
 
@@ -4366,7 +4366,7 @@ Cette architecture est prête à guider l'implémentation consistante du projet 
 ### Implementation Handoff
 
 **For AI Agents:**
-This architecture document is your complete guide for implementing ai-101-ts. Follow all decisions, patterns, and structures exactly as documented.
+This architecture document is your complete guide for implementing suika. Follow all decisions, patterns, and structures exactly as documented.
 
 **First Implementation Priority:**
 ```bash
@@ -4374,8 +4374,8 @@ npx --package yo --package generator-code -- yo code
 
 # Prompts selections:
 # - Type: New Extension (TypeScript)
-# - Name: ai-101-ts
-# - Identifier: ai-101-ts
+# - Name: suika
+# - Identifier: suika
 # - Description: VSCode AI agents with transparent HUD
 # - Bundler: esbuild (CRITICAL)
 # - Package manager: npm

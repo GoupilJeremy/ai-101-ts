@@ -14,7 +14,7 @@ export class VitalSignsBar {
 
     private constructor() {
         this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-        this.statusBarItem.command = 'ai-101-ts.showBudgetDetails';
+        this.statusBarItem.command = 'suika.showBudgetDetails';
         this.statusBarItem.tooltip = 'Click to see budget details';
         this.update();
         this.statusBarItem.show();

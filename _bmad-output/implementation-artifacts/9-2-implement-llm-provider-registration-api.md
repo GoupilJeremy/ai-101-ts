@@ -1,6 +1,6 @@
 # Story 9.2: Implement LLM Provider Registration API
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -8,7 +8,7 @@ Status: review
 
 As an extension developer,
 I want a programmatic API to register custom LLM providers during my extension's activation,
-so that I can integrate my company's internal LLM or other third-party models into AI-101 without forking the codebase.
+so that I can integrate my company's internal LLM or other third-party models into Suika without forking the codebase.
 
 ## Acceptance Criteria
 
@@ -19,7 +19,7 @@ so that I can integrate my company's internal LLM or other third-party models in
 5.  **Registered providers are immediately available** to the `LLMProviderManager`.
 6.  **API is typed** and exports necessary interfaces (`ILLMProvider`, `ExtensionAPI`) for consumers.
 7.  **Unit tests verify API surface** and successful registration flow.
-8.  **Integration test demonstrates** a second extension activating `ai-101-ts` and registering a provider.
+8.  **Integration test demonstrates** a second extension activating `suika` and registering a provider.
 9.  **Error handling** for invalid providers (null, missing methods) is implemented.
 
 ## Tasks / Subtasks

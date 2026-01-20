@@ -1,6 +1,6 @@
 # Story 1.8: Set up Testing Framework with Mocha and vscode-test-electron
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -35,7 +35,7 @@ So that I can write and run integration tests within the actual VSCode environme
   - [x] 2.1: Create `src/test/suite/extension.test.ts` (Created as `src/test/extension.test.ts`)
   - [x] 2.2: Implement test: "Extension should be present"
   - [x] 2.3: Implement test: "Extension should activate"
-  - [x] 2.4: Implement test: "Command 'ai-101-ts.helloWorld' should be registered"
+  - [x] 2.4: Implement test: "Command 'suika.helloWorld' should be registered"
 
 - [x] Task 3: Verify Test Execution (AC: 2, 3, 5, 7)
   - [x] 3.1: Run `npm run compile` to ensure latest code is available (Succeeded)

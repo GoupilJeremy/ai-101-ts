@@ -1,14 +1,14 @@
 /**
- * Example: Custom LLM Provider for AI-101 Extension
+ * Example: Custom LLM Provider for Suika Extension
  * 
  * This example demonstrates how to create and register a custom LLM provider
- * with the AI-101 extension from another VSCode extension.
+ * with the Suika extension from another VSCode extension.
  * 
  * @packageDocumentation
  */
 
 import * as vscode from 'vscode';
-import { IAI101API, ILLMProvider, ILLMResponse, ILLMOptions, IModelInfo } from 'ai-101-ts';
+import { IAI101API, ILLMProvider, ILLMResponse, ILLMOptions, IModelInfo } from 'suika';
 
 /**
  * Example custom provider implementation for a company's internal LLM.
@@ -69,15 +69,15 @@ class CompanyInternalLLMProvider implements ILLMProvider {
  * This is called when your extension is activated.
  */
 export function activate(context: vscode.ExtensionContext) {
-    // Step 1: Get the AI-101 extension
-    const ai101Extension = vscode.extensions.getExtension('your-publisher.ai-101-ts');
+    // Step 1: Get the Suika extension
+    const ai101Extension = vscode.extensions.getExtension('your-publisher.suika');
 
     if (!ai101Extension) {
-        vscode.window.showWarningMessage('AI-101 extension not found. Custom LLM provider not registered.');
+        vscode.window.showWarningMessage('Suika extension not found. Custom LLM provider not registered.');
         return;
     }
 
-    // Step 2: Activate AI-101 if not already active
+    // Step 2: Activate Suika if not already active
     ai101Extension.activate().then(() => {
         // Step 3: Get the public API
         const api: IAI101API = ai101Extension.exports;
@@ -87,7 +87,7 @@ export function activate(context: vscode.ExtensionContext) {
             const customProvider = new CompanyInternalLLMProvider();
             api.registerLLMProvider('company-internal-llm', customProvider);
 
-            vscode.window.showInformationMessage('Company Internal LLM successfully registered with AI-101!');
+            vscode.window.showInformationMessage('Company Internal LLM successfully registered with Suika!');
         } catch (error) {
             vscode.window.showErrorMessage(`Failed to register custom LLM provider: ${error}`);
         }

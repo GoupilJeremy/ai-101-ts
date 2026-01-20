@@ -15,7 +15,7 @@ So that I can share usage data to improve the product without compromising sensi
 **Then** Telemetry consent dialog explains data collection clearly
 **And** Dialog details: what data is collected, how it's used, who has access
 **And** Consent is opt-in (default is NO collection until user explicitly agrees)
-**And** User can change consent anytime via "AI-101: Telemetry Settings" command
+**And** User can change consent anytime via "Suika: Telemetry Settings" command
 **And** No user code is logged without explicit consent (NFR13 compliance)
 **And** No API keys, secrets, or sensitive data ever transmitted (strict filtering)
 **And** Telemetry data encrypted in transit (HTTPS/TLS)
@@ -40,7 +40,7 @@ So that I understand how I'm using the tool and the value it provides.
 **And** Metrics include: suggestions accepted, suggestions rejected, acceptance rate
 **And** Metrics include: estimated time saved (based on accepted suggestions)
 **And** Time saved calculation: average typing speed × code lines generated
-**And** User can view metrics dashboard: "AI-101: View My Metrics"
+**And** User can view metrics dashboard: "Suika: View My Metrics"
 **And** Dashboard shows: daily/weekly/monthly trends, totals, acceptance rate graph
 **And** Dashboard respects user privacy (local display, not shared unless consented)
 **And** Metrics persist across extension updates (migration strategy)
@@ -106,7 +106,7 @@ So that I track whether the tool is improving my understanding of AI and coding 
 **Given** User has used extension for at least 7 days
 **When** One week has passed since last learning survey
 **Then** Survey prompt appears at convenient time (low activity detection)
-**And** Survey asks: "This week, how much did AI-101 improve your understanding?" (1-10 scale)
+**And** Survey asks: "This week, how much did Suika improve your understanding?" (1-10 scale)
 **And** Survey asks: "What patterns or concepts did you learn?" (optional freeform)
 **And** Target learning impact score documented: 7/10 average (NFR29)
 **And** Survey reminds user of features they haven't tried yet
@@ -128,7 +128,7 @@ So that I understand user satisfaction and likelihood to recommend the tool.
 
 **Given** User has used extension for at least 30 days
 **When** 30 days have passed since installation or last NPS survey
-**Then** NPS survey prompt appears with standard question: "How likely are you to recommend AI-101 to a colleague?" (0-10 scale)
+**Then** NPS survey prompt appears with standard question: "How likely are you to recommend Suika to a colleague?" (0-10 scale)
 **And** Follow-up question: "What is the primary reason for your score?" (freeform text)
 **And** NPS calculation: % Promoters (9-10) - % Detractors (0-6) = NPS
 **And** Target NPS documented for product goals
@@ -173,7 +173,7 @@ So that I can identify who needs support and measure team-wide value.
 **Acceptance Criteria:**
 
 **Given** Team telemetry mode is enabled (organization setting)
-**When** Tech lead opens team dashboard: "AI-101: View Team Metrics"
+**When** Tech lead opens team dashboard: "Suika: View Team Metrics"
 **Then** Dashboard shows aggregate metrics: team adoption rate, active users, suggestion usage
 **And** Dashboard shows team average comprehension score (from post-session surveys)
 **And** Dashboard shows team average acceptance rate (anonymous, no individual attribution)
@@ -290,7 +290,7 @@ So that I can build custom analytics, notifications, or integrations.
 ### Story 9.5: Implement Typed Configuration API for Programmatic Access
 
 As an extension developer,
-I want programmatic access to AI-101 configuration,
+I want programmatic access to Suika configuration,
 So that I can read/write settings from my custom extension.
 
 **Acceptance Criteria:**
@@ -343,7 +343,7 @@ So that my extensions don't break unexpectedly on updates.
 
 As a new user,
 I want getting-started documentation accessible within the extension,
-So that I can learn how to use AI-101 without leaving VSCode.
+So that I can learn how to use Suika without leaving VSCode.
 
 **Acceptance Criteria:**
 
@@ -353,7 +353,7 @@ So that I can learn how to use AI-101 without leaving VSCode.
 **And** Guide includes: quick tour, first suggestion walkthrough, mode explanations
 **And** Guide is interactive with "Try it now" buttons that trigger real features
 **And** Guide uses screenshots and animations to demonstrate concepts
-**And** Guide accessible anytime via "AI-101: Show Getting Started" command
+**And** Guide accessible anytime via "Suika: Show Getting Started" command
 **And** Guide tracks completion progress (which sections viewed)
 **And** Guide includes video tutorials (linked, not embedded for size)
 **And** Guide supports search within content
@@ -372,7 +372,7 @@ So that I can self-diagnose and resolve problems quickly.
 **Acceptance Criteria:**
 
 **Given** Extension is installed
-**When** I open troubleshooting: "AI-101: Troubleshooting"
+**When** I open troubleshooting: "Suika: Troubleshooting"
 **Then** Knowledge base opens with search input and symptom categories
 **And** Categories include: Performance, Connectivity, Display Issues, API Key Problems
 **And** Search finds articles by symptom keywords (e.g., "slow", "doesn't work", "blank screen")
@@ -416,7 +416,7 @@ So that I can understand the codebase and contribute effectively.
 
 As an extension developer,
 I want comprehensive API documentation with runnable examples,
-So that I can integrate with AI-101 quickly and correctly.
+So that I can integrate with Suika quickly and correctly.
 
 **Acceptance Criteria:**
 
@@ -478,7 +478,7 @@ So that I know what's new, what's fixed, and who contributed.
 **And** Changelog includes "Thank you" section recognizing all contributors
 **And** Changelog auto-generated from conventional commit messages (tooling)
 **And** Manual changelog editing supported for clarity and organization
-**And** Changelog accessible via "AI-101: View Changelog" command
+**And** Changelog accessible via "Suika: View Changelog" command
 **And** Changelog displayed after extension updates (highlights new features)
 **And** Changelog maintained in repository root for GitHub visibility
 

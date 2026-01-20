@@ -246,7 +246,7 @@ interface IColorblindConfig {
 **Package.json Settings to Add:**
 ```json
 {
-  "ai101.accessibility.colorblind": {
+  "suika.accessibility.colorblind": {
     "type": "object",
     "properties": {
       "enabled": {

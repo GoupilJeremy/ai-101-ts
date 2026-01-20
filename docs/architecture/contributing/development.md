@@ -3,7 +3,7 @@
 ## Project Structure
 
 ```
-ai-101-ts/
+suika/
 ├── src/                  # Source code
 │   ├── agents/          # AI agents
 │   ├── llm/             # LLM providers

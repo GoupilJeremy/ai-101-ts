@@ -8,9 +8,9 @@ export function registerShowTroubleshootingCommand(
     context: vscode.ExtensionContext,
     provider: TroubleshootingWebviewProvider
 ): vscode.Disposable {
-    return vscode.commands.registerCommand('ai-101-ts.showTroubleshooting', async () => {
+    return vscode.commands.registerCommand('suika.showTroubleshooting', async () => {
         // Focus the troubleshooting view
-        await vscode.commands.executeCommand('ai101.troubleshootingView.focus');
+        await vscode.commands.executeCommand('suika.troubleshootingView.focus');
     });
 }
 
@@ -21,7 +21,7 @@ export function registerOpenTroubleshootingArticleCommand(
     context: vscode.ExtensionContext
 ): vscode.Disposable {
     return vscode.commands.registerCommand(
-        'ai-101-ts.openTroubleshootingArticle',
+        'suika.openTroubleshootingArticle',
         async (articleId?: string) => {
             // If no article ID provided, prompt user
             if (!articleId) {
@@ -36,11 +36,11 @@ export function registerOpenTroubleshootingArticleCommand(
             }
 
             // Focus troubleshooting view and send message to open article
-            await vscode.commands.executeCommand('ai101.troubleshootingView.focus');
+            await vscode.commands.executeCommand('suika.troubleshootingView.focus');
 
             // Wait a bit for view to load, then send message
             setTimeout(() => {
-                vscode.commands.executeCommand('ai-101-ts.sendToTroubleshooting', {
+                vscode.commands.executeCommand('suika.sendToTroubleshooting', {
                     type: 'openArticle',
                     articleId
                 });
@@ -56,7 +56,7 @@ export function registerSearchTroubleshootingCommand(
     context: vscode.ExtensionContext
 ): vscode.Disposable {
     return vscode.commands.registerCommand(
-        'ai-101-ts.searchTroubleshooting',
+        'suika.searchTroubleshooting',
         async (query?: string) => {
             // If no query provided, prompt user
             if (!query) {
@@ -71,11 +71,11 @@ export function registerSearchTroubleshootingCommand(
             }
 
             // Focus troubleshooting view and send search query
-            await vscode.commands.executeCommand('ai101.troubleshootingView.focus');
+            await vscode.commands.executeCommand('suika.troubleshootingView.focus');
 
             // Wait for view to load, then send search query
             setTimeout(() => {
-                vscode.commands.executeCommand('ai-101-ts.sendToTroubleshooting', {
+                vscode.commands.executeCommand('suika.sendToTroubleshooting', {
                     type: 'search',
                     query
                 });
@@ -93,7 +93,7 @@ export function registerSendToTroubleshootingCommand(
     provider: TroubleshootingWebviewProvider
 ): vscode.Disposable {
     return vscode.commands.registerCommand(
-        'ai-101-ts.sendToTroubleshooting',
+        'suika.sendToTroubleshooting',
         async (message: any) => {
             // This would need to be implemented in the provider
             // For now, it's a placeholder for future enhancement

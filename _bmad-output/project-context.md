@@ -1,5 +1,5 @@
 ---
-project_name: 'ai-101-ts'
+project_name: 'suika'
 user_name: 'Jeregoupix'
 date: '2026-01-10'
 sections_completed: ['technology_stack', 'language_rules', 'framework_rules', 'testing_rules', 'quality_rules', 'critical_rules']
@@ -9,9 +9,9 @@ optimized_for_llm: true
 architecture_source: '_bmad-output/planning-artifacts/architecture.md'
 ---
 
-# Project Context for AI Agents: ai-101-ts
+# Project Context for AI Agents: suika
 
-_This file contains critical rules and patterns that AI agents MUST follow when implementing the ai-101-ts VSCode extension. Focus on unobvious details and architectural decisions that prevent implementation conflicts._
+_This file contains critical rules and patterns that AI agents MUST follow when implementing the suika VSCode extension. Focus on unobvious details and architectural decisions that prevent implementation conflicts._
 
 **⚠️ MANDATORY READING:** All AI agents must read the complete architecture document at `_bmad-output/planning-artifacts/architecture.md` before implementing any code.
 
@@ -705,8 +705,8 @@ const config = vscode.workspace.getConfiguration('ai101');
 const llmProvider = config.get<string>('llm.defaultProvider', 'openai');
 
 // ✅ CORRECT - VSCode SecretStorage for API keys
-await context.secrets.store('ai101.openai.apiKey', apiKey);
-const apiKey = await context.secrets.get('ai101.openai.apiKey');
+await context.secrets.store('suika.openai.apiKey', apiKey);
+const apiKey = await context.secrets.get('suika.openai.apiKey');
 
 // ❌ INCORRECT - Environment variables for secrets
 const apiKey = process.env.OPENAI_API_KEY;  // FORBIDDEN!
@@ -725,8 +725,8 @@ npx --package yo --package generator-code -- yo code
 
 # Selections:
 # - Type: New Extension (TypeScript)
-# - Name: ai-101-ts
-# - Identifier: ai-101-ts
+# - Name: suika
+# - Identifier: suika
 # - Description: VSCode AI agents with transparent HUD
 # - Bundler: esbuild (CRITICAL - NOT webpack)
 # - Package manager: npm

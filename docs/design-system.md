@@ -1,7 +1,7 @@
-# AI-101 Sumi-e HUD Design System
+# Suika Sumi-e HUD Design System
 
 ## Philosophy
-The visual language of AI-101 is inspired by **Sumi-e** (Japanese ink wash painting). It emphasizes simplicity, spontaneity, and the beauty of imperfection.
+The visual language of Suika is inspired by **Sumi-e** (Japanese ink wash painting). It emphasizes simplicity, spontaneity, and the beauty of imperfection.
 
 ### Core Principles
 - **Ma (間)**: Negative space is as important as the content. We prioritize empty space to avoid visual clutter and maintain focus.

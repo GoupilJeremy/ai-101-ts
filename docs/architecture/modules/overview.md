@@ -2,7 +2,7 @@
 
 ## Module Structure
 
-AI-101 is organized into distinct modules, each with clear responsibilities and boundaries. This document provides a high-level overview of all modules and their relationships.
+Suika is organized into distinct modules, each with clear responsibilities and boundaries. This document provides a high-level overview of all modules and their relationships.
 
 ## Module Directory Structure
 

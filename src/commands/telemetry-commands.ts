@@ -7,7 +7,7 @@ import { TelemetryManager } from '../telemetry/telemetry-manager';
 export function registerTelemetryCommands(context: vscode.ExtensionContext, telemetryManager: TelemetryManager): void {
 
     // Command to configure telemetry settings
-    const configureTelemetry = vscode.commands.registerCommand('ai-101-ts.configureTelemetry', async () => {
+    const configureTelemetry = vscode.commands.registerCommand('suika.configureTelemetry', async () => {
         const currentStatus = telemetryManager.getConsentStatus() ? 'Enabled' : 'Disabled';
         const options = [
             { label: 'Enable Telemetry', description: 'Enable data collection', action: 'enable' },
@@ -31,20 +31,20 @@ export function registerTelemetryCommands(context: vscode.ExtensionContext, tele
                 await telemetryManager.updateConsent(false);
                 break;
             case 'privacy':
-                await vscode.env.openExternal(vscode.Uri.parse('https://github.com/GoupilJeremy/ai-101-ts/blob/main/PRIVACY.md'));
+                await vscode.env.openExternal(vscode.Uri.parse('https://github.com/GoupilJeremy/suika/blob/main/PRIVACY.md'));
                 break;
             case 'export':
-                vscode.window.showInformationMessage('AI-101: Your usage data export has been requested. You will receive an email shortly (MVP Placeholder).');
+                vscode.window.showInformationMessage('Suika: Your usage data export has been requested. You will receive an email shortly (MVP Placeholder).');
                 break;
             case 'delete':
                 const confirm = await vscode.window.showWarningMessage(
-                    'AI-101: Are you sure you want to delete your telemetry data? This will clear your local ID and send a deletion request.',
+                    'Suika: Are you sure you want to delete your telemetry data? This will clear your local ID and send a deletion request.',
                     { modal: true },
                     'Delete Everything'
                 );
                 if (confirm === 'Delete Everything') {
                     await telemetryManager.updateConsent(false);
-                    vscode.window.showInformationMessage('AI-101: Data deletion request sent.');
+                    vscode.window.showInformationMessage('Suika: Data deletion request sent.');
                 }
                 break;
         }

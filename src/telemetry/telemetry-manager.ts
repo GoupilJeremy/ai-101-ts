@@ -22,7 +22,7 @@ export class TelemetryManager {
      * Shows the telemetry consent information message.
      */
     public async showConsentDialog(): Promise<void> {
-        const message = "AI-101: Help us improve by opting into telemetry? This collects usage data (no code or keys) to help improve agent performance. Data is encrypted and anonymized after 90 days.";
+        const message = "Suika: Help us improve by opting into telemetry? This collects usage data (no code or keys) to help improve agent performance. Data is encrypted and anonymized after 90 days.";
         const accept = "Accept";
         const decline = "Decline";
         const learnMore = "Learn More";
@@ -34,7 +34,7 @@ export class TelemetryManager {
         } else if (selection === decline) {
             await this.updateConsent(false);
         } else if (selection === learnMore) {
-            await vscode.env.openExternal(vscode.Uri.parse('https://github.com/GoupilJeremy/ai-101-ts/blob/main/PRIVACY.md'));
+            await vscode.env.openExternal(vscode.Uri.parse('https://github.com/GoupilJeremy/suika/blob/main/PRIVACY.md'));
             // Show dialog again after learning more
             await this.showConsentDialog();
             return;
@@ -51,7 +51,7 @@ export class TelemetryManager {
         TelemetryService.getInstance(this.context).updateConsentStatus();
 
         const statusMessage = optIn ? "Telemetry enabled. Thank you!" : "Telemetry disabled.";
-        vscode.window.showInformationMessage(`AI-101: ${statusMessage}`);
+        vscode.window.showInformationMessage(`Suika: ${statusMessage}`);
     }
 
     /**

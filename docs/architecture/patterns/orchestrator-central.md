@@ -2,11 +2,11 @@
 
 ## Overview
 
-The **Orchestrator Central Pattern** is the core coordination mechanism in AI-101. A single `AgentOrchestrator` class manages all agent interactions, ensuring deterministic execution order and centralized state management.
+The **Orchestrator Central Pattern** is the core coordination mechanism in Suika. A single `AgentOrchestrator` class manages all agent interactions, ensuring deterministic execution order and centralized state management.
 
 ## Pattern Description
 
-Instead of using an event bus or pub/sub system, AI-101 uses direct method calls through a central orchestrator. This provides:
+Instead of using an event bus or pub/sub system, Suika uses direct method calls through a central orchestrator. This provides:
 
 - **Predictable execution order**: Context → Architect → Coder → Reviewer
 - **Centralized error handling**: Single point for catching and managing failures
@@ -170,7 +170,7 @@ private handleError(error: Error): void {
 
   // 4. Show user-friendly message
   vscode.window.showErrorMessage(
-    `AI-101: ${error.message}`,
+    `Suika: ${error.message}`,
     'View Logs'
   );
 

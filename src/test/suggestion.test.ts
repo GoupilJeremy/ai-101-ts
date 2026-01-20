@@ -10,7 +10,7 @@ suite('Suggestion Actions Integration Test Suite', () => {
 
     // Ensure extension is activated
     suiteSetup(async () => {
-        const extension = vscode.extensions.getExtension('GoupilJeremy.ai-101-ts');
+        const extension = vscode.extensions.getExtension('GoupilJeremy.suika');
         if (extension) {
             await extension.activate();
         }
@@ -42,7 +42,7 @@ suite('Suggestion Actions Integration Test Suite', () => {
         });
 
         // 3. Execute the accept command
-        await vscode.commands.executeCommand('ai-101-ts.acceptSuggestion', { suggestionId });
+        await vscode.commands.executeCommand('suika.acceptSuggestion', { suggestionId });
 
         // 4. Verify the document content changed
         assert.strictEqual(doc.getText(), 'const result = "success";', 'Document content was not updated correctly');
@@ -79,7 +79,7 @@ suite('Suggestion Actions Integration Test Suite', () => {
         assert.ok(stateManager.getAlerts().some(a => a.id === suggestionId), 'Alert was not created');
 
         // 2. Execute the reject command
-        await vscode.commands.executeCommand('ai-101-ts.rejectSuggestion', { suggestionId });
+        await vscode.commands.executeCommand('suika.rejectSuggestion', { suggestionId });
 
         // 3. Verify history status
         const record = stateManager.getHistory().find(h => h.id === suggestionId);
@@ -104,7 +104,7 @@ suite('Suggestion Actions Integration Test Suite', () => {
         });
 
         // Execute without args
-        await vscode.commands.executeCommand('ai-101-ts.rejectSuggestion');
+        await vscode.commands.executeCommand('suika.rejectSuggestion');
 
         const record = stateManager.getHistory().find(h => h.id === suggestionId);
         assert.strictEqual(record?.status, 'rejected');

@@ -1,6 +1,6 @@
 # Agent Renderer Extension Guide
 
-This guide explains how to create and register custom visual representations for AI agents in the AI-101-TS extension.
+This guide explains how to create and register custom visual representations for AI agents in the Suika-TS extension.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@ This guide explains how to create and register custom visual representations for
 
 ## Overview
 
-The AI-101-TS extension allows developers to customize how agents are visually represented in the transparent HUD. By implementing the `IAgentRenderer` interface, you can create:
+The Suika-TS extension allows developers to customize how agents are visually represented in the transparent HUD. By implementing the `IAgentRenderer` interface, you can create:
 
 - Custom 2D or 3D animations for agent states
 - Specialized visualizations for specific agent types
@@ -56,7 +56,7 @@ export interface IAgentRenderer {
 Create a new TypeScript file for your renderer. It's recommended to use SVG or GPU-accelerated CSS for best performance.
 
 ```typescript
-import { IAgentRenderer, AgentRenderContext, RenderTransition, IDisposable } from 'ai-101-ts';
+import { IAgentRenderer, AgentRenderContext, RenderTransition, IDisposable } from 'suika';
 
 export class MyCustomRenderer implements IAgentRenderer {
     private element?: HTMLElement;

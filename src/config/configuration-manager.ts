@@ -45,7 +45,7 @@ export class ConfigurationManager {
                 if (e.affectsConfiguration(this.section)) {
                     // Logic to handle configuration changes can be added here (e.g., event emitter)
                     // For now, consumers get fresh values via getSettings()
-                    console.log('AI-101 Configuration changed');
+                    console.log('Suika Configuration changed');
                 }
             })
         );

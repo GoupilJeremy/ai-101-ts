@@ -1,6 +1,6 @@
 # Story 3.5: Implement Coder Agent for Code Generation
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

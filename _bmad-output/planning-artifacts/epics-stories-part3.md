@@ -412,7 +412,7 @@ So that the interface matches my personal preferences and workflow.
 **Acceptance Criteria:**
 
 **Given** Visual system and mode system are implemented
-**When** User opens customization settings (Command: "AI-101: Customize Appearance")
+**When** User opens customization settings (Command: "Suika: Customize Appearance")
 **Then** Settings UI allows color palette selection (8 predefined palettes + custom)
 **And** Transparency level slider with 3 presets: Minimal (80%), Medium (50%), Full (20%)
 **And** Agent size slider: Small (16px), Medium (24px), Large (32px)

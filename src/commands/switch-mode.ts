@@ -9,7 +9,7 @@ import { AgentMode } from '../modes/mode-types.js';
 export async function switchToLearningModeCommand(): Promise<void> {
     try {
         await ModeManager.getInstance().setMode(AgentMode.Learning);
-        vscode.window.showInformationMessage('AI-101: Switched to Learning Mode');
+        vscode.window.showInformationMessage('Suika: Switched to Learning Mode');
     } catch (error) {
         vscode.window.showErrorMessage(`Failed to switch to Learning Mode: ${error}`);
     }
@@ -22,7 +22,7 @@ export async function switchToLearningModeCommand(): Promise<void> {
 export async function switchToExpertModeCommand(): Promise<void> {
     try {
         await ModeManager.getInstance().setMode(AgentMode.Expert);
-        vscode.window.showInformationMessage('AI-101: Switched to Expert Mode');
+        vscode.window.showInformationMessage('Suika: Switched to Expert Mode');
     } catch (error) {
         vscode.window.showErrorMessage(`Failed to switch to Expert Mode: ${error}`);
     }
@@ -35,7 +35,7 @@ export async function switchToExpertModeCommand(): Promise<void> {
 export async function switchToTeamModeCommand(): Promise<void> {
     try {
         await ModeManager.getInstance().setMode(AgentMode.Team);
-        vscode.window.showInformationMessage('AI-101: Switched to Team Mode');
+        vscode.window.showInformationMessage('Suika: Switched to Team Mode');
     } catch (error) {
         vscode.window.showErrorMessage(`Failed to switch to Team Mode: ${error}`);
     }

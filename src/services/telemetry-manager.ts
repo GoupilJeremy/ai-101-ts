@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 /**
- * Manages opt-in telemetry for the AI-101 extension.
+ * Manages opt-in telemetry for the Suika extension.
  * Tracks usage patterns and performance metrics for analytics.
  * Story 7.1: Implement Suggestion Accept/Reject with Visual Feedback
  */
@@ -12,7 +12,7 @@ export class TelemetryManager {
     private constructor() {
         this.updateConfig();
         vscode.workspace.onDidChangeConfiguration(e => {
-            if (e.affectsConfiguration('ai101.telemetry.enabled')) {
+            if (e.affectsConfiguration('suika.telemetry.enabled')) {
                 this.updateConfig();
             }
         });
@@ -26,7 +26,7 @@ export class TelemetryManager {
     }
 
     private updateConfig() {
-        this.enabled = vscode.workspace.getConfiguration('ai101.telemetry').get('enabled', true);
+        this.enabled = vscode.workspace.getConfiguration('suika.telemetry').get('enabled', true);
     }
 
     /**

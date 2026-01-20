@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **API Module** (`src/api/`) exposes the public extension API for other extensions to integrate with AI-101.
+The **API Module** (`src/api/`) exposes the public extension API for other extensions to integrate with Suika.
 
 ## Module Structure
 

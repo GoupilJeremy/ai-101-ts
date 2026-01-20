@@ -1,6 +1,6 @@
 # Story 1.7: Implement Centralized Error Handler with Retry Logic
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -18,7 +18,7 @@ So that the system can gracefully handle transient failures (network errors, rat
 4.  **And** Transient errors (LLM rate limits, network timeouts) trigger automatic retries
 5.  **And** Retries implement exponential backoff (e.g., 1s, 2s, 4s...)
 6.  **And** Critical errors (Auth failure, invalid config) are reported to the user immediately via VSCode UI
-7.  **And** All errors are logged to a dedicated "AI 101" Output Channel
+7.  **And** All errors are logged to a dedicated "Suika" Output Channel
 8.  **And** Error messages include error codes and actionable advice where possible
 9.  **And** The max number of retries is configurable
 
@@ -67,7 +67,7 @@ Gemini 2.0 Flash
 
 - Build passed.
 - `ErrorHandler` initialized in `extension.ts`.
-- Output Channel "AI 101" created.
+- Output Channel "Suika" created.
 - `handleWithRetry` implements exponential backoff correctly.
 
 ### Completion Notes List

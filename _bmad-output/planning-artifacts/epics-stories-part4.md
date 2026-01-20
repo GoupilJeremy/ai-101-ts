@@ -88,7 +88,7 @@ So that AI suggestions align with existing codebase conventions.
 **And** Architect identifies build tools and configuration (webpack, vite, esbuild)
 **And** Architect recognizes code style conventions (naming, file organization, module patterns)
 **And** Architecture analysis results cached for current workspace session
-**And** Architecture summary accessible via command: "AI-101: View Detected Architecture"
+**And** Architecture summary accessible via command: "Suika: View Detected Architecture"
 **And** User can override detected patterns via settings if detection incorrect
 **And** Architecture analysis completes in <5 seconds for typical projects
 **And** Unit tests verify pattern detection accuracy with sample projects
@@ -176,7 +176,7 @@ So that I understand how suggestions evolved and learn from the decision process
 **Acceptance Criteria:**
 
 **Given** Multiple agent interactions have occurred
-**When** I open the History Timeline (Command: "AI-101: Show Decision History")
+**When** I open the History Timeline (Command: "Suika: Show Decision History")
 **Then** Timeline displays chronological list of all AI interactions in current session
 **And** Each entry shows: timestamp, agent(s) involved, action taken, user decision (accept/reject)
 **And** Click entry expands full reasoning and alternatives considered
@@ -251,7 +251,7 @@ So that I can integrate the extension into my existing keyboard workflow.
 **Acceptance Criteria:**
 
 **Given** Extension is activated
-**When** I open hotkey configuration (Command: "AI-101: Configure Hotkeys")
+**When** I open hotkey configuration (Command: "Suika: Configure Hotkeys")
 **Then** Configurable hotkeys listed: HUD toggle, Focus Mode, Force agent states, Accept/Reject
 **And** Hotkey editor shows current binding and allows custom key combination input
 **And** Conflict detection warns if hotkey already bound to VSCode or other extension
@@ -347,7 +347,7 @@ So that I can discover and trigger actions using VSCode's standard interface.
 
 **Given** Extension is activated
 **When** I open VSCode Command Palette (Cmd+Shift+P / Ctrl+Shift+P)
-**Then** All extension commands listed with "AI-101:" prefix for discoverability
+**Then** All extension commands listed with "Suika:" prefix for discoverability
 **And** Commands include: Toggle HUD, Change Mode, Configure Hotkeys, Show History, etc.
 **And** Commands have descriptive text explaining what they do
 **And** Commands organized logically: View, Mode, Configure, Debug, Help categories

@@ -100,7 +100,7 @@ export class PhaseDetector {
             }
         } catch (error) {
             // Fail safe to prototype if detection errors occur
-            console.error('AI-101 PhaseDetector: Error during production heuristic check', error);
+            console.error('Suika PhaseDetector: Error during production heuristic check', error);
         }
 
         return false;

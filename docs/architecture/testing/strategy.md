@@ -2,7 +2,7 @@
 
 ## Overview
 
-AI-101 uses a comprehensive testing strategy with >70% code coverage target (NFR17).
+Suika uses a comprehensive testing strategy with >70% code coverage target (NFR17).
 
 ## Test Frameworks
 

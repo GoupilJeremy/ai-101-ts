@@ -71,9 +71,9 @@ export interface IKeyboardShortcuts {
 }
 
 /**
- * Comprehensive interface for all AI-101 configuration settings.
+ * Comprehensive interface for all Suika configuration settings.
  * This represents the internal schema of settings under the 'ai101' namespace.
- * Keys match the property names in package.json (without the 'ai101.' prefix).
+ * Keys match the property names in package.json (without the 'suika.' prefix).
  * 
  * @public
  * @category Configuration

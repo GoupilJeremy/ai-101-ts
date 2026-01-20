@@ -68,7 +68,7 @@ export class ArchitectAgent implements IAgent {
             architecture.conventions = { ...architecture.conventions, ...conventions };
 
             // Merge with settings overrides
-            const config = vscode.workspace.getConfiguration('ai101.architecture');
+            const config = vscode.workspace.getConfiguration('suika.architecture');
             const overrides = config.get<any>('overrides');
             if (overrides) {
                 if (overrides.techStack) {architecture.techStack = { ...architecture.techStack, ...overrides.techStack };}

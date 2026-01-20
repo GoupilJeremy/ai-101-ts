@@ -1,6 +1,6 @@
 # Story 5.9: Implement Keyboard-Only Navigation for HUD
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

@@ -1,6 +1,6 @@
 # Troubleshooting Knowledge Base Index
 
-This directory contains troubleshooting articles for the AI-101 VSCode extension.
+This directory contains troubleshooting articles for the Suika VSCode extension.
 
 ## Article Structure
 

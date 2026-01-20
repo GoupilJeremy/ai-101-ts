@@ -1,5 +1,5 @@
 /**
- * Supported modes for the AI-101 extension.
+ * Supported modes for the Suika extension.
  */
 export enum AgentMode {
     Learning = 'learning',

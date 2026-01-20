@@ -1,121 +1,116 @@
-# ai-101-ts README
+# 🍉 Suika - See How AI Thinks
 
-This is the README for your extension "ai-101-ts". After writing up a brief description, we recommend including the following sections.
+<p align="center">
+  <img src="media/suika-logo.svg" alt="Suika Logo" width="200">
+</p>
 
-## Features
+<p align="center">
+  <strong>Transparent AI assistant for VSCode with sumi-e inspired HUD</strong>
+</p>
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Default Hotkeys
-
-The following hotkeys are available by default (configurable in VSCode Keyboard Shortcuts):
-
-### Global Hotkeys
-* **Toggle HUD Visibility**: `Ctrl+Alt+H` (`Cmd+Alt+H` on macOS)
-* **Toggle Focus Mode**: `Ctrl+Shift+Alt+F` (`Cmd+Shift+Alt+F` on macOS)
-* **Accept AI Suggestion**: `Ctrl+Enter` (`Cmd+Enter` on macOS)
-* **Reject AI Suggestion**: `Ctrl+Backspace` (`Cmd+Backspace` on macOS)
-* **Force Agent State (Debug)**: `Ctrl+Shift+Alt+S` (`Cmd+Shift+Alt+S` on macOS)
-* **Focus HUD for Navigation**: `Ctrl+Shift+H` (`Cmd+Shift+H` on macOS)
-
-### Keyboard-Only Navigation
-
-The AI-101 extension provides comprehensive keyboard navigation for all interactive elements in the HUD:
-
-#### Navigation Keys
-* **Tab**: Cycle forward through all interactive elements (agents, alerts, suggestions, vital signs, panels)
-* **Shift+Tab**: Cycle backward through interactive elements
-* **Arrow Left/Right**: Navigate spatially between agents (horizontal navigation)
-* **Arrow Up/Down**: Navigate spatially between alerts (vertical navigation)
-
-#### Action Keys
-* **Enter**: Activate the currently focused element (expand agent, accept suggestion, etc.)
-* **Space**: Toggle the currently focused element state (expand/collapse, select/deselect)
-* **Escape**: Close expanded panels or dismiss the currently focused alert
-
-#### Skip Links
-* **Skip to Agents**: Quickly jump to the first agent
-* **Skip to Alerts**: Quickly jump to the first alert
-* **Skip to Suggestions**: Quickly jump to the first suggestion
-
-#### Help
-* **Shift+?**: Show keyboard shortcuts help overlay
-
-### Accessibility Features
-...
-* **Reduced Motion**: Respects `prefers-reduced-motion` setting
-
-## Development & Debugging
-
-AI-101 includes built-in tools for developers and contributors:
-
-* **Force Agent State**: Force any agent into a specific state (`thinking`, `working`, `alert`, etc.) to test UI transitions and animations.
-  - Command: `AI 101: Force Agent State (Debug)`
-  - Hotkey: `Ctrl+Shift+Alt+S`
-  - Argument support for automation and testing.
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed technical documentation on debugging tools.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+<p align="center">
+  <em>"La transparence n'est pas un bug, c'est une feature"</em>
+</p>
 
 ---
 
-## Following extension guidelines
+**Suika** transforms the developer-AI interaction by making the AI reasoning process **visible and understandable**. Through a HUD (Heads-Up Display) inspired by Japanese sumi-e (墨絵) aesthetics, four specialized AI agents collaborate transparently above your code.
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+## ✨ Philosophy
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+While other AI tools treat intelligence as a black box, Suika believes that **transparency creates trust**. See exactly:
 
-## Working with Markdown
+- 🏗️ **Architect** analyzing your project structure
+- 💻 **Coder** generating suggestions aligned with your patterns
+- 🔍 **Reviewer** catching edge cases before you accept
+- 📚 **Context** managing which files the AI sees
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+## 🎨 Design Aesthetic
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+Inspired by Japanese minimalism:
+- **Ma (間)** - Negative space that respects your code
+- **Wabi-sabi** - Beauty in imperfection and simplicity
+- **Kanso (簡素)** - Elegant simplicity in every interaction
 
-## For more information
+## 🚀 Quick Start
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+1. Install from VSCode Marketplace
+2. Configure your API keys: `Suika: Configure API Keys`
+3. Start coding - watch the agents come alive!
 
-**Enjoy!**
+## ⌨️ Default Hotkeys
+
+| Action | Windows/Linux | macOS |
+|--------|---------------|-------|
+| Toggle HUD | `Ctrl+Alt+H` | `Cmd+Alt+H` |
+| Toggle Focus Mode | `Ctrl+Shift+Alt+F` | `Cmd+Shift+Alt+F` |
+| Accept Suggestion | `Ctrl+Enter` | `Cmd+Enter` |
+| Reject Suggestion | `Ctrl+Backspace` | `Cmd+Backspace` |
+| Focus HUD | `Ctrl+Shift+H` | `Cmd+Shift+H` |
+
+## 🎯 Keyboard Navigation
+
+Suika provides comprehensive keyboard-only navigation:
+
+- **Tab/Shift+Tab**: Cycle through interactive elements
+- **Arrow Keys**: Navigate spatially between agents/alerts
+- **Enter/Space**: Activate or toggle focused elements
+- **Escape**: Dismiss or close panels
+- **Shift+?**: Show help overlay
+
+## 🔧 Extension Settings
+
+```json
+{
+  "suika.llm.provider": "openai",
+  "suika.ui.transparency": "medium",
+  "suika.ui.mode": "learning",
+  "suika.accessibility.highContrast": null
+}
+```
+
+## ♿ Accessibility
+
+- **High Contrast Mode**: Auto-detects VSCode theme
+- **Colorblind Modes**: Deuteranopia, Protanopia, Tritanopia
+- **Reduced Motion**: Respects system preferences
+- **Screen Reader**: Full ARIA support
+
+## 📖 Documentation
+
+- [Getting Started](./docs/guides/getting-started.md)
+- [Architecture](./docs/architecture/index.md)
+- [API Reference](./docs/api/index.html)
+- [Contributing](./CONTRIBUTING.md)
+
+## 🛠️ Development
+
+```bash
+# Clone and install
+git clone https://github.com/GoupilJeremy/suika.git
+cd suika
+npm install
+
+# Run in development
+npm run watch
+# Press F5 in VSCode to launch Extension Development Host
+```
+
+### Debug Commands
+
+- **Force Agent State**: `Suika: Force Agent State (Debug)` - Test UI transitions
+- Hotkey: `Ctrl+Shift+Alt+S`
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+## 📄 License
+
+MIT
+
+---
+
+<p align="center">
+  Made with 墨 (ink) and ❤️
+</p>

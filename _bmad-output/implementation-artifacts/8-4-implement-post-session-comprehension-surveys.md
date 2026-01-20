@@ -1,6 +1,6 @@
 # Story 8.4: Implement Post-Session Comprehension Surveys
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -55,7 +55,7 @@ so that I can validate the transparency goal with real user feedback.
 
 - [x] Task 4: Opt-Out & privacy (AC: 10)
   - [x] Check `telemetryService.isTelemetryEnabled()` before showing/sending
-  - [x] Respect `ai101.telemetry.enabled` setting
+  - [x] Respect `suika.telemetry.enabled` setting
   - [x] Add "Don't show again" option in survey prompt if needed? (Not explicitly in AC, but good UX)
 
 - [x] Task 5: Testing (AC: 12)

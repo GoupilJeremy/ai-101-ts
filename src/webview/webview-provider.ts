@@ -8,7 +8,7 @@ import { AnnotationsManager } from '../team/annotations-manager.js';
 import { PerformanceDetector } from '../performance/performance-detector.js';
 
 export class AI101WebviewProvider implements vscode.WebviewViewProvider {
-    public static readonly viewType = 'ai101.webview';
+    public static readonly viewType = 'suika.webview';
 
     private _view?: vscode.WebviewView;
 
@@ -48,11 +48,11 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         switch (type) {
             case 'toExtension:suggestionAccepted':
                 this.handleSuggestionAction(message.agent, 'accepted', message.complexity);
-                vscode.commands.executeCommand('ai-101-ts.acceptSuggestion', { suggestionId: message.suggestionId });
+                vscode.commands.executeCommand('suika.acceptSuggestion', { suggestionId: message.suggestionId });
                 break;
             case 'toExtension:suggestionRejected':
                 this.handleSuggestionAction(message.agent, 'rejected', message.complexity);
-                vscode.commands.executeCommand('ai-101-ts.rejectSuggestion', { suggestionId: message.suggestionId });
+                vscode.commands.executeCommand('suika.rejectSuggestion', { suggestionId: message.suggestionId });
                 break;
             case 'toExtension:annotationAdded':
                 this.handleAnnotationAdded(message.suggestionId, message.comment, message.author);
@@ -83,10 +83,10 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
 
             // Alert Interactions
             case 'toExtension:createTodo':
-                vscode.commands.executeCommand('ai-101-ts.createTodoFromAlert', message.alertId);
+                vscode.commands.executeCommand('suika.createTodoFromAlert', message.alertId);
                 break;
             case 'toExtension:dismissAlert':
-                vscode.commands.executeCommand('ai-101-ts.dismissAlert', message.alertId);
+                vscode.commands.executeCommand('suika.dismissAlert', message.alertId);
                 break;
             case 'toExtension:applyFix':
                 await this.handleApplyFix(message.alertId, message.fix);
@@ -213,7 +213,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
                 vscode.window.showInformationMessage('Fix applied successfully');
 
                 // Dismiss the alert
-                vscode.commands.executeCommand('ai-101-ts.dismissAlert', alertId);
+                vscode.commands.executeCommand('suika.dismissAlert', alertId);
             } else {
                 vscode.window.showErrorMessage('Failed to apply fix');
             }
@@ -271,25 +271,25 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
 
         // Map glossary terms to documentation or knowledge base articles
         const glossaryUrls: Record<string, string> = {
-            'context': 'https://ai-101.dev/docs/concepts/context',
-            'token-budget': 'https://ai-101.dev/docs/concepts/tokens',
-            'tokens': 'https://ai-101.dev/docs/concepts/tokens',
-            'architecture': 'https://ai-101.dev/docs/concepts/architecture',
-            'design-patterns': 'https://ai-101.dev/docs/concepts/patterns',
-            'code-generation': 'https://ai-101.dev/docs/concepts/code-generation',
-            'llm-provider': 'https://ai-101.dev/docs/concepts/llm-providers',
-            'code-review': 'https://ai-101.dev/docs/concepts/code-review',
-            'security': 'https://ai-101.dev/docs/concepts/security',
-            'edge-cases': 'https://ai-101.dev/docs/concepts/edge-cases',
-            'cost-tracking': 'https://ai-101.dev/docs/concepts/costs',
-            'budget': 'https://ai-101.dev/docs/concepts/budget',
-            'development-phase': 'https://ai-101.dev/docs/concepts/phases',
-            'user-modes': 'https://ai-101.dev/docs/concepts/modes',
-            'focus-mode': 'https://ai-101.dev/docs/concepts/focus-mode',
-            'team-mode': 'https://ai-101.dev/docs/concepts/team-mode',
-            'alert-system': 'https://ai-101.dev/docs/concepts/alerts',
-            'severity-levels': 'https://ai-101.dev/docs/concepts/severity',
-            'code-smells': 'https://ai-101.dev/docs/concepts/code-smells',
+            'context': 'https://suika.dev/docs/concepts/context',
+            'token-budget': 'https://suika.dev/docs/concepts/tokens',
+            'tokens': 'https://suika.dev/docs/concepts/tokens',
+            'architecture': 'https://suika.dev/docs/concepts/architecture',
+            'design-patterns': 'https://suika.dev/docs/concepts/patterns',
+            'code-generation': 'https://suika.dev/docs/concepts/code-generation',
+            'llm-provider': 'https://suika.dev/docs/concepts/llm-providers',
+            'code-review': 'https://suika.dev/docs/concepts/code-review',
+            'security': 'https://suika.dev/docs/concepts/security',
+            'edge-cases': 'https://suika.dev/docs/concepts/edge-cases',
+            'cost-tracking': 'https://suika.dev/docs/concepts/costs',
+            'budget': 'https://suika.dev/docs/concepts/budget',
+            'development-phase': 'https://suika.dev/docs/concepts/phases',
+            'user-modes': 'https://suika.dev/docs/concepts/modes',
+            'focus-mode': 'https://suika.dev/docs/concepts/focus-mode',
+            'team-mode': 'https://suika.dev/docs/concepts/team-mode',
+            'alert-system': 'https://suika.dev/docs/concepts/alerts',
+            'severity-levels': 'https://suika.dev/docs/concepts/severity',
+            'code-smells': 'https://suika.dev/docs/concepts/code-smells',
         };
 
         const url = glossaryUrls[term];
@@ -300,7 +300,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         } else {
             // Try to open knowledge base view if term not in URL map
             try {
-                await vscode.commands.executeCommand('ai-101-ts.openKnowledgeBase', { searchTerm: term });
+                await vscode.commands.executeCommand('suika.openKnowledgeBase', { searchTerm: term });
             } catch (e) {
                 // Fallback: Show information message with the term
                 vscode.window.showInformationMessage(
@@ -311,8 +311,8 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
     }
 
     private handleConfigurationChange(event: vscode.ConfigurationChangeEvent): void {
-        if (event.affectsConfiguration('ai101.teamMode.largeText')) {
-            const config = vscode.workspace.getConfiguration('ai101.teamMode');
+        if (event.affectsConfiguration('suika.teamMode.largeText')) {
+            const config = vscode.workspace.getConfiguration('suika.teamMode');
             const largeTextEnabled = config.get<boolean>('largeText', false);
 
             if (this._view) {

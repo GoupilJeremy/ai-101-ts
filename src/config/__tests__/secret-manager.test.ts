@@ -51,13 +51,13 @@ suite('SecretManager Suite', () => {
         const manager = SecretManager.getInstance();
         await manager.storeApiKey('openai', 'test-key-123');
 
-        const stored = await mockSecrets.get('ai101.openai.apiKey');
+        const stored = await mockSecrets.get('suika.openai.apiKey');
         assert.strictEqual(stored, 'test-key-123');
     });
 
     test('getApiKey retrieves correct key', async () => {
         const manager = SecretManager.getInstance();
-        await mockSecrets.store('ai101.anthropic.apiKey', 'anthropic-key-456');
+        await mockSecrets.store('suika.anthropic.apiKey', 'anthropic-key-456');
 
         const retrieved = await manager.getApiKey('anthropic');
         assert.strictEqual(retrieved, 'anthropic-key-456');
@@ -65,10 +65,10 @@ suite('SecretManager Suite', () => {
 
     test('deleteApiKey removes key', async () => {
         const manager = SecretManager.getInstance();
-        await mockSecrets.store('ai101.custom.apiKey', 'custom-key-789');
+        await mockSecrets.store('suika.custom.apiKey', 'custom-key-789');
 
         await manager.deleteApiKey('custom');
-        const retrieved = await mockSecrets.get('ai101.custom.apiKey');
+        const retrieved = await mockSecrets.get('suika.custom.apiKey');
         assert.strictEqual(retrieved, undefined);
     });
 });

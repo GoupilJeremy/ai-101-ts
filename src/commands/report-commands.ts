@@ -15,7 +15,7 @@ export function registerReportCommands(
 ): void {
     // Command: Generate Team Report
     const generateReportCommand = vscode.commands.registerCommand(
-        'ai-101.generateTeamReport',
+        'suika.generateTeamReport',
         async () => {
             try {
                 // Get team metrics

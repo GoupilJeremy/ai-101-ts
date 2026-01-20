@@ -1,6 +1,6 @@
 # Story 7.4: Implement Contextual Hover Tooltips on Agents
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

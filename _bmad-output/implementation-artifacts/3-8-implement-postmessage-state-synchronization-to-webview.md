@@ -1,6 +1,6 @@
 # Story 3.8: Implement PostMessage State Synchronization to Webview
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

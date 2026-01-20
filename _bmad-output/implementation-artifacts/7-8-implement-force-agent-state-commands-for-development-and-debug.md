@@ -1,6 +1,6 @@
 # Story 7.8: Implement Force Agent State Commands for Development and Debug
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -13,7 +13,7 @@ Status: review
 ## Acceptance Criteria
 
 1. **Given** The extension is active
-2. **When** I run the command `AI 101: Force Agent State` (ID: `ai-101.forceAgentState`)
+2. **When** I run the command `Suika: Force Agent State` (ID: `ai-101.forceAgentState`)
 3. **And** I select an agent (Architect, Coder, Reviewer, Context)
 4. **And** I select a target state (Idle, Thinking, Working, Alert, Success)
 5. **Then** The backend `ExtensionStateManager` updates the agent's state immediately
@@ -32,7 +32,7 @@ Status: review
   - [x] Integrate with `ExtensionStateManager` to apply state updates
 - [x] **Task 2: Command Registration & Configuration**
   - [x] Register command in `package.json` under `contributes.commands`
-  - [x] Add category "AI 101 Debug" for better organization
+  - [x] Add category "Suika Debug" for better organization
   - [x] Register command implementation in `src/extension.ts`
   - [x] Support programmatic arguments in registration
 - [x] **Task 3: Integration & Validation**
@@ -80,7 +80,7 @@ PLACEHOLDER_M18
 - Renamed command file to `force-agent-state.command.ts` for architectural consistency.
 - Updated `CONTRIBUTING.md` and `README.md` with debugging tool documentation.
 - Added unit tests for the command handler.
-- Improved command categorization in Command Palette under "AI 101 Debug".
+- Improved command categorization in Command Palette under "Suika Debug".
 
 ### File List
 

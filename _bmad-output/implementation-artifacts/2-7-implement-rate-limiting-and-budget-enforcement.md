@@ -1,6 +1,6 @@
 # Story 2.7: Implement Rate Limiting and Budget Enforcement
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -46,7 +46,7 @@ so that users can control LLM costs and prevent unexpected charges.
 
 ## Dev Notes
 
-- **Settings**: Read `ai101.performance.maxTokens` and potentially new budget settings.
+- **Settings**: Read `suika.performance.maxTokens` and potentially new budget settings.
 - **VSCode API**: Use `vscode.window.showWarningMessage` for the 80% notification.
 - **Error**: `BudgetExceededError` should extend `AI101Error`.
 

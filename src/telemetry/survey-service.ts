@@ -230,7 +230,7 @@ export class SurveyService {
     private async showComprehensionSurvey(sessionStats: ISessionStats): Promise<void> {
         // Step 1: Ask if user wants to participate
         const participate = await vscode.window.showInformationMessage(
-            'AI-101: How well did you understand the AI\'s suggestions in your last session?',
+            'Suika: How well did you understand the AI\'s suggestions in your last session?',
             { modal: false },
             'Yes, I\'ll answer',
             'No, thanks'
@@ -256,7 +256,7 @@ export class SurveyService {
 
         const selectedScore = await vscode.window.showQuickPick(scoreOptions, {
             placeHolder: 'Rate your comprehension (1-10)',
-            title: 'AI-101 Comprehension Survey',
+            title: 'Suika Comprehension Survey',
         });
 
         if (!selectedScore) {
@@ -284,7 +284,7 @@ export class SurveyService {
         );
 
         // Show thank you message
-        vscode.window.showInformationMessage('AI-101: Thank you for your feedback!');
+        vscode.window.showInformationMessage('Suika: Thank you for your feedback!');
     }
 
     /**
@@ -293,7 +293,7 @@ export class SurveyService {
     private async showWeeklyLearningSurvey(): Promise<void> {
         // Step 1: Ask if user wants to participate
         const participate = await vscode.window.showInformationMessage(
-            'AI-101: Quick check-in: How\'s your learning progress this week?',
+            'Suika: Quick check-in: How\'s your learning progress this week?',
             { modal: false },
             'Start Survey',
             'Snooze 24h',
@@ -331,8 +331,8 @@ export class SurveyService {
         ];
 
         const selectedScore = await vscode.window.showQuickPick(scoreOptions, {
-            placeHolder: 'This week, how much did AI-101 improve your understanding? (1-10)',
-            title: 'AI-101 Learning Progress Survey',
+            placeHolder: 'This week, how much did Suika improve your understanding? (1-10)',
+            title: 'Suika Learning Progress Survey',
         });
 
         if (!selectedScore) {
@@ -370,13 +370,13 @@ export class SurveyService {
         const featureTip = await this.getUnusedFeatureTip();
         if (featureTip) {
             await vscode.window.showInformationMessage(
-                `AI-101: ${featureTip}`,
+                `Suika: ${featureTip}`,
                 { modal: false }
             );
         }
 
         // Show thank you message
-        vscode.window.showInformationMessage('AI-101: Thank you for sharing your progress!');
+        vscode.window.showInformationMessage('Suika: Thank you for sharing your progress!');
     }
 
     /**
@@ -385,7 +385,7 @@ export class SurveyService {
     private async showNPSSurvey(): Promise<void> {
         // Step 1: Ask if user wants to participate
         const participate = await vscode.window.showInformationMessage(
-            'AI-101: Quick question: How likely are you to recommend AI-101 to a colleague?',
+            'Suika: Quick question: How likely are you to recommend Suika to a colleague?',
             { modal: false },
             'Answer',
             'Snooze',
@@ -430,8 +430,8 @@ export class SurveyService {
         ];
 
         const selectedScore = await vscode.window.showQuickPick(scoreOptions, {
-            placeHolder: 'How likely are you to recommend AI-101? (0-10)',
-            title: 'AI-101 Net Promoter Score',
+            placeHolder: 'How likely are you to recommend Suika? (0-10)',
+            title: 'Suika Net Promoter Score',
         });
 
         if (!selectedScore) {
@@ -468,7 +468,7 @@ export class SurveyService {
         await this.context.globalState.update('survey.nps.lastShown', now);
 
         // Show thank you message
-        vscode.window.showInformationMessage('AI-101: Thank you for your feedback!');
+        vscode.window.showInformationMessage('Suika: Thank you for your feedback!');
     }
 
     /**

@@ -30,7 +30,7 @@ Agents appear stuck in "thinking" state for extended periods. LLM API calls time
    - Anthropic: https://status.anthropic.com
    
 3. **Verify API key configuration**
-   - Run "AI 101: Configure API Keys"
+   - Run "Suika: Configure API Keys"
    - Ensure key is valid and not expired
    
 4. **Check proxy/firewall settings**
@@ -45,7 +45,7 @@ Extend the timeout for slow connections.
 
 ```json
 {
-  "ai101.llm.timeoutMs": 60000  // 60 seconds instead of default 30s
+  "suika.llm.timeoutMs": 60000  // 60 seconds instead of default 30s
 }
 ```
 
@@ -55,7 +55,7 @@ Try an alternative provider if one is experiencing issues.
 
 ```
 1. Open Settings
-2. Search for "ai101.llm.provider"
+2. Search for "suika.llm.provider"
 3. Switch from "openai" to "anthropic" (or vice versa)
 4. Configure API key for new provider
 ```
@@ -77,8 +77,8 @@ Enable automatic fallback to secondary provider.
 
 ```json
 {
-  "ai101.llm.enableFallback": true,
-  "ai101.llm.fallbackProvider": "anthropic"
+  "suika.llm.enableFallback": true,
+  "suika.llm.fallbackProvider": "anthropic"
 }
 ```
 
@@ -88,8 +88,8 @@ The extension automatically retries failed requests up to 3 times. Check retry s
 
 ```json
 {
-  "ai101.llm.maxRetries": 3,
-  "ai101.llm.retryDelayMs": 1000
+  "suika.llm.maxRetries": 3,
+  "suika.llm.retryDelayMs": 1000
 }
 ```
 

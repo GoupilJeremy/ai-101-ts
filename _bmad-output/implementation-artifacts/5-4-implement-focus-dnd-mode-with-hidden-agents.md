@@ -1,6 +1,6 @@
 # Story 5.4: Implement Focus (DND) Mode with Hidden Agents
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -152,7 +152,7 @@ So that I can concentrate deeply without visual distraction when needed.
 **Hotkey Registration (package.json):**
 ```json
 {
-  "command": "ai-101-ts.toggleFocusMode",
+  "command": "suika.toggleFocusMode",
   "key": "ctrl+shift+f",
   "mac": "cmd+shift+f",
   "when": "editorTextFocus"

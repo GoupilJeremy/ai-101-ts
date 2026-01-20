@@ -40,7 +40,7 @@ describe('ReportGeneratorService', () => {
         it('should generate valid markdown report', () => {
             const report = reportGenerator.generateMarkdownReport(mockMetrics);
 
-            expect(report).toContain('# AI-101 Team Adoption Report');
+            expect(report).toContain('# Suika Team Adoption Report');
             expect(report).toContain('## Executive Summary');
             expect(report).toContain('## Learning Progress');
             expect(report).toContain('## Usage Frequency');

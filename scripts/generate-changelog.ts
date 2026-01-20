@@ -25,7 +25,7 @@ function getContributors(): string[] {
 function generateThankYou(contributors: string[]): string {
     if (contributors.length === 0) return '';
 
-    let section = '\n## ❤️ Thank You\n\nWe would like to thank all the contributors who have helped make AI-101 better:\n\n';
+    let section = '\n## ❤️ Thank You\n\nWe would like to thank all the contributors who have helped make Suika better:\n\n';
     contributors.forEach(contributor => {
         section += `- ${contributor}\n`;
     });

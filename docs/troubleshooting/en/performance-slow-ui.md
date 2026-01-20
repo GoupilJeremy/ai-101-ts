@@ -22,7 +22,7 @@ The HUD animations appear choppy, the UI responds slowly, or you notice stutteri
 ## Diagnosis Steps
 
 1. **Check CPU usage** in VSCode Developer Tools (Help > Toggle Developer Tools)
-   - Look for high CPU usage (>80%) when AI-101 is active
+   - Look for high CPU usage (>80%) when Suika is active
    
 2. **Check FPS counter** (if available in debug mode)
    - Target is 60fps for smooth animations
@@ -43,16 +43,16 @@ Performance Mode reduces animation complexity and throttles updates.
 
 ```
 1. Open Command Palette (Ctrl+Shift+P / Cmd+Shift+P)
-2. Run "AI 101: Toggle Performance Mode"
+2. Run "Suika: Toggle Performance Mode"
 3. Restart VSCode if issues persist
 ```
 
 **Settings:**
 ```json
 {
-  "ai101.performanceMode.autoActivate": true,
-  "ai101.performanceMode.collisionThrottleMs": 500,
-  "ai101.performanceMode.metricsThrottleMs": 1000
+  "suika.performanceMode.autoActivate": true,
+  "suika.performanceMode.collisionThrottleMs": 500,
+  "suika.performanceMode.metricsThrottleMs": 1000
 }
 ```
 
@@ -62,7 +62,7 @@ Lower transparency levels reduce GPU load.
 
 ```
 1. Open Settings (Ctrl+, / Cmd+,)
-2. Search for "ai101.ui.transparency"
+2. Search for "suika.ui.transparency"
 3. Set to "minimal" instead of "full"
 ```
 
@@ -88,7 +88,7 @@ Outdated graphics drivers can cause rendering issues.
 ## Prevention
 
 - **Keep extensions count low** - Only install extensions you actively use
-- **Enable auto Performance Mode** - Set `ai101.performanceMode.autoActivate: true`
+- **Enable auto Performance Mode** - Set `suika.performanceMode.autoActivate: true`
 - **Use Focus Mode when coding** - Hides agents to reduce visual complexity
 - **Close unused VSCode windows** - Each window consumes resources
 - **Restart VSCode daily** - Clears memory leaks from long-running sessions

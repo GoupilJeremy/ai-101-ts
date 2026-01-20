@@ -1,6 +1,6 @@
 # Story 5.6: Implement Performance Mode for Low-End Machines
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -63,13 +63,13 @@ So that the extension remains usable on older machines or in resource-constraine
   - [x] 6.1: Locate applyRepulsionToAgent() and repositionAgents() in main.ts
   - [x] 6.2: Create throttledRepositionAgents() with 500ms interval for Performance Mode
   - [x] 6.3: In Performance Mode, use throttled version instead of real-time checks
-  - [x] 6.4: Ensure throttle is configurable via 'ai101.performanceMode.collisionThrottleMs'
+  - [x] 6.4: Ensure throttle is configurable via 'suika.performanceMode.collisionThrottleMs'
 
 - [x] Task 7: Reduce Web Worker Usage (AC: 9)
   - [x] 7.1: Audit existing Web Worker usage (async-renderer, collision detection)
   - [x] 7.2: In Performance Mode, disable Web Workers and use main thread
   - [x] 7.3: Ensure graceful fallback if Workers not available
-  - [x] 7.4: Add config 'ai101.performanceMode.useWebWorkers' (default: false in Performance Mode)
+  - [x] 7.4: Add config 'suika.performanceMode.useWebWorkers' (default: false in Performance Mode)
 
 - [x] Task 8: Throttle Vital Signs Bar Updates (AC: 10)
   - [x] 8.1: Locate executeUpdateMetricsUI() in main.ts
@@ -88,7 +88,7 @@ So that the extension remains usable on older machines or in resource-constraine
   - [x] 10.2: Use navigator.deviceMemory API (if available) in webview
   - [x] 10.3: In extension context, use os.totalmem() / os.freemem()
   - [x] 10.4: Auto-activate Performance Mode if <4GB RAM detected
-  - [x] 10.5: Add user override setting 'ai101.performanceMode.autoActivate' (default: true)
+  - [x] 10.5: Add user override setting 'suika.performanceMode.autoActivate' (default: true)
   - [x] 10.6: Show notification when auto-activated with option to disable
 
 - [x] Task 11: Unit Tests (AC: 13)
@@ -251,7 +251,7 @@ class PerformanceModeAutoActivator {
     private static activated = false;
 
     static async checkAndActivate(): Promise<void> {
-        const config = vscode.workspace.getConfiguration('ai101.performanceMode');
+        const config = vscode.workspace.getConfiguration('suika.performanceMode');
         const autoActivate = config.get<boolean>('autoActivate', true);
 
         if (!autoActivate || this.activated) return;
@@ -350,22 +350,22 @@ class PerformanceModeAutoActivator {
 **Package.json Settings to Add:**
 ```json
 {
-  "ai101.performanceMode.autoActivate": {
+  "suika.performanceMode.autoActivate": {
     "type": "boolean",
     "default": true,
     "description": "Auto-activate Performance Mode on low-memory systems (<4GB RAM)"
   },
-  "ai101.performanceMode.collisionThrottleMs": {
+  "suika.performanceMode.collisionThrottleMs": {
     "type": "number",
     "default": 500,
     "description": "Anti-collision check interval in Performance Mode (ms)"
   },
-  "ai101.performanceMode.metricsThrottleMs": {
+  "suika.performanceMode.metricsThrottleMs": {
     "type": "number",
     "default": 1000,
     "description": "Vital Signs Bar update interval in Performance Mode (ms)"
   },
-  "ai101.performanceMode.useWebWorkers": {
+  "suika.performanceMode.useWebWorkers": {
     "type": "boolean",
     "default": false,
     "description": "Use Web Workers in Performance Mode (disable for maximum compatibility)"

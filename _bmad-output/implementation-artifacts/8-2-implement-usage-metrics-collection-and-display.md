@@ -1,6 +1,6 @@
 # Story 8.2: Implement Usage Metrics Collection and Display
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -14,7 +14,7 @@ so that I understand how I'm using the tool and the value it provides.
 
 1.  **Given** Telemetry is enabled, **When** I use the extension, **Then** the system tracks: total sessions, session duration, suggestions requested, suggestions accepted/rejected, and calculated "time saved".
 2.  **Given** "Time Saved" metric, **Then** it is calculated as (lines of code accepted * average typing speed constant).
-3.  **Given** user runs command "AI-101: View My Metrics", **Then** a Dashboard Webview opens displaying these metrics.
+3.  **Given** user runs command "Suika: View My Metrics", **Then** a Dashboard Webview opens displaying these metrics.
 4.  **Given** the Dashboard, **Then** it shows trends (daily/weekly) and an acceptance rate graph.
 5.  **Given** the Dashboard, **Then** data is rendered locally and explicitly states if data is being shared (based on Telemetry consent).
 6.  **Given** metrics data, **Then** it persists locally across sessions (using `globalStorage`) and survives extension updates.
@@ -77,7 +77,7 @@ Antigravity (Google Deepmind)
 ### Completion Notes List
 
 - Implemented `MetricsService` and `MetricsStorage` for persistent local tracking of extension usage.
-- Created Sumi-e styled Dashboard Webview reached via `AI-101: View My Metrics`.
+- Created Sumi-e styled Dashboard Webview reached via `Suika: View My Metrics`.
 - Implemented "Time Saved" calculation (10s/line accepted).
 - Integrated with suggestion lifecycle (requested, accepted, rejected).
 - Added JSON export functionality.

@@ -1,6 +1,6 @@
 # Story 7.6: Implement VSCode Command Palette Integration
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -13,7 +13,7 @@ Status: review
 ## Acceptance Criteria
 
 1. **Given** The extension is active
-2. **When** I open the Command Palette (Cmd/Ctrl+Shift+P) and type "AI 101"
+2. **When** I open the Command Palette (Cmd/Ctrl+Shift+P) and type "Suika"
 3. **Then** I see a comprehensive list of commands including all Modes, Configuration, and UI toggles
 4. **And** Commands for "Switch to Learning Mode", "Switch to Expert Mode", "Switch to Team Mode" are available and functional
 5. **And** "Configure API Keys" command opens a secure InputBox flow to save keys via SecretStorage
@@ -21,7 +21,7 @@ Status: review
 7. **And** "Toggle Agent Visibility" command opens a QuickPick to show/hide specific agents (Architect, Coder, Reviewer, Context)
 8. **And** "Open Documentation" command opens the integrated Getting Started view
 9. **And** All commands properly update `ExtensionStateManager` and sync state to the Webview HUD
-10. **And** All commands are registered with "AI 101" category for easy filtering
+10. **And** All commands are registered with "Suika" category for easy filtering
 
 ## Tasks / Subtasks
 
@@ -43,9 +43,9 @@ Status: review
   - [x] Create `src/commands/open-documentation.ts`
   - [x] Implement logic to open `internal-docs` Webview or Markdown preview of `README.md`
 - [x] **Task 4: Integration: Register Commands**
-  - [x] Update `package.json` `contributes.commands` with all new commands (Category: "AI 101")
+  - [x] Update `package.json` `contributes.commands` with all new commands (Category: "Suika")
   - [x] Update `src/extension.ts` to register new commands in `activate()` function
-  - [x] Ensure command IDs follow `ai-101-ts.commandName` convention
+  - [x] Ensure command IDs follow `suika.commandName` convention
 - [x] **Task 5: Testing**
   - [x] Create `src/commands/__tests__/command-handlers.test.ts`
   - [x] Mock `vscode.window` (QuickPick, InputBox) and `ExtensionStateManager`
@@ -81,7 +81,7 @@ Antigravity (Gemini 2.0 Flash Thinking)
 
 **Implementation Summary:**
 - ✅ Created 3 new command files for mode switching, API key configuration, and UI commands
-- ✅ Added 7 new commands to Command Palette (all under "AI 101" category)
+- ✅ Added 7 new commands to Command Palette (all under "Suika" category)
 - ✅ Implemented secure API key storage using VSCode SecretStorage
 - ✅ Added agent visibility toggling with multi-select QuickPick
 - ✅ Integrated documentation viewer with markdown preview

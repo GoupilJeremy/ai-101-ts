@@ -1,11 +1,11 @@
-# Contributing to AI-101-ts
+# Contributing to Suika-ts
 
 ## Debugging Tools
 
 ### Force Agent State Command
 The extension provides a powerful debugging command to force agents into specific states. This is useful for testing visual transitions, animations, and state synchronization without requiring real LLM calls.
 
-**Command ID**: `ai-101-ts.forceAgentState`
+**Command ID**: `suika.forceAgentState`
 **Hotkey**: `Ctrl+Shift+Alt+S` (`Cmd+Shift+Alt+S` on macOS)
 
 #### Usage
@@ -18,7 +18,7 @@ The extension provides a powerful debugging command to force agents into specifi
 2. **Programmatic Mode**:
    You can call this command programmatically via the VSCode API or custom keybindings with arguments:
    ```typescript
-   vscode.commands.executeCommand('ai-101-ts.forceAgentState', 'architect', 'thinking', 'Analyzing project structure');
+   vscode.commands.executeCommand('suika.forceAgentState', 'architect', 'thinking', 'Analyzing project structure');
    ```
 
 **Arguments**:

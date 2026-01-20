@@ -31,7 +31,7 @@ AI agents remain in "idle" state and never transition to "thinking" or "working"
    
 3. **Check Output panel**
    - View > Output
-   - Select "AI-101" channel
+   - Select "Suika" channel
    - Look for error messages
    
 4. **Monitor Developer Tools**
@@ -44,7 +44,7 @@ AI agents remain in "idle" state and never transition to "thinking" or "working"
 
 ```
 1. Open Command Palette
-2. Run "AI 101: Force Agent State (Debug)"
+2. Run "Suika: Force Agent State (Debug)"
 3. Select agent to reset
 4. Choose "Reset to Idle"
 ```
@@ -63,9 +63,9 @@ Verify LLM provider is configured:
 
 ```
 1. Open Settings
-2. Search "ai101.llm.provider"
+2. Search "suika.llm.provider"
 3. Ensure valid provider selected
-4. Run "AI 101: Configure API Keys"
+4. Run "Suika: Configure API Keys"
 5. Test connection
 ```
 
@@ -75,7 +75,7 @@ Reset extension state:
 
 ```
 1. Open Command Palette
-2. Run "AI 101: Reset Configuration"
+2. Run "Suika: Reset Configuration"
 3. Reconfigure API keys
 4. Reload window
 ```
@@ -89,7 +89,7 @@ Agents need context to work:
 2. Make a code change
 3. Wait for agents to activate
 4. Or manually add context:
-   - Run "AI 101: Add File to Context"
+   - Run "Suika: Add File to Context"
 ```
 
 ### Solution 6: Verify Development Phase
@@ -97,7 +97,7 @@ Agents need context to work:
 Agents behave differently based on phase:
 
 ```
-1. Run "AI 101: Set Development Phase"
+1. Run "Suika: Set Development Phase"
 2. Select appropriate phase (Planning/Implementation/Review)
 3. Test agent responsiveness
 ```

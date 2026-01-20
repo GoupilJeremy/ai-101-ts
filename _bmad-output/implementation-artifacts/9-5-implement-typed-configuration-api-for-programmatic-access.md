@@ -1,13 +1,13 @@
 # Story 9.5: Implement Typed Configuration API for Programmatic Access
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
 ## Story
 
 As an extension developer,
-I want programmatic access to AI-101 configuration,
+I want programmatic access to Suika configuration,
 so that I can read/write settings from my custom extension.
 
 ## Acceptance Criteria
@@ -80,9 +80,9 @@ so that I can read/write settings from my custom extension.
 
 ### References
 
-- [Source: planning-artifacts/epics.md#Story 9.5](file:///home/jeregoupix/dev/ai-101-ts/_bmad-output/planning-artifacts/epics.md)
-- [Source: project-context.md#Category 6: API Patterns](file:///home/jeregoupix/dev/ai-101-ts/_bmad-output/project-context.md)
-- [Source: implementation-artifacts/9-4-implement-lifecycle-event-subscription-api.md](file:///home/jeregoupix/dev/ai-101-ts/_bmad-output/implementation-artifacts/9-4-implement-lifecycle-event-subscription-api.md)
+- [Source: planning-artifacts/epics.md#Story 9.5](file:///home/jeregoupix/dev/suika/_bmad-output/planning-artifacts/epics.md)
+- [Source: project-context.md#Category 6: API Patterns](file:///home/jeregoupix/dev/suika/_bmad-output/project-context.md)
+- [Source: implementation-artifacts/9-4-implement-lifecycle-event-subscription-api.md](file:///home/jeregoupix/dev/suika/_bmad-output/implementation-artifacts/9-4-implement-lifecycle-event-subscription-api.md)
 
 ## Dev Agent Record
 

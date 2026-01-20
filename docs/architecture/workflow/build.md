@@ -2,7 +2,7 @@
 
 ## Overview
 
-AI-101 uses a dual-build system with esbuild for both extension and webview bundles.
+Suika uses a dual-build system with esbuild for both extension and webview bundles.
 
 ## npm Scripts
 

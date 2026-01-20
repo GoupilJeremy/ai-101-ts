@@ -7,7 +7,7 @@ export async function importConfigCommand() {
         filters: {
             'JSON Files': ['json']
         },
-        title: 'Import AI 101 Configuration'
+        title: 'Import Suika Configuration'
     };
 
     const fileUris = await vscode.window.showOpenDialog(options);

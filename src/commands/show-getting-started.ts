@@ -1,16 +1,16 @@
 import * as vscode from 'vscode';
 
 /**
- * Command to show the AI-101 Getting Started walkthrough
- * Opens the VSCode walkthrough UI for the AI-101 extension
+ * Command to show the Suika Getting Started walkthrough
+ * Opens the VSCode walkthrough UI for the Suika extension
  */
 export async function showGettingStartedCommand(): Promise<void> {
     try {
-        // Open the AI-101 getting started walkthrough
+        // Open the Suika getting started walkthrough
         // Format: 'publisher.extensionId#walkthroughId'
         await vscode.commands.executeCommand(
             'workbench.action.openWalkthrough',
-            'GoupilJeremy.ai-101-ts#ai101.gettingStarted',
+            'GoupilJeremy.suika#suika.gettingStarted',
             false // Don't open in the background
         );
     } catch (error) {

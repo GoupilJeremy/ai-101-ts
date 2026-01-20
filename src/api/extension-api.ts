@@ -4,7 +4,7 @@ import { IAI101Config, ConfigurationScope } from './configuration-types.js';
 
 
 /**
- * Public API exposed by the AI-101 extension to other extensions.
+ * Public API exposed by the Suika extension to other extensions.
  * 
  * @public
  * @remarks
@@ -13,7 +13,7 @@ import { IAI101Config, ConfigurationScope } from './configuration-types.js';
  * **Usage Example:**
  * ```typescript
  * // In another extension's activate() function:
- * const ai101Extension = vscode.extensions.getExtension('your-publisher.ai-101-ts');
+ * const ai101Extension = vscode.extensions.getExtension('your-publisher.suika');
  * if (ai101Extension) {
  *   const api: IAI101API = ai101Extension.exports;
  *   
@@ -26,7 +26,7 @@ import { IAI101Config, ConfigurationScope } from './configuration-types.js';
  */
 export interface IAI101API {
     /**
-     * The current version of the AI-101 API.
+     * The current version of the Suika API.
      * Follows Semantic Versioning (Major.Minor.Patch).
      * 
      * @example "1.2.3"
@@ -42,12 +42,12 @@ export interface IAI101API {
      * 
      * @remarks
      * Extensions should use this to guard against breaking changes or ensure
-     * required features are available in the installed version of AI-101.
+     * required features are available in the installed version of Suika.
      * 
      * @example
      * ```typescript
      * if (!api.checkCompatibility('^1.0.0')) {
-     *   vscode.window.showErrorMessage('This extension requires AI-101 version 1.x.x');
+     *   vscode.window.showErrorMessage('This extension requires Suika version 1.x.x');
      *   return;
      * }
      * ```
@@ -57,7 +57,7 @@ export interface IAI101API {
     checkCompatibility(requiredVersion: string): boolean;
 
     /**
-     * Registers a custom LLM provider with the AI-101 extension.
+     * Registers a custom LLM provider with the Suika extension.
      * 
      * @param name - Unique identifier for the provider (lowercase, URL-safe)
      * @param provider - Implementation of the ILLMProvider interface
@@ -89,7 +89,7 @@ export interface IAI101API {
     registerLLMProvider(name: string, provider: ILLMProvider): void;
 
     /**
-     * Subscribes to AI-101 lifecycle events.
+     * Subscribes to Suika lifecycle events.
      * 
      * @param event - The name of the event to subscribe to
      * @param callback - Function called when the event occurs
@@ -114,7 +114,7 @@ export interface IAI101API {
     on<K extends keyof AI101Events>(event: K, callback: (payload: AI101Events[K]) => void): Unsubscribe;
 
     /**
-     * Gets the value of an AI-101 configuration setting.
+     * Gets the value of an Suika configuration setting.
      * 
      * @param key - The configuration key (e.g., 'ui.mode')
      * @returns The current value of the configuration setting
@@ -124,7 +124,7 @@ export interface IAI101API {
     getConfig<K extends keyof IAI101Config>(key: K): IAI101Config[K];
 
     /**
-     * Sets the value of an AI-101 configuration setting.
+     * Sets the value of an Suika configuration setting.
      * 
      * @param key - The configuration key (e.g., 'ui.mode')
      * @param value - The new value to set
@@ -138,7 +138,7 @@ export interface IAI101API {
     setConfig<K extends keyof IAI101Config>(key: K, value: IAI101Config[K], scope?: ConfigurationScope): Promise<void>;
 
     /**
-     * Updates multiple AI-101 configuration settings simultaneously.
+     * Updates multiple Suika configuration settings simultaneously.
      * 
      * @param config - A partial configuration object containing keys to update
      * @param scope - The configuration scope (default: 'user')

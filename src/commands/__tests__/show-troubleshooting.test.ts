@@ -17,7 +17,7 @@ describe('Show Troubleshooting Commands', () => {
         vi.clearAllMocks();
     });
 
-    describe('ai-101-ts.showTroubleshooting', () => {
+    describe('suika.showTroubleshooting', () => {
         it('should register command', async () => {
             const { registerShowTroubleshootingCommand } = await import('../show-troubleshooting');
 
@@ -50,11 +50,11 @@ describe('Show Troubleshooting Commands', () => {
 
             await handler();
 
-            expect(vscode.commands.executeCommand).toHaveBeenCalledWith('ai101.troubleshootingView.focus');
+            expect(vscode.commands.executeCommand).toHaveBeenCalledWith('suika.troubleshootingView.focus');
         });
     });
 
-    describe('ai-101-ts.openTroubleshootingArticle', () => {
+    describe('suika.openTroubleshootingArticle', () => {
         it('should register command', async () => {
             const { registerOpenTroubleshootingArticleCommand } = await import('../show-troubleshooting');
 
@@ -79,7 +79,7 @@ describe('Show Troubleshooting Commands', () => {
 
             // Get the registered handler
             const registerCall = (vscode.commands.registerCommand as any).mock.calls.find(
-                (call: any[]) => call[0] === 'ai-101-ts.openTroubleshootingArticle'
+                (call: any[]) => call[0] === 'suika.openTroubleshootingArticle'
             );
             const handler = registerCall[1];
 
@@ -100,18 +100,18 @@ describe('Show Troubleshooting Commands', () => {
             registerOpenTroubleshootingArticleCommand(mockContext);
 
             const registerCall = (vscode.commands.registerCommand as any).mock.calls.find(
-                (call: any[]) => call[0] === 'ai-101-ts.openTroubleshootingArticle'
+                (call: any[]) => call[0] === 'suika.openTroubleshootingArticle'
             );
             const handler = registerCall[1];
 
             await handler('performance-slow-ui');
 
             expect(vscode.window.showInputBox).not.toHaveBeenCalled();
-            expect(vscode.commands.executeCommand).toHaveBeenCalledWith('ai101.troubleshootingView.focus');
+            expect(vscode.commands.executeCommand).toHaveBeenCalledWith('suika.troubleshootingView.focus');
         });
     });
 
-    describe('ai-101-ts.searchTroubleshooting', () => {
+    describe('suika.searchTroubleshooting', () => {
         it('should register command', async () => {
             const { registerSearchTroubleshootingCommand } = await import('../show-troubleshooting');
 
@@ -135,7 +135,7 @@ describe('Show Troubleshooting Commands', () => {
             registerSearchTroubleshootingCommand(mockContext);
 
             const registerCall = (vscode.commands.registerCommand as any).mock.calls.find(
-                (call: any[]) => call[0] === 'ai-101-ts.searchTroubleshooting'
+                (call: any[]) => call[0] === 'suika.searchTroubleshooting'
             );
             const handler = registerCall[1];
 
@@ -156,14 +156,14 @@ describe('Show Troubleshooting Commands', () => {
             registerSearchTroubleshootingCommand(mockContext);
 
             const registerCall = (vscode.commands.registerCommand as any).mock.calls.find(
-                (call: any[]) => call[0] === 'ai-101-ts.searchTroubleshooting'
+                (call: any[]) => call[0] === 'suika.searchTroubleshooting'
             );
             const handler = registerCall[1];
 
             await handler('slow ui');
 
             expect(vscode.window.showInputBox).not.toHaveBeenCalled();
-            expect(vscode.commands.executeCommand).toHaveBeenCalledWith('ai101.troubleshootingView.focus');
+            expect(vscode.commands.executeCommand).toHaveBeenCalledWith('suika.troubleshootingView.focus');
         });
     });
 });

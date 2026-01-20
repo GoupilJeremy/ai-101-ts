@@ -1,6 +1,6 @@
 # Story 9.4: Implement Lifecycle Event Subscription API
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -81,8 +81,8 @@ so that I can build custom analytics, notifications, or integrations.
 
 ### References
 
-- [Source: planning-artifacts/epics.md#Story 9.4](file:///home/jeregoupix/dev/ai-101-ts/_bmad-output/planning-artifacts/epics.md)
-- [Source: project-context.md#Category 6: API Patterns](file:///home/jeregoupix/dev/ai-101-ts/_bmad-output/project-context.md)
+- [Source: planning-artifacts/epics.md#Story 9.4](file:///home/jeregoupix/dev/suika/_bmad-output/planning-artifacts/epics.md)
+- [Source: project-context.md#Category 6: API Patterns](file:///home/jeregoupix/dev/suika/_bmad-output/project-context.md)
 
 ## Dev Agent Record
 

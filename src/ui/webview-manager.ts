@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { AI101WebviewProvider } from '../webview/webview-provider.js';
 
 /**
- * Manages the lifecycle and configuration of the AI 101 Webviews (HUD).
+ * Manages the lifecycle and configuration of the Suika Webviews (HUD).
  */
 export class WebviewManager {
     private static instance: WebviewManager;

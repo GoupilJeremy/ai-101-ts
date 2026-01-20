@@ -38,38 +38,38 @@ describe('First-run Welcome Screen', () => {
         executeCommandMock.mockResolvedValue(undefined);
 
         // Simulate first run - hasShownWelcome is false
-        const hasShownWelcome = mockContext.globalState.get('ai101.hasShownWelcome', false);
+        const hasShownWelcome = mockContext.globalState.get('suika.hasShownWelcome', false);
         expect(hasShownWelcome).toBe(false);
 
         if (!hasShownWelcome) {
             await vscode.commands.executeCommand(
                 'workbench.action.openWalkthrough',
-                'GoupilJeremy.ai-101-ts#ai101.gettingStarted',
+                'GoupilJeremy.suika#suika.gettingStarted',
                 false
             );
-            await mockContext.globalState.update('ai101.hasShownWelcome', true);
+            await mockContext.globalState.update('suika.hasShownWelcome', true);
         }
 
         expect(executeCommandMock).toHaveBeenCalledWith(
             'workbench.action.openWalkthrough',
-            'GoupilJeremy.ai-101-ts#ai101.gettingStarted',
+            'GoupilJeremy.suika#suika.gettingStarted',
             false
         );
-        expect(mockContext.globalState.update).toHaveBeenCalledWith('ai101.hasShownWelcome', true);
+        expect(mockContext.globalState.update).toHaveBeenCalledWith('suika.hasShownWelcome', true);
     });
 
     it('should not show welcome walkthrough on subsequent activations', async () => {
         const executeCommandMock = vi.mocked(vscode.commands.executeCommand);
 
         // Simulate subsequent run - hasShownWelcome is true
-        globalStateData.set('ai101.hasShownWelcome', true);
-        const hasShownWelcome = mockContext.globalState.get('ai101.hasShownWelcome', false);
+        globalStateData.set('suika.hasShownWelcome', true);
+        const hasShownWelcome = mockContext.globalState.get('suika.hasShownWelcome', false);
         expect(hasShownWelcome).toBe(true);
 
         if (!hasShownWelcome) {
             await vscode.commands.executeCommand(
                 'workbench.action.openWalkthrough',
-                'GoupilJeremy.ai-101-ts#ai101.gettingStarted',
+                'GoupilJeremy.suika#suika.gettingStarted',
                 false
             );
         }
@@ -82,16 +82,16 @@ describe('First-run Welcome Screen', () => {
         const testError = new Error('Walkthrough not found');
         executeCommandMock.mockRejectedValue(testError);
 
-        const hasShownWelcome = mockContext.globalState.get('ai101.hasShownWelcome', false);
+        const hasShownWelcome = mockContext.globalState.get('suika.hasShownWelcome', false);
 
         if (!hasShownWelcome) {
             try {
                 await vscode.commands.executeCommand(
                     'workbench.action.openWalkthrough',
-                    'GoupilJeremy.ai-101-ts#ai101.gettingStarted',
+                    'GoupilJeremy.suika#suika.gettingStarted',
                     false
                 );
-                await mockContext.globalState.update('ai101.hasShownWelcome', true);
+                await mockContext.globalState.update('suika.hasShownWelcome', true);
             } catch (error) {
                 // Should handle error gracefully without blocking activation
                 expect(error).toBe(testError);

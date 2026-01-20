@@ -81,7 +81,7 @@ export class RateLimiter {
         if (stats.tokenPercent >= 80 || stats.costPercent >= 80) {
             this.hasWarned80 = true;
             vscode.window.showWarningMessage(
-                `AI-101: You have reached 80% of your session budget ($${this.totalCost.toFixed(2)} / $${stats.costLimit.toFixed(2)}).`
+                `Suika: You have reached 80% of your session budget ($${this.totalCost.toFixed(2)} / $${stats.costLimit.toFixed(2)}).`
             );
         }
     }

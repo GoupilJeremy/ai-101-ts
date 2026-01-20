@@ -1,6 +1,6 @@
 # Story 10.1: Implement Integrated Getting-Started Documentation
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -8,7 +8,7 @@ Status: review
 
 As a new user,
 I want getting-started documentation accessible within the extension,
-So that I can learn how to use AI-101 without leaving VSCode.
+So that I can learn how to use Suika without leaving VSCode.
 
 ## Acceptance Criteria
 
@@ -18,7 +18,7 @@ So that I can learn how to use AI-101 without leaving VSCode.
 4. **And** Guide includes: quick tour, first suggestion walkthrough, mode explanations
 5. **And** Guide is interactive with "Try it now" buttons that trigger real features
 6. **And** Guide uses screenshots and animations to demonstrate concepts
-7. **And** Guide accessible anytime via "AI-101: Show Getting Started" command
+7. **And** Guide accessible anytime via "Suika: Show Getting Started" command
 8. **And** Guide tracks completion progress (which sections viewed - handled by VSCode Walkthrough state)
 9. **And** Guide includes video tutorials (linked, not embedded for size)
 10. **And** Guide supports search within content (limitations of Walkthrough noted, provide link to full searchable docs if needed)

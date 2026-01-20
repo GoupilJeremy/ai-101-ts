@@ -1,6 +1,6 @@
 # Story 5.1: Implement Mode System Infrastructure
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -30,7 +30,7 @@ so that users can switch between Learning, Expert, Focus, Team, and Performance 
 - [x] Task 2: Infrastructure (AC: 3, 5, 6, 7, 8)
   - [x] 2.1: Implement `ModeManager` singleton in `src/modes/mode-manager.ts`
   - [x] 2.2: Add mode synchronization to `ExtensionStateManager`
-  - [x] 2.3: Add VS Code command `ai101.switchMode` to toggle modes
+  - [x] 2.3: Add VS Code command `suika.switchMode` to toggle modes
   - [x] 2.4: Persist mode in `vscode.WorkspaceConfiguration`
 
 - [x] Task 3: Testing & Verification (AC: 9)

@@ -1,6 +1,6 @@
 # Story 1.4: Implement Secure API Key Storage with VSCode SecretStorage
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -15,8 +15,8 @@ So that sensitive credentials are encrypted at rest and never logged.
 1.  **Given** The extension is activated with `ExtensionContext`
 2.  **When** I create `src/config/secret-manager.ts`
 3.  **And** I implement methods: `storeApiKey()`, `getApiKey()`, `deleteApiKey()`
-4.  **Then** API keys are stored via `context.secrets.store('ai101.{provider}.apiKey', key)`
-5.  **And** API keys are retrieved via `context.secrets.get('ai101.{provider}.apiKey')`
+4.  **Then** API keys are stored via `context.secrets.store('suika.{provider}.apiKey', key)`
+5.  **And** API keys are retrieved via `context.secrets.get('suika.{provider}.apiKey')`
 6.  **And** SecretStorage encryption is handled by VSCode platform automatically
 7.  **And** API keys are NEVER logged to console or files
 8.  **And** API keys are NEVER stored in `settings.json` or environment variables
@@ -74,7 +74,7 @@ Gemini 2.0 Flash
 ### Completion Notes List
 
 - Implemented `SecretManager` as a Singleton using `vscode.SecretStorage`.
-- Ensured keys are prefixed with `ai101.{provider}.apiKey`.
+- Ensured keys are prefixed with `suika.{provider}.apiKey`.
 - Implemented `AuthenticationError` for error scenarios.
 - Created `src/config/__tests__/secret-manager.test.ts` with manual mocks for `vscode.SecretStorage` to verify logic independently of VSCode runtime.
 - Confirmed no logging of API keys in source code.

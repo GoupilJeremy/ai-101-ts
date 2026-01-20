@@ -23,7 +23,7 @@ export class AnnotationsManager {
         // Use VSCode's workspace state for persistence
         const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(''));
         const workspaceUri = workspaceFolder ? workspaceFolder.uri : vscode.Uri.file('');
-        const context = vscode.extensions.getExtension('GoupilJeremy.ai-101-ts')?.exports;
+        const context = vscode.extensions.getExtension('GoupilJeremy.suika')?.exports;
         this.workspaceState = context?.workspaceState || { get: () => [], update: () => { } };
         this.loadAnnotations();
     }
@@ -39,7 +39,7 @@ export class AnnotationsManager {
      * Load annotations from workspace state
      */
     private loadAnnotations(): void {
-        const savedAnnotations = this.workspaceState.get<IAnnotation[]>('ai101.teamAnnotations', []);
+        const savedAnnotations = this.workspaceState.get<IAnnotation[]>('suika.teamAnnotations', []);
         this.annotations = savedAnnotations || [];
     }
 
@@ -47,7 +47,7 @@ export class AnnotationsManager {
      * Save annotations to workspace state
      */
     private saveAnnotations(): void {
-        this.workspaceState.update('ai101.teamAnnotations', this.annotations);
+        this.workspaceState.update('suika.teamAnnotations', this.annotations);
     }
 
     /**

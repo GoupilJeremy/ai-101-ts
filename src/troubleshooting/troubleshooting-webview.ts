@@ -10,7 +10,7 @@ import { IKnowledgeArticle, ITroubleshootingSearchResult } from './types';
  * Provides searchable interface for troubleshooting articles.
  */
 export class TroubleshootingWebviewProvider implements vscode.WebviewViewProvider {
-    public static readonly viewType = 'ai101.troubleshootingView';
+    public static readonly viewType = 'suika.troubleshootingView';
 
     private view?: vscode.WebviewView;
     private searchEngine: SearchEngine;
@@ -186,7 +186,7 @@ export class TroubleshootingWebviewProvider implements vscode.WebviewViewProvide
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${this.getNonce()}' 'unsafe-inline';">
-  <title>AI-101 Troubleshooting</title>
+  <title>Suika Troubleshooting</title>
   <style>
     ${this.getInlineStyles()}
   </style>

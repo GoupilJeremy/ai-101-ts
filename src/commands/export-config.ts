@@ -11,7 +11,7 @@ export async function exportConfigCommand() {
         filters: {
             'JSON Files': ['json']
         },
-        title: 'Export AI 101 Configuration'
+        title: 'Export Suika Configuration'
     };
 
     const fileUri = await vscode.window.showSaveDialog(options);

@@ -4,7 +4,7 @@ import { ILLMProvider, ILLMOptions, ILLMResponse, IModelInfo } from '../../src/l
  * Example custom LLM provider implementation.
  * 
  * This demonstrates how to create a custom provider that integrates
- * with AI-101's agent system.
+ * with Suika's agent system.
  */
 export class ExampleCustomProvider implements ILLMProvider {
     readonly name = 'example-custom-provider';
@@ -90,14 +90,14 @@ export class ExampleCustomProvider implements ILLMProvider {
  * 
  * ```typescript
  * import * as vscode from 'vscode';
- * import { IAI101API } from 'ai-101-ts';
+ * import { IAI101API } from 'suika';
  * import { ExampleCustomProvider } from './example-provider';
  * 
  * export function activate(context: vscode.ExtensionContext) {
- *     const ai101 = vscode.extensions.getExtension('GoupilJeremy.ai-101-ts');
+ *     const ai101 = vscode.extensions.getExtension('GoupilJeremy.suika');
  *     if (!ai101) return;
  * 
- *     const api: IAI101API = ai101.exports;
+ *     const api: IAI101API = suika.exports;
  *     
  *     // Register the custom provider
  *     const provider = new ExampleCustomProvider();

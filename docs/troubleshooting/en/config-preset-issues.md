@@ -29,7 +29,7 @@ Configuration presets (Solo, Team, Enterprise) don't apply correctly. Settings r
    Compare with expected preset values
    
 3. **Look for error messages**
-   - Check Output panel: "AI-101" channel
+   - Check Output panel: "Suika" channel
    - Look for configuration errors
 
 ## Solutions
@@ -38,7 +38,7 @@ Configuration presets (Solo, Team, Enterprise) don't apply correctly. Settings r
 
 ```
 1. Open Command Palette
-2. Run "AI 101: Apply Configuration Preset"
+2. Run "Suika: Apply Configuration Preset"
 3. Select desired preset (Solo/Team/Enterprise)
 4. Reload window if prompted
 ```
@@ -50,29 +50,29 @@ If preset fails, configure manually:
 **Solo Developer Preset:**
 ```json
 {
-  "ai101.ui.mode": "learning",
-  "ai101.ui.transparency": "medium",
-  "ai101.telemetry.enabled": true,
-  "ai101.teamMode.largeText": false
+  "suika.ui.mode": "learning",
+  "suika.ui.transparency": "medium",
+  "suika.telemetry.enabled": true,
+  "suika.teamMode.largeText": false
 }
 ```
 
 **Team Mode Preset:**
 ```json
 {
-  "ai101.ui.mode": "team",
-  "ai101.ui.transparency": "full",
-  "ai101.teamMode.largeText": true,
-  "ai101.teamMode.surveyEnabled": true
+  "suika.ui.mode": "team",
+  "suika.ui.transparency": "full",
+  "suika.teamMode.largeText": true,
+  "suika.teamMode.surveyEnabled": true
 }
 ```
 
 **Enterprise Preset:**
 ```json
 {
-  "ai101.ui.mode": "expert",
-  "ai101.telemetry.enabled": false,
-  "ai101.performanceMode.autoActivate": true
+  "suika.ui.mode": "expert",
+  "suika.telemetry.enabled": false,
+  "suika.performanceMode.autoActivate": true
 }
 ```
 
@@ -82,7 +82,7 @@ Clear all settings and start fresh:
 
 ```
 1. Open Command Palette
-2. Run "AI 101: Reset Configuration"
+2. Run "Suika: Reset Configuration"
 3. Confirm reset
 4. Reapply desired preset
 ```

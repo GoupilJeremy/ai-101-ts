@@ -46,7 +46,7 @@ so that my decision is clear and the action feels responsive.
   - [x] Send `suggestionAccepted` or `suggestionRejected` message to Extension
 
 - [x] Task 4: Handle User Actions in Extension Backend (Back-end)
-  - [x] Register VSCode commands: `ai-101-ts.acceptSuggestion`, `ai-101-ts.rejectSuggestion`
+  - [x] Register VSCode commands: `suika.acceptSuggestion`, `suika.rejectSuggestion`
   - [x] Bind keybindings in `package.json`
   - [x] In `extension.ts` (or `orchestrator.ts`), handle commands:
     - [x] Command triggers Logic -> Applies Edit -> Updates State -> Notifies Webview.

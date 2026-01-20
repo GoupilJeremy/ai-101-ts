@@ -12,7 +12,7 @@ workflowComplete: true
 completionDate: 2026-01-10
 ---
 
-# Product Requirements Document - ai-101-ts
+# Product Requirements Document - suika
 
 **Author:** Jeregoupix
 **Date:** 2026-01-10

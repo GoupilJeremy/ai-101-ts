@@ -1,6 +1,6 @@
 # Story 2.3: Implement Anthropic Claude Provider with Error Handling
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

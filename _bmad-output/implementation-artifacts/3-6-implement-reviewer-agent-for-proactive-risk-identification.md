@@ -1,6 +1,6 @@
 # Story 3.6: Implement Reviewer Agent for Proactive Risk Identification
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

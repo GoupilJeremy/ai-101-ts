@@ -1,22 +1,22 @@
-# AI-101 Extension API Examples
+# Suika Extension API Examples
 
-This directory contains runnable examples demonstrating how to integrate with the AI-101 VSCode extension API.
+This directory contains runnable examples demonstrating how to integrate with the Suika VSCode extension API.
 
 ## Prerequisites
 
 - VSCode 1.75 or higher
 - Node.js 16 or higher
-- AI-101 extension installed in VSCode
+- Suika extension installed in VSCode
 
 ## Available Examples
 
 ### 1. Custom LLM Provider (`custom-llm-provider/`)
 
-Learn how to implement and register a custom LLM provider with AI-101.
+Learn how to implement and register a custom LLM provider with Suika.
 
 **What you'll learn:**
 - Implementing the `ILLMProvider` interface
-- Registering your provider with the AI-101 API
+- Registering your provider with the Suika API
 - Handling completion requests and token estimation
 - Error handling and availability checks
 
@@ -47,7 +47,7 @@ npm run build
 
 ### 3. Event Subscription (`event-subscription/`)
 
-Learn how to subscribe to AI-101 lifecycle events.
+Learn how to subscribe to Suika lifecycle events.
 
 **What you'll learn:**
 - Subscribing to agent activation events
@@ -64,7 +64,7 @@ npm run build
 
 ### 4. Configuration API (`configuration-api/`)
 
-Learn how to read and write AI-101 configuration settings.
+Learn how to read and write Suika configuration settings.
 
 **What you'll learn:**
 - Reading configuration values
@@ -81,13 +81,13 @@ npm run build
 
 ### 5. Full Extension Integration (`extension-integration/`)
 
-A complete example of another VSCode extension using the AI-101 API.
+A complete example of another VSCode extension using the Suika API.
 
 **What you'll learn:**
-- Declaring AI-101 as an extension dependency
+- Declaring Suika as an extension dependency
 - Accessing the API in your extension's `activate()` function
 - Version compatibility checking
-- Graceful degradation when AI-101 is not installed
+- Graceful degradation when Suika is not installed
 
 **Run it:**
 ```bash
@@ -103,14 +103,14 @@ All examples follow this general pattern:
 
 ```typescript
 import * as vscode from 'vscode';
-import { IAI101API } from 'ai-101-ts'; // Type definitions
+import { IAI101API } from 'suika'; // Type definitions
 
 export function activate(context: vscode.ExtensionContext) {
-    // 1. Get the AI-101 extension
-    const ai101Extension = vscode.extensions.getExtension('GoupilJeremy.ai-101-ts');
+    // 1. Get the Suika extension
+    const ai101Extension = vscode.extensions.getExtension('GoupilJeremy.suika');
     
     if (!ai101Extension) {
-        vscode.window.showWarningMessage('AI-101 extension is not installed');
+        vscode.window.showWarningMessage('Suika extension is not installed');
         return;
     }
 
@@ -119,7 +119,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // 3. Check version compatibility
     if (!api.checkCompatibility('^0.0.1')) {
-        vscode.window.showErrorMessage('AI-101 version incompatible');
+        vscode.window.showErrorMessage('Suika version incompatible');
         return;
     }
 
@@ -131,24 +131,24 @@ export function activate(context: vscode.ExtensionContext) {
 ## API Documentation
 
 For complete API documentation, visit:
-- [Online Documentation](https://goupiljeremy.github.io/ai-101-ts/api/)
+- [Online Documentation](https://goupiljeremy.github.io/suika/api/)
 - [Local Documentation](../docs/api/)
 
 ## Troubleshooting
 
-### "AI-101 extension not found"
-Make sure the AI-101 extension is installed in your VSCode instance.
+### "Suika extension not found"
+Make sure the Suika extension is installed in your VSCode instance.
 
 ### "API version incompatible"
-Update either AI-101 or your extension to compatible versions.
+Update either Suika or your extension to compatible versions.
 
 ### "Provider already registered"
 Each provider name must be unique. Choose a different name for your provider.
 
 ## Contributing
 
-Found an issue with an example? Want to add a new example? Please open an issue or PR on the [AI-101 repository](https://github.com/GoupilJeremy/ai-101-ts).
+Found an issue with an example? Want to add a new example? Please open an issue or PR on the [Suika repository](https://github.com/GoupilJeremy/suika).
 
 ## License
 
-These examples are provided under the same license as the AI-101 extension.
+These examples are provided under the same license as the Suika extension.

@@ -51,12 +51,12 @@ Logs appear in webview Developer Tools console.
 Extension logs appear in Output panel:
 
 1. View → Output
-2. Select "AI-101" from dropdown
+2. Select "Suika" from dropdown
 
 ```typescript
 import * as vscode from 'vscode';
 
-const outputChannel = vscode.window.createOutputChannel('AI-101');
+const outputChannel = vscode.window.createOutputChannel('Suika');
 outputChannel.appendLine('Debug message');
 ```
 

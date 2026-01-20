@@ -1,6 +1,6 @@
 # Story 1.5: Create Configuration Preset System for Solo/Team/Enterprise
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -17,7 +17,7 @@ So that users can quickly set up optimal defaults for their workflow.
 3.  **Then** "Solo Developer" preset optimizes for: Learning Mode, single user, detailed explanations
 4.  **And** "Team" preset optimizes for: visible labels, team metrics, pair programming
 5.  **And** "Enterprise" preset optimizes for: on-premise LLMs, strict security, compliance logging
-6.  **And** Users can select preset via Command Palette: "AI-101: Apply Configuration Preset"
+6.  **And** Users can select preset via Command Palette: "Suika: Apply Configuration Preset"
 7.  **And** Preset application updates VSCode settings with template values
 8.  **And** Users can customize preset values after application
 9.  **And** Preset selection is tracked in telemetry (opt-in)
@@ -36,7 +36,7 @@ So that users can quickly set up optimal defaults for their workflow.
   - [x] 2.4: Ensure existing user customizations are respected (overwrite strategy chosen as per prompt "apply preset")
 
 - [x] Task 3: UI Integration (AC: 6, 9)
-  - [x] 3.1: Register command `ai-101-ts.applyPreset` in `package.json` and `extension.ts`
+  - [x] 3.1: Register command `suika.applyPreset` in `package.json` and `extension.ts`
   - [x] 3.2: Show QuickPick to select preset
   - [x] 3.3: Log telemetry event on success (Not explicit in code yet but architecture ready. AC 9 is satisfied by command execution flow)
   - [x] 3.4: Show information message on success
@@ -76,7 +76,7 @@ Gemini 2.0 Flash
 
 - Defined Solo, Team, Enterprise presets.
 - Implemented logic to map presets to `vscode.workspace.getConfiguration().update()`.
-- Created interactive command `ai-101-ts.applyPreset` for users.
+- Created interactive command `suika.applyPreset` for users.
 - Fixed TS Node16 import extension issue (`.js` extension obligatory).
 
 ### File List

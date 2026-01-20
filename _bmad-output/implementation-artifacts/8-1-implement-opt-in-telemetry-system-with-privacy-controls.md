@@ -1,6 +1,6 @@
 # Story 8.1: Implement Opt-In Telemetry System with Privacy Controls
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -15,7 +15,7 @@ So that I can share usage data to improve the product without compromising sensi
 1.  **Given** Extension is activated for first time, **When** First-run experience begins, **Then** Telemetry consent dialog explains data collection clearly.
 2.  Dialog details: what data is collected, how it's used, who has access.
 3.  Consent is opt-in (default is NO collection until user explicitly agrees).
-4.  User can change consent anytime via "AI-101: Telemetry Settings" command.
+4.  User can change consent anytime via "Suika: Telemetry Settings" command.
 5.  No user code is logged without explicit consent (NFR13 compliance).
 6.  No API keys, secrets, or sensitive data ever transmitted (strict filtering).
 7.  Telemetry data encrypted in transit (HTTPS/TLS).
@@ -91,7 +91,7 @@ So that I can share usage data to improve the product without compromising sensi
 ### Completion Notes List
 - [x] Implemented `TelemetryService` using `@vscode/extension-telemetry` with a privacy-first wrapper.
 - [x] Implemented `TelemetryManager` for opt-in consent flow and first-run experience.
-- [x] Implemented `ai-101-ts.configureTelemetry` command with export/delete placeholders.
+- [x] Implemented `suika.configureTelemetry` command with export/delete placeholders.
 - [x] Added comprehensive sanitization logic to remove PII and code from telemetry data.
 - [x] Verified all logic with unit tests using vitest and mocks.
 

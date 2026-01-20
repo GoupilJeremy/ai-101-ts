@@ -1,6 +1,6 @@
 # Custom LLM Provider Example
 
-This example demonstrates how to implement and register a custom LLM provider with AI-101.
+This example demonstrates how to implement and register a custom LLM provider with Suika.
 
 ## What This Example Shows
 
@@ -9,7 +9,7 @@ This example demonstrates how to implement and register a custom LLM provider wi
 - ✅ Token estimation
 - ✅ Model information and capabilities
 - ✅ Availability checking
-- ✅ Registering the provider with AI-101
+- ✅ Registering the provider with Suika
 
 ## Files
 
@@ -63,22 +63,22 @@ export class MyProvider implements ILLMProvider {
 }
 ```
 
-### Step 2: Register with AI-101
+### Step 2: Register with Suika
 
 ```typescript
-const ai101 = vscode.extensions.getExtension('GoupilJeremy.ai-101-ts');
-const api: IAI101API = ai101.exports;
+const ai101 = vscode.extensions.getExtension('GoupilJeremy.suika');
+const api: IAI101API = suika.exports;
 
 api.registerLLMProvider('my-provider', new MyProvider());
 ```
 
 ### Step 3: Configure in Settings
 
-Users can then select your provider in AI-101 settings:
+Users can then select your provider in Suika settings:
 
 ```json
 {
-    "ai101.llm.provider": "my-provider"
+    "suika.llm.provider": "my-provider"
 }
 ```
 

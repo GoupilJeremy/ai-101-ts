@@ -1,6 +1,6 @@
 # Story 4.1: Enhance Webview with Transparency and HUD Positioning
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -12,7 +12,7 @@ so that the HUD displays over code without blocking editor interactions.
 
 ## Acceptance Criteria
 
-1.  **Given** Webview scaffold exists (view-type: ai101.webview)
+1.  **Given** Webview scaffold exists (view-type: suika.webview)
 2.  **When** I create `src/ui/webview-manager.ts` and update `src/webview/main.ts`
 3.  **Then** WebviewManager configures `retainContextWhenHidden: true` to preserve state
 4.  **And** Webview panel has transparent background via CSS and configuration

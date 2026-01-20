@@ -1,6 +1,6 @@
 # Story 10.2: Implement Searchable Troubleshooting Knowledge Base
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -13,7 +13,7 @@ So that I can self-diagnose and resolve problems quickly.
 ## Acceptance Criteria
 
 1. **Given** Extension is installed
-2. **When** I open troubleshooting: "AI-101: Troubleshooting"
+2. **When** I open troubleshooting: "Suika: Troubleshooting"
 3. **Then** Knowledge base opens with search input and symptom categories
 4. **And** Categories include: Performance, Connectivity, Display Issues, API Key Problems
 5. **And** Search finds articles by symptom keywords (e.g., "slow", "doesn't work", "blank screen")
@@ -298,9 +298,9 @@ N/A - No critical issues encountered during implementation
 - Dark/Light theme support via VSCode CSS variables
 
 ✅ **Task 6 Complete** - Registered VSCode commands
-- `ai-101-ts.showTroubleshooting` - Opens troubleshooting panel
-- `ai-101-ts.openTroubleshootingArticle` - Opens specific article
-- `ai-101-ts.searchTroubleshooting` - Opens with pre-filled query
+- `suika.showTroubleshooting` - Opens troubleshooting panel
+- `suika.openTroubleshootingArticle` - Opens specific article
+- `suika.searchTroubleshooting` - Opens with pre-filled query
 - All commands registered in package.json and extension.ts
 
 ✅ **Task 7 Complete** - Integrated with Error Handler

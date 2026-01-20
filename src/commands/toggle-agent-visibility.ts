@@ -44,7 +44,7 @@ export async function toggleAgentVisibilityCommand(): Promise<void> {
             const visibleCount = selected.length;
             const hiddenCount = agents.length - visibleCount;
             vscode.window.showInformationMessage(
-                `AI-101: ${visibleCount} agent(s) visible, ${hiddenCount} hidden`
+                `Suika: ${visibleCount} agent(s) visible, ${hiddenCount} hidden`
             );
         }
     } catch (error) {
@@ -60,7 +60,7 @@ export async function openDocumentationCommand(): Promise<void> {
     try {
         const workspaceFolders = vscode.workspace.workspaceFolders;
         if (!workspaceFolders || workspaceFolders.length === 0) {
-            vscode.window.showWarningMessage('AI-101: No workspace folder found');
+            vscode.window.showWarningMessage('Suika: No workspace folder found');
             return;
         }
 
@@ -70,7 +70,7 @@ export async function openDocumentationCommand(): Promise<void> {
         try {
             // Open README in preview mode
             await vscode.commands.executeCommand('markdown.showPreview', readmePath);
-            vscode.window.showInformationMessage('AI-101: Documentation opened');
+            vscode.window.showInformationMessage('Suika: Documentation opened');
         } catch {
             // Fallback: open as text file if preview fails
             const doc = await vscode.workspace.openTextDocument(readmePath);

@@ -8,7 +8,7 @@ Status: ready-for-dev
 
 As an extension developer,
 I want comprehensive API documentation with runnable examples,
-So that I can integrate with AI-101 quickly and correctly.
+So that I can integrate with Suika quickly and correctly.
 
 ## Acceptance Criteria
 
@@ -76,20 +76,20 @@ So that I can integrate with AI-101 quickly and correctly.
     - `config-usage.ts`: Reading and writing configuration
     - Demonstrates scope handling (user vs workspace)
   - [x] Create `examples/extension-integration/`:
-    - Complete example of another extension using AI-101 API
+    - Complete example of another extension using Suika API
     - `package.json` with `extensionDependencies`
     - `extension.ts` with full activation and API usage
 
 - [x] **Task 4: Create Getting-Started Guide for Extension Developers** (AC: #8, #9)
   - [x] Create `docs/api/getting-started.md`:
     - Prerequisites (VSCode 1.75+, Node 16+)
-    - How to declare dependency on AI-101 in `package.json`:
+    - How to declare dependency on Suika in `package.json`:
       ```json
-      "extensionDependencies": ["GoupilJeremy.ai-101-ts"]
+      "extensionDependencies": ["GoupilJeremy.suika"]
       ```
     - How to access the API in `activate()`:
       ```typescript
-      const ai101 = vscode.extensions.getExtension('GoupilJeremy.ai-101-ts');
+      const ai101 = vscode.extensions.getExtension('GoupilJeremy.suika');
       const api = ai101?.exports as IAI101API;
       ```
     - Version compatibility checking with `api.checkCompatibility()`
@@ -97,8 +97,8 @@ So that I can integrate with AI-101 quickly and correctly.
     - Step-by-step tutorial: first event subscription
   - [x] Create `docs/api/extension-activation.md`:
     - Extension activation lifecycle
-    - When to access AI-101 API (after your extension activates)
-    - Error handling for AI-101 not installed
+    - When to access Suika API (after your extension activates)
+    - Error handling for Suika not installed
     - Graceful degradation patterns
 
 - [ ] **Task 5: Create API Surface Reference Guides** (AC: #4, #7)
@@ -128,7 +128,7 @@ So that I can integrate with AI-101 quickly and correctly.
 
 - [ ] **Task 6: Create Troubleshooting Guide** (AC: #10)
   - [ ] Create `docs/api/troubleshooting.md`:
-    - "AI-101 extension not found" error
+    - "Suika extension not found" error
     - "API version incompatible" error
     - "Provider already registered" error
     - "Invalid provider implementation" error

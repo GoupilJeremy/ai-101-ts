@@ -90,7 +90,7 @@ export class ColorblindManager {
      * Load settings from VSCode configuration.
      */
     private loadSettings(): void {
-        const config = vscode.workspace.getConfiguration('ai101.accessibility.colorblind');
+        const config = vscode.workspace.getConfiguration('suika.accessibility.colorblind');
 
         this.config.enabled = config.get<boolean>('enabled', false);
         this.config.type = config.get<ColorblindType>('type', 'none');
@@ -107,14 +107,14 @@ export class ColorblindManager {
         this.config.enabled = enabled;
 
         // Persist to settings
-        await vscode.workspace.getConfiguration('ai101.accessibility.colorblind')
+        await vscode.workspace.getConfiguration('suika.accessibility.colorblind')
             .update('enabled', enabled, vscode.ConfigurationTarget.Workspace);
 
         // Notify webview and listeners
         this.notifyWebview();
         this.onColorblindChangedEmitter.fire(this.config);
 
-        console.log(`AI-101: Colorblind Mode ${enabled ? 'enabled' : 'disabled'}`);
+        console.log(`Suika: Colorblind Mode ${enabled ? 'enabled' : 'disabled'}`);
     }
 
     /**
@@ -128,14 +128,14 @@ export class ColorblindManager {
         this.config.type = type;
 
         // Persist to settings
-        await vscode.workspace.getConfiguration('ai101.accessibility.colorblind')
+        await vscode.workspace.getConfiguration('suika.accessibility.colorblind')
             .update('type', type, vscode.ConfigurationTarget.Workspace);
 
         // Notify webview and listeners
         this.notifyWebview();
         this.onColorblindChangedEmitter.fire(this.config);
 
-        console.log(`AI-101: Colorblind type set to ${type}`);
+        console.log(`Suika: Colorblind type set to ${type}`);
     }
 
     /**
@@ -146,7 +146,7 @@ export class ColorblindManager {
         await this.setEnabled(newState);
 
         vscode.window.showInformationMessage(
-            `AI-101: Colorblind Mode ${newState ? 'enabled' : 'disabled'}`
+            `Suika: Colorblind Mode ${newState ? 'enabled' : 'disabled'}`
         );
     }
 

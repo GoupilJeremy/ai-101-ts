@@ -1,6 +1,6 @@
 # Story 8.6: Implement NPS (Net Promoter Score) Collection
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -14,7 +14,7 @@ so that I understand user satisfaction and likelihood to recommend the tool.
 
 1. **Given** User has used extension for at least 30 days
 2. **When** 30 days have passed since installation or last NPS survey
-3. **Then** NPS survey prompt appears with standard question: "How likely are you to recommend AI-101 to a colleague?" (0-10 scale)
+3. **Then** NPS survey prompt appears with standard question: "How likely are you to recommend Suika to a colleague?" (0-10 scale)
 4. **And** Follow-up question: "What is the primary reason for your score?" (freeform text)
 5. **And** NPS calculation: % Promoters (9-10) - % Detractors (0-6) = NPS (Backend concern, but frontend must send valid data)
 6. **And** Target NPS documented for product goals
@@ -39,7 +39,7 @@ so that I understand user satisfaction and likelihood to recommend the tool.
 
 - [x] Task 2: Implement NPS UI Flow (AC: 3, 4, 10)
   - [x] Create `showNPSSurvey()` method:
-    - [x] Initial Prompt: "Quick question: How likely are you to recommend AI-101?" (Options: "Answer", "Snooze", "Never")
+    - [x] Initial Prompt: "Quick question: How likely are you to recommend Suika?" (Options: "Answer", "Snooze", "Never")
     - [x] QuickPick (0-10) with labels (0=Not Likely, 10=Very Likely)
     - [x] InputBox: "What is the primary reason for your score?" (Optional)
   - [x] Handle "Never": Set flag to disable NPS permanently (Opt-out for this specific survey type)

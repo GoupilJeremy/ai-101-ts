@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { IAI101API, AI101Events } from '../../src/api/index.js';
 
 /**
- * Example demonstrating how to subscribe to AI-101 lifecycle events.
+ * Example demonstrating how to subscribe to Suika lifecycle events.
  * 
  * This shows all available event types and how to handle them.
  */
@@ -17,7 +17,7 @@ export class EventSubscriptionExample {
     subscribeToAllEvents(): void {
         // 1. Agent Activation Events
         const unsubActivated = this.api.on('agentActivated', (event) => {
-            console.log(`[AI-101] Agent activated: ${event.agent}`);
+            console.log(`[Suika] Agent activated: ${event.agent}`);
             console.log(`  Timestamp: ${new Date(event.timestamp).toISOString()}`);
             if (event.data) {
                 console.log(`  Data:`, event.data);
@@ -32,7 +32,7 @@ export class EventSubscriptionExample {
 
         // 2. Agent State Change Events
         const unsubStateChanged = this.api.on('agentStateChanged', (event) => {
-            console.log(`[AI-101] Agent state changed: ${event.agent}`);
+            console.log(`[Suika] Agent state changed: ${event.agent}`);
             console.log(`  New state:`, event.state);
             console.log(`  Status: ${event.state.status}`);
 
@@ -45,7 +45,7 @@ export class EventSubscriptionExample {
 
         // 3. Suggestion Generated Events
         const unsubSuggestionGenerated = this.api.on('suggestionGenerated', (event) => {
-            console.log(`[AI-101] New suggestion from ${event.agent}`);
+            console.log(`[Suika] New suggestion from ${event.agent}`);
             console.log(`  Suggestion ID: ${event.id}`);
             if (event.code) {
                 console.log(`  Code preview: ${event.code.substring(0, 100)}...`);
@@ -58,7 +58,7 @@ export class EventSubscriptionExample {
 
         // 4. Suggestion Accepted Events
         const unsubSuggestionAccepted = this.api.on('suggestionAccepted', (event) => {
-            console.log(`[AI-101] User accepted suggestion ${event.id} from ${event.agent}`);
+            console.log(`[Suika] User accepted suggestion ${event.id} from ${event.agent}`);
 
             // Example: Track acceptance rate
             this.logSuggestion(event.id, event.agent, 'accepted');
@@ -68,14 +68,14 @@ export class EventSubscriptionExample {
 
         // 5. Suggestion Rejected Events
         const unsubSuggestionRejected = this.api.on('suggestionRejected', (event) => {
-            console.log(`[AI-101] User rejected suggestion ${event.id} from ${event.agent}`);
+            console.log(`[Suika] User rejected suggestion ${event.id} from ${event.agent}`);
 
             // Example: Track rejection reasons
             this.logSuggestion(event.id, event.agent, 'rejected');
         });
         this.unsubscribeFunctions.push(unsubSuggestionRejected);
 
-        console.log('[AI-101] Subscribed to all events');
+        console.log('[Suika] Subscribed to all events');
     }
 
     /**
@@ -150,7 +150,7 @@ export class EventSubscriptionExample {
     dispose(): void {
         this.unsubscribeFunctions.forEach(unsub => unsub());
         this.unsubscribeFunctions = [];
-        console.log('[AI-101] Unsubscribed from all events');
+        console.log('[Suika] Unsubscribed from all events');
     }
 }
 
@@ -158,10 +158,10 @@ export class EventSubscriptionExample {
  * Example usage in extension activation:
  */
 export function activate(context: vscode.ExtensionContext) {
-    // Get AI-101 API
-    const ai101Extension = vscode.extensions.getExtension('GoupilJeremy.ai-101-ts');
+    // Get Suika API
+    const ai101Extension = vscode.extensions.getExtension('GoupilJeremy.suika');
     if (!ai101Extension) {
-        console.log('AI-101 extension not found');
+        console.log('Suika extension not found');
         return;
     }
 
@@ -175,7 +175,7 @@ export function activate(context: vscode.ExtensionContext) {
     const showStatsCommand = vscode.commands.registerCommand('example.showAI101Stats', () => {
         const stats = eventSubscriber.getStats();
         vscode.window.showInformationMessage(
-            `AI-101 Stats: ${stats.accepted}/${stats.generated} accepted (${stats.acceptanceRate.toFixed(1)}%)`
+            `Suika Stats: ${stats.accepted}/${stats.generated} accepted (${stats.acceptanceRate.toFixed(1)}%)`
         );
     });
 

@@ -21,8 +21,8 @@ export async function setPhaseCommand() {
         PhaseDetector.getInstance().setManualOverride(selected.value as DevelopmentPhase | null);
 
         const message = selected.value === null
-            ? 'AI-101: Reverted to automatic phase detection'
-            : `AI-101: Development phase set to ${selected.label.split(' ')[1]}`;
+            ? 'Suika: Reverted to automatic phase detection'
+            : `Suika: Development phase set to ${selected.label.split(' ')[1]}`;
 
         vscode.window.showInformationMessage(message);
     }

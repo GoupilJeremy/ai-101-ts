@@ -1,6 +1,6 @@
 # Story 7.2: Implement Global Hotkey Configuration System
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -23,7 +23,7 @@ so that I can integrate the extension into my existing keyboard workflow.
 4. **Conflict Avoidance**: Default hotkeys avoid common VSCode built-in conflicts.
 5. **Assistive Tech Friendly**: Hotkeys are configurable to avoid conflicts with screen readers.
 6. **Immediate Application**: Hotkey changes apply immediately without reload.
-7. **Command Palette Integration**: All hotkey actions are also available via Command Palette ("AI-101: ...").
+7. **Command Palette Integration**: All hotkey actions are also available via Command Palette ("Suika: ...").
 
 ## Tasks / Subtasks
 

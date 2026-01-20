@@ -116,7 +116,7 @@ export class PerformanceDetector {
             vscode.window.showInformationMessage('Performance Mode enabled. Animations reduced for better performance.');
         } else if (choice === 'Never Ask') {
             // Store preference to not ask again
-            await vscode.workspace.getConfiguration('ai101.performanceMode')
+            await vscode.workspace.getConfiguration('suika.performanceMode')
                 .update('autoSuggest', false, vscode.ConfigurationTarget.Global);
         }
     }

@@ -83,7 +83,7 @@ describe('HighContrastManager', () => {
 
         it('should show information message when toggling', async () => {
             await manager.toggleManual();
-            expect(mockWindow.showInformationMessage).toHaveBeenCalledWith('AI-101: High Contrast Mode enabled');
+            expect(mockWindow.showInformationMessage).toHaveBeenCalledWith('Suika: High Contrast Mode enabled');
         });
     });
 

@@ -1,6 +1,6 @@
 # Story 1.2: Configure Dual-Build System and Create Webview Scaffold
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

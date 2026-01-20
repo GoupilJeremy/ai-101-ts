@@ -14,7 +14,7 @@
     "excludeProtected": false,
     "excludeExternals": true,
     "readme": "none",
-    "name": "AI-101-TS API Documentation",
+    "name": "Suika-TS API Documentation",
     "includeVersion": true,
     "sort": [
         "source-order"

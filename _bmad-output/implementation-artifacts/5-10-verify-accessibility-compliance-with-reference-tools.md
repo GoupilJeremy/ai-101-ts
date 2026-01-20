@@ -1,6 +1,6 @@
 # Story 5.10: verify-accessibility-compliance-with-reference-tools
 
-Status: review
+Status: done
 
 ## Story
 

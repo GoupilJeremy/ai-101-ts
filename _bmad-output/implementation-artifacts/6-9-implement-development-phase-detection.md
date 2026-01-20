@@ -1,6 +1,6 @@
 # Story 6.9: Implement Development Phase Detection
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -40,7 +40,7 @@ so that I get relevant assistance without manual configuration (e.g., stricter c
 
 7. **Given** the intelligent detection
    **When** I want to override
-   **Then** I can explicitly set the phase via Command Palette (`AI 101: Set Development Phase`).
+   **Then** I can explicitly set the phase via Command Palette (`Suika: Set Development Phase`).
 
 ## Tasks / Subtasks
 
@@ -66,7 +66,7 @@ so that I get relevant assistance without manual configuration (e.g., stricter c
   - [x] 5.2 Add specific icons/styles for each phase.
 
 - [x] 6. User Override
-  - [x] 6.1 Register command `ai101.setPhase`.
+  - [x] 6.1 Register command `suika.setPhase`.
   - [x] 6.2 Allow manual override to persist (session only or workspace settings?). Session only for now is fine, or workspace state.
 
 - [x] 7. Testing

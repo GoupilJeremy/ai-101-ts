@@ -1,6 +1,6 @@
 # Story 3.1: Define IAgent Interface for Shared Agent Behaviors
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

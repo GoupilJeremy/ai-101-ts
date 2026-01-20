@@ -71,7 +71,7 @@ Keep explanations concise and technical. Avoid basic explanations - assume deep 
             phaseInstructions = PhasePromptBuilder.buildSystemPrompt(request.data.currentPhase);
         }
 
-        const systemPrompt = `You are the Coder Agent for AI-101.
+        const systemPrompt = `You are the Coder Agent for Suika.
 Your goal is to generate high-quality TypeScript code based on the user's request, project context, and architectural guidance.
 Always follow established project patterns and TypeScript best practices.
 ${architectureInstructions}

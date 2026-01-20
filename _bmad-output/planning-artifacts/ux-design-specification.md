@@ -6,7 +6,7 @@ workflowType: 'ux-design'
 lastStep: 2
 ---
 
-# UX Design Specification ai-101-ts
+# UX Design Specification suika
 
 **Author:** Jeregoupix
 **Date:** 2026-01-10
@@ -17,7 +17,7 @@ lastStep: 2
 
 ### Project Vision
 
-**ai-101-ts** est un plugin VSCode révolutionnaire qui inverse le paradigme dominant de l'IA développeur "invisible et magique". Au lieu de cacher le raisonnement de l'intelligence artificielle, ce plugin le rend **visible, compréhensible et éducatif** à travers un "Théâtre d'IA Transparent".
+**suika** est un plugin VSCode révolutionnaire qui inverse le paradigme dominant de l'IA développeur "invisible et magique". Au lieu de cacher le raisonnement de l'intelligence artificielle, ce plugin le rend **visible, compréhensible et éducatif** à travers un "Théâtre d'IA Transparent".
 
 Quatre agents IA spécialisés (🏗️ Architecte, 💻 Codeur, 🔍 Reviewer, 📚 Contexte) collaborent visuellement au-dessus du code dans un HUD overlay utilisant l'esthétique minimaliste japonaise **sumi-e** (墨絵). Les développeurs peuvent observer en temps réel comment l'IA analyse, raisonne et suggère - transformant l'expérience de "consommation passive de suggestions" en "collaboration active avec compréhension".
 

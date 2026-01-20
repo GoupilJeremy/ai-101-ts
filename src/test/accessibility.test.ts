@@ -142,6 +142,6 @@ suite('Accessibility Tests', () => {
         // Check for title
         const title = document.querySelector('title');
         assert.ok(title, 'HTML should have a title element');
-        assert.strictEqual(title?.textContent, 'AI 101 HUD', 'Title should be descriptive');
+        assert.strictEqual(title?.textContent, 'Suika HUD', 'Title should be descriptive');
     });
 });

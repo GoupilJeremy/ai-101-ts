@@ -2,7 +2,7 @@
 
 ## Key Data Flows
 
-This document illustrates how data flows through the AI-101 system for critical operations.
+This document illustrates how data flows through the Suika system for critical operations.
 
 ## 1. LLM Request → Cache Check → Response Flow
 
@@ -223,7 +223,7 @@ Complete flow from user request to suggestion display in HUD.
 
 ```mermaid
 flowchart TD
-    A[User triggers suggestion] --> B[Command: ai101.getSuggestion]
+    A[User triggers suggestion] --> B[Command: suika.getSuggestion]
     
     B --> C[Collect Context]
     C --> D[Active file path]

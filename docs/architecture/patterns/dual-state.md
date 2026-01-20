@@ -6,7 +6,7 @@ The **Dual State Pattern** maintains two synchronized copies of application stat
 
 ## Pattern Description
 
-AI-101 runs in two separate JavaScript contexts:
+Suika runs in two separate JavaScript contexts:
 1. **Backend (Extension)**: Node.js environment with access to VSCode APIs
 2. **Frontend (Webview)**: Browser environment with access to DOM and rendering
 

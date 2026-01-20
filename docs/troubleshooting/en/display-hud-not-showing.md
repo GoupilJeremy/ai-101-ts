@@ -21,12 +21,12 @@ The transparent HUD with AI agents is not visible in the editor. The extension a
 ## Diagnosis Steps
 
 1. **Check if extension is activated**
-   - Look for "AI-101" in status bar
-   - Run "AI 101: Toggle HUD" command
+   - Look for "Suika" in status bar
+   - Run "Suika: Toggle HUD" command
    
 2. **Check Focus Mode status**
    - Focus Mode hides agents intentionally
-   - Run "AI 101: Toggle Focus Mode"
+   - Run "Suika: Toggle Focus Mode"
    
 3. **Verify webview panel exists**
    - Help > Toggle Developer Tools
@@ -42,7 +42,7 @@ The transparent HUD with AI agents is not visible in the editor. The extension a
 
 ```
 1. Open Command Palette (Ctrl+Shift+P / Cmd+Shift+P)
-2. Run "AI 101: Toggle HUD"
+2. Run "Suika: Toggle HUD"
 3. Or use keyboard shortcut: Ctrl+Alt+H (Cmd+Alt+H on Mac)
 ```
 
@@ -52,7 +52,7 @@ Focus Mode intentionally hides agents.
 
 ```
 1. Open Command Palette
-2. Run "AI 101: Toggle Focus Mode"
+2. Run "Suika: Toggle Focus Mode"
 3. Or use keyboard shortcut: Ctrl+Shift+Alt+F
 ```
 
@@ -62,7 +62,7 @@ Make HUD more visible:
 
 ```json
 {
-  "ai101.ui.transparency": "full"  // Instead of "minimal"
+  "suika.ui.transparency": "full"  // Instead of "minimal"
 }
 ```
 
@@ -72,7 +72,7 @@ Clear extension state and restart:
 
 ```
 1. Open Command Palette
-2. Run "AI 101: Reset Configuration"
+2. Run "Suika: Reset Configuration"
 3. Reload VSCode window (Ctrl+R / Cmd+R)
 ```
 
@@ -91,7 +91,7 @@ Ensure webviews are enabled:
 If all else fails:
 
 ```
-1. Uninstall AI-101 extension
+1. Uninstall Suika extension
 2. Reload VSCode window
 3. Reinstall extension from marketplace
 4. Reload window again

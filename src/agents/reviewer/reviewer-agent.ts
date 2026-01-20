@@ -55,7 +55,7 @@ Provide in-depth security and quality analysis for experienced developers. Keep 
             phaseInstructions = PhasePromptBuilder.buildSystemPrompt(request.data.currentPhase);
         }
 
-        const systemPrompt = `You are the Reviewer Agent for AI-101.
+        const systemPrompt = `You are the Reviewer Agent for Suika.
 Your goal is to perform a rigorous security and quality review of the generated code.
 
 ${modeInstructions}

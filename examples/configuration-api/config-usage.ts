@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { IAI101API, UIMode, UITransparency } from '../../src/api/index.js';
 
 /**
- * Example demonstrating how to use the AI-101 Configuration API.
+ * Example demonstrating how to use the Suika Configuration API.
  * 
  * Shows how to read, write, and listen to configuration changes.
  */
@@ -51,7 +51,7 @@ export class ConfigurationAPIExample {
             await this.api.setConfig('performance.maxTokens', 4096);
             console.log('Max tokens set to 4096');
 
-            vscode.window.showInformationMessage('AI-101 configuration updated!');
+            vscode.window.showInformationMessage('Suika configuration updated!');
         } catch (error) {
             console.error('Failed to update configuration:', error);
             vscode.window.showErrorMessage(`Failed to update configuration: ${error}`);
@@ -72,7 +72,7 @@ export class ConfigurationAPIExample {
             }, 'workspace');
 
             console.log('Batch configuration update complete');
-            vscode.window.showInformationMessage('AI-101 configured for learning mode!');
+            vscode.window.showInformationMessage('Suika configured for learning mode!');
         } catch (error) {
             console.error('Batch update failed:', error);
         }
@@ -159,20 +159,20 @@ export class ConfigurationAPIExample {
     watchConfiguration(): vscode.Disposable {
         // VSCode's built-in configuration change listener
         return vscode.workspace.onDidChangeConfiguration((event) => {
-            // Check if AI-101 configuration changed
+            // Check if Suika configuration changed
             if (event.affectsConfiguration('ai101')) {
-                console.log('AI-101 configuration changed!');
+                console.log('Suika configuration changed!');
 
                 // Re-read specific values
                 const newMode = this.api.getConfig('ui.mode');
                 console.log(`New UI mode: ${newMode}`);
 
                 // React to specific changes
-                if (event.affectsConfiguration('ai101.ui.mode')) {
+                if (event.affectsConfiguration('suika.ui.mode')) {
                     this.onUIModeChanged(newMode);
                 }
 
-                if (event.affectsConfiguration('ai101.telemetry.enabled')) {
+                if (event.affectsConfiguration('suika.telemetry.enabled')) {
                     const telemetryEnabled = this.api.getConfig('telemetry.enabled');
                     this.onTelemetryChanged(telemetryEnabled);
                 }
@@ -182,7 +182,7 @@ export class ConfigurationAPIExample {
 
     private onUIModeChanged(newMode: UIMode): void {
         console.log(`UI mode changed to: ${newMode}`);
-        vscode.window.showInformationMessage(`AI-101 switched to ${newMode} mode`);
+        vscode.window.showInformationMessage(`Suika switched to ${newMode} mode`);
     }
 
     private onTelemetryChanged(enabled: boolean): void {
@@ -194,7 +194,7 @@ export class ConfigurationAPIExample {
  * Example usage in extension activation:
  */
 export function activate(context: vscode.ExtensionContext) {
-    const ai101Extension = vscode.extensions.getExtension('GoupilJeremy.ai-101-ts');
+    const ai101Extension = vscode.extensions.getExtension('GoupilJeremy.suika');
     if (!ai101Extension) return;
 
     const api: IAI101API = ai101Extension.exports;

@@ -13,7 +13,7 @@ export interface IErrorDefinition {
     actionCommand?: string;
 }
 
-export const DOCS_BASE_URL = 'https://github.com/GoupilJeremy/ai-101-ts/wiki/Troubleshooting';
+export const DOCS_BASE_URL = 'https://github.com/GoupilJeremy/suika/wiki/Troubleshooting';
 
 export const ERROR_REGISTRY: Record<string, IErrorDefinition> = {
     // Auth Errors
@@ -26,7 +26,7 @@ export const ERROR_REGISTRY: Record<string, IErrorDefinition> = {
         documentationLink: `${DOCS_BASE_URL}#api-key-invalid`,
         severity: 'Error',
         actionLabel: 'Update API Key',
-        actionCommand: 'ai101.settings.configureApiKey'
+        actionCommand: 'suika.settings.configureApiKey'
     },
     'AI101-AUTH-002': {
         code: 'AI101-AUTH-002',
@@ -37,7 +37,7 @@ export const ERROR_REGISTRY: Record<string, IErrorDefinition> = {
         documentationLink: `${DOCS_BASE_URL}#api-key-not-found`,
         severity: 'Error',
         actionLabel: 'Configure API Key',
-        actionCommand: 'ai101.settings.configureApiKey'
+        actionCommand: 'suika.settings.configureApiKey'
     },
 
     // LLM Errors
@@ -61,7 +61,7 @@ export const ERROR_REGISTRY: Record<string, IErrorDefinition> = {
         documentationLink: `${DOCS_BASE_URL}#budget-exceeded`,
         severity: 'Warning',
         actionLabel: 'Increase Budget',
-        actionCommand: 'workbench.action.openSettings?ai101.performance.maxTokens'
+        actionCommand: 'workbench.action.openSettings?suika.performance.maxTokens'
     },
 
     // Network Errors

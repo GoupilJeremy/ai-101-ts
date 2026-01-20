@@ -69,7 +69,7 @@ export class SystemDetector {
         }
 
         // Check if auto-activate is enabled in settings
-        const config = vscode.workspace.getConfiguration('ai101.performanceMode');
+        const config = vscode.workspace.getConfiguration('suika.performanceMode');
         const autoActivate = config.get<boolean>('autoActivate', true);
 
         if (!autoActivate) {

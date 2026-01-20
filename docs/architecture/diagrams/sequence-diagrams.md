@@ -2,7 +2,7 @@
 
 ## Key Interaction Flows
 
-This document contains sequence diagrams for the most important interaction flows in AI-101.
+This document contains sequence diagrams for the most important interaction flows in Suika.
 
 ## 1. User Request Processing Flow
 

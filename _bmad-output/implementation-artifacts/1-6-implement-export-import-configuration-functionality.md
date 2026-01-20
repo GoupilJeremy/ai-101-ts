@@ -1,6 +1,6 @@
 # Story 1.6: Implement Export/Import Configuration Functionality
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -13,12 +13,12 @@ So that I can share my setup or sync it across environments easily.
 ## Acceptance Criteria
 
 1.  **Given** I have a customized configuration
-2.  **When** I run "AI-101: Export Configuration"
+2.  **When** I run "Suika: Export Configuration"
 3.  **Then** A file save dialog appears
 4.  **And** The configuration is saved as a JSON file
-5.  **And** The JSON contains all `ai101.*` settings
+5.  **And** The JSON contains all `suika.*` settings
 6.  **And** Secrets (API Keys) are **EXCLUDED** from the export (Security)
-7.  **When** I run "AI-101: Import Configuration"
+7.  **When** I run "Suika: Import Configuration"
 8.  **Then** A file open dialog appears
 9.  **And** I can select a valid JSON configuration file
 10. **And** The system validates the JSON against the schema
@@ -33,12 +33,12 @@ So that I can share my setup or sync it across environments easily.
   - [x] 1.3: Implement `validateImportData(data)`: Check basic schema validity
 
 - [x] Task 2: Implement Export Command (AC: 2, 3)
-  - [x] 2.1: Register `ai-101-ts.exportConfig`
+  - [x] 2.1: Register `suika.exportConfig`
   - [x] 2.2: Use `vscode.window.showSaveDialog`
   - [x] 2.3: Write JSON to file via `fs`
 
 - [x] Task 3: Implement Import Command (AC: 7, 8, 9, 11, 12)
-  - [x] 3.1: Register `ai-101-ts.importConfig`
+  - [x] 3.1: Register `suika.importConfig`
   - [x] 3.2: Use `vscode.window.showOpenDialog`
   - [x] 3.3: Read file and parse JSON
   - [x] 3.4: Use `PresetManager` or `ConfigurationManager` logic to apply settings line-by-line

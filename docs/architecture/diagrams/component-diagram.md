@@ -2,7 +2,7 @@
 
 ## Module Dependencies
 
-This diagram shows the relationships and dependencies between major modules in the AI-101 codebase.
+This diagram shows the relationships and dependencies between major modules in the Suika codebase.
 
 ```mermaid
 graph TD

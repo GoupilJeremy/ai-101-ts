@@ -1,6 +1,6 @@
 # Story 5.5: Implement Team Mode with Visible Labels and Metrics
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -60,9 +60,9 @@ So that my pairing partner or team members understand what the AI is doing.
   - [x] 5.5: Store survey responses in workspace state (anonymized)
 
 - [x] Task 6: Large Text Mode (AC: 10)
-  - [x] 6.1: Add 'ai101.teamMode.largeText' configuration setting (boolean)
+  - [x] 6.1: Add 'suika.teamMode.largeText' configuration setting (boolean)
   - [x] 6.2: Apply CSS transform: scale(1.25) to HUD when largeText enabled
-  - [x] 6.3: Add toggle command 'ai-101-ts.toggleLargeText' in package.json
+  - [x] 6.3: Add toggle command 'suika.toggleLargeText' in package.json
   - [x] 6.4: Create toggle-large-text.ts command handler
   - [x] 6.5: Ensure scaling doesn't break layout or positioning
 
@@ -275,7 +275,7 @@ class SurveyManager {
   private idleTimeoutMs = 10 * 60 * 1000; // 10 minutes idle = session end
 
   constructor() {
-    const config = vscode.workspace.getConfiguration('ai101.teamMode');
+    const config = vscode.workspace.getConfiguration('suika.teamMode');
     this.surveyEnabled = config.get<boolean>('surveyEnabled', false); // Opt-in only
   }
 
@@ -462,9 +462,9 @@ Gemini 2.0 Flash Thinking (Experimental)
 **✅ TASKS COMPLETED (6-8) - Session 2:**
 
 **Task 6: Large Text Mode**
-- ✓ `ai101.teamMode.largeText` config already exists in package.json
+- ✓ `suika.teamMode.largeText` config already exists in package.json
 - ✓ CSS transform: scale(1.25) already in mode-team.css
-- ✓ `ai-101-ts.toggleLargeText` command already in package.json
+- ✓ `suika.toggleLargeText` command already in package.json
 - ✓ toggle-large-text.ts command handler already exists
 - ✓ Registered command in extension.ts
 - ✓ Layout/positioning verified with transform-origin: top left

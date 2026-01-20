@@ -1,6 +1,6 @@
 # Story 2.8: Implement Real-Time Cost Tracking and Display
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

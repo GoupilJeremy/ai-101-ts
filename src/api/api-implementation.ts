@@ -10,7 +10,7 @@ import { IAI101Config, ConfigurationScope } from './configuration-types.js';
 import * as semver from 'semver';
 
 /**
- * Creates the public API implementation for the AI-101 extension.
+ * Creates the public API implementation for the Suika extension.
  * 
  * @param providerManager - The LLM provider manager singleton instance
  * @param version - The version of the extension/API

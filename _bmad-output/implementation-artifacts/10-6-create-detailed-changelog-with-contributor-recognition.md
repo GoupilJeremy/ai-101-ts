@@ -1,6 +1,6 @@
 # Story 10.6: Create Detailed Changelog with Contributor Recognition
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -21,7 +21,7 @@ So that I know what's new, what's fixed, and who contributed.
 8. [x] **And** Changelog includes "Thank you" section recognizing all contributors
 9. [x] **And** Changelog auto-generated from conventional commit messages via tooling
 10. [x] **And** Manual changelog editing supported for clarity and organization
-11. [x] **And** Changelog accessible via "AI-101: View Changelog" command
+11. [x] **And** Changelog accessible via "Suika: View Changelog" command
 12. [x] **And** Changelog displayed automatically after extension updates (highlights new features)
 13. [x] **And** Changelog maintained in repository root (`CHANGELOG.md`)
 
@@ -46,7 +46,7 @@ So that I know what's new, what's fixed, and who contributed.
   - [x] In `ExtensionStateManager` or similar, track `lastKnownVersion` in `globalState`.
   - [x] On activation, compare `currentVersion` (package.json) with `lastKnownVersion`.
   - [x] If `currentVersion > lastKnownVersion`, trigger "What's New" notification.
-  - [x] Notification action "View Changelog" triggers `ai-101-ts.viewChangelog`.
+  - [x] Notification action "View Changelog" triggers `suika.viewChangelog`.
   - [x] Update `lastKnownVersion` after check.
 
 - [x] **Task 5: Documentation & Contributor Guide** (AC: #10)
@@ -78,7 +78,7 @@ So that I know what's new, what's fixed, and who contributed.
 ### Completion Notes
 - Set up `standard-version`, `husky`, and `commitlint` for automated versioning and changelog generation following Conventional Commits.
 - Created `scripts/generate-changelog.ts` and `.versionrc.js` to customize the changelog with contributor recognition.
-- Implemented `ai-101-ts.viewChangelog` command to display `CHANGELOG.md` using VSCode's Markdown Preview.
+- Implemented `suika.viewChangelog` command to display `CHANGELOG.md` using VSCode's Markdown Preview.
 - Implemented `VersionManager` to track extension updates and show a "What's New" notification to users.
 - Updated `CONTRIBUTING.md` with commit conventions and development instructions.
 - Added unit tests for `VersionManager` and `viewChangelogCommand`.

@@ -1,6 +1,6 @@
 # Story 6.4: Implement Project Architecture Pattern Detection
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -21,7 +21,7 @@ so that AI suggestions align with existing codebase conventions.
 7. **And** Architect identifies build tools and configuration (webpack, vite, esbuild)
 8. **And** Architect recognizes code style conventions (naming, file organization, module patterns)
 9. **And** Architecture analysis results cached for current workspace session
-10. **And** Architecture summary accessible via command: "AI-101: View Detected Architecture"
+10. **And** Architecture summary accessible via command: "Suika: View Detected Architecture"
 11. **And** User can override detected patterns via settings if detection incorrect
 12. **And** Architecture analysis completes in <5 seconds for typical projects
 13. **And** Unit tests verify pattern detection accuracy with sample projects
@@ -36,11 +36,11 @@ so that AI suggestions align with existing codebase conventions.
 - [x] 3. Enhance `ArchitectAgent` with `analyzeProject` method
     - [x] 3.1 Orchestrate detection steps
     - [x] 3.2 Implement results caching
-- [x] 4. Implement "AI-101: View Detected Architecture" command
+- [x] 4. Implement "Suika: View Detected Architecture" command
     - [x] 4.1 Register command
     - [x] 4.2 Display formatted output channel or notification
 - [x] 5. Implement user override settings
-    - [x] 5.1 Add configuration contributes to `package.json` (`ai101.architecture.overrides`)
+    - [x] 5.1 Add configuration contributes to `package.json` (`suika.architecture.overrides`)
     - [x] 5.2 Merge detected vs overridden patterns
 - [x] 6. Add Unit Tests
     - [x] 6.1 Mock file system and package.json inputs
@@ -131,8 +131,8 @@ Recent work has focused on:
 - Created `ProjectPatternDetector` service to handle heuristic detection of tech stack from `package.json`.
 - Enhanced `ArchitectAgent` with `analyzeProject` method, integrating the detector and session caching.
 - Registered `ArchitectAgent` in `AgentOrchestrator` via `extension.ts`.
-- Implemented `ai-101-ts.viewArchitecture` command to display detected patterns in an output channel.
-- Added support for user overrides in `ai101.architecture.overrides` settings.
+- Implemented `suika.viewArchitecture` command to display detected patterns in an output channel.
+- Added support for user overrides in `suika.architecture.overrides` settings.
 
 ### Completion Notes
 - Architecture detection covers Frontend (React, Vue, Angular, Svelte), Backend (Express, NestJS, Fastify), Build tools (Vite, Webpack, esbuild, Rollup), and Testing (Jest, Mocha, Vitest).

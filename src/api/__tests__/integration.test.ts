@@ -5,10 +5,10 @@ import { createAPI } from '../api-implementation.js';
 import { LLMProviderManager } from '../../llm/provider-manager.js';
 
 /**
- * Integration tests simulating a second extension consuming the AI-101 API.
+ * Integration tests simulating a second extension consuming the Suika API.
  * 
  * This demonstrates the real-world usage pattern where another VSCode extension
- * would call vscode.extensions.getExtension('publisher.ai-101-ts').exports
+ * would call vscode.extensions.getExtension('publisher.suika').exports
  * to get the API and register a custom provider.
  */
 describe('Extension API Integration', () => {
@@ -16,7 +16,7 @@ describe('Extension API Integration', () => {
     let providerManager: LLMProviderManager;
 
     beforeEach(() => {
-        // Simulate what happens when another extension activates AI-101
+        // Simulate what happens when another extension activates Suika
         providerManager = LLMProviderManager.getInstance();
         api = createAPI(providerManager, '1.0.0');
     });

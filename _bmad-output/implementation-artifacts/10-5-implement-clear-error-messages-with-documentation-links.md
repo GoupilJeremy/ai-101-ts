@@ -42,7 +42,7 @@ So that I can resolve issues without external support.
   - [x] Maintain backward compatibility for raw `Error` objects (fallback generic error).
 
 - [x] **Task 3: Implement Documentation Link Opening Logic** (AC: #6, #7)
-  - [x] Add configuration setting: `ai101.errors.openLinksIn` (enum: 'SimpleBrowser', 'ExternalBrowser').
+  - [x] Add configuration setting: `suika.errors.openLinksIn` (enum: 'SimpleBrowser', 'ExternalBrowser').
   - [x] Implement `openHelpLink(url)` helper in `ErrorHandler`.
   - [x] Use `vscode.env.openExternal` for external browser.
   - [x] Use `vscode.commands.executeCommand('simpleBrowser.show', url)` for internal browser.

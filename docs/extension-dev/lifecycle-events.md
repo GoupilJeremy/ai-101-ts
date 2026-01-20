@@ -1,6 +1,6 @@
 # Lifecycle Event Subscription Guide
 
-This guide explains how to subscribe to lifecycle events in the AI-101-TS extension to build custom integrations, analytics, or UI enhancements.
+This guide explains how to subscribe to lifecycle events in the Suika-TS extension to build custom integrations, analytics, or UI enhancements.
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@ This guide explains how to subscribe to lifecycle events in the AI-101-TS extens
 
 ## Overview
 
-The AI-101-TS extension exposes a public event system through its API. Other extensions can subscribe to events related to agents and suggestions. The event system is:
+The Suika-TS extension exposes a public event system through its API. Other extensions can subscribe to events related to agents and suggestions. The event system is:
 
 - **Type-safe**: Generic `on()` method provides strict typing for event names and payloads.
 - **Asynchronous**: Event emission is non-blocking.
@@ -31,14 +31,14 @@ The AI-101-TS extension exposes a public event system through its API. Other ext
 
 ## Subscribing to Events
 
-To subscribe to events, get the AI-101-TS API instance and use the `on()` method:
+To subscribe to events, get the Suika-TS API instance and use the `on()` method:
 
 ```typescript
 import * as vscode from 'vscode';
-import { IAI101API } from 'your-publisher.ai-101-ts';
+import { IAI101API } from 'your-publisher.suika';
 
 export async function activate(context: vscode.ExtensionContext) {
-    const ai101Extension = vscode.extensions.getExtension('your-publisher.ai-101-ts');
+    const ai101Extension = vscode.extensions.getExtension('your-publisher.suika');
     if (ai101Extension) {
         const api = ai101Extension.exports as IAI101API;
 
@@ -105,7 +105,7 @@ unsubscribe();
 ## Best Practices
 
 ### 1. Error Isolation
-While AI-101-TS wraps your callbacks in a `try-catch` block, you should still implement your own error handling to ensure your extension remains stable.
+While Suika-TS wraps your callbacks in a `try-catch` block, you should still implement your own error handling to ensure your extension remains stable.
 
 ### 2. Performance
 Keep your callbacks lightweight. If you need to perform heavy processing (e.g., network requests, complex analysis), do it asynchronously and avoid blocking the event loop.

@@ -1,14 +1,14 @@
 # Story 9.6: Implement Semantic Versioning for API Compatibility
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
 ## Story
 
 As an extension developer,
-I want to verify the AI-101 API version and check compatibility,
-so that I can ensure my extension works reliably with the installed version of AI-101.
+I want to verify the Suika API version and check compatibility,
+so that I can ensure my extension works reliably with the installed version of Suika.
 
 ## Acceptance Criteria
 
@@ -54,7 +54,7 @@ so that I can ensure my extension works reliably with the installed version of A
   - Use `semver` package (`npm install semver`) for robust version parsing and range checking. Do not write custom regex parsers.
   
 - **Version Source**:
-  - Ideally, read the version from `package.json` via `vscode.extensions.getExtension('GoupilJeremy.ai-101-ts').packageJSON.version` if possible, or pass it from `activate` context.
+  - Ideally, read the version from `package.json` via `vscode.extensions.getExtension('GoupilJeremy.suika').packageJSON.version` if possible, or pass it from `activate` context.
   - Alternatively, define a `const VERSION` that acts as the source of truth for the API, but ensuring it stays in sync with `package.json` is critical (maybe a build script check).
   - **Decision**: Pass `context.extension.packageJSON.version` or similar to `createAPI` factory.
 
@@ -70,8 +70,8 @@ so that I can ensure my extension works reliably with the installed version of A
 
 ### References
 
-- [Source: planning-artifacts/epics.md#Story 9.6](file:///home/jeregoupix/dev/ai-101-ts/_bmad-output/planning-artifacts/epics.md)
-- [Source: implementation-artifacts/9-5-implement-typed-configuration-api-for-programmatic-access.md](file:///home/jeregoupix/dev/ai-101-ts/_bmad-output/implementation-artifacts/9-5-implement-typed-configuration-api-for-programmatic-access.md)
+- [Source: planning-artifacts/epics.md#Story 9.6](file:///home/jeregoupix/dev/suika/_bmad-output/planning-artifacts/epics.md)
+- [Source: implementation-artifacts/9-5-implement-typed-configuration-api-for-programmatic-access.md](file:///home/jeregoupix/dev/suika/_bmad-output/implementation-artifacts/9-5-implement-typed-configuration-api-for-programmatic-access.md)
 - [NPM: semver](https://www.npmjs.com/package/semver)
 
 ## Dev Agent Record

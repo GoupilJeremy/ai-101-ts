@@ -1,6 +1,6 @@
 # Story 7.5: Implement Click-to-Expand for Alert Details and Fixes
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

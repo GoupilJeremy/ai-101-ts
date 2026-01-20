@@ -1,6 +1,6 @@
 # Story 1.3: Implement Configuration Manager with VSCode Settings Integration
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -27,11 +27,11 @@ So that users can configure the extension via standard VSCode settings UI.
 ## Tasks / Subtasks
 
 - [x] Task 1: Define Configuration Schema in package.json (AC: 3, 6, 7)
-  - [x] 1.1: Add `ai101.llm.provider` enum (openai, anthropic, custom)
-  - [x] 1.2: Add `ai101.ui.transparency` (minimal, medium, full)
-  - [x] 1.3: Add `ai101.ui.mode` (learning, expert, focus, team, performance)
-  - [x] 1.4: Add `ai101.performance.maxTokens` (number)
-  - [x] 1.5: Add `ai101.telemetry.enabled` (boolean, default true)
+  - [x] 1.1: Add `suika.llm.provider` enum (openai, anthropic, custom)
+  - [x] 1.2: Add `suika.ui.transparency` (minimal, medium, full)
+  - [x] 1.3: Add `suika.ui.mode` (learning, expert, focus, team, performance)
+  - [x] 1.4: Add `suika.performance.maxTokens` (number)
+  - [x] 1.5: Add `suika.telemetry.enabled` (boolean, default true)
 
 - [x] Task 2: Implement Configuration Manager (AC: 1, 2, 4, 5, 8, 9, 10)
   - [x] 2.1: Create `src/config/configuration-manager.ts` class singleton

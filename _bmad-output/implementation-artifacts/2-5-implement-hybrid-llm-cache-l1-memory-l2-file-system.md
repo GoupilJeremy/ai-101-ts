@@ -1,6 +1,6 @@
 # Story 2.5: Implement Hybrid LLM Cache (L1 Memory + L2 File System)
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

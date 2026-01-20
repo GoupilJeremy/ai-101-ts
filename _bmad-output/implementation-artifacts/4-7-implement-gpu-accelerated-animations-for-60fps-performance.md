@@ -1,6 +1,6 @@
 # Story 4.7: Implement GPU-Accelerated Animations for 60fps Performance
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

@@ -52,7 +52,7 @@ export class ModeManager {
         // Notify listeners
         this.onModeChangedEmitter.fire({ previous: previousMode, next: mode });
 
-        console.log(`AI-101: Mode switched from ${previousMode} to ${mode}`);
+        console.log(`Suika: Mode switched from ${previousMode} to ${mode}`);
     }
 
     /**

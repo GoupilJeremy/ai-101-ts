@@ -14,11 +14,11 @@ import { ExtensionStateManager } from '../state/index.js';
  * 
  * @example
  * // Interactive mode (via Command Palette)
- * await vscode.commands.executeCommand('ai-101-ts.forceAgentState');
+ * await vscode.commands.executeCommand('suika.forceAgentState');
  * 
  * @example
  * // Programmatic mode (via keybinding or API)
- * await vscode.commands.executeCommand('ai-101-ts.forceAgentState', 'architect', 'thinking');
+ * await vscode.commands.executeCommand('suika.forceAgentState', 'architect', 'thinking');
  */
 export async function forceAgentStateCommand(
     agentId?: AgentType,
@@ -36,7 +36,7 @@ export async function forceAgentStateCommand(
     // If agentId is provided but invalid, show error and fall back to interactive mode
     if (agentId && !validAgents.includes(agentId)) {
         vscode.window.showErrorMessage(
-            `AI-101: Invalid agent ID "${agentId}". Valid agents: ${validAgents.join(', ')}`
+            `Suika: Invalid agent ID "${agentId}". Valid agents: ${validAgents.join(', ')}`
         );
         selectedAgent = undefined;
     }
@@ -44,7 +44,7 @@ export async function forceAgentStateCommand(
     // If state is provided but invalid, show error and fall back to interactive mode
     if (state && !validStatuses.includes(state)) {
         vscode.window.showErrorMessage(
-            `AI-101: Invalid state "${state}". Valid states: ${validStatuses.join(', ')}`
+            `Suika: Invalid state "${state}". Valid states: ${validStatuses.join(', ')}`
         );
         selectedStatus = undefined;
     }
@@ -100,6 +100,6 @@ export async function forceAgentStateCommand(
     // Show confirmation message
     const taskSuffix = selectedTask ? ` (Task: ${selectedTask})` : '';
     vscode.window.showInformationMessage(
-        `AI-101: Agent ${selectedAgent} forced to ${selectedStatus}${taskSuffix}`
+        `Suika: Agent ${selectedAgent} forced to ${selectedStatus}${taskSuffix}`
     );
 }
