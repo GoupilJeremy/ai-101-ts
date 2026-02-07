@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { TelemetryService } from './telemetry-service';
+import { MetricsService } from './metrics-service';
 import { ModeManager } from '../modes/mode-manager';
 
 /**
@@ -9,6 +10,7 @@ interface ISessionStats {
     startTime: number;
     interactionCount: number;
     featureUsage: Record<string, number>;
+    contextSize?: number;
 }
 
 /**
@@ -99,6 +101,9 @@ export class SurveyService {
             sessionDuration >= SurveyService.MIN_SESSION_DURATION;
 
         if (meetsMinimumCriteria && this.shouldShowSurvey()) {
+            // Get actual context size from MetricsService
+            sessionStats.contextSize = MetricsService.getInstance(this.context).getAverageContextSize();
+
             // Mark survey as pending for next activation
             await this.context.globalState.update('survey.pendingSurvey', true);
             await this.context.globalState.update('survey.lastShownDate', Date.now());
@@ -560,7 +565,7 @@ export class SurveyService {
             measurements: {
                 sessionDuration: sessionDuration,
                 interactionCount: sessionStats.interactionCount,
-                contextSize: 0, // TODO: Get actual context size from MetricsService
+                contextSize: sessionStats.contextSize || 0,
             },
         };
     }

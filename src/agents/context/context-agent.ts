@@ -3,6 +3,7 @@ import { IAgent, AgentType, IAgentRequest, IAgentResponse, IAgentState, AgentSta
 import { LLMProviderManager } from '../../llm/provider-manager.js';
 import { ErrorHandler } from '../../errors/error-handler.js';
 import { MetricsProvider } from '../../ui/metrics-provider.js';
+import { MetricsService } from '../../telemetry/metrics-service.js';
 import { ExtensionStateManager } from '../../state/extension-state-manager.js';
 import { VitalSignsBar } from '../../ui/vital-signs-bar.js';
 import { FileLoader } from './file-loader.js';
@@ -89,6 +90,7 @@ export class ContextAgent implements IAgent {
             // Report metrics
             const tokens = await this.tokenOptimizer.estimateTokens(optimizedContext);
             MetricsProvider.getInstance().updateTokens(tokens);
+            MetricsService.getInstance().recordContextSize(tokens);
             MetricsProvider.getInstance().updateFiles(this.loadedFiles.length);
 
             // Store detailed context data for UI

@@ -13,6 +13,8 @@ export class MetricsService implements vscode.Disposable {
     private telemetryService: TelemetryService | undefined;
     private currentMetrics: IUsageMetrics = { ...DEFAULT_METRICS };
     private sessionStartTime: number = Date.now();
+    private sessionContextSizeTotal: number = 0;
+    private sessionContextSizeCount: number = 0;
 
     // Constant for time saved calculation: 10 seconds per line of code
     private readonly TYPING_SPEED_MS_PER_LINE = 10000;
@@ -55,6 +57,31 @@ export class MetricsService implements vscode.Disposable {
         this.currentMetrics.suggestionsRequested++;
         this.getTodayStats().suggestionsRequested++;
         this.save();
+    }
+
+    public recordContextSize(size: number): void {
+        this.sessionContextSizeTotal += size;
+        this.sessionContextSizeCount++;
+
+        // Use null-coalescing to handle existing persisted metrics that might not have these fields yet
+        this.currentMetrics.totalContextSize = (this.currentMetrics.totalContextSize || 0) + size;
+        this.currentMetrics.contextSizeCount = (this.currentMetrics.contextSizeCount || 0) + 1;
+
+        const today = this.getTodayStats();
+        today.totalContextSize = (today.totalContextSize || 0) + size;
+        today.contextSizeCount = (today.contextSizeCount || 0) + 1;
+
+        this.save();
+    }
+
+    /**
+     * Get average context size for the current session
+     */
+    public getAverageContextSize(): number {
+        if (this.sessionContextSizeCount === 0) {
+            return 0;
+        }
+        return Math.round(this.sessionContextSizeTotal / this.sessionContextSizeCount);
     }
 
     public recordSuggestionAccepted(linesCount: number, context?: ISuggestionContext): void {
@@ -214,7 +241,9 @@ export class MetricsService implements vscode.Disposable {
                 suggestionsAccepted: 0,
                 suggestionsRejected: 0,
                 linesAccepted: 0,
-                timeSavedMs: 0
+                timeSavedMs: 0,
+                totalContextSize: 0,
+                contextSizeCount: 0
             };
         }
         return this.currentMetrics.dailyStats[today];

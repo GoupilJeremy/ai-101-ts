@@ -88,4 +88,27 @@ suite('MetricsService Test Suite', () => {
         service.recordSuggestionRequested();
         assert.strictEqual((vscode.workspace.fs.writeFile as any).mock.calls.length, 2); // Start + Request
     });
+
+    test('Should record context size and calculate average', () => {
+        service.recordContextSize(100);
+        service.recordContextSize(200);
+
+        assert.strictEqual(service.getAverageContextSize(), 150);
+    });
+
+    test('Should handle zero context size recordings', () => {
+        assert.strictEqual(service.getAverageContextSize(), 0);
+    });
+
+    test('Should update persistent metrics for context size', async () => {
+        service.recordContextSize(500);
+        const metrics = await service.getMetrics();
+
+        assert.strictEqual(metrics.totalContextSize, 500);
+        assert.strictEqual(metrics.contextSizeCount, 1);
+
+        const today = new Date().toISOString().split('T')[0];
+        assert.strictEqual(metrics.dailyStats[today].totalContextSize, 500);
+        assert.strictEqual(metrics.dailyStats[today].contextSizeCount, 1);
+    });
 });
