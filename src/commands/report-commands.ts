@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import * as path from 'path';
 import { TeamMetricsService } from '../telemetry/team-metrics-service';
 import { ReportGeneratorService } from '../telemetry/report-generator-service';
@@ -117,7 +116,7 @@ export function registerReportCommands(
                         filePath = path.join(dir, `${base}${ext}`);
                     }
 
-                    fs.writeFileSync(filePath, report.content, 'utf-8');
+                    await vscode.workspace.fs.writeFile(vscode.Uri.file(filePath), Buffer.from(report.content, 'utf-8'));
 
                     // Show success message with option to open
                     const action = await vscode.window.showInformationMessage(
