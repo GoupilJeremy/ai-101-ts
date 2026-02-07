@@ -9,15 +9,14 @@ suite('HybridLLMCache Test Suite', () => {
     let cache: HybridLLMCache;
     let tempDir: string;
 
-    setup(() => {
+    beforeEach(async () => {
         tempDir = path.join(os.tmpdir(), `ai101-cache-test-${Date.now()}`);
-        if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
-        cache = new HybridLLMCache(tempDir);
+        cache = await HybridLLMCache.create(tempDir);
     });
 
-    teardown(() => {
+    afterEach(async () => {
         if (fs.existsSync(tempDir)) {
-            fs.rmSync(tempDir, { recursive: true, force: true });
+            await fs.promises.rm(tempDir, { recursive: true, force: true });
         }
     });
 
