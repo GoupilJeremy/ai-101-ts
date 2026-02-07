@@ -1,5 +1,5 @@
 import * as crypto from 'crypto';
-import * as fs from 'fs';
+import * as fs from 'fs/promises';
 import * as path from 'path';
 import { ILLMResponse } from './provider.interface.js';
 
@@ -32,11 +32,14 @@ export class HybridLLMCache {
         costSaved: 0
     };
 
-    constructor(storagePath: string) {
+    private constructor(storagePath: string) {
         this.cacheDir = path.join(storagePath, '.cache');
-        if (!fs.existsSync(this.cacheDir)) {
-            fs.mkdirSync(this.cacheDir, { recursive: true });
-        }
+    }
+
+    public static async create(storagePath: string): Promise<HybridLLMCache> {
+        const instance = new HybridLLMCache(storagePath);
+        await fs.mkdir(instance.cacheDir, { recursive: true });
+        return instance;
     }
 
     /**
@@ -64,10 +67,10 @@ export class HybridLLMCache {
         }
 
         // L2 check
-        entry = this.readFromL2(key);
+        entry = await this.readFromL2(key);
         if (entry) {
             if (this.isExpired(entry)) {
-                this.deleteFromL2(key);
+                await this.deleteFromL2(key);
             } else {
                 // Feed L1
                 this.addToL1(key, entry);
@@ -91,7 +94,7 @@ export class HybridLLMCache {
         };
 
         this.addToL1(key, entry);
-        this.writeToL2(key, entry);
+        await this.writeToL2(key, entry);
     }
 
     public getStats(): ICacheStats {
@@ -111,36 +114,36 @@ export class HybridLLMCache {
         this.l1Cache.set(key, entry);
     }
 
-    private writeToL2(key: string, entry: ICacheEntry): void {
+    private async writeToL2(key: string, entry: ICacheEntry): Promise<void> {
         try {
             const filePath = path.join(this.cacheDir, `${key}.json`);
-            fs.writeFileSync(filePath, JSON.stringify(entry), 'utf8');
+            await fs.writeFile(filePath, JSON.stringify(entry), 'utf8');
         } catch (error) {
             console.error('Failed to write to L2 cache:', error);
         }
     }
 
-    private readFromL2(key: string): ICacheEntry | null {
+    private async readFromL2(key: string): Promise<ICacheEntry | null> {
         try {
             const filePath = path.join(this.cacheDir, `${key}.json`);
-            if (fs.existsSync(filePath)) {
-                const data = fs.readFileSync(filePath, 'utf8');
-                return JSON.parse(data);
-            }
+            const data = await fs.readFile(filePath, 'utf8');
+            return JSON.parse(data);
         } catch (error) {
-            console.error('Failed to read from L2 cache:', error);
+            if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+                console.error('Failed to read from L2 cache:', error);
+            }
         }
         return null;
     }
 
-    private deleteFromL2(key: string): void {
+    private async deleteFromL2(key: string): Promise<void> {
         try {
             const filePath = path.join(this.cacheDir, `${key}.json`);
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
+            await fs.unlink(filePath);
         } catch (error) {
-            console.error('Failed to delete from L2 cache:', error);
+            if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+                console.error('Failed to delete from L2 cache:', error);
+            }
         }
     }
 
