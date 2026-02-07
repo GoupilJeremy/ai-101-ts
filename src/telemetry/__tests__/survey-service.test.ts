@@ -11,6 +11,15 @@ vi.mock('../telemetry-service', () => ({
     },
 }));
 
+// Mock MetricsService
+vi.mock('../metrics-service', () => ({
+    MetricsService: {
+        getInstance: vi.fn(() => ({
+            getAverageContextSize: vi.fn(() => 1024),
+        })),
+    },
+}));
+
 // Mock ModeManager BEFORE importing SurveyService
 vi.mock('../../modes/mode-manager', () => ({
     ModeManager: {
@@ -133,6 +142,7 @@ describe('SurveyService', () => {
                 expect.objectContaining({
                     interactionCount: 5,
                     featureUsage: expect.any(Object),
+                    contextSize: 1024, // From mocked MetricsService
                 })
             );
 
@@ -217,8 +227,21 @@ describe('SurveyService', () => {
             expect(payload.measurements).toEqual({
                 sessionDuration: expect.any(Number),
                 interactionCount: 15,
-                contextSize: expect.any(Number),
+                contextSize: 0, // In this test, sessionStats doesn't have contextSize, so it defaults to 0
             });
+        });
+
+        it('should use contextSize from sessionStats if present', () => {
+            const sessionStats = {
+                startTime: Date.now() - 600000,
+                interactionCount: 15,
+                featureUsage: { coder: 8, architect: 7 },
+                contextSize: 2048,
+            };
+
+            const payload = surveyService['buildTelemetryPayload'](8, 'Great experience!', sessionStats);
+
+            expect(payload.measurements.contextSize).toBe(2048);
         });
 
         it('should sanitize freeform text to prevent PII leakage', () => {

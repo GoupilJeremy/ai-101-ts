@@ -4,6 +4,8 @@ export interface IDailyMetrics {
     suggestionsRejected: number;
     linesAccepted: number;
     timeSavedMs: number;
+    totalContextSize: number;
+    contextSizeCount: number;
 }
 
 export interface IDimensionalMetrics {
@@ -32,6 +34,8 @@ export interface IUsageMetrics {
     suggestionsRejected: number;
     linesAccepted: number;
     timeSavedMs: number;
+    totalContextSize: number;
+    contextSizeCount: number;
     lastUpdated: number;
     dailyStats: { [date: string]: IDailyMetrics };
     dimensionalStats: IDimensionalStats;
@@ -45,6 +49,8 @@ export const DEFAULT_METRICS: IUsageMetrics = {
     suggestionsRejected: 0,
     linesAccepted: 0,
     timeSavedMs: 0,
+    totalContextSize: 0,
+    contextSizeCount: 0,
     lastUpdated: Date.now(),
     dailyStats: {},
     dimensionalStats: {
