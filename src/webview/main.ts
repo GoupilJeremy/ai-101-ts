@@ -696,13 +696,28 @@ function createAnnotationElement(annotation: any): HTMLElement {
 
     const timestamp = new Date(annotation.timestamp).toLocaleString();
 
-    el.innerHTML = `
-        <div class="team-annotation__header">
-            <span class="team-annotation__author">${annotation.author}</span>
-            <span class="team-annotation__timestamp">${timestamp}</span>
-        </div>
-        <div class="team-annotation__content">${annotation.comment}</div>
-    `;
+    // Create header
+    const header = document.createElement('div');
+    header.className = 'team-annotation__header';
+
+    const authorSpan = document.createElement('span');
+    authorSpan.className = 'team-annotation__author';
+    authorSpan.textContent = annotation.author;
+
+    const timestampSpan = document.createElement('span');
+    timestampSpan.className = 'team-annotation__timestamp';
+    timestampSpan.textContent = timestamp;
+
+    header.appendChild(authorSpan);
+    header.appendChild(timestampSpan);
+
+    // Create content
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'team-annotation__content';
+    contentDiv.textContent = annotation.comment;
+
+    el.appendChild(header);
+    el.appendChild(contentDiv);
 
     return el;
 }
@@ -1022,10 +1037,17 @@ function executeRenderAlert(alert: any) {
 function showToastNotification(message: string, icon: string = '🚨') {
     const toast = document.createElement('div');
     toast.className = 'toast toast--critical';
-    toast.innerHTML = `
-        <div class="toast__icon">${icon}</div>
-        <div class="toast__message">${message}</div>
-    `;
+
+    const iconDiv = document.createElement('div');
+    iconDiv.className = 'toast__icon';
+    iconDiv.textContent = icon;
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'toast__message';
+    messageDiv.textContent = message;
+
+    toast.appendChild(iconDiv);
+    toast.appendChild(messageDiv);
 
     document.body.appendChild(toast);
 
