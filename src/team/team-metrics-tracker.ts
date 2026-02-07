@@ -106,7 +106,7 @@ export class TeamMetricsTracker {
     public getAcceptanceRate(agent: AgentType): number {
         const agentMetrics = this.metrics[agent];
         const total = agentMetrics.accepted + agentMetrics.rejected;
-        if (total === 0) return 0;
+        if (total === 0) {return 0;}
         return Math.round((agentMetrics.accepted / total) * 100);
     }
 
@@ -125,7 +125,7 @@ export class TeamMetricsTracker {
         });
 
         const total = totalAccepted + totalRejected;
-        if (total === 0) return 0;
+        if (total === 0) {return 0;}
         return Math.round((totalAccepted / total) * 100);
     }
 

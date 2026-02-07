@@ -40,11 +40,11 @@ export class RateLimiter {
         const costLimit = settings.performance.costBudget;
 
         if (this.totalTokens >= tokenLimit) {
-            throw new BudgetExceededError(`Token budget of ${tokenLimit} exceeded for this session.`);
+            throw new BudgetExceededError({ type: 'tokens' });
         }
 
         if (this.totalCost >= costLimit) {
-            throw new BudgetExceededError(`Cost budget of $${costLimit.toFixed(2)} exceeded for this session.`);
+            throw new BudgetExceededError({ type: 'cost' });
         }
     }
 
@@ -75,7 +75,7 @@ export class RateLimiter {
     }
 
     private checkWarnings(): void {
-        if (this.hasWarned80) return;
+        if (this.hasWarned80) {return;}
 
         const stats = this.getStats();
         if (stats.tokenPercent >= 80 || stats.costPercent >= 80) {

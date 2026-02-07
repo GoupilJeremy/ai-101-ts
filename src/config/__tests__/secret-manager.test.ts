@@ -1,3 +1,4 @@
+import { describe, test, suite, beforeEach, afterEach, vi } from 'vitest';
 import * as assert from 'assert';
 import { SecretManager, LLMProvider } from '../secret-manager';
 // Mocking vscode types for the test environment
@@ -26,7 +27,7 @@ suite('SecretManager Suite', () => {
     let mockSecrets: MockSecretStorage;
     let contextMock: any;
 
-    setup(() => {
+    beforeEach(() => {
         mockSecrets = new MockSecretStorage();
         contextMock = {
             secrets: mockSecrets

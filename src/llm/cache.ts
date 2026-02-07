@@ -109,7 +109,7 @@ export class HybridLLMCache {
         // Simple LRU: if full, delete first key (oldest inserted)
         if (this.l1Cache.size >= this.l1MaxEntries) {
             const firstKey = this.l1Cache.keys().next().value;
-            if (firstKey) this.l1Cache.delete(firstKey);
+            if (firstKey) {this.l1Cache.delete(firstKey);}
         }
         this.l1Cache.set(key, entry);
     }

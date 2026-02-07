@@ -1,0 +1,16 @@
+{
+    "name": "ai-101-custom-llm-provider-example",
+    "version": "1.0.0",
+    "description": "Example custom LLM provider for AI-101",
+    "main": "dist/example-provider.js",
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch"
+    },
+    "dependencies": {
+        "@types/vscode": "^1.75.0"
+    },
+    "devDependencies": {
+        "typescript": "^5.3.3"
+    }
+}

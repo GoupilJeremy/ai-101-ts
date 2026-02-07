@@ -1,0 +1,48 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": [
+        "./src/api/index.ts",
+        "./src/api/extension-api.ts",
+        "./src/api/events.ts",
+        "./src/api/configuration-types.ts",
+        "./src/llm/provider.interface.ts",
+        "./src/ui/renderer.interface.ts"
+    ],
+    "out": "./docs/api",
+    "plugin": [],
+    "excludePrivate": true,
+    "excludeProtected": false,
+    "excludeExternals": true,
+    "readme": "none",
+    "name": "AI-101-TS API Documentation",
+    "includeVersion": true,
+    "sort": [
+        "source-order"
+    ],
+    "validation": {
+        "notExported": true,
+        "invalidLink": true,
+        "notDocumented": false
+    },
+    "categorizeByGroup": true,
+    "defaultCategory": "Other",
+    "categoryOrder": [
+        "LLM Providers",
+        "Agent Renderers",
+        "Events",
+        "Configuration",
+        "Public API",
+        "*"
+    ],
+    "searchInComments": true,
+    "cleanOutputDir": true,
+    "gitRevision": "main",
+    "githubPages": true,
+    "hideGenerator": false,
+    "visibilityFilters": {
+        "protected": false,
+        "private": false,
+        "inherited": true,
+        "external": false
+    }
+}

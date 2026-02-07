@@ -6,7 +6,7 @@ export class PresetManager {
     public async applyPreset(presetName: string): Promise<void> {
         const preset = PRESETS[presetName];
         if (!preset) {
-            throw new ConfigurationError(`Unknown preset: ${presetName}`);
+            throw new ConfigurationError({ preset: presetName });
         }
 
         const config = vscode.workspace.getConfiguration('ai101');

@@ -8,7 +8,7 @@ class MockSecretManager {
     private static instance: MockSecretManager;
     public getApiKey = async (provider: string) => (provider === 'anthropic' ? 'test-key' : undefined);
     public static getInstance() {
-        if (!this.instance) this.instance = new MockSecretManager();
+        if (!this.instance) {this.instance = new MockSecretManager();}
         return this.instance;
     }
 }

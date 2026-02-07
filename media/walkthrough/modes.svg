@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="User Modes">
+  <defs>
+    <style>
+      .sumi-stroke { stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+      .sumi-fill { fill: currentColor; opacity: 0.1; }
+      .text { fill: currentColor; font-family: system-ui, -apple-system, sans-serif; }
+      .mode-icon { fill: none; stroke: currentColor; stroke-width: 2; }
+    </style>
+  </defs>
+  
+  <!-- Mode cards -->
+  <g transform="translate(50, 40)">
+    <!-- Learning Mode -->
+    <rect class="sumi-fill" width="80" height="80" rx="8"/>
+    <path class="mode-icon" d="M20,25 L60,25 M20,40 L60,40 M20,55 L50,55" transform="translate(10, 10)"/>
+    <text class="text" x="40" y="95" text-anchor="middle" font-size="11">Learning</text>
+  </g>
+  
+  <g transform="translate(160, 40)">
+    <!-- Expert Mode -->
+    <rect class="sumi-fill" width="80" height="80" rx="8"/>
+    <path class="mode-icon" d="M25,20 L40,50 L55,20 M30,35 L50,35" transform="translate(10, 10)"/>
+    <text class="text" x="40" y="95" text-anchor="middle" font-size="11">Expert</text>
+  </g>
+  
+  <g transform="translate(270, 40)">
+    <!-- Focus Mode -->
+    <rect class="sumi-fill" width="80" height="80" rx="8"/>
+    <circle class="mode-icon" cx="40" cy="40" r="20" transform="translate(10, 10)"/>
+    <circle class="mode-icon" cx="40" cy="40" r="10" transform="translate(10, 10)"/>
+    <text class="text" x="40" y="95" text-anchor="middle" font-size="11">Focus</text>
+  </g>
+  
+  <g transform="translate(50, 160)">
+    <!-- Team Mode -->
+    <rect class="sumi-fill" width="80" height="80" rx="8"/>
+    <circle class="mode-icon" cx="25" cy="30" r="8" transform="translate(10, 10)"/>
+    <circle class="mode-icon" cx="40" cy="30" r="8" transform="translate(10, 10)"/>
+    <circle class="mode-icon" cx="55" cy="30" r="8" transform="translate(10, 10)"/>
+    <text class="text" x="40" y="95" text-anchor="middle" font-size="11">Team</text>
+  </g>
+  
+  <g transform="translate(160, 160)">
+    <!-- Performance Mode -->
+    <rect class="sumi-fill" width="80" height="80" rx="8"/>
+    <path class="mode-icon" d="M25,50 L40,25 L55,50" transform="translate(10, 10)"/>
+    <text class="text" x="40" y="95" text-anchor="middle" font-size="11">Performance</text>
+  </g>
+</svg>

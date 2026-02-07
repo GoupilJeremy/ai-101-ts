@@ -77,21 +77,141 @@
         "command": "ai-101-ts.viewArchitecture",
         "title": "View Detected Architecture",
         "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.setPhase",
+        "title": "Set Development Phase",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.acceptSuggestion",
+        "title": "Accept AI Suggestion",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.rejectSuggestion",
+        "title": "Reject AI Suggestion",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.toggleHUD",
+        "title": "Toggle HUD Visibility",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.forceAgentState",
+        "title": "Force Agent State (Debug)",
+        "category": "AI 101 Debug"
+      },
+      {
+        "command": "ai-101-ts.switchToLearningMode",
+        "title": "Switch to Learning Mode",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.switchToExpertMode",
+        "title": "Switch to Expert Mode",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.switchToTeamMode",
+        "title": "Switch to Team Mode",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.configureApiKeys",
+        "title": "Configure API Keys",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.resetConfig",
+        "title": "Reset Configuration",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.toggleAgentVisibility",
+        "title": "Toggle Agent Visibility",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.configureTelemetry",
+        "title": "Configure Telemetry Settings",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.openDocumentation",
+        "title": "Open Documentation",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.viewMetrics",
+        "title": "View My Metrics",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.exportMetrics",
+        "title": "Export Metrics to JSON",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.showGettingStarted",
+        "title": "Show Getting Started",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.showTroubleshooting",
+        "title": "Show Troubleshooting",
+        "category": "AI 101",
+        "icon": "$(question)"
+      },
+      {
+        "command": "ai-101-ts.openTroubleshootingArticle",
+        "title": "Open Troubleshooting Article",
+        "category": "AI 101"
+      },
+      {
+        "command": "ai-101-ts.searchTroubleshooting",
+        "title": "Search Troubleshooting",
+        "category": "AI 101",
+        "icon": "$(search)"
+      },
+      {
+        "command": "ai-101-ts.viewChangelog",
+        "title": "View Changelog",
+        "category": "AI 101",
+        "icon": "$(history)"
       }
     ],
     "keybindings": [
       {
-        "command": "ai-101-ts.toggleFocusMode",
-        "key": "ctrl+shift+f",
-        "mac": "cmd+shift+f",
+        "command": "ai-101-ts.toggleHUD",
+        "key": "ctrl+alt+h",
+        "mac": "cmd+alt+h",
         "when": "editorTextFocus"
       },
       {
-        "command": "ai-101-ts.focusHud",
-        "key": "ctrl+shift+h",
-        "mac": "cmd+shift+h",
-        "when": "editorTextFocus",
-        "description": "Focus the AI HUD for keyboard navigation"
+        "command": "ai-101-ts.toggleFocusMode",
+        "key": "ctrl+shift+alt+f",
+        "mac": "cmd+shift+alt+f",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "ai-101-ts.acceptSuggestion",
+        "key": "ctrl+enter",
+        "mac": "cmd+enter",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "ai-101-ts.rejectSuggestion",
+        "key": "ctrl+backspace",
+        "mac": "cmd+backspace",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "ai-101-ts.forceAgentState",
+        "key": "ctrl+shift+alt+s",
+        "mac": "cmd+shift+alt+s",
+        "when": "editorTextFocus"
       }
     ],
     "configuration": {
@@ -246,8 +366,82 @@
           "type": "object",
           "default": {},
           "description": "Override detected project architecture patterns (e.g., techStack, patterns, conventions)."
+        },
+        "ai101.errors.openLinksIn": {
+          "type": "string",
+          "default": "SimpleBrowser",
+          "enum": [
+            "SimpleBrowser",
+            "ExternalBrowser"
+          ],
+          "description": "Specify where documentation links should be opened."
         }
       }
+    },
+    "walkthroughs": [
+      {
+        "id": "ai101.gettingStarted",
+        "title": "%walkthrough.gettingStarted.title%",
+        "description": "%walkthrough.gettingStarted.description%",
+        "steps": [
+          {
+            "id": "welcome",
+            "title": "%walkthrough.welcome.title%",
+            "description": "%walkthrough.welcome.description%",
+            "media": {
+              "svg": "media/walkthrough/welcome.svg",
+              "altText": "%walkthrough.welcome.altText%"
+            }
+          },
+          {
+            "id": "quickTour",
+            "title": "%walkthrough.quickTour.title%",
+            "description": "%walkthrough.quickTour.description%",
+            "media": {
+              "svg": "media/walkthrough/quick-tour.svg",
+              "altText": "%walkthrough.quickTour.altText%"
+            }
+          },
+          {
+            "id": "modes",
+            "title": "%walkthrough.modes.title%",
+            "description": "%walkthrough.modes.description%",
+            "media": {
+              "svg": "media/walkthrough/modes.svg",
+              "altText": "%walkthrough.modes.altText%"
+            },
+            "completionEvents": [
+              "onCommand:ai-101-ts.switchToLearningMode",
+              "onCommand:ai-101-ts.switchToExpertMode",
+              "onCommand:ai-101-ts.switchToTeamMode"
+            ]
+          },
+          {
+            "id": "firstSuggestion",
+            "title": "%walkthrough.firstSuggestion.title%",
+            "description": "%walkthrough.firstSuggestion.description%",
+            "media": {
+              "svg": "media/walkthrough/first-suggestion.svg",
+              "altText": "%walkthrough.firstSuggestion.altText%"
+            },
+            "completionEvents": [
+              "onCommand:ai-101-ts.acceptSuggestion",
+              "onCommand:ai-101-ts.rejectSuggestion"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "ai101.troubleshootingView",
+          "name": "AI-101 Troubleshooting",
+          "icon": "$(question)",
+          "contextualTitle": "AI-101 Troubleshooting"
+        }
+      ]
     }
   },
   "scripts": {
@@ -262,27 +456,43 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "check-types": "tsc --noEmit",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "test:unit": "vitest run",
+    "test:watch": "vitest watch",
+    "docs:generate": "typedoc",
+    "changelog": "standard-version"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
+    "@vscode/extension-telemetry": "^1.2.0",
     "js-tiktoken": "^1.0.10",
-    "openai": "^4.28.0"
+    "openai": "^4.28.0",
+    "semver": "^7.7.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
+    "@types/chai": "^5.2.3",
     "@types/jsdom": "^27.0.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "20.x",
+    "@types/node": "^20.19.30",
+    "@types/semver": "^7.7.1",
+    "@types/sinon": "^21.0.0",
     "@types/vscode": "^1.108.0",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
     "axe-core": "^4.8.2",
+    "chai": "^6.2.2",
     "esbuild": "^0.25.12",
     "eslint": "^9.25.1",
     "jsdom": "^20.0.3",
     "npm-run-all": "^4.1.5",
+    "sinon": "^21.0.1",
+    "standard-version": "^9.5.0",
+    "ts-node": "^1.7.1",
+    "typedoc": "^0.28.16",
     "typescript": "^5.8.3",
     "vitest": "^4.0.17"
   }

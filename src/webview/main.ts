@@ -3,12 +3,32 @@
 import ContextPanel from './components/context-panel.js';
 // @ts-ignore
 import VitalSignsBar from './components/vital-signs-bar.js';
+// @ts-ignore
+import TimelineComponent from './components/timeline-component.js';
+// @ts-ignore
+import SuggestionCard from './components/suggestion-card.js';
+// @ts-ignore
+import AlertComponent from './components/alert-component.js';
+// @ts-ignore
+import DropZoneManager from './components/drop-zone-manager.js';
+// @ts-ignore
+import AgentComponent from './components/agent-component.js';
+// @ts-ignore
+import TooltipManager from './components/tooltip-manager.js';
+// @ts-ignore
+import AlertDetailPanel from './components/alert-detail-panel.js';
+// @ts-ignore
+import FocusManager from './accessibility/focus-manager.js';
 
 console.log('Webview loaded');
 
 // Initialize Components
 let contextPanel: any;
 let vitalSignsBar: any;
+let timelineComponent: any;
+let dropZoneManager: any;
+const agentComponents: Map<string, any> = new Map();
+let tooltipManager: any;
 
 const stateManagerAdapter = {
     subscribe: (callback: any) => { /* No-op, we call update manually for now */ },
@@ -33,14 +53,40 @@ function initializeComponents() {
             if (contextPanel) {
                 contextPanel.toggle();
             }
+        },
+        onHistoryClick: () => {
+            if (timelineComponent) {
+                timelineComponent.toggle();
+            }
         }
     });
 
     // Initialize Context Panel
-    // We want to insert it into hud-container, possibly before agent-hud?
-    // context-panel.js appends to container.
     contextPanel = new ContextPanel('hud-container', stateManagerAdapter);
     contextPanel.render();
+
+    // Initialize Timeline Component
+    timelineComponent = new TimelineComponent('hud-container', stateManagerAdapter);
+
+    // Initialize Drop Zone Manager
+    dropZoneManager = new DropZoneManager('hud-container');
+    dropZoneManager.render();
+
+    // Initialize Tooltip Manager and sync with current mode
+    tooltipManager = TooltipManager.getInstance();
+    // Fix race condition: Sync TooltipManager with current mode on init
+    if (currentMode) {
+        let tooltipMode = 'default';
+        if (currentMode === 'learning') {
+            tooltipMode = 'learning';
+        } else if (currentMode === 'expert') {
+            tooltipMode = 'expert';
+        }
+        tooltipManager.setMode(tooltipMode);
+    }
+
+    // Initialize Alert Detail Panel
+    const alertDetailPanel = AlertDetailPanel.getInstance();
 }
 
 // Performance Monitoring
@@ -136,21 +182,36 @@ function applyUpdate(update: any) {
         case 'cursor':
             executeHandleCursorUpdate(update.cursor);
             break;
+        case 'phase':
+            executeUpdatePhaseUI(update.phase);
+            break;
         case 'newAlert':
             executeRenderAlert(update.alert);
             break;
         case 'clearAlerts':
             document.querySelectorAll('.alert-component').forEach(el => el.remove());
             break;
+        case 'history':
+            if (timelineComponent) {
+                timelineComponent.updateHistory(update.history);
+            }
+            break;
         case 'fullState':
             if (update.mode && update.config) {
                 applyModeUpdate(update.mode, update.config);
             }
+            if (update.hudVisible !== undefined) {
+                updateHUDVisibility(update.hudVisible);
+            }
             Object.entries(update.states).forEach(([agent, state]: any) => {
                 executeUpdateAgentHUD(agent, state);
             });
-            if (update.metrics) executeUpdateMetricsUI(update.metrics);
-            if (update.alerts) update.alerts.forEach((alert: any) => executeRenderAlert(alert));
+            if (update.metrics) { executeUpdateMetricsUI(update.metrics); }
+            if (update.phase) { executeUpdatePhaseUI(update.phase); }
+            if (update.alerts) { update.alerts.forEach((alert: any) => executeRenderAlert(alert)); }
+            if (update.history && timelineComponent) {
+                timelineComponent.updateHistory(update.history);
+            }
             break;
     }
 }
@@ -161,6 +222,18 @@ function applyModeUpdate(mode: string, config: any) {
     // Track current mode and verbosity for condensed rendering (Expert Mode)
     currentMode = mode;
     currentVerbosity = config.explanationVerbositiy || 'high';
+
+    // Sync mode with TooltipManager for mode-aware content
+    if (tooltipManager) {
+        // Map mode to tooltip content mode
+        let tooltipMode = 'default';
+        if (mode === 'learning') {
+            tooltipMode = 'learning';
+        } else if (mode === 'expert') {
+            tooltipMode = 'expert';
+        }
+        tooltipManager.setMode(tooltipMode);
+    }
 
     // Performance Mode: Apply additional optimizations
     if (mode === 'performance') {
@@ -204,209 +277,194 @@ function applyModeUpdate(mode: string, config: any) {
         metricsEl.setAttribute('data-mode', mode);
     }
 
-    console.log(`AI-101 Webview: Mode=${mode}, Verbosity=${currentVerbosity}, HUD Opacity=${config.hudOpacity}`);
+    console.log(`AI-101 Webview: Mode=${mode}, Verbosity=${currentVerbosity}, HUD Opacity=${config.hudOpacity}, TooltipMode=${tooltipManager ? tooltipManager.currentMode : 'not initialized'}`);
 }
 
-// Keyboard Navigation State
-let currentFocusIndex = -1;
-let interactiveElements: HTMLElement[] = [];
 
-// Initialize keyboard navigation
+// Focus Manager for keyboard navigation
+let focusManager: any;
+
+// Initialize keyboard navigation with FocusManager
 function initializeKeyboardNavigation() {
-    updateInteractiveElements();
+    focusManager = new FocusManager();
+    focusManager.initialize();
 
-    // Add keydown event listener
-    document.addEventListener('keydown', handleKeyDown);
+    // Add global hotkeys handler
+    document.addEventListener('keydown', handleGlobalHotkeys);
 
-    // Add focus event listeners for focus management
-    document.addEventListener('focusin', handleFocusIn);
-    document.addEventListener('focusout', handleFocusOut);
-}
-
-function updateInteractiveElements() {
-    // Get all interactive elements (agents and alerts)
-    interactiveElements = Array.from(document.querySelectorAll('.agent-icon, .alert-component')) as HTMLElement[];
-
-    // Ensure all have tabindex
-    interactiveElements.forEach(el => {
-        if (!el.hasAttribute('tabindex')) {
-            el.setAttribute('tabindex', '0');
+    // Add help overlay handler (Shift+?)
+    document.addEventListener('keydown', (e) => {
+        if (e.shiftKey && e.key === '?') {
+            e.preventDefault();
+            showKeyboardHelpOverlay();
         }
     });
 }
 
-function handleKeyDown(event: KeyboardEvent) {
-    if (interactiveElements.length === 0) return;
+function handleGlobalHotkeys(event: KeyboardEvent) {
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    const cmdOrCtrl = isMac ? event.metaKey : event.ctrlKey;
 
-    switch (event.key) {
-        case 'Tab':
-            event.preventDefault();
-            handleTabNavigation(event.shiftKey);
-            break;
-        case 'ArrowRight':
-        case 'ArrowLeft':
-        case 'ArrowUp':
-        case 'ArrowDown':
-            event.preventDefault();
-            handleArrowNavigation(event.key);
-            break;
-        case 'Enter':
-        case ' ':
-            event.preventDefault();
-            handleActivation();
-            break;
-        case 'Escape':
-            event.preventDefault();
-            handleEscape();
-            break;
-    }
-}
-
-function handleTabNavigation(shiftKey: boolean) {
-    if (currentFocusIndex === -1) {
-        // No current focus, start with first element
-        currentFocusIndex = 0;
-    } else {
-        if (shiftKey) {
-            // Shift+Tab: previous
-            currentFocusIndex = currentFocusIndex > 0 ? currentFocusIndex - 1 : interactiveElements.length - 1;
-        } else {
-            // Tab: next
-            currentFocusIndex = currentFocusIndex < interactiveElements.length - 1 ? currentFocusIndex + 1 : 0;
+    if (cmdOrCtrl && event.key === 'Enter') {
+        event.preventDefault();
+        // Find visible suggestion card
+        const suggestionEl = document.querySelector('.suggestion-card:not(.suggestion-card--accepted):not(.suggestion-card--rejected)') as HTMLElement;
+        if (suggestionEl) {
+            const acceptBtn = suggestionEl.querySelector('.suggestion-card__btn--accept') as HTMLButtonElement;
+            if (acceptBtn) { acceptBtn.click(); }
         }
-    }
-
-    focusElement(currentFocusIndex);
-}
-
-function handleArrowNavigation(key: string) {
-    if (currentFocusIndex === -1) {
-        currentFocusIndex = 0;
-        focusElement(currentFocusIndex);
-        return;
-    }
-
-    const currentElement = interactiveElements[currentFocusIndex];
-    let nextIndex = currentFocusIndex;
-
-    if (currentElement.classList.contains('agent-icon')) {
-        // Agent navigation
-        if (key === 'ArrowRight') {
-            // Find next agent
-            for (let i = currentFocusIndex + 1; i < interactiveElements.length; i++) {
-                if (interactiveElements[i].classList.contains('agent-icon')) {
-                    nextIndex = i;
-                    break;
-                }
-            }
-        } else if (key === 'ArrowLeft') {
-            // Find previous agent
-            for (let i = currentFocusIndex - 1; i >= 0; i--) {
-                if (interactiveElements[i].classList.contains('agent-icon')) {
-                    nextIndex = i;
-                    break;
-                }
-            }
+    } else if (cmdOrCtrl && (event.key === 'Backspace' || (isMac && event.key === 'Delete'))) {
+        event.preventDefault();
+        // Find visible suggestion card
+        const suggestionEl = document.querySelector('.suggestion-card:not(.suggestion-card--accepted):not(.suggestion-card--rejected)') as HTMLElement;
+        if (suggestionEl) {
+            const rejectBtn = suggestionEl.querySelector('.suggestion-card__btn--reject') as HTMLButtonElement;
+            if (rejectBtn) { rejectBtn.click(); }
         }
-    } else if (currentElement.classList.contains('alert-component')) {
-        // Alert navigation
-        if (key === 'ArrowDown') {
-            // Find next alert
-            for (let i = currentFocusIndex + 1; i < interactiveElements.length; i++) {
-                if (interactiveElements[i].classList.contains('alert-component')) {
-                    nextIndex = i;
-                    break;
-                }
-            }
-        } else if (key === 'ArrowUp') {
-            // Find previous alert
-            for (let i = currentFocusIndex - 1; i >= 0; i--) {
-                if (interactiveElements[i].classList.contains('alert-component')) {
-                    nextIndex = i;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (nextIndex !== currentFocusIndex) {
-        currentFocusIndex = nextIndex;
-        focusElement(currentFocusIndex);
-    }
-}
-
-function handleActivation() {
-    if (currentFocusIndex === -1) return;
-
-    const element = interactiveElements[currentFocusIndex];
-    if (element.classList.contains('agent-icon')) {
-        // Activate agent (could expand details, show menu, etc.)
-        console.log('Activating agent:', element.dataset.agent);
-        // For now, just announce
-        announceToScreenReader(`Agent ${element.dataset.agent} activated`);
-    } else if (element.classList.contains('alert-component')) {
-        // Activate alert (could expand, accept suggestion, etc.)
-        console.log('Activating alert:', element.id);
-        announceToScreenReader('Alert activated');
-    }
-}
-
-function handleEscape() {
-    if (currentFocusIndex === -1) return;
-
-    const element = interactiveElements[currentFocusIndex];
-    if (element.classList.contains('alert-component')) {
-        // Dismiss/collapse alert
-        console.log('Dismissing alert:', element.id);
-        announceToScreenReader('Alert dismissed');
-    }
-}
-
-function focusElement(index: number) {
-    if (index >= 0 && index < interactiveElements.length) {
-        interactiveElements[index].focus();
     }
 }
 
 function focusFirstElement() {
-    updateInteractiveElements();
-    if (interactiveElements.length > 0) {
-        currentFocusIndex = 0;
-        focusElement(0);
-        announceToScreenReader('HUD focused for keyboard navigation');
+    if (focusManager) {
+        focusManager.focusFirst();
     }
 }
 
-function handleFocusIn(event: FocusEvent) {
-    const target = event.target as HTMLElement;
-    const index = interactiveElements.indexOf(target);
-    if (index !== -1) {
-        currentFocusIndex = index;
-        target.classList.add('keyboard-focus');
-    }
-}
+function showKeyboardHelpOverlay() {
+    // Create help overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'focus-trap-overlay';
 
-function handleFocusOut(event: FocusEvent) {
-    const target = event.target as HTMLElement;
-    target.classList.remove('keyboard-focus');
-}
+    const helpPanel = document.createElement('div');
+    helpPanel.className = 'keyboard-help-overlay';
+    helpPanel.setAttribute('role', 'dialog');
+    helpPanel.setAttribute('aria-labelledby', 'keyboard-help-title');
+    helpPanel.setAttribute('aria-modal', 'true');
 
-function announceToScreenReader(message: string) {
-    // Create a live region for screen reader announcements
-    let liveRegion = document.getElementById('sr-live-region');
-    if (!liveRegion) {
-        liveRegion = document.createElement('div');
-        liveRegion.id = 'sr-live-region';
-        liveRegion.setAttribute('aria-live', 'polite');
-        liveRegion.setAttribute('aria-atomic', 'true');
-        liveRegion.style.position = 'absolute';
-        liveRegion.style.left = '-10000px';
-        liveRegion.style.width = '1px';
-        liveRegion.style.height = '1px';
-        liveRegion.style.overflow = 'hidden';
-        document.body.appendChild(liveRegion);
+    helpPanel.innerHTML = `
+        <div class="keyboard-help-overlay__header">
+            <h2 id="keyboard-help-title" class="keyboard-help-overlay__title">Keyboard Shortcuts</h2>
+            <button class="keyboard-help-overlay__close" aria-label="Close help">✕</button>
+        </div>
+        <div class="keyboard-help-overlay__content">
+            <div class="keyboard-help-section">
+                <h3 class="keyboard-help-section__title">Navigation</h3>
+                <div class="keyboard-help-section__shortcuts">
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Tab</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Cycle through interactive elements</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Shift</span>
+                            <span class="keyboard-shortcut__key">Tab</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Cycle backwards</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">←</span>
+                            <span class="keyboard-shortcut__key">→</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Navigate between agents</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">↑</span>
+                            <span class="keyboard-shortcut__key">↓</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Navigate between alerts</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="keyboard-help-section">
+                <h3 class="keyboard-help-section__title">Actions</h3>
+                <div class="keyboard-help-section__shortcuts">
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Enter</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Activate focused element</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Space</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Toggle focused element</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Esc</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Close panel or dismiss alert</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="keyboard-help-section">
+                <h3 class="keyboard-help-section__title">Suggestions</h3>
+                <div class="keyboard-help-section__shortcuts">
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">${navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'Cmd' : 'Ctrl'}</span>
+                            <span class="keyboard-shortcut__key">Enter</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Accept suggestion</div>
+                    </div>
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">${navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'Cmd' : 'Ctrl'}</span>
+                            <span class="keyboard-shortcut__key">Backspace</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Reject suggestion</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="keyboard-help-section">
+                <h3 class="keyboard-help-section__title">Help</h3>
+                <div class="keyboard-help-section__shortcuts">
+                    <div class="keyboard-shortcut">
+                        <div class="keyboard-shortcut__keys">
+                            <span class="keyboard-shortcut__key">Shift</span>
+                            <span class="keyboard-shortcut__key">?</span>
+                        </div>
+                        <div class="keyboard-shortcut__description">Show this help</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(helpPanel);
+
+    // Create focus trap
+    if (focusManager) {
+        focusManager.createFocusTrap(helpPanel);
     }
-    liveRegion.textContent = message;
+
+    // Close button handler
+    const closeBtn = helpPanel.querySelector('.keyboard-help-overlay__close') as HTMLButtonElement;
+    closeBtn.addEventListener('click', () => {
+        if (focusManager) {
+            focusManager.releaseFocusTrap();
+        }
+        overlay.remove();
+        helpPanel.remove();
+    });
+
+    // Overlay click handler
+    overlay.addEventListener('click', () => {
+        if (focusManager) {
+            focusManager.releaseFocusTrap();
+        }
+        overlay.remove();
+        helpPanel.remove();
+    });
 }
 
 // Initialize keyboard navigation when DOM is ready
@@ -433,18 +491,33 @@ window.addEventListener('message', event => {
         case 'toWebview:cursorUpdate':
             requestUpdate({ type: 'cursor', cursor: message.cursor });
             break;
+        case 'toWebview:phaseUpdate':
+            requestUpdate({ type: 'phase', phase: message.phase });
+            break;
         case 'toWebview:newAlert':
             requestUpdate({ type: 'newAlert', alert: message.alert, alertId: message.alert.id });
             break;
         case 'toWebview:clearAlerts':
             requestUpdate({ type: 'clearAlerts' });
             break;
+        case 'toWebview:historyUpdate':
+            requestUpdate({ type: 'history', history: message.history });
+            break;
         case 'toWebview:modeUpdate':
             console.log('Mode update received:', message.mode, message.config);
             applyModeUpdate(message.mode, message.config);
             break;
         case 'toWebview:fullStateUpdate':
-            requestUpdate({ type: 'fullState', states: message.states, metrics: message.metrics, alerts: message.alerts, mode: message.mode, config: message.modeConfig });
+            requestUpdate({
+                type: 'fullState',
+                states: message.states,
+                metrics: message.metrics,
+                alerts: message.alerts,
+                history: message.history,
+                mode: message.mode,
+                config: message.modeConfig,
+                phase: message.phase
+            });
             break;
         case 'toWebview:largeTextUpdate':
             console.log('Large text update received:', message.enabled);
@@ -479,10 +552,16 @@ window.addEventListener('message', event => {
             console.log('Focus first element requested');
             focusFirstElement();
             break;
+        case 'toWebview:hudVisibilityUpdate':
+            console.log('HUD visibility update received:', message.visible);
+            updateHUDVisibility(message.visible);
+            break;
     }
 
     // Update interactive elements after any DOM changes
-    setTimeout(updateInteractiveElements, 0);
+    if (focusManager) {
+        setTimeout(() => focusManager.updateInteractiveElements(), 0);
+    }
 });
 
 function updateLargeTextMode(enabled: boolean): void {
@@ -490,6 +569,20 @@ function updateLargeTextMode(enabled: boolean): void {
     if (hudContainer) {
         if (currentMode === 'team') {
             hudContainer.setAttribute('data-large-text', enabled ? 'true' : 'false');
+        }
+    }
+}
+
+function updateHUDVisibility(visible: boolean): void {
+    const hudContainer = document.getElementById('hud-container');
+    if (hudContainer) {
+        hudContainer.classList.toggle('hud-container--hidden', !visible);
+        if (focusManager) {
+            if (visible) {
+                focusManager.announceToScreenReader('HUD is now visible');
+            } else {
+                focusManager.announceToScreenReader('HUD is now hidden');
+            }
         }
     }
 }
@@ -645,7 +738,7 @@ let currentAnnotations: any[] = [];
  * Render a single annotation in the annotation panel
  */
 function renderAnnotation(annotation: any): void {
-    if (currentMode !== 'team') return;
+    if (currentMode !== 'team') { return; }
 
     currentAnnotations.push(annotation);
 
@@ -666,7 +759,7 @@ function renderAnnotation(annotation: any): void {
  * Update all annotations display
  */
 function updateAnnotationsDisplay(annotations: any[]): void {
-    if (currentMode !== 'team') return;
+    if (currentMode !== 'team') { return; }
 
     currentAnnotations = annotations;
 
@@ -696,13 +789,28 @@ function createAnnotationElement(annotation: any): HTMLElement {
 
     const timestamp = new Date(annotation.timestamp).toLocaleString();
 
-    el.innerHTML = `
-        <div class="team-annotation__header">
-            <span class="team-annotation__author">${annotation.author}</span>
-            <span class="team-annotation__timestamp">${timestamp}</span>
-        </div>
-        <div class="team-annotation__content">${annotation.comment}</div>
-    `;
+    // Create header
+    const header = document.createElement('div');
+    header.className = 'team-annotation__header';
+
+    const authorSpan = document.createElement('span');
+    authorSpan.className = 'team-annotation__author';
+    authorSpan.textContent = annotation.author;
+
+    const timestampSpan = document.createElement('span');
+    timestampSpan.className = 'team-annotation__timestamp';
+    timestampSpan.textContent = timestamp;
+
+    header.appendChild(authorSpan);
+    header.appendChild(timestampSpan);
+
+    // Create content
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'team-annotation__content';
+    contentDiv.textContent = annotation.comment;
+
+    el.appendChild(header);
+    el.appendChild(contentDiv);
 
     return el;
 }
@@ -727,11 +835,11 @@ function showAddCommentDialog(suggestionId: string): void {
  * Add "Add Comment" button to alert elements (suggestions) in Team Mode
  */
 function addCommentButtonToAlerts(): void {
-    if (currentMode !== 'team') return;
+    if (currentMode !== 'team') { return; }
 
     const alerts = document.querySelectorAll('.alert-component');
     alerts.forEach((alertEl: any) => {
-        if (alertEl.querySelector('.add-comment-btn')) return; // Already has button
+        if (alertEl.querySelector('.add-comment-btn')) { return; } // Already has button
 
         const btn = document.createElement('button');
         btn.className = 'add-comment-btn';
@@ -770,6 +878,12 @@ function executeUpdateMetricsUI(metrics: any) {
     doUpdateMetricsUI(metrics);
 }
 
+function executeUpdatePhaseUI(phase: string) {
+    if (vitalSignsBar) {
+        vitalSignsBar.setPhase(phase);
+    }
+}
+
 let metricsThrottleTimeout: any = null;
 
 function doUpdateMetricsUI(metrics: any) {
@@ -796,22 +910,18 @@ function doUpdateMetricsUI(metrics: any) {
 
 function executeUpdateAgentHUD(agent: string, state: any) {
     const hud = document.getElementById('agent-hud');
-    if (!hud) return;
+    if (!hud) { return; }
 
-    let agentEl = document.getElementById(`agent-${agent}`);
-    if (!agentEl) {
-        agentEl = document.createElement('div');
-        agentEl.id = `agent-${agent}`;
-        agentEl.className = 'agent-icon';
-        const icons: any = { context: '🔍', architect: '🏗️', coder: '💻', reviewer: '🛡️' };
-        const labelMap: any = { context: 'Context', architect: 'Architect', coder: 'Coder', reviewer: 'Reviewer' };
-
-        agentEl.innerHTML = `
-            <div class="agent-symbol">${icons[agent] || '🤖'}</div>
-            <div class="agent-label-text">${labelMap[agent] || agent}</div>
-        `;
-        hud.appendChild(agentEl);
+    let agentComponent = agentComponents.get(agent);
+    if (!agentComponent) {
+        agentComponent = new AgentComponent(agent, state);
+        agentComponent.render(hud);
+        agentComponents.set(agent, agentComponent);
+    } else {
+        agentComponent.update(state);
     }
+
+    const agentEl = agentComponent.element;
 
     agentEl.className = `agent-icon ${state.status} ${performanceMode ? 'low-fx' : ''}`;
     agentEl.setAttribute('data-agent', agent);
@@ -854,8 +964,8 @@ function executeUpdateAgentHUD(agent: string, state: any) {
         const totalLines = end - start;
         const relativePos = (state.anchorLine - start) / Math.max(1, totalLines);
         targetTop = relativePos * 100;
-        if (targetTop < 5) targetTop = 5;
-        if (targetTop > 95) targetTop = 95;
+        if (targetTop < 5) { targetTop = 5; }
+        if (targetTop > 95) { targetTop = 95; }
     }
 
     agentEl.style.left = `${positions[agent]?.left || 10}%`;
@@ -939,7 +1049,7 @@ function repositionAgents() {
 }
 
 function repositionAlerts() {
-    if (!currentViewport) return;
+    if (!currentViewport) { return; }
     const alerts = document.querySelectorAll('.alert-component');
     alerts.forEach((el: any) => {
         const anchorLine = parseInt(el.dataset.anchorLine);
@@ -947,8 +1057,8 @@ function repositionAlerts() {
             const { start, end } = currentViewport;
             const totalLines = end - start;
             let relativePos = (anchorLine - start) / Math.max(1, totalLines);
-            if (relativePos < 0.05) relativePos = 0.05;
-            if (relativePos > 0.95) relativePos = 0.95;
+            if (relativePos < 0.05) { relativePos = 0.05; }
+            if (relativePos > 0.95) { relativePos = 0.95; }
 
             const targetY = relativePos * window.innerHeight;
             el.style.transform = `translate3d(0, ${targetY}px, 0)`;
@@ -957,6 +1067,34 @@ function repositionAlerts() {
 }
 
 function executeRenderAlert(alert: any) {
+    // Story 7.1: Specialized Suggestion Rendering
+    if (alert.type === 'suggestion' || (alert.data && alert.data.type === 'suggestion')) {
+        const hud = document.getElementById('agent-hud');
+        if (!hud) { return; }
+
+        // Force cleanup of existing suggestion if new one arrives?
+        // For now, let's keep it simple.
+        const suggestionCard = new SuggestionCard(hud, alert, {
+            onAccept: (s: any) => {
+                getVsCodeApi().postMessage({
+                    type: 'toExtension:suggestionAccepted',
+                    suggestionId: s.id,
+                    agent: s.agent || 'coder'
+                });
+            },
+            onReject: (s: any) => {
+                getVsCodeApi().postMessage({
+                    type: 'toExtension:suggestionRejected',
+                    suggestionId: s.id,
+                    agent: s.agent || 'coder'
+                });
+            }
+        });
+        suggestionCard.render();
+        repositionAlerts();
+        return;
+    }
+
     const icons: any = { info: '💡', warning: '⚠️', critical: '🚨', urgent: '🔥' };
 
     // Focus Mode: Show only critical/urgent alerts as toast notifications
@@ -972,42 +1110,35 @@ function executeRenderAlert(alert: any) {
 
     // Normal/Expert Mode: Render as standard alert
     const hud = document.getElementById('agent-hud');
-    if (!hud) return;
+    if (!hud) { return; }
 
-    let alertEl = document.getElementById(`alert-${alert.id}`);
-    if (!alertEl) {
-        alertEl = document.createElement('div');
-        alertEl.id = `alert-${alert.id}`;
-        hud.appendChild(alertEl);
-    }
+    const alertComponent = new AlertComponent(hud, alert, {
+        verbosity: currentVerbosity,
+        onAlertClick: (alertData: any, targetElement: HTMLElement) => {
+            const alertDetailPanel = AlertDetailPanel.getInstance();
+            alertDetailPanel.show(alertData, targetElement);
+        },
+        onFix: (data: any) => {
+            getVsCodeApi().postMessage({
+                type: 'toExtension:fixEdgeCase',
+                edgeCase: data
+            });
+        },
+        onAddToTodo: (id: string) => {
+            getVsCodeApi().postMessage({
+                type: 'toExtension:createTodo',
+                alertId: id
+            });
+        },
+        onDismiss: (id: string) => {
+            getVsCodeApi().postMessage({
+                type: 'toExtension:dismissAlert',
+                alertId: id
+            });
+        }
+    });
 
-    alertEl.className = `alert-component alert-${alert.severity}`;
-    alertEl.dataset.anchorLine = alert.anchorLine?.toString() || '';
-
-    // Add ARIA attributes for accessibility
-    alertEl.setAttribute('role', 'alert');
-    alertEl.setAttribute('aria-label', `Alert: ${alert.message}`);
-    alertEl.setAttribute('aria-live', 'polite');
-    alertEl.setAttribute('aria-atomic', 'true');
-
-    // Expert Mode: Condensed rendering (signal > noise)
-    let messageToDisplay = alert.message;
-    if (currentVerbosity === 'low') {
-        // In Expert Mode, render links more compactly and keep message concise
-        messageToDisplay = messageToDisplay
-            .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">🔗</a>')
-            .replace(/\n/g, '<br/>');
-    } else {
-        // Normal mode: Full link display
-        messageToDisplay = messageToDisplay
-            .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>')
-            .replace(/\n/g, '<br/>');
-    }
-
-    alertEl.innerHTML = `
-        <div class="alert-icon-ideogram">${icons[alert.severity] || '❗'}</div>
-        <div class="alert-tooltip">${messageToDisplay}</div>
-    `;
+    alertComponent.render();
     repositionAlerts();
 
     // Team Mode: Add comment button to alerts
@@ -1022,10 +1153,17 @@ function executeRenderAlert(alert: any) {
 function showToastNotification(message: string, icon: string = '🚨') {
     const toast = document.createElement('div');
     toast.className = 'toast toast--critical';
-    toast.innerHTML = `
-        <div class="toast__icon">${icon}</div>
-        <div class="toast__message">${message}</div>
-    `;
+
+    const iconDiv = document.createElement('div');
+    iconDiv.className = 'toast__icon';
+    iconDiv.textContent = icon;
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'toast__message';
+    messageDiv.textContent = message;
+
+    toast.appendChild(iconDiv);
+    toast.appendChild(messageDiv);
 
     document.body.appendChild(toast);
 

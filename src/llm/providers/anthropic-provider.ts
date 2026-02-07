@@ -20,7 +20,7 @@ export class AnthropicProvider implements ILLMProvider {
 
         const apiKey = await SecretManager.getInstance().getApiKey('anthropic');
         if (!apiKey) {
-            throw new LLMProviderError('Anthropic API key not found in SecretStorage', 'AUTH_FAILED', false);
+            throw new LLMProviderError('Anthropic API key not found in SecretStorage', 'AI101-AUTH-002', false, { provider: 'anthropic' });
         }
 
         this.client = new Anthropic({
@@ -48,7 +48,7 @@ export class AnthropicProvider implements ILLMProvider {
 
             const content = response.content[0];
             if (content.type !== 'text') {
-                throw new LLMProviderError('Unexpected Anthropic response content type', 'UNEXPECTED_RESPONSE', false);
+                throw new LLMProviderError('Unexpected Anthropic response content type', 'AI101-LLM-001', false, { provider: 'anthropic' });
             }
 
             const usage = response.usage;
@@ -66,8 +66,7 @@ export class AnthropicProvider implements ILLMProvider {
             };
         } catch (error: any) {
             const isTransient = error.status === 429 || error.status >= 500;
-            const code = error.type || 'ANTHROPIC_ERROR';
-            throw new LLMProviderError(`Anthropic API Error: ${error.message}`, code, isTransient);
+            throw new LLMProviderError(`Anthropic API Error: ${error.message}`, 'AI101-LLM-001', isTransient, { provider: 'anthropic' });
         }
     }
 
@@ -79,7 +78,7 @@ export class AnthropicProvider implements ILLMProvider {
     public getModelInfo(model: string): IModelInfo {
         const info = this.models[model];
         if (!info) {
-            throw new LLMProviderError(`Unsupported Anthropic model: ${model}`, 'INVALID_MODEL', false);
+            throw new LLMProviderError(`Unsupported Anthropic model: ${model}`, 'AI101-LLM-001', false, { provider: 'anthropic' });
         }
         return info;
     }

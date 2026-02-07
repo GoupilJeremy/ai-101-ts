@@ -17,15 +17,117 @@ import { AgentOrchestrator } from './agents/orchestrator.js';
 import { ContextAgent } from './agents/context/context-agent.js';
 import { ArchitectAgent } from './agents/architect/architect-agent.js';
 import { SystemDetector } from './performance/system-detector.js';
+import { PhaseDetector } from './services/phase-detector.js';
+import { TelemetryManager } from './telemetry/telemetry-manager.js';
+import { TelemetryService } from './telemetry/telemetry-service.js';
+import { registerTelemetryCommands } from './commands/telemetry-commands.js';
+import { MetricsService } from './telemetry/metrics-service.js';
+import { registerMetricsCommands } from './commands/metrics-commands.js';
+import { SurveyService } from './telemetry/survey-service.js';
+import { DistractionDetectorService } from './telemetry/distraction-detector.js';
+import { TeamMetricsService } from './telemetry/team-metrics-service.js';
+import { ReportGeneratorService } from './telemetry/report-generator-service.js';
+import { registerReportCommands } from './commands/report-commands.js';
+import { IAI101API } from './api/extension-api.js';
+import { createAPI } from './api/api-implementation.js';
+import { KnowledgeBaseService } from './troubleshooting/knowledge-base-service.js';
+import { TroubleshootingWebviewProvider } from './troubleshooting/troubleshooting-webview.js';
+import { VersionManager } from './state/version-manager.js';
+import {
+	registerShowTroubleshootingCommand,
+	registerOpenTroubleshootingArticleCommand,
+	registerSearchTroubleshootingCommand,
+	registerSendToTroubleshootingCommand
+} from './commands/show-troubleshooting.js';
 
-export function activate(context: vscode.ExtensionContext) {
+// Global reference to survey service for deactivate
+let surveyService: SurveyService | null = null;
+
+export function activate(context: vscode.ExtensionContext): IAI101API {
 
 	// Initialize Centralized Error Handler
 	ErrorHandler.initialize();
 	ErrorHandler.log('Extension "ai-101-ts" activation started.');
 
 	// Check for low memory and auto-activate Performance Mode if needed (Story 5.6)
-	SystemDetector.getInstance().checkAndAutoActivate();
+	if (context.extensionMode !== vscode.ExtensionMode.Test) {
+		SystemDetector.getInstance().checkAndAutoActivate();
+	}
+
+	// Initialize Phase Detector (Story 6.9)
+	if (context.extensionMode !== vscode.ExtensionMode.Test) {
+		PhaseDetector.getInstance().initialize(context);
+	}
+
+	// Initialize Telemetry
+	const telemetryManager = new TelemetryManager(context);
+	telemetryManager.checkFirstRun();
+	registerTelemetryCommands(context, telemetryManager);
+	TelemetryService.getInstance(context); // Initialize singleton
+	const metricsService = MetricsService.getInstance(context); // Initialize metrics tracking
+	registerMetricsCommands(context); // Register metrics commands
+
+	// Initialize Survey Service (Story 8.4)
+	surveyService = new SurveyService(context);
+	if (context.extensionMode !== vscode.ExtensionMode.Test) {
+		surveyService.startSession(); // Start tracking session
+		surveyService.checkAndPrompt(); // Check for pending surveys from previous session
+	}
+
+	// Initialize Team Metrics and Report Generation (Story 8.8)
+	const teamMetricsService = new TeamMetricsService(context, metricsService, surveyService);
+	const reportGenerator = new ReportGeneratorService();
+	registerReportCommands(context, teamMetricsService, reportGenerator, TelemetryService.getInstance(context));
+
+	// Initialize Distraction Detector (Story 8.7)
+	const distractionDetector = DistractionDetectorService.getInstance(context);
+	context.subscriptions.push(distractionDetector);
+
+	// First-run welcome screen (Story 10.1)
+	const hasShownWelcome = context.globalState.get<boolean>('ai101.hasShownWelcome', false);
+	if (!hasShownWelcome && context.extensionMode !== vscode.ExtensionMode.Test) {
+		// Show getting started walkthrough on first activation
+		vscode.commands.executeCommand(
+			'workbench.action.openWalkthrough',
+			'GoupilJeremy.ai-101-ts#ai101.gettingStarted',
+			false
+		).then(() => {
+			// Mark welcome as shown
+			context.globalState.update('ai101.hasShownWelcome', true);
+		}, (error) => {
+			// Silently fail - don't block activation
+			ErrorHandler.log(`Failed to show welcome walkthrough: ${error}`);
+		});
+	}
+
+	// Check for extension updates (Story 10.6)
+	if (context.extensionMode !== vscode.ExtensionMode.Test) {
+		const versionManager = new VersionManager(context);
+		versionManager.checkVersionUpdate();
+	}
+
+	// Initialize Troubleshooting Knowledge Base (Story 10.2)
+	const knowledgeBaseService = new KnowledgeBaseService(context);
+	const troubleshootingProvider = new TroubleshootingWebviewProvider(context, knowledgeBaseService);
+
+	// Register troubleshooting webview provider
+	context.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(
+			TroubleshootingWebviewProvider.viewType,
+			troubleshootingProvider
+		)
+	);
+
+	// Register troubleshooting commands
+	context.subscriptions.push(
+		registerShowTroubleshootingCommand(context, troubleshootingProvider),
+		registerOpenTroubleshootingArticleCommand(context),
+		registerSearchTroubleshootingCommand(context),
+		registerSendToTroubleshootingCommand(context, troubleshootingProvider)
+	);
+
+	// Dispose knowledge base on deactivation
+	context.subscriptions.push(knowledgeBaseService);
 
 	// Initialize LLM Manager and Rate Limiter
 	const llmManager = LLMProviderManager.getInstance();
@@ -163,7 +265,100 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.window.showInformationMessage('AI-101: HUD focused for keyboard navigation');
 		})
 	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.setPhase', () => {
+			import('./commands/set-phase.js').then(module => module.setPhaseCommand());
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.toggleHUD', () => {
+			import('./commands/toggle-hud.js').then(module => module.toggleHUDCommand());
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.forceAgentState', (agentId?: any, state?: any, task?: any) => {
+			import('./commands/force-agent-state.command.js').then(module => module.forceAgentStateCommand(agentId, state, task));
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.acceptSuggestion', (args?: any) => {
+			import('./commands/suggestion-commands.js').then(module => module.handleSuggestionCommand('accepted', args));
+		}),
+		vscode.commands.registerCommand('ai-101-ts.rejectSuggestion', (args?: any) => {
+			import('./commands/suggestion-commands.js').then(module => module.handleSuggestionCommand('rejected', args));
+		}),
+		vscode.commands.registerCommand('ai-101-ts.createTodoFromAlert', (alertId: string) => {
+			import('./commands/alert-commands.js').then(module => module.createTodoFromAlert(alertId));
+		}),
+		vscode.commands.registerCommand('ai-101-ts.dismissAlert', (alertId: string) => {
+			import('./commands/alert-commands.js').then(module => module.dismissAlert(alertId));
+		})
+	);
+
+	// Mode switching commands
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.switchToLearningMode', () => {
+			import('./commands/switch-mode.js').then(module => module.switchToLearningModeCommand());
+		}),
+		vscode.commands.registerCommand('ai-101-ts.switchToExpertMode', () => {
+			import('./commands/switch-mode.js').then(module => module.switchToExpertModeCommand());
+		}),
+		vscode.commands.registerCommand('ai-101-ts.switchToTeamMode', () => {
+			import('./commands/switch-mode.js').then(module => module.switchToTeamModeCommand());
+		})
+	);
+
+	// Configuration commands
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.configureApiKeys', () => {
+			import('./commands/configure-api-keys.js').then(module => module.configureApiKeysCommand(context));
+		}),
+		vscode.commands.registerCommand('ai-101-ts.resetConfig', () => {
+			import('./commands/configure-api-keys.js').then(module => module.resetConfigCommand());
+		})
+	);
+
+	// UI commands
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ai-101-ts.toggleAgentVisibility', () => {
+			import('./commands/toggle-agent-visibility.js').then(module => module.toggleAgentVisibilityCommand());
+		}),
+		vscode.commands.registerCommand('ai-101-ts.openDocumentation', () => {
+			import('./commands/toggle-agent-visibility.js').then(module => module.openDocumentationCommand());
+		}),
+		vscode.commands.registerCommand('ai-101-ts.showGettingStarted', () => {
+			import('./commands/show-getting-started.js').then(module => module.showGettingStartedCommand());
+		}),
+		vscode.commands.registerCommand('ai-101-ts.viewChangelog', () => {
+			import('./commands/view-changelog.js').then(module => module.viewChangelogCommand(context));
+		})
+	);
+
+	// Create and return the public API
+	// LLMProviderManager is already initialized above (line 72-73)
+	const api = createAPI(llmManager, context.extension.packageJSON.version);
+	return api;
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() { }
+export function deactivate() {
+	// End survey session (Story 8.4)
+	if (surveyService) {
+		surveyService.endSession().catch(error => {
+			// Silently fail - don't block deactivation
+			console.error('Failed to end survey session:', error);
+		});
+	}
+
+	// Finalize metrics session
+	try {
+		MetricsService.getInstance().recordSessionEnd();
+	} catch (error) {
+		// Service might not have been initialized
+	}
+}
+

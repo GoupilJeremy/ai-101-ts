@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Quick Tour">
+  <defs>
+    <style>
+      .sumi-stroke { stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+      .sumi-fill { fill: currentColor; opacity: 0.1; }
+      .text { fill: currentColor; font-family: system-ui, -apple-system, sans-serif; }
+      .highlight { fill: var(--vscode-editor-selectionBackground, #007acc); opacity: 0.3; }
+    </style>
+  </defs>
+  
+  <!-- Code editor representation -->
+  <rect class="sumi-fill" x="20" y="20" width="360" height="220" rx="4"/>
+  
+  <!-- Code lines -->
+  <line class="sumi-stroke" x1="40" y1="50" x2="180" y2="50" opacity="0.5"/>
+  <line class="sumi-stroke" x1="40" y1="70" x2="220" y2="70" opacity="0.5"/>
+  <line class="sumi-stroke" x1="40" y1="90" x2="160" y2="90" opacity="0.5"/>
+  
+  <!-- Highlighted suggestion line -->
+  <rect class="highlight" x="35" y="105" width="200" height="20" rx="2"/>
+  <line class="sumi-stroke" x1="40" y1="115" x2="220" y2="115" stroke-width="2.5"/>
+  
+  <line class="sumi-stroke" x1="40" y1="135" x2="190" y2="135" opacity="0.5"/>
+  <line class="sumi-stroke" x1="40" y1="155" x2="210" y2="155" opacity="0.5"/>
+  
+  <!-- HUD overlay - transparent agents -->
+  <g transform="translate(300, 80)" opacity="0.8">
+    <!-- Context Agent -->
+    <circle class="sumi-stroke" cx="0" cy="0" r="12" stroke-width="2"/>
+    <text class="text" x="0" y="25" text-anchor="middle" font-size="9">Context</text>
+    
+    <!-- Architect Agent -->
+    <circle class="sumi-stroke" cx="0" cy="60" r="12" stroke-width="2"/>
+    <text class="text" x="0" y="85" text-anchor="middle" font-size="9">Architect</text>
+    
+    <!-- Coder Agent -->
+    <circle class="sumi-stroke" cx="0" cy="120" r="12" stroke-width="2"/>
+    <text class="text" x="0" y="145" text-anchor="middle" font-size="9">Coder</text>
+  </g>
+  
+  <!-- Vital Signs Bar -->
+  <rect class="sumi-stroke" x="20" y="250" width="360" height="30" rx="15"/>
+  <text class="text" x="40" y="270" font-size="12">Tokens: 2.4K</text>
+  <text class="text" x="150" y="270" font-size="12">Cost: $0.02</text>
+  <text class="text" x="260" y="270" font-size="12">FPS: 60</text>
+</svg>

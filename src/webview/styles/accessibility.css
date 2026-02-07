@@ -1,0 +1,324 @@
+/**
+ * Accessibility Styles - Keyboard Navigation & Focus Management
+ * Implements WCAG 2.1 AA compliant focus indicators with Sumi-e aesthetic
+ */
+
+/* ============================================
+   Skip Links
+   ============================================ */
+.skip-links {
+    position: absolute;
+    top: -100px;
+    left: 10px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.skip-link {
+    background-color: var(--washi-white, #ffffff);
+    color: var(--sumi-ink, #1a1a1a);
+    padding: 8px 16px;
+    border: 2px solid var(--sumi-ink, #1a1a1a);
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: top 0.2s ease;
+    pointer-events: auto;
+}
+
+.skip-link:focus {
+    top: 10px;
+    outline: 3px solid #007acc;
+    outline-offset: 2px;
+}
+
+/* ============================================
+   Focus Indicators (WCAG 2.1 AA Compliant)
+   ============================================ */
+
+/* Base focus style - Sumi-e ink stroke glow */
+:focus-visible {
+    outline: none;
+}
+
+.keyboard-focus {
+    outline: 2px solid var(--focus-color, #007acc) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 4px rgba(0, 122, 204, 0.2),
+        0 0 8px 2px rgba(0, 122, 204, 0.3) !important;
+    transition: outline 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+    z-index: 100;
+}
+
+/* Agent focus - Sumi-e brush stroke effect */
+.agent-icon.keyboard-focus {
+    outline: 3px solid var(--focus-color, #007acc) !important;
+    outline-offset: 3px !important;
+    box-shadow: 0 0 0 5px rgba(0, 122, 204, 0.15),
+        0 0 12px 4px rgba(0, 122, 204, 0.25),
+        inset 0 0 20px rgba(0, 122, 204, 0.1) !important;
+    transform: scale(1.05) translate3d(0, 0, 0);
+}
+
+/* Alert focus */
+.alert-component.keyboard-focus {
+    outline: 2px solid #ff6b6b !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2),
+        0 0 10px 2px rgba(255, 107, 107, 0.3) !important;
+}
+
+/* Suggestion card button focus */
+.suggestion-card__btn.keyboard-focus {
+    outline: 2px solid var(--sumi-ink, #1a1a1a) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.15) !important;
+}
+
+/* Vital Signs Bar interactive elements focus */
+.vital-signs__files.keyboard-focus,
+.vital-signs__history.keyboard-focus {
+    outline: 2px solid #007acc !important;
+    outline-offset: 1px !important;
+    box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2) !important;
+    background-color: rgba(0, 122, 204, 0.05);
+}
+
+/* Context panel file item focus */
+.context-panel__file-item.keyboard-focus {
+    outline: 2px solid #007acc !important;
+    outline-offset: -2px !important;
+    background-color: rgba(0, 122, 204, 0.1) !important;
+}
+
+/* Alert panel button focus */
+.alert-panel__btn.keyboard-focus,
+.alert-panel__btn--close.keyboard-focus {
+    outline: 2px solid var(--sumi-ink, #1a1a1a) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.15) !important;
+}
+
+/* ============================================
+   High Contrast Mode Focus Indicators
+   ============================================ */
+.high-contrast-mode .keyboard-focus {
+    outline: 3px solid #ffffff !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 1px #000000,
+        0 0 0 5px #ffffff !important;
+}
+
+.high-contrast-mode .agent-icon.keyboard-focus {
+    outline: 4px solid #ffffff !important;
+    outline-offset: 3px !important;
+    box-shadow: 0 0 0 2px #000000,
+        0 0 0 7px #ffffff !important;
+}
+
+.high-contrast-mode .alert-component.keyboard-focus {
+    outline: 3px solid #ffff00 !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 1px #000000,
+        0 0 0 5px #ffff00 !important;
+}
+
+/* ============================================
+   Colorblind Mode Focus Indicators
+   ============================================ */
+.colorblind-mode .keyboard-focus {
+    /* Use patterns instead of just color */
+    outline: 3px dashed #007acc !important;
+    outline-offset: 2px !important;
+}
+
+.colorblind-mode .agent-icon.keyboard-focus {
+    outline: 3px dashed #007acc !important;
+    outline-offset: 3px !important;
+    background-image: repeating-linear-gradient(45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 122, 204, 0.1) 2px,
+            rgba(0, 122, 204, 0.1) 4px);
+}
+
+/* ============================================
+   Screen Reader Only Content
+   ============================================ */
+.sr-only {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+}
+
+/* ============================================
+   Focus Trap Overlay
+   ============================================ */
+.focus-trap-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    pointer-events: auto;
+    backdrop-filter: blur(2px);
+}
+
+/* ============================================
+   Keyboard Navigation Help Overlay
+   ============================================ */
+.keyboard-help-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--washi-white, #ffffff);
+    border: 2px solid var(--sumi-ink, #1a1a1a);
+    border-radius: 8px;
+    padding: 24px;
+    max-width: 500px;
+    z-index: 10001;
+    pointer-events: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    font-family: var(--brush-font, 'Outfit', 'Inter', sans-serif);
+    color: var(--sumi-ink, #1a1a1a);
+}
+
+.keyboard-help-overlay__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(26, 26, 26, 0.1);
+}
+
+.keyboard-help-overlay__title {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.keyboard-help-overlay__close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.keyboard-help-overlay__close:hover {
+    opacity: 1;
+}
+
+.keyboard-help-overlay__content {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.keyboard-help-section {
+    margin-bottom: 20px;
+}
+
+.keyboard-help-section__title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    color: rgba(26, 26, 26, 0.7);
+}
+
+.keyboard-help-section__shortcuts {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.keyboard-shortcut {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.keyboard-shortcut__keys {
+    display: flex;
+    gap: 4px;
+    min-width: 120px;
+}
+
+.keyboard-shortcut__key {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: rgba(26, 26, 26, 0.05);
+    border: 1px solid rgba(26, 26, 26, 0.2);
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    min-width: 24px;
+}
+
+.keyboard-shortcut__description {
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* ============================================
+   Performance Mode Optimizations
+   ============================================ */
+.performance-mode .keyboard-focus {
+    /* Simplified focus with no shadows */
+    box-shadow: none !important;
+    outline: 2px solid #007acc !important;
+}
+
+.performance-mode .agent-icon.keyboard-focus {
+    transform: none;
+    box-shadow: none !important;
+}
+
+/* ============================================
+   Reduced Motion Support
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+
+    .keyboard-focus,
+    .agent-icon.keyboard-focus,
+    .alert-component.keyboard-focus {
+        transition: none !important;
+    }
+
+    .skip-link {
+        transition: none !important;
+    }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+
+    .skip-links,
+    .keyboard-help-overlay,
+    .focus-trap-overlay {
+        display: none !important;
+    }
+}

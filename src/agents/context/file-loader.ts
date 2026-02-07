@@ -10,10 +10,11 @@ export class FileLoader {
 
     constructor() {
         const workspaceFolders = vscode.workspace.workspaceFolders;
-        if (!workspaceFolders) {
-            throw new Error('No workspace folder found');
+        if (!workspaceFolders || workspaceFolders.length === 0) {
+            this.workspaceRoot = '';
+        } else {
+            this.workspaceRoot = workspaceFolders[0].uri.fsPath;
         }
-        this.workspaceRoot = workspaceFolders[0].uri.fsPath;
     }
 
     /**
@@ -38,7 +39,7 @@ export class FileLoader {
             // Priority 2: Import dependencies
             const importFiles = await this.discoverImportDependencies(currentFile);
             for (const importFile of importFiles) {
-                if (files.length >= maxFiles) break;
+                if (files.length >= maxFiles) { break; }
                 if (!files.some(f => f.path === importFile)) {
                     const content = await this.loadFileContent(importFile);
                     if (content) {
@@ -50,7 +51,7 @@ export class FileLoader {
             // Priority 3: Recent files
             const recentFiles = await this.getRecentFiles();
             for (const recentFile of recentFiles) {
-                if (files.length >= maxFiles) break;
+                if (files.length >= maxFiles) { break; }
                 if (!files.some(f => f.path === recentFile)) {
                     const content = await this.loadFileContent(recentFile);
                     if (content) {
@@ -62,7 +63,7 @@ export class FileLoader {
             // Priority 4: Similar files
             const similarFiles = await this.discoverSimilarFiles(currentFile);
             for (const similarFile of similarFiles) {
-                if (files.length >= maxFiles) break;
+                if (files.length >= maxFiles) { break; }
                 if (!files.some(f => f.path === similarFile)) {
                     const content = await this.loadFileContent(similarFile);
                     if (content) {
@@ -89,10 +90,10 @@ export class FileLoader {
      * Analyzes import statements in the current file to find dependencies.
      */
     private async discoverImportDependencies(currentFile?: string): Promise<string[]> {
-        if (!currentFile) return [];
+        if (!currentFile) { return []; }
 
         const content = await this.loadFileContent(currentFile);
-        if (!content) return [];
+        if (!content) { return []; }
 
         const dependencies: string[] = [];
         const importRegex = /(?:import|from|require)\s+['"]([^'"]+)['"]/g;
@@ -171,7 +172,7 @@ export class FileLoader {
      * Discovers files with similar names or paths.
      */
     private async discoverSimilarFiles(currentFile?: string): Promise<string[]> {
-        if (!currentFile) return [];
+        if (!currentFile) { return []; }
 
         const currentFileName = path.basename(currentFile, path.extname(currentFile));
         const currentDir = path.dirname(currentFile);

@@ -48,9 +48,11 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         switch (type) {
             case 'toExtension:suggestionAccepted':
                 this.handleSuggestionAction(message.agent, 'accepted', message.complexity);
+                vscode.commands.executeCommand('ai-101-ts.acceptSuggestion', { suggestionId: message.suggestionId });
                 break;
             case 'toExtension:suggestionRejected':
                 this.handleSuggestionAction(message.agent, 'rejected', message.complexity);
+                vscode.commands.executeCommand('ai-101-ts.rejectSuggestion', { suggestionId: message.suggestionId });
                 break;
             case 'toExtension:annotationAdded':
                 this.handleAnnotationAdded(message.suggestionId, message.comment, message.author);
@@ -64,6 +66,9 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
             case 'toExtension:openFile':
                 this.openFileInEditor(message.filePath);
                 break;
+            case 'toExtension:fixEdgeCase':
+                this.handleFixEdgeCase(message.edgeCase);
+                break;
 
             // Context Management
             case 'toExtension:saveContextSnapshot':
@@ -76,13 +81,32 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
                 await this.handleRefreshContextFile(message.filePath);
                 break;
 
+            // Alert Interactions
+            case 'toExtension:createTodo':
+                vscode.commands.executeCommand('ai-101-ts.createTodoFromAlert', message.alertId);
+                break;
+            case 'toExtension:dismissAlert':
+                vscode.commands.executeCommand('ai-101-ts.dismissAlert', message.alertId);
+                break;
+            case 'toExtension:applyFix':
+                await this.handleApplyFix(message.alertId, message.fix);
+                break;
+            case 'toExtension:explainAlert':
+                await this.handleExplainAlert(message.alertId);
+                break;
+
+            // Glossary/Documentation
+            case 'toExtension:openGlossary':
+                await this.handleOpenGlossary(message.term);
+                break;
+
             default:
                 console.warn('Unknown message type from webview:', type);
         }
     }
 
     private async openFileInEditor(filePath: string): Promise<void> {
-        if (!filePath) return;
+        if (!filePath) { return; }
         try {
             const uri = vscode.Uri.file(filePath);
             const doc = await vscode.workspace.openTextDocument(uri);
@@ -125,6 +149,164 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         if (contextAgent && typeof contextAgent.refreshFile === 'function') {
             await contextAgent.refreshFile(filePath);
             // Re-fetch context files?
+        }
+    }
+
+    private async handleFixEdgeCase(edgeCase: any): Promise<void> {
+        const { AgentOrchestrator } = await import('../agents/orchestrator.js');
+        const orchestrator = AgentOrchestrator.getInstance();
+
+        vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: `Fixing Edge Case: ${edgeCase.type}`,
+            cancellable: false
+        }, async (progress) => {
+            try {
+                const response = await orchestrator.processEdgeCaseFix(edgeCase);
+                // In a real implementation, we would apply the edit or show a diff.
+                // For now, let's just show the result in a new document or information message.
+                // Or better, let Coder Agent apply edits directly if it supports it (it doesn't yet fully).
+                // We'll show the suggestion in a new untitled document.
+                const doc = await vscode.workspace.openTextDocument({ content: response.result, language: 'typescript' });
+                await vscode.window.showTextDocument(doc, { preview: false, viewColumn: vscode.ViewColumn.Beside });
+
+                vscode.window.showInformationMessage("Edge case fix generated. Please review side-by-side.");
+            } catch (error: any) {
+                vscode.window.showErrorMessage(`Failed to fix edge case: ${error.message}`);
+            }
+        });
+    }
+
+    private async handleApplyFix(alertId: string, fix: any): Promise<void> {
+        if (!fix || !fix.after) {
+            vscode.window.showErrorMessage('No fix available for this alert');
+            return;
+        }
+
+        try {
+            // Get the active text editor
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showWarningMessage('No active editor to apply fix');
+                return;
+            }
+
+            // Create a workspace edit
+            const edit = new vscode.WorkspaceEdit();
+
+            // For now, we'll replace the entire selection or current line with the fix
+            // In a real implementation, we would need to know the exact range from the alert
+            const document = editor.document;
+            const selection = editor.selection;
+
+            // If there's a selection, replace it; otherwise replace current line
+            const range = selection.isEmpty
+                ? document.lineAt(selection.active.line).range
+                : selection;
+
+            edit.replace(document.uri, range, fix.after);
+
+            // Apply the edit
+            const success = await vscode.workspace.applyEdit(edit);
+
+            if (success) {
+                vscode.window.showInformationMessage('Fix applied successfully');
+
+                // Dismiss the alert
+                vscode.commands.executeCommand('ai-101-ts.dismissAlert', alertId);
+            } else {
+                vscode.window.showErrorMessage('Failed to apply fix');
+            }
+        } catch (error: any) {
+            vscode.window.showErrorMessage(`Error applying fix: ${error.message}`);
+        }
+    }
+
+    private async handleExplainAlert(alertId: string): Promise<void> {
+        try {
+            // Get the alert from state manager
+            const stateManager = ExtensionStateManager.getInstance();
+            // Note: We would need to add a method to retrieve alerts by ID
+            // For now, we'll show a placeholder message
+
+            vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                title: 'Generating detailed explanation...',
+                cancellable: false
+            }, async (progress) => {
+                try {
+                    // In a real implementation, we would:
+                    // 1. Get the alert details from state
+                    // 2. Call ReviewerAgent to generate a deeper explanation
+                    // 3. Send the explanation back to the webview
+
+                    const { AgentOrchestrator } = await import('../agents/orchestrator.js');
+                    const orchestrator = AgentOrchestrator.getInstance();
+
+                    // Placeholder: Show a message for now
+                    // In the future, this would call a method like:
+                    // const explanation = await orchestrator.explainAlert(alertId);
+
+                    vscode.window.showInformationMessage(
+                        'Detailed explanation feature will be implemented in the next iteration. ' +
+                        'This would provide deeper context about the alert and potential solutions.'
+                    );
+                } catch (error: any) {
+                    vscode.window.showErrorMessage(`Failed to generate explanation: ${error.message}`);
+                }
+            });
+        } catch (error: any) {
+            vscode.window.showErrorMessage(`Error explaining alert: ${error.message}`);
+        }
+    }
+
+    /**
+     * Handle opening glossary/documentation for a term clicked in a tooltip.
+     * @param term - The glossary term to look up
+     */
+    private async handleOpenGlossary(term: string): Promise<void> {
+        if (!term) {
+            return;
+        }
+
+        // Map glossary terms to documentation or knowledge base articles
+        const glossaryUrls: Record<string, string> = {
+            'context': 'https://ai-101.dev/docs/concepts/context',
+            'token-budget': 'https://ai-101.dev/docs/concepts/tokens',
+            'tokens': 'https://ai-101.dev/docs/concepts/tokens',
+            'architecture': 'https://ai-101.dev/docs/concepts/architecture',
+            'design-patterns': 'https://ai-101.dev/docs/concepts/patterns',
+            'code-generation': 'https://ai-101.dev/docs/concepts/code-generation',
+            'llm-provider': 'https://ai-101.dev/docs/concepts/llm-providers',
+            'code-review': 'https://ai-101.dev/docs/concepts/code-review',
+            'security': 'https://ai-101.dev/docs/concepts/security',
+            'edge-cases': 'https://ai-101.dev/docs/concepts/edge-cases',
+            'cost-tracking': 'https://ai-101.dev/docs/concepts/costs',
+            'budget': 'https://ai-101.dev/docs/concepts/budget',
+            'development-phase': 'https://ai-101.dev/docs/concepts/phases',
+            'user-modes': 'https://ai-101.dev/docs/concepts/modes',
+            'focus-mode': 'https://ai-101.dev/docs/concepts/focus-mode',
+            'team-mode': 'https://ai-101.dev/docs/concepts/team-mode',
+            'alert-system': 'https://ai-101.dev/docs/concepts/alerts',
+            'severity-levels': 'https://ai-101.dev/docs/concepts/severity',
+            'code-smells': 'https://ai-101.dev/docs/concepts/code-smells',
+        };
+
+        const url = glossaryUrls[term];
+
+        if (url) {
+            // Open the documentation URL in external browser
+            vscode.env.openExternal(vscode.Uri.parse(url));
+        } else {
+            // Try to open knowledge base view if term not in URL map
+            try {
+                await vscode.commands.executeCommand('ai-101-ts.openKnowledgeBase', { searchTerm: term });
+            } catch (e) {
+                // Fallback: Show information message with the term
+                vscode.window.showInformationMessage(
+                    `Glossary term: "${term}". Documentation coming soon!`
+                );
+            }
         }
     }
 
@@ -188,7 +370,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
     }
 
     private sendAnnotationsToWebview(suggestionId?: string): void {
-        if (!this._view) return;
+        if (!this._view) { return; }
 
         const annotationsManager = AnnotationsManager.getInstance();
         const annotations = suggestionId
@@ -216,6 +398,9 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         const sumiUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'sumi-e.css'));
         const performanceModeStyleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'mode-performance.css'));
         const colorblindModeStyleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'mode-colorblind.css'));
+        const timelineUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'timeline.css'));
+        const tooltipUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'webview', 'styles', 'components', 'tooltip.css'));
+        const accessibilityUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'accessibility.css'));
         const htmlPath = vscode.Uri.joinPath(this._extensionUri, 'dist', 'index.html');
 
         let htmlContent = '';
@@ -234,6 +419,10 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
             .replace(/\$\{sumiUri\}/g, sumiUri.toString())
             .replace(/\$\{performanceModeStyleUri\}/g, performanceModeStyleUri.toString())
             .replace(/\$\{colorblindModeStyleUri\}/g, colorblindModeStyleUri.toString())
+            .replace(/\$\{colorblindModeStyleUri\}/g, colorblindModeStyleUri.toString())
+            .replace(/\$\{timelineUri\}/g, timelineUri.toString())
+            .replace(/\$\{tooltipUri\}/g, tooltipUri.toString())
+            .replace(/\$\{accessibilityUri\}/g, accessibilityUri.toString())
             .replace(/\$\{nonce\}/g, nonce)
             .replace(/\$\{webview.cspSource\}/g, webview.cspSource);
     }

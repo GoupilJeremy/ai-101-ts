@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="First Suggestion">
+  <defs>
+    <style>
+      .sumi-stroke { stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+      .sumi-fill { fill: currentColor; opacity: 0.1; }
+      .text { fill: currentColor; font-family: system-ui, -apple-system, sans-serif; }
+      .success { stroke: #4caf50; fill: #4caf50; }
+      .action { stroke: #2196f3; fill: #2196f3; }
+    </style>
+  </defs>
+  
+  <!-- Editor with suggestion -->
+  <rect class="sumi-fill" x="20" y="20" width="360" height="180" rx="4"/>
+  
+  <!-- Code lines -->
+  <line class="sumi-stroke" x1="40" y1="50" x2="200" y2="50" opacity="0.5"/>
+  <line class="sumi-stroke" x1="40" y1="70" x2="180" y2="70" opacity="0.5"/>
+  
+  <!-- Suggestion box -->
+  <rect class="action" x="35" y="85" width="250" height="60" rx="4" opacity="0.2"/>
+  <text class="text" x="50" y="105" font-size="12" font-weight="600">💡 Suggestion</text>
+  <text class="text" x="50" y="125" font-size="11" opacity="0.8">Add error handling for null values</text>
+  
+  <!-- Action buttons -->
+  <g transform="translate(50, 155)">
+    <rect class="success" width="80" height="25" rx="4" opacity="0.3"/>
+    <text class="text" x="40" y="17" text-anchor="middle" font-size="11">✓ Accept</text>
+  </g>
+  
+  <g transform="translate(150, 155)">
+    <rect class="sumi-stroke" width="80" height="25" rx="4"/>
+    <text class="text" x="40" y="17" text-anchor="middle" font-size="11">✗ Reject</text>
+  </g>
+  
+  <!-- Agent providing suggestion -->
+  <g transform="translate(320, 120)">
+    <circle class="action" cx="0" cy="0" r="15" opacity="0.3"/>
+    <circle class="sumi-stroke" cx="0" cy="0" r="15" stroke-width="2"/>
+    <text class="text" x="0" y="30" text-anchor="middle" font-size="9">Reviewer</text>
+  </g>
+  
+  <!-- Keyboard shortcuts hint -->
+  <rect class="sumi-fill" x="20" y="220" width="360" height="60" rx="4"/>
+  <text class="text" x="200" y="245" text-anchor="middle" font-size="12" font-weight="600">
+    Keyboard Shortcuts
+  </text>
+  <text class="text" x="120" y="265" text-anchor="middle" font-size="10">
+    Ctrl+Enter: Accept
+  </text>
+  <text class="text" x="280" y="265" text-anchor="middle" font-size="10">
+    Ctrl+Backspace: Reject
+  </text>
+</svg>

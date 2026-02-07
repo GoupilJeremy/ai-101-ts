@@ -20,6 +20,7 @@ export interface IAlert {
     message: string;
     anchorLine?: number;
     timestamp: number;
+    data?: any;
 }
 
 /**
@@ -34,6 +35,12 @@ export interface IAgentState {
     lastUpdate: number;
     /** Target line number for spatial anchoring */
     anchorLine?: number;
+    /** Why the agent was activated for this specific context */
+    activationReason?: string;
+    /** Estimated completion timestamp for long-running tasks */
+    estimatedCompletion?: number;
+    /** Whether the agent is visible in the UI (default: true) */
+    visible?: boolean;
 }
 
 /**
@@ -62,6 +69,8 @@ export interface IAgentResponse {
     alternatives?: string[];
     /** Confidence score (0.0 to 1.0) */
     confidence: number;
+    /** Optional structured data returned by the agent */
+    data?: any;
 }
 
 /**

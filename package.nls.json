@@ -1,0 +1,16 @@
+{
+    "walkthrough.gettingStarted.title": "Get Started with AI-101",
+    "walkthrough.gettingStarted.description": "Learn how to use AI-101's transparent HUD and AI agents to enhance your coding workflow",
+    "walkthrough.welcome.title": "Welcome to AI-101",
+    "walkthrough.welcome.description": "AI-101 is your transparent AI coding companion that provides real-time suggestions and insights without blocking your view.\n\n**Key Features:**\n- 🎨 Transparent HUD with sumi-e aesthetic\n- 🤖 Multiple AI agents (Context, Architect, Coder, Reviewer)\n- 📊 Real-time vital signs (tokens, cost, performance)\n- 🎯 Multiple modes for different workflows\n\n[Open Full Documentation](command:ai-101-ts.openDocumentation)",
+    "walkthrough.welcome.altText": "AI-101 welcome screen with logo and transparent HUD preview",
+    "walkthrough.quickTour.title": "Quick Tour of the HUD",
+    "walkthrough.quickTour.description": "The AI-101 HUD overlays your editor with transparent agents that work in the background.\n\n**HUD Components:**\n- **Agents**: Circular indicators showing AI agent status\n- **Vital Signs Bar**: Real-time metrics (tokens, cost, FPS)\n- **Alerts**: Contextual suggestions and warnings\n\n**Try it now:**\n[Toggle HUD](command:ai-101-ts.toggleHUD) | [Focus HUD for Keyboard Navigation](command:ai-101-ts.focusHud)\n\n**Tip:** Press `Ctrl+Alt+H` (or `Cmd+Alt+H` on Mac) to quickly toggle the HUD visibility.",
+    "walkthrough.quickTour.altText": "Quick tour showing HUD overlay with agents and vital signs bar",
+    "walkthrough.modes.title": "Choose Your Mode",
+    "walkthrough.modes.description": "AI-101 adapts to your workflow with different modes:\n\n**🎓 Learning Mode** - Pedagogical explanations and pattern annotations\n[Switch to Learning Mode](command:ai-101-ts.switchToLearningMode)\n\n**⚡ Expert Mode** - In-depth technical details and trade-offs\n[Switch to Expert Mode](command:ai-101-ts.switchToExpertMode)\n\n**🎯 Focus Mode** - Minimal UI with agents hidden\n[Toggle Focus Mode](command:ai-101-ts.toggleFocusMode)\n\n**👥 Team Mode** - Visible labels for screen sharing\n[Switch to Team Mode](command:ai-101-ts.switchToTeamMode)\n\n**🚀 Performance Mode** - Optimized for low-end machines\n[Toggle Performance Mode](command:ai-101-ts.togglePerformanceMode)\n\n**Tip:** The extension auto-detects your system and suggests Performance Mode if needed.",
+    "walkthrough.modes.altText": "Different user modes available in AI-101",
+    "walkthrough.firstSuggestion.title": "Accept Your First Suggestion",
+    "walkthrough.firstSuggestion.description": "AI agents analyze your code and provide contextual suggestions.\n\n**How it works:**\n1. Agents monitor your code in real-time\n2. Suggestions appear as alerts in the HUD\n3. Review and accept/reject with keyboard shortcuts\n\n**Keyboard Shortcuts:**\n- `Ctrl+Enter` (or `Cmd+Enter`): Accept suggestion\n- `Ctrl+Backspace` (or `Cmd+Backspace`): Reject suggestion\n\n**Try it now:**\n[View Architecture](command:ai-101-ts.viewArchitecture) | [Configure API Keys](command:ai-101-ts.configureApiKeys)\n\n**Next Steps:**\n- Configure your LLM provider (OpenAI, Anthropic, or custom)\n- Explore accessibility options\n- Check out the full documentation",
+    "walkthrough.firstSuggestion.altText": "First suggestion workflow with accept and reject options"
+}

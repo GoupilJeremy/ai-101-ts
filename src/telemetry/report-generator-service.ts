@@ -1,0 +1,204 @@
+import { ITeamMetrics } from './team-metrics-service';
+
+/**
+ * Service for generating team adoption and comprehension reports.
+ * Supports both Markdown (human-readable) and JSON (portable) formats.
+ */
+export class ReportGeneratorService {
+    private static readonly VERSION = '1.0.0';
+
+    /**
+     * Generate a comprehensive Markdown report
+     */
+    generateMarkdownReport(metrics: ITeamMetrics): string {
+        const now = new Date();
+        const report: string[] = [];
+
+        // Header
+        report.push('# AI-101 Team Adoption Report');
+        report.push('');
+        report.push(`**Generated:** ${now.toLocaleString()}`);
+        report.push('');
+        report.push('---');
+        report.push('');
+
+        // Privacy Warning
+        report.push('> ⚠️ **Privacy Notice:** This report contains local data only. All metrics are generated from your personal usage and must be manually shared. No data is automatically transmitted.');
+        report.push('');
+        report.push('---');
+        report.push('');
+
+        // Executive Summary
+        report.push('## Executive Summary');
+        report.push('');
+        report.push(`**Adoption Score:** ${metrics.adoptionScore}/100`);
+        report.push('');
+        this.addAdoptionScoreInterpretation(report, metrics.adoptionScore);
+        report.push('');
+        report.push(`**Quality Impact:** ${metrics.qualityImpact}/100`);
+        report.push('');
+        report.push(`**Total Sessions:** ${metrics.usageFrequency.totalSessions}`);
+        report.push(`**Sessions per Week:** ${metrics.usageFrequency.sessionsPerWeek.toFixed(1)}`);
+        report.push('');
+
+        // Learning Progress & Comprehension
+        report.push('## Learning Progress & Comprehension');
+        report.push('');
+        if (metrics.comprehensionTrend.length > 0) {
+            report.push('### Comprehension Trend');
+            report.push('');
+            report.push('| Week | Average Score | Responses |');
+            report.push('|------|--------------|-----------|');
+
+            metrics.comprehensionTrend.forEach(point => {
+                const weekDate = new Date(point.timestamp).toLocaleDateString();
+                report.push(`| ${weekDate} | ${point.average.toFixed(1)}/5 | ${point.count} |`);
+            });
+            report.push('');
+
+            // Calculate trend direction
+            if (metrics.comprehensionTrend.length >= 2) {
+                const first = metrics.comprehensionTrend[0].average;
+                const last = metrics.comprehensionTrend[metrics.comprehensionTrend.length - 1].average;
+                const change = last - first;
+                const direction = change > 0 ? '📈 Improving' : change < 0 ? '📉 Declining' : '➡️ Stable';
+                report.push(`**Trend:** ${direction} (${change > 0 ? '+' : ''}${change.toFixed(1)} points)`);
+                report.push('');
+            }
+        } else {
+            report.push('*No survey data available yet. Complete surveys to see comprehension trends.*');
+            report.push('');
+        }
+
+        // Usage Frequency & Mode Distribution
+        report.push('## Usage Frequency & Mode Distribution');
+        report.push('');
+        report.push('### Mode Usage');
+        report.push('');
+
+        const sortedModes = Object.entries(metrics.modeDistribution)
+            .sort(([, a], [, b]) => b - a);
+
+        sortedModes.forEach(([mode, percentage]) => {
+            const bar = this.createProgressBar(percentage);
+            report.push(`**${this.capitalizeMode(mode)}:** ${bar} ${percentage.toFixed(1)}%`);
+        });
+        report.push('');
+
+        // Team Mode Specific Stats
+        if (metrics.teamModeUsage.sessionCount > 0) {
+            report.push('### Team Mode Statistics');
+            report.push('');
+            report.push(`**Sessions in Team Mode:** ${metrics.teamModeUsage.sessionCount}`);
+            report.push(`**Total Duration:** ${this.formatDuration(metrics.teamModeUsage.totalDuration)}`);
+            report.push(`**Average Session:** ${this.formatDuration(metrics.teamModeUsage.averageDuration)}`);
+            if (metrics.teamModeUsage.lastUsed) {
+                report.push(`**Last Used:** ${new Date(metrics.teamModeUsage.lastUsed).toLocaleString()}`);
+            }
+            report.push('');
+        }
+
+        // Code Quality Impact
+        report.push('## Code Quality Impact');
+        report.push('');
+        report.push(`**Quality Impact Score:** ${metrics.qualityImpact}/100`);
+        report.push('');
+        report.push('This score combines:');
+        report.push('- Suggestion acceptance rate (70% weight)');
+        report.push('- Reasoning view frequency (30% weight)');
+        report.push('');
+        this.addQualityImpactInterpretation(report, metrics.qualityImpact);
+        report.push('');
+
+        // Footer
+        report.push('---');
+        report.push('');
+        report.push('*Report generated by AI-101 VSCode Extension*');
+        report.push(`*Version: ${ReportGeneratorService.VERSION}*`);
+
+        return report.join('\n');
+    }
+
+    /**
+     * Generate a portable JSON report for aggregation
+     */
+    generateJSONReport(metrics: ITeamMetrics): string {
+        const report = {
+            metadata: {
+                version: ReportGeneratorService.VERSION,
+                generatedAt: new Date().toISOString(),
+                privacyNotice: 'This report contains local data only and must be manually shared'
+            },
+            adoptionScore: metrics.adoptionScore,
+            comprehensionTrend: metrics.comprehensionTrend,
+            qualityImpact: metrics.qualityImpact,
+            teamModeUsage: metrics.teamModeUsage,
+            usageFrequency: metrics.usageFrequency,
+            modeDistribution: metrics.modeDistribution
+        };
+
+        return JSON.stringify(report, null, 2);
+    }
+
+    /**
+     * Format duration in milliseconds to human-readable string
+     */
+    private formatDuration(ms: number): string {
+        const hours = Math.floor(ms / (60 * 60 * 1000));
+        const minutes = Math.floor((ms % (60 * 60 * 1000)) / (60 * 1000));
+
+        if (hours > 0 && minutes > 0) {
+            return `${hours}h ${minutes}min`;
+        } else if (hours > 0) {
+            return `${hours}h`;
+        } else {
+            return `${minutes}min`;
+        }
+    }
+
+    /**
+     * Create a simple ASCII progress bar
+     */
+    private createProgressBar(percentage: number, length: number = 20): string {
+        const filled = Math.round((percentage / 100) * length);
+        const empty = length - filled;
+        return '█'.repeat(filled) + '░'.repeat(empty);
+    }
+
+    /**
+     * Capitalize mode name for display
+     */
+    private capitalizeMode(mode: string): string {
+        return mode.charAt(0).toUpperCase() + mode.slice(1);
+    }
+
+    /**
+     * Add interpretation text for adoption score
+     */
+    private addAdoptionScoreInterpretation(report: string[], score: number): void {
+        if (score >= 80) {
+            report.push('✅ **Excellent adoption!** The tool is being used consistently with good feature coverage.');
+        } else if (score >= 60) {
+            report.push('👍 **Good adoption.** Regular usage with room to explore more features.');
+        } else if (score >= 40) {
+            report.push('⚠️ **Moderate adoption.** Consider increasing usage frequency or trying new features.');
+        } else {
+            report.push('📊 **Early adoption phase.** More consistent usage will improve this score.');
+        }
+    }
+
+    /**
+     * Add interpretation text for quality impact score
+     */
+    private addQualityImpactInterpretation(report: string[], score: number): void {
+        if (score >= 70) {
+            report.push('✅ **Strong quality impact!** High acceptance rate indicates valuable suggestions.');
+        } else if (score >= 50) {
+            report.push('👍 **Positive quality impact.** Suggestions are generally helpful.');
+        } else if (score >= 30) {
+            report.push('⚠️ **Moderate quality impact.** Review why suggestions are being rejected.');
+        } else {
+            report.push('📊 **Building quality baseline.** More usage data needed for accurate assessment.');
+        }
+    }
+}

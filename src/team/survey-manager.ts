@@ -85,7 +85,7 @@ export class SurveyManager {
      * End current Team Mode session and potentially show survey.
      */
     private endSession(): void {
-        if (!this.surveyEnabled) return;
+        if (!this.surveyEnabled) {return;}
 
         const sessionDuration = Date.now() - this.sessionStartTime;
 
@@ -162,7 +162,7 @@ export class SurveyManager {
         const config = vscode.workspace.getConfiguration('ai101.teamMode');
         const responses = config.get<ISurveyResponse[]>('surveyResponses', []);
 
-        if (responses.length === 0) return 0;
+        if (responses.length === 0) {return 0;}
 
         const total = responses.reduce((sum, r) => sum + r.comprehensionScore, 0);
         return Math.round((total / responses.length) * 10) / 10; // Round to 1 decimal

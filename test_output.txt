@@ -1,0 +1,1231 @@
+
+> ai-101-ts@0.0.1 test:unit
+> vitest run --reporter=default
+
+
+[1m[46m RUN [49m[22m [36mv4.0.17 [39m[90m/home/jeregoupix/dev/ai-101-ts[39m
+
+ [31m❯[39m src/accessibility/__tests__/contrast-calculator.test.ts [2m([22m[2m19 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 24[2mms[22m[39m
+       [32m✓[39m should calculate contrast ratio correctly for black on white[32m 2[2mms[22m[39m
+       [32m✓[39m should calculate contrast ratio correctly for white on black[32m 0[2mms[22m[39m
+[31m       [31m×[31m should calculate contrast ratio for red on white[39m[32m 8[2mms[22m[39m
+       [32m✓[39m should calculate contrast ratio for dark blue on white[32m 0[2mms[22m[39m
+       [32m✓[39m should calculate contrast ratio for light gray on white[32m 0[2mms[22m[39m
+       [32m✓[39m should return true for black on white[32m 0[2mms[22m[39m
+       [32m✓[39m should return true for dark blue on white[32m 0[2mms[22m[39m
+       [32m✓[39m should return false for light gray on white[32m 0[2mms[22m[39m
+       [32m✓[39m should return false for yellow on white[32m 0[2mms[22m[39m
+       [32m✓[39m should return true for white on black[32m 1[2mms[22m[39m
+       [32m✓[39m should be set to 7[32m 0[2mms[22m[39m
+       [32m✓[39m should verify pure black on pure white meets WCAG AAA[32m 0[2mms[22m[39m
+[31m       [31m×[31m should verify high contrast red on white meets WCAG AAA[39m[32m 4[2mms[22m[39m
+       [32m✓[39m should verify dark green on white meets WCAG AAA[32m 0[2mms[22m[39m
+       [32m✓[39m should verify dark blue on white meets WCAG AAA[32m 0[2mms[22m[39m
+[31m       [31m×[31m should verify dark amber on white meets WCAG AAA with bold text[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should handle same color (minimum contrast)[32m 0[2mms[22m[39m
+       [32m✓[39m should handle very similar colors[32m 0[2mms[22m[39m
+       [32m✓[39m should handle dark colors on dark background[32m 0[2mms[22m[39m
+[90mstderr[2m | src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22m[2mKnowledgeBaseService[2m > [22m[2mloadArticles[2m > [22m[2mshould cache loaded articles
+[22m[39mFailed to load knowledge base articles: TypeError: Cannot read properties of undefined (reading 'language')
+    at KnowledgeBaseService.loadArticles [90m(/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/knowledge-base-service.ts:33:39[90m)[39m
+    at [90m/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/__tests__/knowledge-base-service.test.ts:37:45
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:26
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1653:37
+    at Traces.$ [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+
+[90mstderr[2m | src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22m[2mKnowledgeBaseService[2m > [22m[2mgetArticlesByCategory[2m > [22m[2mshould filter articles by category
+[22m[39mFailed to load knowledge base articles: TypeError: Cannot read properties of undefined (reading 'language')
+    at KnowledgeBaseService.loadArticles [90m(/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/knowledge-base-service.ts:33:39[90m)[39m
+    at [90m/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/__tests__/knowledge-base-service.test.ts:75:27
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:26
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1653:37
+    at Traces.$ [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+
+[90mstderr[2m | src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22m[2mKnowledgeBaseService[2m > [22m[2mgetArticlesByCategory[2m > [22m[2mshould return empty array for category with no articles
+[22m[39mFailed to load knowledge base articles: TypeError: Cannot read properties of undefined (reading 'language')
+    at KnowledgeBaseService.loadArticles [90m(/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/knowledge-base-service.ts:33:39[90m)[39m
+    at [90m/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/__tests__/knowledge-base-service.test.ts:88:27
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:26
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1653:37
+    at Traces.$ [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+
+[90mstderr[2m | src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22m[2mKnowledgeBaseService[2m > [22m[2mgetArticleById[2m > [22m[2mshould return article by ID
+[22m[39mFailed to load knowledge base articles: TypeError: Cannot read properties of undefined (reading 'language')
+    at KnowledgeBaseService.loadArticles [90m(/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/knowledge-base-service.ts:33:39[90m)[39m
+    at [90m/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/__tests__/knowledge-base-service.test.ts:99:27
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:26
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1653:37
+    at Traces.$ [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+
+[90mstderr[2m | src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22m[2mKnowledgeBaseService[2m > [22m[2mgetArticleById[2m > [22m[2mshould return undefined for non-existent ID
+[22m[39mFailed to load knowledge base articles: TypeError: Cannot read properties of undefined (reading 'language')
+    at KnowledgeBaseService.loadArticles [90m(/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/knowledge-base-service.ts:33:39[90m)[39m
+    at [90m/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/__tests__/knowledge-base-service.test.ts:111:27
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:26
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1653:37
+    at Traces.$ [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+
+[90mstderr[2m | src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22m[2mKnowledgeBaseService[2m > [22m[2mgetArticleByErrorCode[2m > [22m[2mshould return article by error code
+[22m[39mFailed to load knowledge base articles: TypeError: Cannot read properties of undefined (reading 'language')
+    at KnowledgeBaseService.loadArticles [90m(/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/knowledge-base-service.ts:33:39[90m)[39m
+    at [90m/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/__tests__/knowledge-base-service.test.ts:121:27
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:26
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1653:37
+    at Traces.$ [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+
+[90mstderr[2m | src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22m[2mKnowledgeBaseService[2m > [22m[2mgetArticleByErrorCode[2m > [22m[2mshould return undefined for non-existent error code
+[22m[39mFailed to load knowledge base articles: TypeError: Cannot read properties of undefined (reading 'language')
+    at KnowledgeBaseService.loadArticles [90m(/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/knowledge-base-service.ts:33:39[90m)[39m
+    at [90m/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/__tests__/knowledge-base-service.test.ts:131:27
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:26
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1653:37
+    at Traces.$ [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+
+[90mstderr[2m | src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22m[2mKnowledgeBaseService[2m > [22m[2mgetArticleByErrorCode[2m > [22m[2mshould map multiple error codes to same article
+[22m[39mFailed to load knowledge base articles: TypeError: Cannot read properties of undefined (reading 'language')
+    at KnowledgeBaseService.loadArticles [90m(/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/knowledge-base-service.ts:33:39[90m)[39m
+    at [90m/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/__tests__/knowledge-base-service.test.ts:139:27
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:26
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1653:37
+    at Traces.$ [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+
+[90mstderr[2m | src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22m[2mKnowledgeBaseService[2m > [22m[2mdispose[2m > [22m[2mshould clear all data on dispose
+[22m[39mFailed to load knowledge base articles: TypeError: Cannot read properties of undefined (reading 'language')
+    at KnowledgeBaseService.loadArticles [90m(/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/knowledge-base-service.ts:33:39[90m)[39m
+    at [90m/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/__tests__/knowledge-base-service.test.ts:153:27
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:26
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1653:37
+    at Traces.$ [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+
+[90mstderr[2m | src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22m[2mKnowledgeBaseService[2m > [22m[2mdispose[2m > [22m[2mshould allow reloading after dispose
+[22m[39mFailed to load knowledge base articles: TypeError: Cannot read properties of undefined (reading 'language')
+    at KnowledgeBaseService.loadArticles [90m(/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/knowledge-base-service.ts:33:39[90m)[39m
+    at [90m/home/jeregoupix/dev/ai-101-ts/[39msrc/troubleshooting/__tests__/knowledge-base-service.test.ts:162:27
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:26
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1653:37
+    at Traces.$ [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///home/jeregoupix/dev/ai-101-ts/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+
+ [31m❯[39m src/troubleshooting/__tests__/knowledge-base-service.test.ts [2m([22m[2m13 tests[22m[2m | [22m[31m11 failed[39m[2m)[22m[32m 43[2mms[22m[39m
+       [32m✓[39m should load articles from markdown files[32m 3[2mms[22m[39m
+[31m       [31m×[31m should cache loaded articles[39m[32m 20[2mms[22m[39m
+[31m       [31m×[31m should return all categories[39m[32m 4[2mms[22m[39m
+       [32m✓[39m should include article counts for each category[32m 0[2mms[22m[39m
+[31m       [31m×[31m should filter articles by category[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should return empty array for category with no articles[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should return article by ID[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return undefined for non-existent ID[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return article by error code[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return undefined for non-existent error code[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should map multiple error codes to same article[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should clear all data on dispose[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should allow reloading after dispose[39m[32m 2[2mms[22m[39m
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mgetAcceptanceRate[2m > [22m[2mshould calculate overall acceptance rate correctly
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mgetAcceptanceRate[2m > [22m[2mshould return 0 when no suggestions have been made
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mgetAcceptanceRate[2m > [22m[2mshould return 100 when all suggestions are accepted
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mgetAcceptanceRate[2m > [22m[2mshould calculate acceptance rate by agent
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+ [31m❯[39m src/agents/__tests__/orchestrator-architecture.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 20[2mms[22m[39m
+[31m     [31m×[31m Should retrieve architecture from ArchitectAgent and pass to CoderAgent[39m[32m 18[2mms[22m[39m
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mgetAcceptanceRate[2m > [22m[2mshould calculate acceptance rate by mode
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mgetAcceptanceRate[2m > [22m[2mshould calculate acceptance rate by suggestion type
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mgetAcceptanceRate[2m > [22m[2mshould return 0 for dimension with no data
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mgetDimensionalBreakdown[2m > [22m[2mshould return breakdown by all agents
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mgetDimensionalBreakdown[2m > [22m[2mshould return breakdown by all modes
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mgetDimensionalBreakdown[2m > [22m[2mshould return breakdown by all suggestion types
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mTelemetry Integration[2m > [22m[2mshould send telemetry events when suggestions are accepted
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mTelemetry Integration[2m > [22m[2mshould send telemetry events when suggestions are rejected
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+[90mstderr[2m | src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22m[2mMetricsService - Acceptance Rate Tracking[2m > [22m[2mTelemetry Integration[2m > [22m[2mshould not include user code in telemetry events
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+ [31m❯[39m src/agents/__tests__/orchestrator.test.ts [2m([22m[2m4 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 21[2mms[22m[39m
+[31m     [31m×[31m Should register and coordinate agents in sequence[39m[32m 16[2mms[22m[39m
+[31m     [31m×[31m Should involve architect when keywords are present[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m Should handle missing agents gracefully[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m Should record decision history in ExtensionStateManager[39m[32m 1[2mms[22m[39m
+ [31m❯[39m src/accessibility/__tests__/colorblind-manager.test.ts [2m([22m[2m5 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[32m 23[2mms[22m[39m
+[31m       [31m×[31m should return the same instance[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should have correct default configuration[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return correct alert pattern for severity[39m[32m 6[2mms[22m[39m
+[31m       [31m×[31m should return correct agent shape for state[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should start disabled[39m[32m 1[2mms[22m[39m
+ [31m❯[39m src/telemetry/__tests__/acceptance-rate.test.ts [2m([22m[2m13 tests[22m[2m | [22m[31m13 failed[39m[2m)[22m[32m 41[2mms[22m[39m
+[31m       [31m×[31m should calculate overall acceptance rate correctly[39m[32m 20[2mms[22m[39m
+[31m       [31m×[31m should return 0 when no suggestions have been made[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should return 100 when all suggestions are accepted[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should calculate acceptance rate by agent[39m[32m 6[2mms[22m[39m
+[31m       [31m×[31m should calculate acceptance rate by mode[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should calculate acceptance rate by suggestion type[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return 0 for dimension with no data[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return breakdown by all agents[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return breakdown by all modes[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return breakdown by all suggestion types[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should send telemetry events when suggestions are accepted[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should send telemetry events when suggestions are rejected[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should not include user code in telemetry events[39m[32m 1[2mms[22m[39m
+ [31m❯[39m src/accessibility/__tests__/high-contrast-manager.test.ts [2m([22m[2m16 tests[22m[2m | [22m[31m16 failed[39m[2m)[22m[32m 38[2mms[22m[39m
+[31m       [31m×[31m should initialize with default config[39m[32m 14[2mms[22m[39m
+[31m       [31m×[31m should load settings from VSCode configuration[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should toggle High Contrast Mode manually[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should show information message when toggling[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should detect High Contrast theme and enable HC mode[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should not auto-detect when manual override is set[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should not auto-detect when autoDetectionEnabled is false[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle theme changes when auto-detection is enabled[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should not handle theme changes when manual override is set[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return current configuration[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should clear manual override[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should emit events when High Contrast Mode changes[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m should not emit events when state does not change[39m[32m 6[2mms[22m[39m
+[31m       [31m×[31m should have minimum 60% opacity in config[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should have high contrast color palette[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should have enhanced readability settings[39m[32m 1[2mms[22m[39m
+ [31m❯[39m src/commands/__tests__/command-handlers.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 71[2mms[22m[39m
+[31m       [31m×[31m switchToLearningMode should update mode manager[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m switchToExpertMode should update mode manager[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m switchToTeamMode should update mode manager[39m[32m 4[2mms[22m[39m
+       [32m✓[39m updateAgentVisibility should update state manager[32m 1[2mms[22m[39m
+       [32m✓[39m agent visibility should default to true if not set[32m 0[2mms[22m[39m
+       [32m✓[39m resetToDefaults should be callable[32m 51[2mms[22m[39m
+ [31m❯[39m src/agents/reviewer/__tests__/reviewer-agent-security.test.ts [2m([22m[2m4 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 30[2mms[22m[39m
+[31m     [31m×[31m should include Security analysis instructions in system prompt[39m[32m 24[2mms[22m[39m
+[31m     [31m×[31m should parse security issues from LLM response[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m should create alerts for security issues[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m should not detect security issues in safe code[39m[32m 2[2mms[22m[39m
+ [31m❯[39m src/agents/coder/__tests__/coder-agent.test.ts [2m([22m[2m9 tests[22m[2m | [22m[31m7 failed[39m[2m)[22m[32m 32[2mms[22m[39m
+     [32m✓[39m Should identify itself correctly[32m 2[2mms[22m[39m
+[31m     [31m×[31m Should parse LLM response correctly[39m[32m 19[2mms[22m[39m
+     [32m✓[39m Should throw error if not initialized[32m 0[2mms[22m[39m
+[31m     [31m×[31m Expert Mode - Should include [TECH DEBT] and [COMPLEXITY] sections in prompt[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m Expert Mode - Should request time/space complexity analysis[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m Expert Mode - Should request trade-off analysis[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m Expert Mode - Should NOT include [PEDAGOGY] section[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m Should include architectural guidance in prompt when provided[39m[32m 3[2mms[22m[39m
+[31m     [31m×[31m Should include phase-specific instructions in prompt[39m[32m 1[2mms[22m[39m
+ [31m❯[39m src/telemetry/__tests__/telemetry-service.test.ts [2m([22m[2m5 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[32m 25[2mms[22m[39m
+[31m     [31m×[31m Should NOT send events when opted out by default[39m[32m 17[2mms[22m[39m
+[31m     [31m×[31m Should send events when opted in[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m Should sanitize properties to remove PII[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m Should sanitize error messages and stacks[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m updateConsentStatus should respect VSCode and extension settings[39m[32m 1[2mms[22m[39m
+ [31m❯[39m src/modes/__tests__/mode-manager-focus.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31m❯[39m src/agents/__tests__/integration-sync.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31m❯[39m src/agents/__tests__/lifecycle-events.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31m❯[39m src/telemetry/__tests__/metrics-service.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31m❯[39m src/telemetry/__tests__/team-metrics.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31m❯[39m src/agents/context/__tests__/file-loader.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31m❯[39m src/webview/components/__tests__/tooltip-manager.test.ts [2m([22m[2m5 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 224[2mms[22m[39m
+     [32m✓[39m should be a singleton[32m 126[2mms[22m[39m
+     [32m✓[39m should create a tooltip element on init[32m 19[2mms[22m[39m
+[31m     [31m×[31m should show tooltip after delay[39m[32m -33325507[2mms[22m[39m
+[31m     [31m×[31m should hide tooltip after delay[39m[32m 200[2mms[22m[39m
+     [33m[2m✓[22m[39m should position tooltip correctly [33m 33325382[2mms[22m[39m
+ [31m❯[39m src/agents/architect/__tests__/architect-agent.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31m❯[39m src/agents/reviewer/__tests__/reviewer-agent.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31m❯[39m src/llm/providers/__tests__/anthropic-provider.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31m❯[39m src/llm/providers/__tests__/openai-provider.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [32m✓[39m src/telemetry/__tests__/report-generator.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+[90mstderr[2m | src/llm/__tests__/provider-manager.test.ts[2m > [22m[2mLLMProviderManager Test Suite[2m > [22m[2mcallLLM should fallback if primary is unavailable
+[22m[39mPrimary provider 'openai' is not available, attempting fallback...
+
+[90mstdout[2m | src/llm/__tests__/provider-manager.test.ts[2m > [22m[2mLLMProviderManager Test Suite[2m > [22m[2mcallLLM should fallback if primary is unavailable
+[22m[39mAttempting fallback call to 'anthropic' for agent 'coder'
+
+[90mstderr[2m | src/llm/__tests__/provider-manager.test.ts[2m > [22m[2mLLMProviderManager Test Suite[2m > [22m[2mcallLLM should fallback if primary fails with transient error
+[22m[39mPrimary provider 'openai' failed with transient error: openai failed. Attempting fallback...
+
+[90mstdout[2m | src/llm/__tests__/provider-manager.test.ts[2m > [22m[2mLLMProviderManager Test Suite[2m > [22m[2mcallLLM should fallback if primary fails with transient error
+[22m[39mAttempting fallback call to 'anthropic' for agent 'coder'
+
+[90mstderr[2m | src/llm/__tests__/provider-manager.test.ts[2m > [22m[2mLLMProviderManager Test Suite[2m > [22m[2mcallLLM should throw if all providers fail
+[22m[39mPrimary provider 'openai' failed with transient error: openai failed. Attempting fallback...
+
+[90mstdout[2m | src/llm/__tests__/provider-manager.test.ts[2m > [22m[2mLLMProviderManager Test Suite[2m > [22m[2mcallLLM should throw if all providers fail
+[22m[39mAttempting fallback call to 'anthropic' for agent 'coder'
+
+[90mstderr[2m | src/llm/__tests__/provider-manager.test.ts[2m > [22m[2mLLMProviderManager Test Suite[2m > [22m[2mcallLLM should throw if all providers fail
+[22m[39mFallback to 'anthropic' failed: anthropic failed
+
+[90mstdout[2m | src/llm/__tests__/provider-manager.test.ts[2m > [22m[2mLLMProviderManager Test Suite[2m > [22m[2mcallLLM should return cached response on hit
+[22m[39mCache hit for agent 'coder'
+
+ [32m✓[39m src/llm/__tests__/provider-manager.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m src/llm/__tests__/cache.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [31m❯[39m src/webview/components/__tests__/alert-detail-panel.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [32m✓[39m src/commands/__tests__/show-troubleshooting.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/webview/__tests__/team-mode.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m src/webview/components/__tests__/drop-zone-manager.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 242[2mms[22m[39m
+ [32m✓[39m src/webview/components/__tests__/vital-signs-bar.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 295[2mms[22m[39m
+ [32m✓[39m src/webview/__tests__/keyboard-navigation.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 435[2mms[22m[39m
+ [32m✓[39m src/webview/__tests__/high-contrast-mode.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 432[2mms[22m[39m
+ [32m✓[39m src/api/__tests__/extension-api.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/webview/components/__tests__/context-panel.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 520[2mms[22m[39m
+ [32m✓[39m src/agents/architect/__tests__/project-pattern-detector.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/llm/__tests__/cost-tracker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/telemetry/__tests__/survey-service.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mrecordSuggestionAction[2m > [22m[2mshould increment accepted count for agent
+[22m[39mTeamMetrics: architect suggestion accepted (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mrecordSuggestionAction[2m > [22m[2mshould increment rejected count for agent
+[22m[39mTeamMetrics: coder suggestion rejected (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mrecordSuggestionAction[2m > [22m[2mshould track multiple actions for same agent
+[22m[39mTeamMetrics: reviewer suggestion accepted (complexity: medium)
+TeamMetrics: reviewer suggestion accepted (complexity: medium)
+TeamMetrics: reviewer suggestion rejected (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mrecordSuggestionAction[2m > [22m[2mshould track actions across multiple agents
+[22m[39mTeamMetrics: architect suggestion accepted (complexity: medium)
+TeamMetrics: coder suggestion accepted (complexity: medium)
+TeamMetrics: reviewer suggestion rejected (complexity: medium)
+TeamMetrics: context suggestion accepted (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mTime Saved Calculation (Task 4.4)[2m > [22m[2mshould add 5 minutes for simple accepted suggestions
+[22m[39mTeamMetrics: architect suggestion accepted (complexity: simple)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mTime Saved Calculation (Task 4.4)[2m > [22m[2mshould add 15 minutes for medium accepted suggestions
+[22m[39mTeamMetrics: coder suggestion accepted (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mTime Saved Calculation (Task 4.4)[2m > [22m[2mshould add 30 minutes for complex accepted suggestions
+[22m[39mTeamMetrics: reviewer suggestion accepted (complexity: complex)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mTime Saved Calculation (Task 4.4)[2m > [22m[2mshould NOT add time for rejected suggestions
+[22m[39mTeamMetrics: architect suggestion rejected (complexity: complex)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mTime Saved Calculation (Task 4.4)[2m > [22m[2mshould accumulate time saved across multiple accepted suggestions
+[22m[39mTeamMetrics: architect suggestion accepted (complexity: simple)
+TeamMetrics: coder suggestion accepted (complexity: medium)
+TeamMetrics: reviewer suggestion accepted (complexity: complex)
+TeamMetrics: context suggestion rejected (complexity: complex)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mTime Saved Calculation (Task 4.4)[2m > [22m[2mshould default to medium complexity when not specified
+[22m[39mTeamMetrics: architect suggestion accepted (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mgetAcceptanceRate[2m > [22m[2mshould calculate correct acceptance rate
+[22m[39mTeamMetrics: coder suggestion accepted (complexity: medium)
+TeamMetrics: coder suggestion accepted (complexity: medium)
+TeamMetrics: coder suggestion rejected (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mgetAcceptanceRate[2m > [22m[2mshould return 100% when all accepted
+[22m[39mTeamMetrics: reviewer suggestion accepted (complexity: medium)
+TeamMetrics: reviewer suggestion accepted (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mgetAcceptanceRate[2m > [22m[2mshould return 0% when all rejected
+[22m[39mTeamMetrics: context suggestion rejected (complexity: medium)
+TeamMetrics: context suggestion rejected (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mgetOverallAcceptanceRate[2m > [22m[2mshould calculate rate across all agents
+[22m[39mTeamMetrics: architect suggestion accepted (complexity: medium)
+TeamMetrics: coder suggestion accepted (complexity: medium)
+TeamMetrics: reviewer suggestion rejected (complexity: medium)
+TeamMetrics: context suggestion accepted (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mgetMetricsSummary[2m > [22m[2mshould return formatted summary
+[22m[39mTeamMetrics: architect suggestion accepted (complexity: complex)
+TeamMetrics: coder suggestion accepted (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mgetMetricsSummary[2m > [22m[2mshould format hours correctly when over 60 minutes
+[22m[39mTeamMetrics: architect suggestion accepted (complexity: complex)
+TeamMetrics: architect suggestion accepted (complexity: complex)
+TeamMetrics: architect suggestion accepted (complexity: complex)
+TeamMetrics: architect suggestion accepted (complexity: complex)
+TeamMetrics: architect suggestion accepted (complexity: complex)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mgetMetrics (immutability)[2m > [22m[2mshould return immutable copy of metrics
+[22m[39mTeamMetrics: architect suggestion accepted (complexity: medium)
+
+[90mstdout[2m | src/team/__tests__/team-metrics-tracker.test.ts[2m > [22m[2mTeamMetricsTracker[2m > [22m[2mresetMetrics[2m > [22m[2mshould reset all metrics to zero
+[22m[39mTeamMetrics: architect suggestion accepted (complexity: complex)
+TeamMetrics: coder suggestion rejected (complexity: medium)
+
+ [32m✓[39m src/team/__tests__/team-metrics-tracker.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/agents/reviewer/__tests__/security-structures.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/troubleshooting/__tests__/search-engine.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m src/api/__tests__/api-implementation.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/api/__tests__/versioning.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/telemetry/__tests__/distraction-detector.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+[90mstdout[2m | docs/extension-dev/__tests__/custom-renderer-example.test.ts[2m > [22m[2mCustomSVGRenderer[2m > [22m[2mshould create an SVG element on render
+[22m[39mRegistered for state updates
+
+[90mstdout[2m | docs/extension-dev/__tests__/custom-renderer-example.test.ts[2m > [22m[2mCustomSVGRenderer[2m > [22m[2mshould have a circle with the correct agent color
+[22m[39mRegistered for state updates
+
+[90mstdout[2m | docs/extension-dev/__tests__/custom-renderer-example.test.ts[2m > [22m[2mCustomSVGRenderer[2m > [22m[2mshould display the agent icon
+[22m[39mRegistered for state updates
+
+[90mstdout[2m | docs/extension-dev/__tests__/custom-renderer-example.test.ts[2m > [22m[2mCustomSVGRenderer[2m > [22m[2mshould handle state updates
+[22m[39mRegistered for state updates
+
+[90mstdout[2m | docs/extension-dev/__tests__/custom-renderer-example.test.ts[2m > [22m[2mCustomSVGRenderer[2m > [22m[2mshould clean up on destroy
+[22m[39mRegistered for state updates
+Unsubscribed from state updates
+
+[90mstdout[2m | docs/extension-dev/__tests__/custom-renderer-example.test.ts[2m > [22m[2mCustomSVGRenderer[2m > [22m[2mshould apply optOutDefaultStyling when requested
+[22m[39mRegistered for state updates
+
+ [32m✓[39m docs/extension-dev/__tests__/custom-renderer-example.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 79[2mms[22m[39m
+ [32m✓[39m src/agents/context/__tests__/context-agent.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/performance/__tests__/system-detector.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/agents/architect/__tests__/architect-agent-logic.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/errors/__tests__/error-registry.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/commands/__tests__/show-getting-started.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/api/__tests__/integration.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/state/__tests__/extension-state-manager.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/agents/reviewer/libs/__tests__/security-prompt-builder.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/webview/__tests__/performance-mode.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/config/__tests__/configuration-manager.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/llm/__tests__/rate-limiter.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/performance/__tests__/performance-detector.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/phase-detector.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/agents/context/__tests__/token-optimizer.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2638[2mms[22m[39m
+       [33m[2m✓[22m[39m should estimate tokens for simple text [33m 1032[2mms[22m[39m
+       [33m[2m✓[22m[39m should estimate tokens accurately [33m 468[2mms[22m[39m
+       [33m[2m✓[22m[39m should optimize files within token limit [33m 1128[2mms[22m[39m
+ [32m✓[39m src/modes/__tests__/mode-manager-team.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/ui/__tests__/renderer.interface.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/modes/__tests__/mode-manager-performance.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/config/__tests__/secret-manager.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/agents/reviewer/libs/__tests__/edge-case-prompt-builder.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/agents/coder/libs/__tests__/architecture-prompt-builder.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/commands/__tests__/force-agent-state.command.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/api/__tests__/lifecycle-event-manager.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m -33330074[2mms[22m[39m
+ [32m✓[39m src/llm/__tests__/custom-provider-example.test.ts [2m([22m[2m36 tests[22m[2m)[22m[33m 5162[2mms[22m[39m
+       [33m[2m✓[22m[39m should timeout health check after 5 seconds [33m 5001[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 11 [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/agents/__tests__/integration-sync.test.ts[2m [ src/agents/__tests__/integration-sync.test.ts ][22m
+[31m[1mReferenceError[22m: setup is not defined[39m
+[36m [2m❯[22m src/agents/__tests__/integration-sync.test.ts:[2m40:5[22m[39m
+    [90m 38| [39m    }[33m;[39m
+    [90m 39| [39m
+    [90m 40| [39m    [34msetup[39m(() [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m 41| [39m        receivedMessages [33m=[39m [][33m;[39m
+    [90m 42| [39m        orchestrator [33m=[39m [33mAgentOrchestrator[39m[33m.[39m[34mgetInstance[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/__tests__/lifecycle-events.test.ts[2m [ src/agents/__tests__/lifecycle-events.test.ts ][22m
+[31m[1mReferenceError[22m: setup is not defined[39m
+[36m [2m❯[22m src/agents/__tests__/lifecycle-events.test.ts:[2m36:5[22m[39m
+    [90m 34| [39m    [35mlet[39m errorEvents[33m:[39m [33mAgentLifecycleEvent[39m[] [33m=[39m [][33m;[39m
+    [90m 35| [39m
+    [90m 36| [39m    [34msetup[39m(() [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m 37| [39m        orchestrator [33m=[39m [33mAgentOrchestrator[39m[33m.[39m[34mgetInstance[39m()[33m;[39m
+    [90m 38| [39m        (orchestrator [35mas[39m any)[33m.[39magents[33m.[39m[34mclear[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/modes/__tests__/mode-manager-focus.test.ts[2m [ src/modes/__tests__/mode-manager-focus.test.ts ][22m
+[31m[1mReferenceError[22m: setup is not defined[39m
+[36m [2m❯[22m src/modes/__tests__/mode-manager-focus.test.ts:[2m8:5[22m[39m
+    [90m  6| [39m    [35mlet[39m modeManager[33m:[39m [33mModeManager[39m[33m;[39m
+    [90m  7| [39m
+    [90m  8| [39m    [34msetup[39m(() [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m  9| [39m        modeManager [33m=[39m [33mModeManager[39m[33m.[39m[34mgetInstance[39m()[33m;[39m
+    [90m 10| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/metrics-service.test.ts[2m [ src/telemetry/__tests__/metrics-service.test.ts ][22m
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/team-metrics.test.ts[2m [ src/telemetry/__tests__/team-metrics.test.ts ][22m
+[31m[1mError[22m: Cannot find module 'vscode'
+Require stack:
+- /home/jeregoupix/dev/ai-101-ts/node_modules/@vscode/extension-telemetry/dist/node/node/telemetryReporter.js[39m
+[90m [2m❯[22m Object.<anonymous> node_modules/@vscode/extension-telemetry/dist/node/node/telemetryReporter.js:[2m32:29[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/architect/__tests__/architect-agent.test.ts[2m [ src/agents/architect/__tests__/architect-agent.test.ts ][22m
+[31m[1mReferenceError[22m: setup is not defined[39m
+[36m [2m❯[22m src/agents/architect/__tests__/architect-agent.test.ts:[2m7:5[22m[39m
+    [90m  5| [39m    [35mlet[39m agent[33m:[39m [33mArchitectAgent[39m[33m;[39m
+    [90m  6| [39m
+    [90m  7| [39m    [34msetup[39m(() [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m  8| [39m        agent [33m=[39m [35mnew[39m [33mArchitectAgent[39m()[33m;[39m
+    [90m  9| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/context/__tests__/file-loader.test.ts[2m [ src/agents/context/__tests__/file-loader.test.ts ][22m
+[31m[1mTypeError[22m: Cannot set property workspace of [object Module] which has only a getter[39m
+[36m [2m❯[22m src/agents/context/__tests__/file-loader.test.ts:[2m36:17[22m[39m
+    [90m 34| [39m}[33m;[39m
+    [90m 35| [39m
+    [90m 36| [39m(vscode [35mas[39m any)[33m.[39mworkspace [33m=[39m mockWorkspace[33m;[39m
+    [90m   | [39m                [31m^[39m
+    [90m 37| [39m(vscode [35mas[39m any)[33m.[39m[33mUri[39m [33m=[39m { file[33m:[39m (path[33m:[39m string) [33m=>[39m ({ fsPath[33m:[39m path }) }[33m;[39m
+    [90m 38| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/reviewer/__tests__/reviewer-agent.test.ts[2m [ src/agents/reviewer/__tests__/reviewer-agent.test.ts ][22m
+[31m[1mReferenceError[22m: setup is not defined[39m
+[36m [2m❯[22m src/agents/reviewer/__tests__/reviewer-agent.test.ts:[2m32:5[22m[39m
+    [90m 30| [39m    [35mlet[39m mockLLM[33m:[39m any[33m;[39m
+    [90m 31| [39m
+    [90m 32| [39m    [34msetup[39m(() [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m 33| [39m        agent [33m=[39m [35mnew[39m [33mReviewerAgent[39m()[33m;[39m
+    [90m 34| [39m        mockLLM [33m=[39m [35mnew[39m [33mMockLLMManager[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/llm/providers/__tests__/anthropic-provider.test.ts[2m [ src/llm/providers/__tests__/anthropic-provider.test.ts ][22m
+[31m[1mReferenceError[22m: setup is not defined[39m
+[36m [2m❯[22m src/llm/providers/__tests__/anthropic-provider.test.ts:[2m30:5[22m[39m
+    [90m 28| [39m    [35mlet[39m provider[33m:[39m [33mAnthropicProvider[39m[33m;[39m
+    [90m 29| [39m
+    [90m 30| [39m    [34msetup[39m(() [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m 31| [39m        provider [33m=[39m [35mnew[39m [33mAnthropicProvider[39m()[33m;[39m
+    [90m 32| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/llm/providers/__tests__/openai-provider.test.ts[2m [ src/llm/providers/__tests__/openai-provider.test.ts ][22m
+[31m[1mReferenceError[22m: setup is not defined[39m
+[36m [2m❯[22m src/llm/providers/__tests__/openai-provider.test.ts:[2m29:5[22m[39m
+    [90m 27| [39m    [35mlet[39m provider[33m:[39m [33mOpenAIProvider[39m[33m;[39m
+    [90m 28| [39m
+    [90m 29| [39m    [34msetup[39m(() [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m 30| [39m        provider [33m=[39m [35mnew[39m [33mOpenAIProvider[39m()[33m;[39m
+    [90m 31| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/webview/components/__tests__/alert-detail-panel.test.ts[2m [ src/webview/components/__tests__/alert-detail-panel.test.ts ][22m
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'describe')[39m
+[90m [2m❯[22m exports.describe node_modules/mocha/lib/mocha.js:[2m119:26[22m[39m
+[36m [2m❯[22m src/webview/components/__tests__/alert-detail-panel.test.ts:[2m11:1[22m[39m
+    [90m  9| [39m[35mimport[39m [33mAlertDetailPanel[39m [35mfrom[39m [32m'../alert-detail-panel.js'[39m[33m;[39m
+    [90m 10| [39m
+    [90m 11| [39m[34mdescribe[39m([32m'AlertDetailPanel'[39m[33m,[39m () [33m=>[39m {
+    [90m   | [39m[31m^[39m
+    [90m 12| [39m    [35mlet[39m dom[33m;[39m
+    [90m 13| [39m    [35mlet[39m document[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/106]⎯[22m[39m
+
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 74 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/colorblind-manager.test.ts[2m > [22mColorblindManager[2m > [22mSingleton Pattern[2m > [22mshould return the same instance
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/colorblind-manager.test.ts[2m > [22mColorblindManager[2m > [22mDefault Configuration[2m > [22mshould have correct default configuration
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/colorblind-manager.test.ts[2m > [22mColorblindManager[2m > [22mPattern and Shape Accessors[2m > [22mshould return correct alert pattern for severity
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/colorblind-manager.test.ts[2m > [22mColorblindManager[2m > [22mPattern and Shape Accessors[2m > [22mshould return correct agent shape for state
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/colorblind-manager.test.ts[2m > [22mColorblindManager[2m > [22mState Management[2m > [22mshould start disabled
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ColorblindManager.<instance_members_initializer> src/accessibility/colorblind-manager.ts:[2m75:42[22m[39m
+    [90m 73| [39m
+    [90m 74| [39m    private config: IColorblindConfig = { ...DEFAULT_COLORBLIND_CONFIG…
+    [90m 75| [39m    private onColorblindChangedEmitter = new vscode.EventEmitter<IColo…
+    [90m   | [39m                                         [31m^[39m
+    [90m 76| [39m    public readonly onColorblindChanged = this.onColorblindChangedEmit…
+    [90m 77| [39m
+[90m [2m❯[22m new ColorblindManager src/accessibility/colorblind-manager.ts:[2m78:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/accessibility/colorblind-manager.ts:[2m84:42[22m[39m
+[90m [2m❯[22m src/accessibility/__tests__/colorblind-manager.test.ts:[2m14:37[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/colorblind-manager.test.ts[2m > [22mColorblindManager[2m > [22mSingleton Pattern[2m > [22mshould return the same instance
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/colorblind-manager.test.ts[2m > [22mColorblindManager[2m > [22mDefault Configuration[2m > [22mshould have correct default configuration
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/colorblind-manager.test.ts[2m > [22mColorblindManager[2m > [22mPattern and Shape Accessors[2m > [22mshould return correct alert pattern for severity
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/colorblind-manager.test.ts[2m > [22mColorblindManager[2m > [22mPattern and Shape Accessors[2m > [22mshould return correct agent shape for state
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/colorblind-manager.test.ts[2m > [22mColorblindManager[2m > [22mState Management[2m > [22mshould start disabled
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'dispose')[39m
+[36m [2m❯[22m src/accessibility/__tests__/colorblind-manager.test.ts:[2m18:17[22m[39m
+    [90m 16| [39m
+    [90m 17| [39m    [34mafterEach[39m(() [33m=>[39m {
+    [90m 18| [39m        manager[33m.[39m[34mdispose[39m()[33m;[39m
+    [90m   | [39m                [31m^[39m
+    [90m 19| [39m    })[33m;[39m
+    [90m 20| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/contrast-calculator.test.ts[2m > [22mContrast Calculator[2m > [22mcalculateContrastRatio[2m > [22mshould calculate contrast ratio for red on white
+[31m[1mAssertionError[22m: expected 3.9984767707539985 to be greater than 4[39m
+[36m [2m❯[22m src/accessibility/__tests__/contrast-calculator.test.ts:[2m23:27[22m[39m
+    [90m 21| [39m        [34mit[39m([32m'should calculate contrast ratio for red on white'[39m[33m,[39m () [33m=>[39m {
+    [90m 22| [39m            [35mconst[39m ratio [33m=[39m [34mcalculateContrastRatio[39m([32m'#ff0000'[39m[33m,[39m [32m'#ffffff'[39m)[33m;[39m
+    [90m 23| [39m            [34mexpect[39m(ratio)[33m.[39m[34mtoBeGreaterThan[39m([34m4[39m)[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m 24| [39m            [34mexpect[39m(ratio)[33m.[39m[34mtoBeLessThan[39m([34m6[39m)[33m;[39m
+    [90m 25| [39m        })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/contrast-calculator.test.ts[2m > [22mContrast Calculator[2m > [22mHigh Contrast Mode Color Palette Tests[2m > [22mshould verify high contrast red on white meets WCAG AAA
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/accessibility/__tests__/contrast-calculator.test.ts:[2m79:27[22m[39m
+    [90m 77| [39m        it('should verify high contrast red on white meets WCAG AAA', …
+    [90m 78| [39m            [35mconst[39m meets [33m=[39m [34mmeetsWCAGAAA[39m([32m'#ff0000'[39m[33m,[39m [32m'#ffffff'[39m)[33m;[39m
+    [90m 79| [39m            [34mexpect[39m(meets)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m 80| [39m        })[33m;[39m
+    [90m 81| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/contrast-calculator.test.ts[2m > [22mContrast Calculator[2m > [22mHigh Contrast Mode Color Palette Tests[2m > [22mshould verify dark amber on white meets WCAG AAA with bold text
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/accessibility/__tests__/contrast-calculator.test.ts:[2m94:27[22m[39m
+    [90m 92| [39m        it('should verify dark amber on white meets WCAG AAA with bold…
+    [90m 93| [39m            [35mconst[39m meets [33m=[39m [34mmeetsWCAGAAA[39m([32m'#996600'[39m[33m,[39m [32m'#ffffff'[39m)[33m;[39m
+    [90m 94| [39m            [34mexpect[39m(meets)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m 95| [39m        })[33m;[39m
+    [90m 96| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mInitialization[2m > [22mshould initialize with default config
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mInitialization[2m > [22mshould load settings from VSCode configuration
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mManual Toggle[2m > [22mshould toggle High Contrast Mode manually
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mManual Toggle[2m > [22mshould show information message when toggling
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mAuto-Detection[2m > [22mshould detect High Contrast theme and enable HC mode
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mAuto-Detection[2m > [22mshould not auto-detect when manual override is set
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mAuto-Detection[2m > [22mshould not auto-detect when autoDetectionEnabled is false
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mTheme Change Handling[2m > [22mshould handle theme changes when auto-detection is enabled
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mTheme Change Handling[2m > [22mshould not handle theme changes when manual override is set
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mConfiguration Management[2m > [22mshould return current configuration
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mConfiguration Management[2m > [22mshould clear manual override
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mEvent Handling[2m > [22mshould emit events when High Contrast Mode changes
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mEvent Handling[2m > [22mshould not emit events when state does not change
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mWCAG AAA Compliance[2m > [22mshould have minimum 60% opacity in config
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mWCAG AAA Compliance[2m > [22mshould have high contrast color palette
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mWCAG AAA Compliance[2m > [22mshould have enhanced readability settings
+[31m[1mReferenceError[22m: jest is not defined[39m
+[36m [2m❯[22m src/accessibility/__tests__/high-contrast-manager.test.ts:[2m19:18[22m[39m
+    [90m 17| [39m        [90m// Mock VSCode API[39m
+    [90m 18| [39m        mockConfig [33m=[39m {
+    [90m 19| [39m            [35mget[39m[33m:[39m jest[33m.[39m[34mfn[39m()[33m,[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 20| [39m            update[33m:[39m jest[33m.[39m[34mfn[39m()
+    [90m 21| [39m        }[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mInitialization[2m > [22mshould initialize with default config
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mInitialization[2m > [22mshould load settings from VSCode configuration
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mManual Toggle[2m > [22mshould toggle High Contrast Mode manually
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mManual Toggle[2m > [22mshould show information message when toggling
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mAuto-Detection[2m > [22mshould detect High Contrast theme and enable HC mode
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mAuto-Detection[2m > [22mshould not auto-detect when manual override is set
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mAuto-Detection[2m > [22mshould not auto-detect when autoDetectionEnabled is false
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mTheme Change Handling[2m > [22mshould handle theme changes when auto-detection is enabled
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mTheme Change Handling[2m > [22mshould not handle theme changes when manual override is set
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mConfiguration Management[2m > [22mshould return current configuration
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mConfiguration Management[2m > [22mshould clear manual override
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mEvent Handling[2m > [22mshould emit events when High Contrast Mode changes
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mEvent Handling[2m > [22mshould not emit events when state does not change
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mWCAG AAA Compliance[2m > [22mshould have minimum 60% opacity in config
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mWCAG AAA Compliance[2m > [22mshould have high contrast color palette
+[41m[1m FAIL [22m[49m src/accessibility/__tests__/high-contrast-manager.test.ts[2m > [22mHighContrastManager[2m > [22mWCAG AAA Compliance[2m > [22mshould have enhanced readability settings
+[31m[1mReferenceError[22m: jest is not defined[39m
+[36m [2m❯[22m src/accessibility/__tests__/high-contrast-manager.test.ts:[2m47:9[22m[39m
+    [90m 45| [39m
+    [90m 46| [39m    [34mafterEach[39m(() [33m=>[39m {
+    [90m 47| [39m        jest[33m.[39m[34mclearAllMocks[39m()[33m;[39m
+    [90m   | [39m        [31m^[39m
+    [90m 48| [39m        manager[33m.[39m[34mdispose[39m()[33m;[39m
+    [90m 49| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/__tests__/orchestrator-architecture.test.ts[2m > [22mAgentOrchestrator Architecture Integration[2m > [22mShould retrieve architecture from ArchitectAgent and pass to CoderAgent
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m AgentOrchestrator.<instance_members_initializer> src/agents/orchestrator.ts:[2m25:29[22m[39m
+    [90m 23| [39m
+    [90m 24| [39m    [90m// Event Emitters[39m
+    [90m 25| [39m    private _onAgentStart = new vscode.EventEmitter<AgentLifecycleEven…
+    [90m   | [39m                            [31m^[39m
+    [90m 26| [39m    [35mpublic[39m readonly onAgentStart [33m=[39m [35mthis[39m[33m.[39m_onAgentStart[33m.[39mevent[33m;[39m
+    [90m 27| [39m
+[90m [2m❯[22m new AgentOrchestrator src/agents/orchestrator.ts:[2m34:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/agents/orchestrator.ts:[2m40:42[22m[39m
+[90m [2m❯[22m src/agents/__tests__/orchestrator-architecture.test.ts:[2m77:42[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/__tests__/orchestrator.test.ts[2m > [22mAgentOrchestrator Test Suite[2m > [22mShould register and coordinate agents in sequence
+[41m[1m FAIL [22m[49m src/agents/__tests__/orchestrator.test.ts[2m > [22mAgentOrchestrator Test Suite[2m > [22mShould involve architect when keywords are present
+[41m[1m FAIL [22m[49m src/agents/__tests__/orchestrator.test.ts[2m > [22mAgentOrchestrator Test Suite[2m > [22mShould handle missing agents gracefully
+[41m[1m FAIL [22m[49m src/agents/__tests__/orchestrator.test.ts[2m > [22mAgentOrchestrator Test Suite[2m > [22mShould record decision history in ExtensionStateManager
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m AgentOrchestrator.<instance_members_initializer> src/agents/orchestrator.ts:[2m25:29[22m[39m
+    [90m 23| [39m
+    [90m 24| [39m    [90m// Event Emitters[39m
+    [90m 25| [39m    private _onAgentStart = new vscode.EventEmitter<AgentLifecycleEven…
+    [90m   | [39m                            [31m^[39m
+    [90m 26| [39m    [35mpublic[39m readonly onAgentStart [33m=[39m [35mthis[39m[33m.[39m_onAgentStart[33m.[39mevent[33m;[39m
+    [90m 27| [39m
+[90m [2m❯[22m new AgentOrchestrator src/agents/orchestrator.ts:[2m34:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/agents/orchestrator.ts:[2m40:42[22m[39m
+[90m [2m❯[22m src/agents/__tests__/orchestrator.test.ts:[2m33:42[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/commands/__tests__/command-handlers.test.ts[2m > [22mCommand Handlers Test Suite[2m > [22mMode Switching Commands[2m > [22mswitchToLearningMode should update mode manager
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m src/commands/__tests__/command-handlers.test.ts:[2m11:45[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/commands/__tests__/command-handlers.test.ts[2m > [22mCommand Handlers Test Suite[2m > [22mMode Switching Commands[2m > [22mswitchToExpertMode should update mode manager
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m src/commands/__tests__/command-handlers.test.ts:[2m23:45[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/commands/__tests__/command-handlers.test.ts[2m > [22mCommand Handlers Test Suite[2m > [22mMode Switching Commands[2m > [22mswitchToTeamMode should update mode manager
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m src/commands/__tests__/command-handlers.test.ts:[2m33:45[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mgetAcceptanceRate[2m > [22mshould calculate overall acceptance rate correctly
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mgetAcceptanceRate[2m > [22mshould return 0 when no suggestions have been made
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mgetAcceptanceRate[2m > [22mshould return 100 when all suggestions are accepted
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mgetAcceptanceRate[2m > [22mshould calculate acceptance rate by agent
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mgetAcceptanceRate[2m > [22mshould calculate acceptance rate by mode
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mgetAcceptanceRate[2m > [22mshould calculate acceptance rate by suggestion type
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mgetAcceptanceRate[2m > [22mshould return 0 for dimension with no data
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mgetDimensionalBreakdown[2m > [22mshould return breakdown by all agents
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mgetDimensionalBreakdown[2m > [22mshould return breakdown by all modes
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mgetDimensionalBreakdown[2m > [22mshould return breakdown by all suggestion types
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mTelemetry Integration[2m > [22mshould send telemetry events when suggestions are accepted
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mTelemetry Integration[2m > [22mshould send telemetry events when suggestions are rejected
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/acceptance-rate.test.ts[2m > [22mMetricsService - Acceptance Rate Tracking[2m > [22mTelemetry Integration[2m > [22mshould not include user code in telemetry events
+[31m[1mTypeError[22m: () => ({
+      loadMetrics: __vite_ssr_import_0__.vi.fn().mockResolvedValue({ ...__vi_import_1__.DEFAULT_METRIC...<omitted>...}) is not a constructor[39m
+[36m [2m❯[22m new MetricsService src/telemetry/metrics-service.ts:[2m21:24[22m[39m
+    [90m 19| [39m
+    [90m 20| [39m    [35mprivate[39m [34mconstructor[39m(context[33m:[39m vscode[33m.[39m[33mExtensionContext[39m) {
+    [90m 21| [39m        [35mthis[39m[33m.[39mstorage [33m=[39m [35mnew[39m [33mMetricsStorage[39m(context)[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m 22| [39m        [90m// Initialize telemetry service (will only send if opted in)[39m
+    [90m 23| [39m        [35mthis[39m[33m.[39mtelemetryService [33m=[39m [33mTelemetryService[39m[33m.[39m[34mgetInstance[39m(context)[33m;[39m
+[90m [2m❯[22m Function.getInstance src/telemetry/metrics-service.ts:[2m32:39[22m[39m
+[90m [2m❯[22m src/telemetry/__tests__/acceptance-rate.test.ts:[2m49:41[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/telemetry-service.test.ts[2m > [22mTelemetryService Test Suite[2m > [22mShould NOT send events when opted out by default
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/telemetry-service.test.ts[2m > [22mTelemetryService Test Suite[2m > [22mShould send events when opted in
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/telemetry-service.test.ts[2m > [22mTelemetryService Test Suite[2m > [22mShould sanitize properties to remove PII
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/telemetry-service.test.ts[2m > [22mTelemetryService Test Suite[2m > [22mShould sanitize error messages and stacks
+[41m[1m FAIL [22m[49m src/telemetry/__tests__/telemetry-service.test.ts[2m > [22mTelemetryService Test Suite[2m > [22mupdateConsentStatus should respect VSCode and extension settings
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'isTelemetryEnabled')[39m
+[36m [2m❯[22m TelemetryService.updateConsentStatus src/telemetry/telemetry-service.ts:[2m39:42[22m[39m
+    [90m 37| [39m    [35mpublic[39m [34mupdateConsentStatus[39m()[33m:[39m [35mvoid[39m {
+    [90m 38| [39m        const extensionConsent = this.context.globalState.get<boolean>…
+    [90m 39| [39m        [35mconst[39m vscodeConsent [33m=[39m vscode[33m.[39menv[33m.[39misTelemetryEnabled[33m;[39m
+    [90m   | [39m                                         [31m^[39m
+    [90m 40| [39m
+    [90m 41| [39m        [35mthis[39m[33m.[39misOptedIn [33m=[39m extensionConsent [33m&&[39m vscodeConsent[33m;[39m
+[90m [2m❯[22m new TelemetryService src/telemetry/telemetry-service.ts:[2m24:14[22m[39m
+[90m [2m❯[22m Function.getInstance src/telemetry/telemetry-service.ts:[2m29:41[22m[39m
+[90m [2m❯[22m src/telemetry/__tests__/telemetry-service.test.ts:[2m59:36[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22mKnowledgeBaseService[2m > [22mloadArticles[2m > [22mshould cache loaded articles
+[31m[1mError[22m: Knowledge base loading failed: TypeError: Cannot read properties of undefined (reading 'language')[39m
+[36m [2m❯[22m KnowledgeBaseService.loadArticles src/troubleshooting/knowledge-base-service.ts:[2m84:19[22m[39m
+    [90m 82| [39m        } [35mcatch[39m (error) {
+    [90m 83| [39m            console.error('Failed to load knowledge base articles:', e…
+    [90m 84| [39m            [35mthrow[39m [35mnew[39m [33mError[39m([32m`Knowledge base loading failed: [39m[36m${[39merror[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 85| [39m        }
+    [90m 86| [39m    }
+[90m [2m❯[22m src/troubleshooting/__tests__/knowledge-base-service.test.ts:[2m37:45[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22mKnowledgeBaseService[2m > [22mgetCategories[2m > [22mshould return all categories
+[31m[1mAssertionError[22m: expected [] to include 'Performance'[39m
+[36m [2m❯[22m src/troubleshooting/__tests__/knowledge-base-service.test.ts:[2m54:33[22m[39m
+    [90m 52| [39m            [90m// Should have all defined categories[39m
+    [90m 53| [39m            [35mconst[39m categoryIds [33m=[39m categories[33m.[39m[34mmap[39m(c [33m=>[39m c[33m.[39mid)[33m;[39m
+    [90m 54| [39m            expect(categoryIds).toContain(TroubleshootingCategory.Perf…
+    [90m   | [39m                                [31m^[39m
+    [90m 55| [39m            expect(categoryIds).toContain(TroubleshootingCategory.Conn…
+    [90m 56| [39m            expect(categoryIds).toContain(TroubleshootingCategory.Disp…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22mKnowledgeBaseService[2m > [22mgetArticlesByCategory[2m > [22mshould filter articles by category
+[31m[1mError[22m: Knowledge base loading failed: TypeError: Cannot read properties of undefined (reading 'language')[39m
+[36m [2m❯[22m KnowledgeBaseService.loadArticles src/troubleshooting/knowledge-base-service.ts:[2m84:19[22m[39m
+    [90m 82| [39m        } [35mcatch[39m (error) {
+    [90m 83| [39m            console.error('Failed to load knowledge base articles:', e…
+    [90m 84| [39m            [35mthrow[39m [35mnew[39m [33mError[39m([32m`Knowledge base loading failed: [39m[36m${[39merror[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 85| [39m        }
+    [90m 86| [39m    }
+[90m [2m❯[22m src/troubleshooting/__tests__/knowledge-base-service.test.ts:[2m75:27[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22mKnowledgeBaseService[2m > [22mgetArticlesByCategory[2m > [22mshould return empty array for category with no articles
+[31m[1mError[22m: Knowledge base loading failed: TypeError: Cannot read properties of undefined (reading 'language')[39m
+[36m [2m❯[22m KnowledgeBaseService.loadArticles src/troubleshooting/knowledge-base-service.ts:[2m84:19[22m[39m
+    [90m 82| [39m        } [35mcatch[39m (error) {
+    [90m 83| [39m            console.error('Failed to load knowledge base articles:', e…
+    [90m 84| [39m            [35mthrow[39m [35mnew[39m [33mError[39m([32m`Knowledge base loading failed: [39m[36m${[39merror[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 85| [39m        }
+    [90m 86| [39m    }
+[90m [2m❯[22m src/troubleshooting/__tests__/knowledge-base-service.test.ts:[2m88:27[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22mKnowledgeBaseService[2m > [22mgetArticleById[2m > [22mshould return article by ID
+[31m[1mError[22m: Knowledge base loading failed: TypeError: Cannot read properties of undefined (reading 'language')[39m
+[36m [2m❯[22m KnowledgeBaseService.loadArticles src/troubleshooting/knowledge-base-service.ts:[2m84:19[22m[39m
+    [90m 82| [39m        } [35mcatch[39m (error) {
+    [90m 83| [39m            console.error('Failed to load knowledge base articles:', e…
+    [90m 84| [39m            [35mthrow[39m [35mnew[39m [33mError[39m([32m`Knowledge base loading failed: [39m[36m${[39merror[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 85| [39m        }
+    [90m 86| [39m    }
+[90m [2m❯[22m src/troubleshooting/__tests__/knowledge-base-service.test.ts:[2m99:27[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22mKnowledgeBaseService[2m > [22mgetArticleById[2m > [22mshould return undefined for non-existent ID
+[31m[1mError[22m: Knowledge base loading failed: TypeError: Cannot read properties of undefined (reading 'language')[39m
+[36m [2m❯[22m KnowledgeBaseService.loadArticles src/troubleshooting/knowledge-base-service.ts:[2m84:19[22m[39m
+    [90m 82| [39m        } [35mcatch[39m (error) {
+    [90m 83| [39m            console.error('Failed to load knowledge base articles:', e…
+    [90m 84| [39m            [35mthrow[39m [35mnew[39m [33mError[39m([32m`Knowledge base loading failed: [39m[36m${[39merror[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 85| [39m        }
+    [90m 86| [39m    }
+[90m [2m❯[22m src/troubleshooting/__tests__/knowledge-base-service.test.ts:[2m111:27[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22mKnowledgeBaseService[2m > [22mgetArticleByErrorCode[2m > [22mshould return article by error code
+[31m[1mError[22m: Knowledge base loading failed: TypeError: Cannot read properties of undefined (reading 'language')[39m
+[36m [2m❯[22m KnowledgeBaseService.loadArticles src/troubleshooting/knowledge-base-service.ts:[2m84:19[22m[39m
+    [90m 82| [39m        } [35mcatch[39m (error) {
+    [90m 83| [39m            console.error('Failed to load knowledge base articles:', e…
+    [90m 84| [39m            [35mthrow[39m [35mnew[39m [33mError[39m([32m`Knowledge base loading failed: [39m[36m${[39merror[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 85| [39m        }
+    [90m 86| [39m    }
+[90m [2m❯[22m src/troubleshooting/__tests__/knowledge-base-service.test.ts:[2m121:27[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[31/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22mKnowledgeBaseService[2m > [22mgetArticleByErrorCode[2m > [22mshould return undefined for non-existent error code
+[31m[1mError[22m: Knowledge base loading failed: TypeError: Cannot read properties of undefined (reading 'language')[39m
+[36m [2m❯[22m KnowledgeBaseService.loadArticles src/troubleshooting/knowledge-base-service.ts:[2m84:19[22m[39m
+    [90m 82| [39m        } [35mcatch[39m (error) {
+    [90m 83| [39m            console.error('Failed to load knowledge base articles:', e…
+    [90m 84| [39m            [35mthrow[39m [35mnew[39m [33mError[39m([32m`Knowledge base loading failed: [39m[36m${[39merror[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 85| [39m        }
+    [90m 86| [39m    }
+[90m [2m❯[22m src/troubleshooting/__tests__/knowledge-base-service.test.ts:[2m131:27[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[32/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22mKnowledgeBaseService[2m > [22mgetArticleByErrorCode[2m > [22mshould map multiple error codes to same article
+[31m[1mError[22m: Knowledge base loading failed: TypeError: Cannot read properties of undefined (reading 'language')[39m
+[36m [2m❯[22m KnowledgeBaseService.loadArticles src/troubleshooting/knowledge-base-service.ts:[2m84:19[22m[39m
+    [90m 82| [39m        } [35mcatch[39m (error) {
+    [90m 83| [39m            console.error('Failed to load knowledge base articles:', e…
+    [90m 84| [39m            [35mthrow[39m [35mnew[39m [33mError[39m([32m`Knowledge base loading failed: [39m[36m${[39merror[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 85| [39m        }
+    [90m 86| [39m    }
+[90m [2m❯[22m src/troubleshooting/__tests__/knowledge-base-service.test.ts:[2m139:27[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[33/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22mKnowledgeBaseService[2m > [22mdispose[2m > [22mshould clear all data on dispose
+[31m[1mError[22m: Knowledge base loading failed: TypeError: Cannot read properties of undefined (reading 'language')[39m
+[36m [2m❯[22m KnowledgeBaseService.loadArticles src/troubleshooting/knowledge-base-service.ts:[2m84:19[22m[39m
+    [90m 82| [39m        } [35mcatch[39m (error) {
+    [90m 83| [39m            console.error('Failed to load knowledge base articles:', e…
+    [90m 84| [39m            [35mthrow[39m [35mnew[39m [33mError[39m([32m`Knowledge base loading failed: [39m[36m${[39merror[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 85| [39m        }
+    [90m 86| [39m    }
+[90m [2m❯[22m src/troubleshooting/__tests__/knowledge-base-service.test.ts:[2m153:27[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[34/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/troubleshooting/__tests__/knowledge-base-service.test.ts[2m > [22mKnowledgeBaseService[2m > [22mdispose[2m > [22mshould allow reloading after dispose
+[31m[1mError[22m: Knowledge base loading failed: TypeError: Cannot read properties of undefined (reading 'language')[39m
+[36m [2m❯[22m KnowledgeBaseService.loadArticles src/troubleshooting/knowledge-base-service.ts:[2m84:19[22m[39m
+    [90m 82| [39m        } [35mcatch[39m (error) {
+    [90m 83| [39m            console.error('Failed to load knowledge base articles:', e…
+    [90m 84| [39m            [35mthrow[39m [35mnew[39m [33mError[39m([32m`Knowledge base loading failed: [39m[36m${[39merror[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 85| [39m        }
+    [90m 86| [39m    }
+[90m [2m❯[22m src/troubleshooting/__tests__/knowledge-base-service.test.ts:[2m162:27[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[35/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/coder/__tests__/coder-agent.test.ts[2m > [22mCoderAgent Test Suite[2m > [22mShould parse LLM response correctly
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m CoderAgent.execute src/agents/coder/coder-agent.ts:[2m40:34[22m[39m
+[90m [2m❯[22m src/agents/coder/__tests__/coder-agent.test.ts:[2m39:38[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[36/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/coder/__tests__/coder-agent.test.ts[2m > [22mCoderAgent Test Suite[2m > [22mExpert Mode - Should include [TECH DEBT] and [COMPLEXITY] sections in prompt
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m src/agents/coder/__tests__/coder-agent.test.ts:[2m57:41[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[37/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/coder/__tests__/coder-agent.test.ts[2m > [22mCoderAgent Test Suite[2m > [22mExpert Mode - Should request time/space complexity analysis
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m src/agents/coder/__tests__/coder-agent.test.ts:[2m76:41[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[38/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/coder/__tests__/coder-agent.test.ts[2m > [22mCoderAgent Test Suite[2m > [22mExpert Mode - Should request trade-off analysis
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m src/agents/coder/__tests__/coder-agent.test.ts:[2m92:41[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/coder/__tests__/coder-agent.test.ts[2m > [22mCoderAgent Test Suite[2m > [22mExpert Mode - Should NOT include [PEDAGOGY] section
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m src/agents/coder/__tests__/coder-agent.test.ts:[2m108:41[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[40/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/coder/__tests__/coder-agent.test.ts[2m > [22mCoderAgent Test Suite[2m > [22mShould include architectural guidance in prompt when provided
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m CoderAgent.execute src/agents/coder/coder-agent.ts:[2m40:34[22m[39m
+[90m [2m❯[22m src/agents/coder/__tests__/coder-agent.test.ts:[2m132:21[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[41/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/coder/__tests__/coder-agent.test.ts[2m > [22mCoderAgent Test Suite[2m > [22mShould include phase-specific instructions in prompt
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m CoderAgent.execute src/agents/coder/coder-agent.ts:[2m40:34[22m[39m
+[90m [2m❯[22m src/agents/coder/__tests__/coder-agent.test.ts:[2m146:21[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[42/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/reviewer/__tests__/reviewer-agent-security.test.ts[2m > [22mReviewerAgent Security Tests[2m > [22mshould include Security analysis instructions in system prompt
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m ReviewerAgent.execute src/agents/reviewer/reviewer-agent.ts:[2m38:34[22m[39m
+[90m [2m❯[22m src/agents/reviewer/__tests__/reviewer-agent-security.test.ts:[2m69:21[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[43/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/reviewer/__tests__/reviewer-agent-security.test.ts[2m > [22mReviewerAgent Security Tests[2m > [22mshould parse security issues from LLM response
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m ReviewerAgent.execute src/agents/reviewer/reviewer-agent.ts:[2m38:34[22m[39m
+[90m [2m❯[22m src/agents/reviewer/__tests__/reviewer-agent-security.test.ts:[2m77:38[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[44/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/reviewer/__tests__/reviewer-agent-security.test.ts[2m > [22mReviewerAgent Security Tests[2m > [22mshould create alerts for security issues
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m ReviewerAgent.execute src/agents/reviewer/reviewer-agent.ts:[2m38:34[22m[39m
+[90m [2m❯[22m src/agents/reviewer/__tests__/reviewer-agent-security.test.ts:[2m85:21[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[45/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/reviewer/__tests__/reviewer-agent-security.test.ts[2m > [22mReviewerAgent Security Tests[2m > [22mshould not detect security issues in safe code
+[31m[1mTypeError[22m: __vite_ssr_import_0__.EventEmitter is not a constructor[39m
+[36m [2m❯[22m ModeManager.<instance_members_initializer> src/modes/mode-manager.ts:[2m14:36[22m[39m
+    [90m 12| [39m    [35mprivate[39m currentMode[33m:[39m [33mAgentMode[39m [33m=[39m [33mAgentMode[39m[33m.[39m[33mLearning[39m[33m;[39m
+    [90m 13| [39m    private previousMode: AgentMode | undefined; // Store mode to rest…
+    [90m 14| [39m    private onModeChangedEmitter = new vscode.EventEmitter<{ previous:…
+    [90m   | [39m                                   [31m^[39m
+    [90m 15| [39m    [35mpublic[39m readonly onModeChanged [33m=[39m [35mthis[39m[33m.[39monModeChangedEmitter[33m.[39mevent[33m;[39m
+    [90m 16| [39m
+[90m [2m❯[22m new ModeManager src/modes/mode-manager.ts:[2m17:13[22m[39m
+[90m [2m❯[22m Function.getInstance src/modes/mode-manager.ts:[2m23:36[22m[39m
+[90m [2m❯[22m ReviewerAgent.execute src/agents/reviewer/reviewer-agent.ts:[2m38:34[22m[39m
+[90m [2m❯[22m src/agents/reviewer/__tests__/reviewer-agent-security.test.ts:[2m95:38[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[46/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/webview/components/__tests__/tooltip-manager.test.ts[2m > [22mTooltipManager[2m > [22mshould show tooltip after delay
+[31m[1mAssertionError[22m: expected '0' to be '1' // Object.is equality[39m
+
+Expected: [32m"1"[39m
+Received: [31m"0"[39m
+
+[36m [2m❯[22m src/webview/components/__tests__/tooltip-manager.test.ts:[2m73:39[22m[39m
+    [90m 71| [39m        [35mconst[39m tooltip [33m=[39m document[33m.[39m[34mgetElementById[39m([32m'hud-tooltip'[39m)[33m;[39m
+    [90m 72| [39m        [34mexpect[39m(tooltip[33m.[39minnerHTML)[33m.[39m[34mtoBe[39m(content)[33m;[39m
+    [90m 73| [39m        [34mexpect[39m(tooltip[33m.[39mstyle[33m.[39mopacity)[33m.[39m[34mtoBe[39m([32m'1'[39m)[33m;[39m
+    [90m   | [39m                                      [31m^[39m
+    [90m 74| [39m        vi[33m.[39m[34museRealTimers[39m()[33m;[39m
+    [90m 75| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[47/106]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/webview/components/__tests__/tooltip-manager.test.ts[2m > [22mTooltipManager[2m > [22mshould hide tooltip after delay
+[31m[1mAssertionError[22m: expected '1' to be '0' // Object.is equality[39m
+
+Expected: [32m"0"[39m
+Received: [31m"1"[39m
+
+[36m [2m❯[22m src/webview/components/__tests__/tooltip-manager.test.ts:[2m91:39[22m[39m
+    [90m 89| [39m        vi[33m.[39m[34madvanceTimersByTime[39m([34m200[39m)[33m;[39m
+    [90m 90| [39m        [35mconst[39m tooltip [33m=[39m document[33m.[39m[34mgetElementById[39m([32m'hud-tooltip'[39m)[33m;[39m
+    [90m 91| [39m        [34mexpect[39m(tooltip[33m.[39mstyle[33m.[39mopacity)[33m.[39m[34mtoBe[39m([32m'0'[39m)[33m;[39m
+    [90m   | [39m                                      [31m^[39m
+    [90m 92| [39m        vi[33m.[39m[34museRealTimers[39m()[33m;[39m
+    [90m 93| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[48/106]⎯[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Errors [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
+[31m[1m
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.[22m[39m
+
+[31m⎯⎯⎯⎯[39m[1m[41m Unhandled Rejection [49m[22m[31m⎯⎯⎯⎯⎯[39m
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'activeDebugSession')[39m
+[36m [2m❯[22m PhaseDetector.detectPhase src/services/phase-detector.ts:[2m59:26[22m[39m
+    [90m 57| [39m
+    [90m 58| [39m        [90m// 1. Debug Phase (Highest priority environmental trigger)[39m
+    [90m 59| [39m        [35mif[39m (vscode[33m.[39mdebug[33m.[39mactiveDebugSession) {
+    [90m   | [39m                         [31m^[39m
+    [90m 60| [39m            [35mthis[39m[33m.[39mstateManager[33m.[39m[34mupdatePhase[39m([32m'debug'[39m)[33m;[39m
+    [90m 61| [39m            [35mreturn[39m[33m;[39m
+[90m [2m❯[22m PhaseDetector.setManualOverride src/services/phase-detector.ts:[2m80:14[22m[39m
+[90m [2m❯[22m src/services/__tests__/phase-detector.test.ts:[2m24:23[22m[39m
+[90m [2m❯[22m node_modules/@vitest/runner/dist/index.js:[2m145:11[22m[39m
+[90m [2m❯[22m node_modules/@vitest/runner/dist/index.js:[2m915:26[22m[39m
+[90m [2m❯[22m node_modules/@vitest/runner/dist/index.js:[2m1243:20[22m[39m
+[90m [2m❯[22m runWithTimeout node_modules/@vitest/runner/dist/index.js:[2m1209:10[22m[39m
+[90m [2m❯[22m node_modules/@vitest/runner/dist/index.js:[2m1653:37[22m[39m
+[90m [2m❯[22m Traces.$ node_modules/vitest/dist/chunks/traces.CCmnQaNT.js:[2m142:27[22m[39m
+
+[31mThis error originated in "[1msrc/services/__tests__/phase-detector.test.ts[22m" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.[39m
+[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
+
+
+[2m Test Files [22m [1m[31m23 failed[39m[22m[2m | [22m[1m[32m44 passed[39m[22m[90m (67)[39m
+[2m      Tests [22m [1m[31m74 failed[39m[22m[2m | [22m[1m[32m388 passed[39m[22m[90m (462)[39m
+[2m     Errors [22m [1m[31m1 error[39m[22m
+[2m   Start at [22m 10:18:01
+[2m   Duration [22m 7.13s[2m (transform 4.62s, setup 0ms, import 12.21s, tests 11.07s, environment 1.76s)[22m
+

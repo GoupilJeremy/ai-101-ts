@@ -148,7 +148,7 @@ export class LLMProviderManager {
 
         const provider = this.getProvider(preferredProviderName);
         if (!provider) {
-            throw new LLMProviderError(`Preferred provider '${preferredProviderName}' not registered for token estimation`, 'PROVIDER_NOT_FOUND', false);
+            throw new LLMProviderError(`Preferred provider '${preferredProviderName}' not registered for token estimation`, 'AI101-LLM-001', false, { provider: preferredProviderName });
         }
 
         return await provider.estimateTokens(text);
@@ -186,10 +186,10 @@ export class LLMProviderManager {
 
         for (const providerName of fallbackOrder) {
             // Skip if already attempted
-            if (attempted.includes(providerName)) continue;
+            if (attempted.includes(providerName)) {continue;}
 
             const provider = this.getProvider(providerName);
-            if (!provider) continue;
+            if (!provider) {continue;}
 
             // Check availability before call
             if (!(await provider.isAvailable())) {
@@ -218,9 +218,10 @@ export class LLMProviderManager {
         }
 
         throw new LLMProviderError(
-            `All configured LLM providers failed for agent '${agent}'. Attempts: ${attempted.join(', ')}. Details: ${JSON.stringify(errors)}`,
-            'ALL_PROVIDERS_FAILED',
-            false
+            `All configured LLM providers failed for agent '${agent}'.`,
+            'AI101-LLM-001',
+            false,
+            { provider: attempted.join(', ') }
         );
     }
 }

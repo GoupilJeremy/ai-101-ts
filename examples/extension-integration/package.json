@@ -1,0 +1,46 @@
+{
+    "name": "ai-101-integration-example",
+    "displayName": "AI-101 Integration Example",
+    "description": "Example extension demonstrating AI-101 API integration",
+    "version": "1.0.0",
+    "publisher": "example",
+    "engines": {
+        "vscode": "^1.75.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "example.toggleAI101Mode",
+                "title": "Toggle AI-101 Mode"
+            },
+            {
+                "command": "example.showAI101Info",
+                "title": "Show AI-101 Info"
+            }
+        ]
+    },
+    "extensionDependencies": [
+        "GoupilJeremy.ai-101-ts"
+    ],
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "lint": "eslint src --ext ts"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.75.0",
+        "@types/node": "16.x",
+        "typescript": "^5.3.3",
+        "eslint": "^8.0.0",
+        "@typescript-eslint/eslint-plugin": "^5.0.0",
+        "@typescript-eslint/parser": "^5.0.0"
+    }
+}

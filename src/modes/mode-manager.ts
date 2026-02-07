@@ -29,7 +29,7 @@ export class ModeManager {
      * Set the active mode and persist it.
      */
     public async setMode(mode: AgentMode): Promise<void> {
-        if (this.currentMode === mode) return;
+        if (this.currentMode === mode) {return;}
 
         const previousMode = this.currentMode;
 

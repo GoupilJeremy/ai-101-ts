@@ -16,6 +16,56 @@ For example if there is an image subfolder under your extension project workspac
 
 If you have any requirements or dependencies, add a section describing those and how to install and configure them.
 
+## Default Hotkeys
+
+The following hotkeys are available by default (configurable in VSCode Keyboard Shortcuts):
+
+### Global Hotkeys
+* **Toggle HUD Visibility**: `Ctrl+Alt+H` (`Cmd+Alt+H` on macOS)
+* **Toggle Focus Mode**: `Ctrl+Shift+Alt+F` (`Cmd+Shift+Alt+F` on macOS)
+* **Accept AI Suggestion**: `Ctrl+Enter` (`Cmd+Enter` on macOS)
+* **Reject AI Suggestion**: `Ctrl+Backspace` (`Cmd+Backspace` on macOS)
+* **Force Agent State (Debug)**: `Ctrl+Shift+Alt+S` (`Cmd+Shift+Alt+S` on macOS)
+* **Focus HUD for Navigation**: `Ctrl+Shift+H` (`Cmd+Shift+H` on macOS)
+
+### Keyboard-Only Navigation
+
+The AI-101 extension provides comprehensive keyboard navigation for all interactive elements in the HUD:
+
+#### Navigation Keys
+* **Tab**: Cycle forward through all interactive elements (agents, alerts, suggestions, vital signs, panels)
+* **Shift+Tab**: Cycle backward through interactive elements
+* **Arrow Left/Right**: Navigate spatially between agents (horizontal navigation)
+* **Arrow Up/Down**: Navigate spatially between alerts (vertical navigation)
+
+#### Action Keys
+* **Enter**: Activate the currently focused element (expand agent, accept suggestion, etc.)
+* **Space**: Toggle the currently focused element state (expand/collapse, select/deselect)
+* **Escape**: Close expanded panels or dismiss the currently focused alert
+
+#### Skip Links
+* **Skip to Agents**: Quickly jump to the first agent
+* **Skip to Alerts**: Quickly jump to the first alert
+* **Skip to Suggestions**: Quickly jump to the first suggestion
+
+#### Help
+* **Shift+?**: Show keyboard shortcuts help overlay
+
+### Accessibility Features
+...
+* **Reduced Motion**: Respects `prefers-reduced-motion` setting
+
+## Development & Debugging
+
+AI-101 includes built-in tools for developers and contributors:
+
+* **Force Agent State**: Force any agent into a specific state (`thinking`, `working`, `alert`, etc.) to test UI transitions and animations.
+  - Command: `AI 101: Force Agent State (Debug)`
+  - Hotkey: `Ctrl+Shift+Alt+S`
+  - Argument support for automation and testing.
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed technical documentation on debugging tools.
+
 ## Extension Settings
 
 Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.

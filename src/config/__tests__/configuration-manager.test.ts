@@ -1,17 +1,42 @@
+import { describe, test, suite, beforeEach, afterEach, vi } from 'vitest';
 import * as assert from 'assert';
-// We mock vscode here to simulate behavior
 import * as vscode from 'vscode';
-import { ConfigurationManager } from '../configuration-manager';
-import { ConfigurationError } from '../../errors/configuration-error';
+import { ConfigurationManager } from '../configuration-manager.js';
+import { UIMode } from '../../api/configuration-types.js';
+
+// Mock vscode
+vi.mock('vscode', () => {
+    let mockStore: Record<string, any> = {
+        'ui.mode': 'learning',
+        'performance.maxTokens': 4096,
+        'llm.provider': 'openai'
+    };
+
+    const mockConfig = {
+        get: vi.fn((key, defaultValue) => {
+            return mockStore[key] !== undefined ? mockStore[key] : defaultValue;
+        }),
+        update: vi.fn((key, value) => {
+            mockStore[key] = value;
+            return Promise.resolve();
+        })
+    };
+
+    return {
+        ConfigurationTarget: {
+            Global: 1,
+            Workspace: 2,
+            WorkspaceFolder: 3
+        },
+        workspace: {
+            getConfiguration: vi.fn(() => mockConfig)
+        }
+    };
+});
 
 suite('ConfigurationManager Suite', () => {
 
     test('getSettings returns default valid configuration', () => {
-        // Assuming the mocked/default environment returns defaults
-        // Note: In a real integration test environment, vscode.workspace.getConfiguration uses actual settings.
-        // For unit testing logic, we rely on the mocked behavior or default values if set up.
-        // Given we are running via vscode-test, we access the real API which reads package.json defaults.
-
         const manager = ConfigurationManager.getInstance();
         const settings = manager.getSettings();
 
@@ -21,11 +46,58 @@ suite('ConfigurationManager Suite', () => {
         assert.strictEqual(settings.telemetry.enabled, true);
     });
 
-    // To test invalid settings, we would ideally mock getConfiguration to return bad values.
-    // Since we are reusing the VSCode integration test runner, mocking 'vscode' module is tricky without a separate unit test runner (like pure mocha).
-    // However, we can assert that the singleton works and that validation logic exists.
+    test('getConfig returns correct default value', () => {
+        const manager = ConfigurationManager.getInstance();
+        const mode = manager.getConfig('ui.mode');
+        assert.strictEqual(mode, UIMode.Learning);
+    });
 
-    // Manual validation logic test (accessing private method via cast or public exposure for testing - here we trust the logic or could extract validator)
-    // For this story, validating the default behavior via integration test is satisfied.
+    test('setConfig updates value in workspace scope', async () => {
+        const manager = ConfigurationManager.getInstance();
+        await manager.setConfig('ui.mode', UIMode.Expert, 'workspace');
+        assert.strictEqual(manager.getConfig('ui.mode'), UIMode.Expert);
+
+        // Reset to default
+        await manager.setConfig('ui.mode', UIMode.Learning, 'workspace');
+    });
+
+    test('updateConfig updates multiple values in workspace scope', async () => {
+        const manager = ConfigurationManager.getInstance();
+        await manager.updateConfig({
+            'ui.mode': UIMode.Focus,
+            'performance.maxTokens': 2048
+        }, 'workspace');
+
+        assert.strictEqual(manager.getConfig('ui.mode'), UIMode.Focus);
+        assert.strictEqual(manager.getConfig('performance.maxTokens'), 2048);
+
+        // Reset to defaults
+        await manager.updateConfig({
+            'ui.mode': UIMode.Learning,
+            'performance.maxTokens': 4096
+        }, 'workspace');
+    });
+
+    test('setConfig throws ConfigurationError for invalid value', async () => {
+        const manager = ConfigurationManager.getInstance();
+        await assert.rejects(async () => {
+            // @ts-ignore
+            await manager.setConfig('ui.mode', 'invalid-mode');
+        }, {
+            name: 'ConfigurationError',
+            message: /Configuration Error: ui.mode/
+        });
+    });
+
+    test('setConfig throws ConfigurationError for non-positive number', async () => {
+        const manager = ConfigurationManager.getInstance();
+        await assert.rejects(async () => {
+            // @ts-ignore
+            await manager.setConfig('performance.maxTokens', -1);
+        }, {
+            name: 'ConfigurationError',
+            message: /Configuration Error: performance.maxTokens/
+        });
+    });
 
 });

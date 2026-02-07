@@ -1,8 +1,10 @@
 import * as vscode from 'vscode';
 import { LLMProviderManager } from '../llm/provider-manager.js';
-import { ExtensionStateManager } from '../state/extension-state-manager.js';
+import { ExtensionStateManager, IDecisionRecord } from '../state/index.js';
 import { ErrorHandler } from '../errors/error-handler.js';
 import { IAgent, AgentType, IAgentRequest, IAgentResponse } from './shared/agent.interface.js';
+import { LifecycleEventManager } from '../api/lifecycle-event-manager.js';
+
 
 export interface AgentLifecycleEvent {
     agent: AgentType;
@@ -107,7 +109,49 @@ export class AgentOrchestrator {
             });
 
             // 5. Synthesize Final Response
-            return this.synthesizeResponse(coderResponse, reviewerResponse, architectReasoning);
+            return this.synthesizeResponse(coderResponse, reviewerResponse, architectReasoning, prompt);
+
+        } catch (error: any) {
+            ErrorHandler.handleError(error);
+            throw error;
+        }
+    }
+
+    /**
+     * Processes an edge case fix request.
+     * Flow: Coder -> Reviewer
+     */
+    public async processEdgeCaseFix(edgeCase: any): Promise<IAgentResponse> {
+        ErrorHandler.log(`Processing edge case fix: ${edgeCase.type}`);
+
+        try {
+            const activeEditor = vscode.window.activeTextEditor;
+            let currentContext = '';
+            if (activeEditor) {
+                currentContext = activeEditor.document.getText();
+            }
+
+            // 1. Coder Agent - Generate Fix
+            const fixPrompt = `Implement the following edge case fix for the current file:
+Type: ${edgeCase.type}
+Description: ${edgeCase.description}
+Recommended Fix: ${edgeCase.fix}
+
+Please provide the corrected code snippet or file content.`;
+
+            const coderResponse = await this.runAgent('coder', {
+                prompt: fixPrompt,
+                context: currentContext
+            });
+
+            // 2. Reviewer Agent - Validate
+            const reviewerResponse = await this.runAgent('reviewer', {
+                prompt: `Review this edge case fix: ${coderResponse.result}`,
+                context: currentContext
+            });
+
+            // 3. Synthesize
+            return this.synthesizeResponse(coderResponse, reviewerResponse, 'Edge Case Fix implemented', edgeCase.description);
 
         } catch (error: any) {
             ErrorHandler.handleError(error);
@@ -126,7 +170,7 @@ export class AgentOrchestrator {
     /**
      * Combines outputs from multiple agents into a final response.
      */
-    private synthesizeResponse(coder: IAgentResponse, reviewer: IAgentResponse, architectReasoning: string): IAgentResponse {
+    private synthesizeResponse(coder: IAgentResponse, reviewer: IAgentResponse, architectReasoning: string, originalPrompt: string): IAgentResponse {
         const finalResult = coder.result;
         const combinedReasoning = [
             architectReasoning ? `Architect: ${architectReasoning}` : null,
@@ -134,7 +178,59 @@ export class AgentOrchestrator {
             `Reviewer: ${reviewer.reasoning}`
         ].filter(Boolean).join('\n\n');
 
+        // Record Metrics (Story 8.2)
+        import('../telemetry/metrics-service.js').then(module => {
+            const metrics = module.MetricsService.getInstance();
+            metrics.recordSuggestionRequested();
+        }).catch(() => { });
+
+        // Create and add history record
+
+        const historyRecord: IDecisionRecord = {
+            id: Date.now().toString(36) + Math.random().toString(36).substring(2),
+            timestamp: Date.now(),
+            type: 'suggestion',
+            summary: originalPrompt.length > 50 ? originalPrompt.substring(0, 47) + '...' : originalPrompt,
+            agent: 'coder',
+            status: 'pending',
+            details: {
+                reasoning: combinedReasoning,
+                code: coder.result,
+                architectReasoning,
+                coderApproach: coder.reasoning,
+                reviewerValidation: reviewer.reasoning
+            }
+        };
+
+        this.stateManager.addHistoryEntry(historyRecord);
+
+        // Also add an alert so the webview can display the suggestion card
+        this.stateManager.addAlert({
+            id: historyRecord.id,
+            agent: 'coder',
+            severity: 'info',
+            message: `Suggestion for: ${historyRecord.summary}`,
+            timestamp: Date.now(),
+            data: {
+                type: 'suggestion',
+                code: coder.result
+            }
+        });
+
+        // Emit Lifecycle Event: suggestionGenerated
+        LifecycleEventManager.getInstance().emit('suggestionGenerated', {
+            id: historyRecord.id,
+            agent: historyRecord.agent as AgentType,
+            code: coder.result,
+            timestamp: Date.now(),
+            data: {
+                reasoning: combinedReasoning,
+                confidence: (coder.confidence + reviewer.confidence) / 2
+            }
+        });
+
         return {
+
             result: finalResult,
             reasoning: combinedReasoning,
             confidence: (coder.confidence + reviewer.confidence) / 2,
@@ -155,12 +251,27 @@ export class AgentOrchestrator {
         const activeEditor = vscode.window.activeTextEditor;
         const anchorLine = activeEditor?.selection.active.line;
 
+        // Inject current phase into request
+        const currentPhase = this.stateManager.getPhase();
+        request.data = {
+            ...request.data,
+            currentPhase
+        };
+
         this.stateManager.updateAgentState(type, 'thinking', `Processing request...`, anchorLine);
 
         const eventData: AgentLifecycleEvent = { agent: type, timestamp: Date.now() };
         this._onAgentStart.fire({ ...eventData, data: { request } });
 
+        // Emit Lifecycle Event: agentActivated
+        LifecycleEventManager.getInstance().emit('agentActivated', {
+            agent: type,
+            timestamp: Date.now(),
+            data: { request }
+        });
+
         try {
+
             const response = await agent.execute(request);
             this.stateManager.updateAgentState(type, 'success', `Task complete.`, anchorLine);
 
