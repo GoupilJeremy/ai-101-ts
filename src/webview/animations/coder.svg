@@ -1,0 +1,29 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tête -->
+  <circle cx="50" cy="12" r="7" fill="var(--ink-black, #2C3E50)"/>
+
+  <!-- Corps penché (concentration) -->
+  <path
+    d="M50,19 L50,45 Q55,60 65,65"
+    stroke="var(--ink-black, #2C3E50)"
+    stroke-width="3"
+    stroke-linecap="round"
+    fill="none"
+  />
+
+  <!-- Clavier/base -->
+  <path
+    d="M35,65 L70,65"
+    stroke="var(--ink-black, #2C3E50)"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <!-- Accent vermillon (ligne de code active) -->
+  <path
+    d="M45,55 L60,55"
+    stroke="var(--vermillion-red, #E74C3C)"
+    stroke-width="1.5"
+    stroke-linecap="round"
+  />
+</svg>

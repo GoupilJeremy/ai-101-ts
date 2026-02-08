@@ -1,0 +1,28 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tête -->
+  <circle cx="50" cy="15" r="7" fill="var(--ink-black, #2C3E50)"/>
+
+  <!-- Corps droit (gardien) -->
+  <path
+    d="M50,22 L50,75"
+    stroke="var(--ink-black, #2C3E50)"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <!-- Bouclier (protection/validation) -->
+  <path
+    d="M35,30 Q50,25 65,30 L50,55 Z"
+    fill="var(--ink-black, #2C3E50)"
+    opacity="0.7"
+  />
+
+  <!-- Accent vigilance (oeil) -->
+  <circle
+    cx="50"
+    cy="40"
+    r="3"
+    fill="var(--vermillion-red, #E74C3C)"
+    opacity="0.5"
+  />
+</svg>

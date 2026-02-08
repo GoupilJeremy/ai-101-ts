@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suika Agents - SVG Characters Test</title>
+  <style>
+    :root {
+      --ink-black: #2C3E50;
+      --vermillion-red: #E74C3C;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Monaco', 'Courier New', monospace;
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      color: var(--ink-black);
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 16px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .character-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .character-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--ink-black);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .character-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .character-card:hover::before {
+      opacity: 1;
+    }
+
+    .svg-container {
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 20px;
+      background: #f9f9f9;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+
+    .character-card:hover .svg-container {
+      background: #fff;
+    }
+
+    .svg-container svg {
+      width: 120px;
+      height: 120px;
+      transition: transform 0.3s ease;
+    }
+
+    .character-card:hover .svg-container svg {
+      transform: scale(1.1);
+    }
+
+    .character-info {
+      margin-top: 20px;
+    }
+
+    .character-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--ink-black);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .character-role {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 16px;
+    }
+
+    .character-traits {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+      background: #f9f9f9;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .trait-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .trait-label {
+      font-weight: bold;
+      color: var(--ink-black);
+      min-width: 80px;
+    }
+
+    .trait-value {
+      color: #666;
+    }
+
+    .validation-section {
+      max-width: 1400px;
+      margin: 60px auto 0;
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .validation-section h2 {
+      color: var(--ink-black);
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    .checklist-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .checklist-item label {
+      cursor: pointer;
+      flex: 1;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .size-preview {
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 2px dashed #ddd;
+    }
+
+    .size-preview h3 {
+      color: var(--ink-black);
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .sizes {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .size-item {
+      text-align: center;
+    }
+
+    .size-label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      color: #999;
+      font-size: 14px;
+    }
+
+    .success-badge {
+      display: inline-block;
+      background: #50C878;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🍉 Suika Agents</h1>
+    <p>Sumi-e Style SVG Characters - Story 11.1 Validation</p>
+  </div>
+
+  <div class="container">
+    <!-- Architect -->
+    <div class="character-card">
+      <div class="svg-container">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="15" r="8" fill="var(--ink-black)"/>
+          <path d="M50,23 Q45,50 50,80" stroke="var(--ink-black)" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M35,45 L65,45" stroke="var(--ink-black)" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="50" cy="15" r="2" fill="var(--vermillion-red)" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="character-info">
+        <div class="character-name">
+          🏗️ Architect
+          <span class="success-badge">4 traits</span>
+        </div>
+        <div class="character-role">Structure & Design Analysis</div>
+        <div class="character-traits">
+          <div class="trait-item">
+            <span class="trait-label">Traits:</span>
+            <span class="trait-value">Circle (head) + Curved body + T-rule + Red accent</span>
+          </div>
+          <div class="trait-item">
+            <span class="trait-label">Posture:</span>
+            <span class="trait-value">Thoughtful, analytical stance</span>
+          </div>
+          <div class="trait-item">
+            <span class="trait-label">Symbol:</span>
+            <span class="trait-value">T-ruler (architectural tool)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coder -->
+    <div class="character-card">
+      <div class="svg-container">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="12" r="7" fill="var(--ink-black)"/>
+          <path d="M50,19 L50,45 Q55,60 65,65" stroke="var(--ink-black)" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M35,65 L70,65" stroke="var(--ink-black)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M45,55 L60,55" stroke="var(--vermillion-red)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="character-info">
+        <div class="character-name">
+          💻 Coder
+          <span class="success-badge">4 traits</span>
+        </div>
+        <div class="character-role">Code Generation & Implementation</div>
+        <div class="character-traits">
+          <div class="trait-item">
+            <span class="trait-label">Traits:</span>
+            <span class="trait-value">Circle (head) + Leaning body + Keyboard + Active line</span>
+          </div>
+          <div class="trait-item">
+            <span class="trait-label">Posture:</span>
+            <span class="trait-value">Focused, leaning toward work</span>
+          </div>
+          <div class="trait-item">
+            <span class="trait-label">Symbol:</span>
+            <span class="trait-value">Red line (active code line)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviewer -->
+    <div class="character-card">
+      <div class="svg-container">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="15" r="7" fill="var(--ink-black)"/>
+          <path d="M50,22 L50,75" stroke="var(--ink-black)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M35,30 Q50,25 65,30 L50,55 Z" fill="var(--ink-black)" opacity="0.7"/>
+          <circle cx="50" cy="40" r="3" fill="var(--vermillion-red)" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="character-info">
+        <div class="character-name">
+          🛡️ Reviewer
+          <span class="success-badge">4 traits</span>
+        </div>
+        <div class="character-role">Quality & Risk Validation</div>
+        <div class="character-traits">
+          <div class="trait-item">
+            <span class="trait-label">Traits:</span>
+            <span class="trait-value">Circle (head) + Straight body + Shield + Vigilant eye</span>
+          </div>
+          <div class="trait-item">
+            <span class="trait-label">Posture:</span>
+            <span class="trait-value">Upright, guardian stance</span>
+          </div>
+          <div class="trait-item">
+            <span class="trait-label">Symbol:</span>
+            <span class="trait-value">Shield (protection/validation)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Context -->
+    <div class="character-card">
+      <div class="svg-container">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="15" r="7" fill="var(--ink-black)"/>
+          <path d="M50,22 L50,55" stroke="var(--ink-black)" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="50" cy="50" r="15" stroke="var(--ink-black)" stroke-width="2" fill="none"/>
+          <path d="M62,62 L72,72" stroke="var(--ink-black)" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="50" cy="50" r="2" fill="var(--vermillion-red)" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="character-info">
+        <div class="character-name">
+          🔍 Context
+          <span class="success-badge">5 traits</span>
+        </div>
+        <div class="character-role">File Discovery & Context Management</div>
+        <div class="character-traits">
+          <div class="trait-item">
+            <span class="trait-label">Traits:</span>
+            <span class="trait-value">Circle (head) + Body + Magnifier + Handle + Focus point</span>
+          </div>
+          <div class="trait-item">
+            <span class="trait-label">Posture:</span>
+            <span class="trait-value">Observant, searching</span>
+          </div>
+          <div class="trait-item">
+            <span class="trait-label">Symbol:</span>
+            <span class="trait-value">Magnifying glass (observation)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="validation-section">
+    <h2>✅ Story 11.1 - Acceptance Criteria</h2>
+    <div class="checklist">
+      <div class="checklist-item">
+        <input type="checkbox" id="check1" checked>
+        <label for="check1">4 fichiers SVG créés (architect, coder, reviewer, context)</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="check2" checked>
+        <label for="check2">Chaque personnage = 2-5 traits maximum</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="check3" checked>
+        <label for="check3">ViewBox 100x100 pour scalabilité</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="check4" checked>
+        <label for="check4">CSS variables pour couleurs (thémable)</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="check5" checked>
+        <label for="check5">stroke-linecap="round" (effet pinceau)</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="check6">
+        <label for="check6">Minimalisme extrême (philosophie sumi-e)</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="check7">
+        <label for="check7">Asymétrie naturelle (wabi-sabi)</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="check8">
+        <label for="check8">Traits fluides, un seul coup</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="check9">
+        <label for="check9">Accent vermillon stratégique</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="check10">
+        <label for="check10">Identifiable par rôle</label>
+      </div>
+    </div>
+
+    <div class="size-preview">
+      <h3>📏 Size Preview - Scalability Test</h3>
+      <div class="sizes">
+        <div class="size-item">
+          <div class="size-label">40px (minimum)</div>
+          <svg viewBox="0 0 100 100" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="15" r="8" fill="var(--ink-black)"/>
+            <path d="M50,23 Q45,50 50,80" stroke="var(--ink-black)" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M35,45 L65,45" stroke="var(--ink-black)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="size-item">
+          <div class="size-label">60px</div>
+          <svg viewBox="0 0 100 100" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="12" r="7" fill="var(--ink-black)"/>
+            <path d="M50,19 L50,45 Q55,60 65,65" stroke="var(--ink-black)" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M35,65 L70,65" stroke="var(--ink-black)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="size-item">
+          <div class="size-label">80px (default)</div>
+          <svg viewBox="0 0 100 100" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="15" r="7" fill="var(--ink-black)"/>
+            <path d="M50,22 L50,75" stroke="var(--ink-black)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M35,30 Q50,25 65,30 L50,55 Z" fill="var(--ink-black)" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="size-item">
+          <div class="size-label">120px</div>
+          <svg viewBox="0 0 100 100" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="15" r="7" fill="var(--ink-black)"/>
+            <path d="M50,22 L50,55" stroke="var(--ink-black)" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="50" cy="50" r="15" stroke="var(--ink-black)" stroke-width="2" fill="none"/>
+            <path d="M62,62 L72,72" stroke="var(--ink-black)" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="size-item">
+          <div class="size-label">160px (maximum)</div>
+          <svg viewBox="0 0 100 100" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="15" r="8" fill="var(--ink-black)"/>
+            <path d="M50,23 Q45,50 50,80" stroke="var(--ink-black)" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M35,45 L65,45" stroke="var(--ink-black)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>🎨 Suika - Story 11.1 Complete | Made with 墨 (ink) and ❤️</p>
+  </div>
+
+  <script>
+    // Auto-check validation items after review
+    const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        const checkedCount = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked').length;
+        if (checkedCount === checkboxes.length) {
+          alert('✅ Story 11.1 Complete! All acceptance criteria validated. Ready to commit!');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

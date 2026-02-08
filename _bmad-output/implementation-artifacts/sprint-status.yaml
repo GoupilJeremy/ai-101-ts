@@ -187,7 +187,7 @@ development_status:
   epic-11: backlog
 
   # Sprint 1-2: Fondations - Personnages SVG et Ancrage Code
-  11-1-creer-assets-svg-sumi-e-pour-4-agents: backlog
+  11-1-creer-assets-svg-sumi-e-pour-4-agents: done
   11-2-implementer-agentpositioning-ancrage-au-code: backlog
   11-3-etendre-spatialmanager-pour-ancrage-ligne: backlog
   11-4-creer-agentcharactercomponent-avec-animations-deplacement: backlog
