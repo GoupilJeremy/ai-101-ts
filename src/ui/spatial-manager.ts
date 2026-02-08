@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { ExtensionStateManager } from '../state/extension-state-manager.js';
+import { WebviewManager } from './webview-manager.js';
 import { AgentPositioning, AgentPosition, EditorBounds, VisibleRange } from './agent-positioning.js';
 import { AgentType } from '../agents/shared/agent.interface.js';
 
@@ -192,7 +193,7 @@ export class SpatialManager {
      * @param position - New position (or null to detach)
      */
     private notifyWebview(agentId: AgentType, position: (AgentPosition & { isVisible?: boolean }) | null): void {
-        ExtensionStateManager.getInstance().postMessageToWebview({
+        WebviewManager.getInstance().postMessageToWebview({
             type: 'toWebview:agentPositionUpdate',
             agentId,
             position

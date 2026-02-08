@@ -28,8 +28,15 @@ const mockNotifyCursorUpdate = vi.fn();
 vi.mock('../../state/extension-state-manager.js', () => ({
     ExtensionStateManager: {
         getInstance: vi.fn(() => ({
-            postMessageToWebview: mockPostMessageToWebview,
             notifyCursorUpdate: mockNotifyCursorUpdate
+        }))
+    }
+}));
+
+vi.mock('../webview-manager.js', () => ({
+    WebviewManager: {
+        getInstance: vi.fn(() => ({
+            postMessageToWebview: mockPostMessageToWebview
         }))
     }
 }));

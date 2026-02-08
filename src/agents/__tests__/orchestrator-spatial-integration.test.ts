@@ -36,8 +36,16 @@ vi.mock('../../state/extension-state-manager.js', () => ({
         getInstance: vi.fn(() => ({
             updateAgentState: vi.fn(),
             getPhase: vi.fn(() => 'implementation'),
-            postMessageToWebview: vi.fn(),
             notifyCursorUpdate: vi.fn()
+        }))
+    }
+}));
+
+// Mock WebviewManager
+vi.mock('../../ui/webview-manager.js', () => ({
+    WebviewManager: {
+        getInstance: vi.fn(() => ({
+            postMessageToWebview: vi.fn()
         }))
     }
 }));

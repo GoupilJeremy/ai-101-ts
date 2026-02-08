@@ -36,8 +36,8 @@ export class LLMProviderManager {
      * Initializes the manager with a storage path for the cache.
      * @param storagePath Absolute path where cache data should be stored.
      */
-    public initialize(storagePath: string): void {
-        this.cache = new HybridLLMCache(storagePath);
+    public async initialize(storagePath: string): Promise<void> {
+        this.cache = await HybridLLMCache.create(storagePath);
     }
 
     /**
