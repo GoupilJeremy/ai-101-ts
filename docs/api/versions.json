@@ -1,0 +1,13 @@
+{
+    "versions": [
+        {
+            "version": "0.0.1",
+            "releaseDate": "2026-01-20",
+            "isLatest": true,
+            "path": "v0.0.1",
+            "changelog": "Initial release with full API surface"
+        }
+    ],
+    "latest": "0.0.1",
+    "deprecatedVersions": []
+}

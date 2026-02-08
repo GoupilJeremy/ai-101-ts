@@ -1,7 +1,7 @@
 # 🍉 Suika - See How AI Thinks
 
 <p align="center">
-  <img src="media/suika-logo.svg" alt="Suika Logo" width="200">
+  <!-- <img src="media/suika-logo.svg" alt="Suika Logo" width="200"> -->
 </p>
 
 <p align="center">

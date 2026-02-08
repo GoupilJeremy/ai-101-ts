@@ -4,6 +4,10 @@
   "displayName": "Suika",
   "description": "Transparent AI assistant with sumi-e inspired HUD - see how AI thinks",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GoupilJeremy/ai-101-ts.git"
+  },
   "engines": {
     "vscode": "^1.108.0"
   },
@@ -432,14 +436,66 @@
         ]
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "suika-sidebar",
+          "title": "Suika",
+          "icon": "media/suika-logo.svg"
+        }
+      ]
+    },
     "views": {
-      "explorer": [
+      "suika-sidebar": [
+        {
+          "type": "webview",
+          "id": "suika.webview",
+          "name": "Suika HUD",
+          "icon": "media/suika-logo.svg",
+          "contextualTitle": "Suika"
+        },
         {
           "type": "webview",
           "id": "suika.troubleshootingView",
-          "name": "Suika Troubleshooting",
+          "name": "Troubleshooting",
           "icon": "$(question)",
-          "contextualTitle": "Suika Troubleshooting"
+          "contextualTitle": "Troubleshooting"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "suika.showGettingStarted",
+          "when": "view == suika.webview",
+          "group": "navigation"
+        },
+        {
+          "command": "suika.configureApiKeys",
+          "when": "view == suika.webview",
+          "group": "navigation"
+        },
+        {
+          "command": "suika.openDocumentation",
+          "when": "view == suika.webview",
+          "group": "navigation"
+        },
+        {
+          "command": "suika.toggleHUD",
+          "when": "view == suika.webview",
+          "group": "actions"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "suika.addContextFile",
+          "group": "Suika",
+          "when": "resourceLangId"
+        },
+        {
+          "command": "suika.focusHud",
+          "group": "Suika",
+          "when": "editorTextFocus"
         }
       ]
     }
@@ -460,6 +516,10 @@
     "test:unit": "vitest run",
     "test:watch": "vitest watch",
     "docs:generate": "typedoc",
+    "docs:serve": "npx serve docs/api -p 3000",
+    "docs:watch": "typedoc --watch",
+    "docs:clean": "rimraf docs/api",
+    "docs:validate": "npx ts-node scripts/validate-docs.ts",
     "changelog": "standard-version"
   },
   "dependencies": {
