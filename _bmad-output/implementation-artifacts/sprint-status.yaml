@@ -190,7 +190,7 @@ development_status:
   11-1-creer-assets-svg-sumi-e-pour-4-agents: done
   11-2-implementer-agentpositioning-ancrage-au-code: done
   11-3-etendre-spatialmanager-pour-ancrage-ligne: done
-  11-4-creer-agentcharactercomponent-avec-animations-deplacement: backlog
+  11-4-creer-agentcharactercomponent-avec-animations-deplacement: done
   11-5-integrer-agentcharactercomponent-dans-webviewmanager: backlog
   11-6-tests-integration-end-to-end-sprint-1-2: backlog
 

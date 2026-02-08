@@ -401,6 +401,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
         const timelineUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'timeline.css'));
         const tooltipUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'webview', 'styles', 'components', 'tooltip.css'));
         const accessibilityUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'accessibility.css'));
+        const agentCharacterUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'webview', 'styles', 'agent-character.css'));
         const htmlPath = vscode.Uri.joinPath(this._extensionUri, 'dist', 'index.html');
 
         let htmlContent = '';
@@ -423,6 +424,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
             .replace(/\$\{timelineUri\}/g, timelineUri.toString())
             .replace(/\$\{tooltipUri\}/g, tooltipUri.toString())
             .replace(/\$\{accessibilityUri\}/g, accessibilityUri.toString())
+            .replace(/\$\{agentCharacterUri\}/g, agentCharacterUri.toString())
             .replace(/\$\{nonce\}/g, nonce)
             .replace(/\$\{webview.cspSource\}/g, webview.cspSource);
     }

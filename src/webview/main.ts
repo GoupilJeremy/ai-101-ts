@@ -19,6 +19,8 @@ import TooltipManager from './components/tooltip-manager.js';
 import AlertDetailPanel from './components/alert-detail-panel.js';
 // @ts-ignore
 import FocusManager from './accessibility/focus-manager.js';
+// @ts-ignore - Story 11.4: Animated agent characters
+import { AgentCharacterManager } from './components/agent-character.js';
 
 console.log('Webview loaded');
 
@@ -29,6 +31,7 @@ let timelineComponent: any;
 let dropZoneManager: any;
 const agentComponents: Map<string, any> = new Map();
 let tooltipManager: any;
+let agentCharacterManager: AgentCharacterManager;
 
 const stateManagerAdapter = {
     subscribe: (callback: any) => { /* No-op, we call update manually for now */ },
@@ -87,6 +90,16 @@ function initializeComponents() {
 
     // Initialize Alert Detail Panel
     const alertDetailPanel = AlertDetailPanel.getInstance();
+
+    // Story 11.4: Initialize Agent Character Manager
+    agentCharacterManager = AgentCharacterManager.getInstance();
+    const hudContainer = document.getElementById('hud-container');
+    if (hudContainer) {
+        agentCharacterManager.initialize(hudContainer);
+        console.log('AgentCharacterManager initialized');
+    } else {
+        console.error('Failed to initialize AgentCharacterManager: hud-container not found');
+    }
 }
 
 // Performance Monitoring
@@ -555,6 +568,12 @@ window.addEventListener('message', event => {
         case 'toWebview:hudVisibilityUpdate':
             console.log('HUD visibility update received:', message.visible);
             updateHUDVisibility(message.visible);
+            break;
+        case 'toWebview:agentPositionUpdate':
+            // Story 11.4: Handle agent character position updates
+            if (agentCharacterManager) {
+                agentCharacterManager.handlePositionUpdate(message.agentId, message.position);
+            }
             break;
     }
 

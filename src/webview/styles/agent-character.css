@@ -1,0 +1,301 @@
+/**
+ * Agent Character Styles
+ * Story 11.4 - Animated SVG characters with sumi-e aesthetic
+ */
+
+/* ==================================================================
+   Agent Character - Base Styles
+   ================================================================== */
+
+.agent-character {
+    position: fixed;
+    width: 80px;
+    height: 80px;
+    z-index: 1000;
+    pointer-events: auto;
+
+    /* GPU Acceleration */
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
+
+    /* Initial state (hidden) */
+    opacity: 0;
+
+    /* Center the character on its position */
+    margin-left: -40px;  /* Half of width */
+    margin-top: -40px;   /* Half of height */
+}
+
+/* Container for SVG */
+.agent-character__container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Sumi-e ink texture filter */
+    filter: drop-shadow(0 2px 8px rgba(44, 62, 80, 0.15));
+}
+
+/* SVG styling */
+.agent-character__svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* ==================================================================
+   Agent-Specific Styles (Visual Identity)
+   ================================================================== */
+
+.agent-character[data-agent-id="architect"] .agent-character__container {
+    /* Thoughtful, structured - subtle blue tint */
+    filter: drop-shadow(0 2px 8px rgba(52, 152, 219, 0.2));
+}
+
+.agent-character[data-agent-id="coder"] .agent-character__container {
+    /* Active, energetic - subtle green tint */
+    filter: drop-shadow(0 2px 8px rgba(39, 174, 96, 0.2));
+}
+
+.agent-character[data-agent-id="reviewer"] .agent-character__container {
+    /* Vigilant, protective - subtle gold tint */
+    filter: drop-shadow(0 2px 8px rgba(243, 156, 18, 0.2));
+}
+
+.agent-character[data-agent-id="context"] .agent-character__container {
+    /* Observant, curious - subtle bamboo green tint */
+    filter: drop-shadow(0 2px 8px rgba(46, 204, 113, 0.2));
+}
+
+/* ==================================================================
+   Animation States
+   ================================================================== */
+
+/* Smooth transitions for movement */
+.agent-character.moving {
+    transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                top 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Appearing animation */
+.agent-character.appearing {
+    animation: agentAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes agentAppear {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -20px, 0) scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+/* Disappearing animation */
+.agent-character.disappearing {
+    animation: agentDisappear 0.3s ease-in forwards;
+}
+
+@keyframes agentDisappear {
+    from {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translate3d(0, -20px, 0) scale(0.5);
+    }
+}
+
+/* Fading when line out of view */
+.agent-character.faded {
+    opacity: 0.3 !important;
+}
+
+/* ==================================================================
+   Idle Breathing Animation (Subtle Ma - Negative Space)
+   ================================================================== */
+
+/* Subtle breathing when idle (very subtle, like ink drying) */
+.agent-character:not(.moving):not(.appearing):not(.disappearing) .agent-character__svg {
+    animation: agentBreathe 3s ease-in-out infinite;
+}
+
+@keyframes agentBreathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+/* ==================================================================
+   Performance Mode Optimizations
+   ================================================================== */
+
+/* Disable animations in performance mode */
+body.performance-mode .agent-character {
+    transition: none !important;
+    animation: none !important;
+    will-change: auto;
+}
+
+body.performance-mode .agent-character__svg {
+    animation: none !important;
+}
+
+/* Simplify shadows in performance mode */
+body.performance-mode .agent-character__container {
+    filter: none;
+}
+
+/* ==================================================================
+   Focus Mode - Hide characters
+   ================================================================== */
+
+body[data-mode="focus"] .agent-character {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* ==================================================================
+   High Contrast Mode
+   ================================================================== */
+
+body.high-contrast-mode .agent-character__container {
+    filter: drop-shadow(0 3px 12px rgba(0, 0, 0, 0.8));
+}
+
+body.high-contrast-mode .agent-character__svg {
+    /* Increase stroke width for better visibility */
+    stroke-width: 4 !important;
+}
+
+/* ==================================================================
+   Reduced Motion (Accessibility)
+   ================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .agent-character {
+        transition: opacity 0.1s linear !important;
+        animation: none !important;
+    }
+
+    .agent-character__svg {
+        animation: none !important;
+    }
+}
+
+/* ==================================================================
+   Colorblind Mode Adjustments
+   ================================================================== */
+
+body.colorblind-mode[data-colorblind-type="protanopia"] .agent-character__svg,
+body.colorblind-mode[data-colorblind-type="deuteranopia"] .agent-character__svg {
+    /* Adjust colors for red-green colorblindness */
+    /* SVG CSS variables will handle this via root definitions */
+}
+
+body.colorblind-mode[data-colorblind-type="tritanopia"] .agent-character__svg {
+    /* Adjust colors for blue-yellow colorblindness */
+    /* SVG CSS variables will handle this via root definitions */
+}
+
+/* ==================================================================
+   Hover Effects (Desktop)
+   ================================================================== */
+
+@media (hover: hover) {
+    .agent-character:hover .agent-character__container {
+        filter: drop-shadow(0 4px 16px rgba(44, 62, 80, 0.3));
+        cursor: pointer;
+    }
+
+    .agent-character:hover .agent-character__svg {
+        animation: agentHoverPulse 0.6s ease-in-out;
+    }
+}
+
+@keyframes agentHoverPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* ==================================================================
+   CSS Variables for Sumi-e Colors
+   ================================================================== */
+
+:root {
+    --ink-black: #2C3E50;
+    --vermillion-red: #E74C3C;
+    --pine-green: #27AE60;
+    --bamboo-green: #2ECC71;
+    --gold-yellow: #F39C12;
+}
+
+/* High contrast mode overrides */
+body.high-contrast-mode {
+    --ink-black: #000000;
+    --vermillion-red: #FF0000;
+    --pine-green: #00FF00;
+    --bamboo-green: #00FF00;
+    --gold-yellow: #FFFF00;
+}
+
+/* Colorblind mode overrides - Protanopia/Deuteranopia (red-green) */
+body.colorblind-mode[data-colorblind-type="protanopia"],
+body.colorblind-mode[data-colorblind-type="deuteranopia"] {
+    --vermillion-red: #E67E22;  /* Orange instead of red */
+    --pine-green: #3498DB;      /* Blue instead of green */
+    --bamboo-green: #9B59B6;    /* Purple instead of light green */
+}
+
+/* Colorblind mode overrides - Tritanopia (blue-yellow) */
+body.colorblind-mode[data-colorblind-type="tritanopia"] {
+    --gold-yellow: #E74C3C;     /* Red instead of yellow */
+    --pine-green: #E74C3C;      /* Red instead of green */
+    --bamboo-green: #9B59B6;    /* Purple instead of light green */
+}
+
+/* ==================================================================
+   Dark Theme Support
+   ================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    .agent-character__container {
+        filter: drop-shadow(0 2px 12px rgba(255, 255, 255, 0.1));
+    }
+}
+
+/* ==================================================================
+   Z-Index Layers
+   ================================================================== */
+
+/* Ensure characters appear above editor but below critical UI */
+.agent-character {
+    z-index: 1000;
+}
+
+/* Hovered character goes on top */
+.agent-character:hover {
+    z-index: 1001;
+}
+
+/* ==================================================================
+   Print Styles (Hide in print)
+   ================================================================== */
+
+@media print {
+    .agent-character {
+        display: none !important;
+    }
+}
