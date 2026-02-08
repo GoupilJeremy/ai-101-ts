@@ -5,6 +5,7 @@ import { ErrorHandler } from '../errors/error-handler.js';
 import { IAgent, AgentType, IAgentRequest, IAgentResponse } from './shared/agent.interface.js';
 import { LifecycleEventManager } from '../api/lifecycle-event-manager.js';
 import { SpatialManager } from '../ui/spatial-manager.js';
+import { WebviewManager } from '../ui/webview-manager.js';
 
 
 export interface AgentLifecycleEvent {
@@ -87,12 +88,20 @@ export class AgentOrchestrator {
                 }
 
                 if (this.shouldInvolveArchitect(prompt)) {
+                    // Story 11.8: Visualize context → architect interaction
+                    this.visualizeAgentInteraction('context', 'architect',
+                        'Context loaded - analyzing architecture', false);
+
                     const architectResponse = await this.runAgent('architect', {
                         prompt,
                         context: currentContext
                     });
                     currentContext += `\n\nArchitectural Analysis:\n${architectResponse.result}`;
                     architectReasoning = architectResponse.reasoning;
+
+                    // Story 11.8: Visualize architect → coder interaction
+                    this.visualizeAgentInteraction('architect', 'coder',
+                        'Architecture analysis complete', true);
                 }
             }
 
@@ -103,11 +112,19 @@ export class AgentOrchestrator {
                 data: { architecture: projectArchitecture }
             });
 
+            // Story 11.8: Visualize coder → reviewer interaction
+            this.visualizeAgentInteraction('coder', 'reviewer',
+                'Code generation complete', true);
+
             // 4. Reviewer Agent - Validate code
             const reviewerResponse = await this.runAgent('reviewer', {
                 prompt: `Review this code: ${coderResponse.result}`,
                 context: currentContext
             });
+
+            // Story 11.8: Visualize reviewer → context interaction (completing the cycle)
+            this.visualizeAgentInteraction('reviewer', 'context',
+                'Review complete - updating context', false);
 
             // 5. Synthesize Final Response
             return this.synthesizeResponse(coderResponse, reviewerResponse, architectReasoning, prompt);
@@ -166,6 +183,44 @@ Please provide the corrected code snippet or file content.`;
     private shouldInvolveArchitect(prompt: string): boolean {
         const structuralKeywords = ['architecture', 'design', 'structure', 'refactor', 'pattern', 'setup', 'scaffold'];
         return structuralKeywords.some(keyword => prompt.toLowerCase().includes(keyword));
+    }
+
+    /**
+     * Visualizes an interaction between two agents
+     *
+     * Story 11.8: Sends postMessage to webview to trigger ink stroke animation
+     *
+     * @param fromAgent - Source agent
+     * @param toAgent - Destination agent
+     * @param message - Description of the interaction
+     * @param critical - Whether this is a critical interaction (uses vermillion color)
+     *
+     * @example
+     * ```typescript
+     * this.visualizeAgentInteraction('context', 'architect',
+     *   'Context loaded - 5 files', false);
+     * ```
+     */
+    private visualizeAgentInteraction(
+        fromAgent: AgentType,
+        toAgent: AgentType,
+        message: string,
+        critical: boolean = false
+    ): void {
+        try {
+            // Send to webview for visualization
+            WebviewManager.getInstance().postMessageToWebview({
+                type: 'toWebview:agentInteraction',
+                from: fromAgent,
+                to: toAgent,
+                message,
+                critical,
+                timestamp: Date.now()
+            });
+        } catch (error) {
+            // Non-critical: visualization failure shouldn't break agent workflow
+            ErrorHandler.log(`Failed to visualize interaction ${fromAgent} -> ${toAgent}: ${error}`, 'WARNING');
+        }
     }
 
     /**

@@ -21,6 +21,8 @@ import AlertDetailPanel from './components/alert-detail-panel.js';
 import FocusManager from './accessibility/focus-manager.js';
 // @ts-ignore - Story 11.4: Animated agent characters
 import { AgentCharacterManager } from './components/agent-character.js';
+// @ts-ignore - Story 11.7: Inter-agent interaction visualization
+import { AgentInteractionManager } from './components/agent-interaction-manager.js';
 
 console.log('Webview loaded');
 
@@ -32,6 +34,7 @@ let dropZoneManager: any;
 const agentComponents: Map<string, any> = new Map();
 let tooltipManager: any;
 let agentCharacterManager: AgentCharacterManager;
+let agentInteractionManager: AgentInteractionManager;
 
 const stateManagerAdapter = {
     subscribe: (callback: any) => { /* No-op, we call update manually for now */ },
@@ -100,6 +103,10 @@ function initializeComponents() {
     } else {
         console.error('Failed to initialize AgentCharacterManager: hud-container not found');
     }
+
+    // Story 11.8: Initialize Agent Interaction Manager
+    agentInteractionManager = AgentInteractionManager.getInstance();
+    console.log('AgentInteractionManager initialized');
 }
 
 // Performance Monitoring
@@ -573,6 +580,18 @@ window.addEventListener('message', event => {
             // Story 11.4: Handle agent character position updates
             if (agentCharacterManager) {
                 agentCharacterManager.handlePositionUpdate(message.agentId, message.position);
+            }
+            break;
+        case 'toWebview:agentInteraction':
+            // Story 11.8: Handle agent interaction visualization
+            if (agentInteractionManager) {
+                const { from, to, message: text, critical } = message;
+                agentInteractionManager.drawInkStroke(from, to, {
+                    message: text,
+                    critical: critical || false,
+                    duration: critical ? 1500 : 1200
+                });
+                console.log(`Agent interaction: ${from} -> ${to}${critical ? ' (CRITICAL)' : ''}`);
             }
             break;
     }
