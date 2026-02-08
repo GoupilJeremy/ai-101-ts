@@ -4,6 +4,7 @@ import { ExtensionStateManager, IDecisionRecord } from '../state/index.js';
 import { ErrorHandler } from '../errors/error-handler.js';
 import { IAgent, AgentType, IAgentRequest, IAgentResponse } from './shared/agent.interface.js';
 import { LifecycleEventManager } from '../api/lifecycle-event-manager.js';
+import { SpatialManager } from '../ui/spatial-manager.js';
 
 
 export interface AgentLifecycleEvent {
@@ -260,6 +261,16 @@ Please provide the corrected code snippet or file content.`;
 
         this.stateManager.updateAgentState(type, 'thinking', `Processing request...`, anchorLine);
 
+        // Story 11.5: Anchor agent character to current line
+        if (anchorLine !== undefined) {
+            try {
+                SpatialManager.getInstance().attachAgentToLine(type, anchorLine);
+            } catch (error) {
+                // Log but don't fail - spatial positioning is non-critical
+                ErrorHandler.log(`Failed to anchor agent ${type}: ${error}`, 'WARNING');
+            }
+        }
+
         const eventData: AgentLifecycleEvent = { agent: type, timestamp: Date.now() };
         this._onAgentStart.fire({ ...eventData, data: { request } });
 
@@ -277,11 +288,30 @@ Please provide the corrected code snippet or file content.`;
 
             this._onAgentComplete.fire({ ...eventData, data: { response } });
 
+            // Story 11.5: Detach agent character after completion
+            // Keep anchored for a brief moment to show success, then detach
+            setTimeout(() => {
+                try {
+                    SpatialManager.getInstance().detachAgent(type);
+                } catch (error) {
+                    ErrorHandler.log(`Failed to detach agent ${type}: ${error}`, 'WARNING');
+                }
+            }, 2000); // 2 second delay to show success state
+
             return response;
         } catch (error: any) {
             this.stateManager.updateAgentState(type, 'alert', `Error: ${error.message}`);
 
             this._onAgentError.fire({ ...eventData, data: { error: error.message } });
+
+            // Story 11.5: Detach agent on error
+            setTimeout(() => {
+                try {
+                    SpatialManager.getInstance().detachAgent(type);
+                } catch (error) {
+                    ErrorHandler.log(`Failed to detach agent ${type}: ${error}`, 'WARNING');
+                }
+            }, 3000); // 3 second delay to show error state
 
             throw error;
         }
