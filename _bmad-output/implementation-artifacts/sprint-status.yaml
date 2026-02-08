@@ -179,4 +179,36 @@ development_status:
   10-5-implement-clear-error-messages-with-documentation-links: done
   10-6-create-detailed-changelog-with-contributor-recognition: done
   10-7-implement-contextual-tooltips-throughout-ui: done
-  epic-10-retrospective: optional
+  epic-10-retrospective: done
+
+  # ============================================================
+  # Epic 11: Agents Interactifs Animés - Transformation en Personnages Vivants
+  # ============================================================
+  epic-11: backlog
+
+  # Sprint 1-2: Fondations - Personnages SVG et Ancrage Code
+  11-1-creer-assets-svg-sumi-e-pour-4-agents: backlog
+  11-2-implementer-agentpositioning-ancrage-au-code: backlog
+  11-3-etendre-spatialmanager-pour-ancrage-ligne: backlog
+  11-4-creer-agentcharactercomponent-avec-animations-deplacement: backlog
+  11-5-integrer-agentcharactercomponent-dans-webviewmanager: backlog
+  11-6-tests-integration-end-to-end-sprint-1-2: backlog
+
+  # Sprint 3: Interactions Inter-Agents
+  11-7-creer-agentinteractionmanager-traits-encre: backlog
+  11-8-integrer-visualisation-dans-agentorchestrator: backlog
+  11-9-etats-visuels-enrichis-idle-thinking-working: backlog
+
+  # Sprint 4: Fusion Collective Enso
+  11-10-creer-agentfusionmanager-forme-collective: backlog
+  11-11-integrer-logique-fusion-dans-orchestrator: backlog
+  11-12-tests-integration-sprint-4: backlog
+
+  # Sprint 5: Polish & Optimisations
+  11-13-pathfinding-intelligent-anti-collision-avance: backlog
+  11-14-micro-animations-personnalite: backlog
+  11-15-easter-eggs-delices: backlog
+  11-16-optimisations-performance-finales: backlog
+  11-17-documentation-video-tutoriel: backlog
+
+  epic-11-retrospective: optional
