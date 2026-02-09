@@ -1,0 +1,258 @@
+/**
+ * Fusion Enso Styles
+ * Story 11.10 - Collective Agent Fusion
+ *
+ * Styles for the collective Enso circle that appears when agents fuse,
+ * including mini-dashboard, breathing animation, and agent fused state.
+ */
+
+/* ============================================================================
+   Fusion Enso Container
+   ============================================================================ */
+
+/**
+ * Main Enso container
+ * Positioned at screen center with drop shadow
+ */
+.fusion-enso {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+    will-change: transform, opacity;
+}
+
+/**
+ * Enso SVG circle
+ * Additional glow effect for prominence
+ */
+.enso-circle {
+    filter: drop-shadow(0 0 8px var(--ink-black, #2C3E50));
+}
+
+/**
+ * Enso path (circle stroke)
+ * Rounded caps for brush-like appearance
+ */
+.enso-path {
+    stroke-linecap: round;
+}
+
+/* ============================================================================
+   Enso Breathing Animation
+   ============================================================================ */
+
+/**
+ * Breathing animation: Gentle pulsation
+ * 4 second cycle with stroke width and opacity variation
+ * Simulates the living, breathing nature of collaboration
+ */
+@keyframes enso-breathe {
+    0%, 100% {
+        stroke-width: 4;
+        opacity: 0.9;
+    }
+    50% {
+        stroke-width: 5;
+        opacity: 1;
+    }
+}
+
+/* Applied via JavaScript in startEnsoBreathing() */
+
+/* ============================================================================
+   Mini-Dashboard Text Elements
+   ============================================================================ */
+
+/**
+ * Token count display
+ * Monospace font for technical data
+ */
+.enso-tokens {
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    fill: var(--ink-black, #2C3E50);
+    font-weight: bold;
+}
+
+/**
+ * Status text (e.g., "collaborating")
+ * Slightly smaller and semi-transparent
+ */
+.enso-status {
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 11px;
+    fill: var(--ink-black, #2C3E50);
+    opacity: 0.7;
+}
+
+/* ============================================================================
+   Tooltip Message
+   ============================================================================ */
+
+/**
+ * Tooltip message below Enso
+ * Shows contextual information on hover
+ */
+.enso-message {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 200ms ease;
+    pointer-events: none;
+}
+
+/**
+ * Show tooltip on Enso hover
+ */
+.fusion-enso:hover .enso-message {
+    opacity: 1;
+}
+
+/* ============================================================================
+   Fused Agent State
+   ============================================================================ */
+
+/**
+ * Agent character when fused
+ * Disables pointer events (agents are "locked" into fusion)
+ */
+.agent-character.fused {
+    pointer-events: none;
+}
+
+/* ============================================================================
+   Accessibility: Reduced Motion
+   ============================================================================ */
+
+/**
+ * Disable animations for users who prefer reduced motion
+ * Enso still appears but without rotation or breathing
+ */
+@media (prefers-reduced-motion: reduce) {
+    .enso-path {
+        animation: none !important;
+    }
+
+    .enso-circle animateTransform {
+        display: none;
+    }
+
+    /* Static appearance without pulsation */
+    .enso-path {
+        stroke-width: 4.5;
+        opacity: 0.95;
+    }
+}
+
+/* ============================================================================
+   Performance Mode
+   ============================================================================ */
+
+/**
+ * Simplified Enso for performance mode
+ * Slower breathing, no rotation
+ */
+body.performance-mode .enso-path {
+    animation-duration: 6s; /* Slower breathing */
+}
+
+body.performance-mode .enso-circle animateTransform {
+    display: none; /* Disable rotation */
+}
+
+/* ============================================================================
+   High Contrast Mode
+   ============================================================================ */
+
+/**
+ * Enhanced visibility for high contrast mode
+ * Stronger drop shadows and thicker stroke
+ */
+@media (prefers-contrast: high) {
+    .fusion-enso {
+        filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5));
+    }
+
+    .enso-circle {
+        filter: drop-shadow(0 0 12px var(--ink-black, #2C3E50));
+    }
+
+    .enso-path {
+        stroke-width: 5;
+    }
+
+    .enso-tokens,
+    .enso-status {
+        fill: var(--ink-black, #2C3E50);
+        opacity: 1;
+    }
+}
+
+/* ============================================================================
+   Debug Mode
+   ============================================================================ */
+
+/**
+ * Debug mode: Show fusion state label
+ * Useful for development and testing
+ */
+body.debug-mode .fusion-enso::before {
+    content: 'FUSED';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #F39C12;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-family: monospace;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+/* ============================================================================
+   Responsive Scaling
+   ============================================================================ */
+
+/**
+ * Scale Enso on smaller screens
+ * Prevents overlap with other UI elements
+ */
+@media (max-width: 768px) {
+    .enso-circle {
+        width: 150px;
+        height: 150px;
+    }
+
+    .enso-tokens {
+        font-size: 12px;
+    }
+
+    .enso-status {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .enso-circle {
+        width: 120px;
+        height: 120px;
+    }
+
+    .enso-tokens {
+        font-size: 10px;
+    }
+
+    .enso-status {
+        font-size: 9px;
+    }
+}

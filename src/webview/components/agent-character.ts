@@ -292,6 +292,20 @@ export class AgentCharacterComponent {
     }
 
     /**
+     * Get DOM element (Story 11.10 - for fusion animations)
+     */
+    public getElement(): HTMLElement | null {
+        return this.element;
+    }
+
+    /**
+     * Get agent ID
+     */
+    public getAgentId(): AgentType {
+        return this.agentId;
+    }
+
+    /**
      * Check if character is visible
      */
     public isVisible(): boolean {
