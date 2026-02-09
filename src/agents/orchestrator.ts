@@ -276,12 +276,12 @@ Please provide the corrected code snippet or file content.`;
         // Estimate tokens (rough approximation: 1 token ≈ 4 characters)
         const estimatedTokens = Math.ceil(prompt.length / 4);
 
-        // Determine status based on prompt
+        // Determine status based on prompt (check architecture first for priority)
         let status = 'collaborating';
-        if (prompt.toLowerCase().includes('refactor')) {
-            status = 'refactoring';
-        } else if (prompt.toLowerCase().includes('architecture')) {
+        if (prompt.toLowerCase().includes('architecture')) {
             status = 'architectural design';
+        } else if (prompt.toLowerCase().includes('refactor')) {
+            status = 'refactoring';
         } else if (prompt.toLowerCase().includes('optimize')) {
             status = 'optimization';
         } else if (prompt.toLowerCase().includes('migrate')) {
