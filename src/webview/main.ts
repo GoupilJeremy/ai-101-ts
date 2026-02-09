@@ -23,6 +23,7 @@ import FocusManager from './accessibility/focus-manager.js';
 import { AgentCharacterManager } from './components/agent-character.js';
 // @ts-ignore - Story 11.7: Inter-agent interaction visualization
 import { AgentInteractionManager } from './components/agent-interaction-manager.js';
+import { AgentFusionManager } from './components/agent-fusion-manager.js';
 
 console.log('Webview loaded');
 
@@ -35,6 +36,7 @@ const agentComponents: Map<string, any> = new Map();
 let tooltipManager: any;
 let agentCharacterManager: AgentCharacterManager;
 let agentInteractionManager: AgentInteractionManager;
+let agentFusionManager: AgentFusionManager;
 
 const stateManagerAdapter = {
     subscribe: (callback: any) => { /* No-op, we call update manually for now */ },
@@ -107,6 +109,9 @@ function initializeComponents() {
     // Story 11.8: Initialize Agent Interaction Manager
     agentInteractionManager = AgentInteractionManager.getInstance();
     console.log('AgentInteractionManager initialized');
+
+    agentFusionManager = AgentFusionManager.getInstance();
+    console.log('AgentFusionManager initialized');
 }
 
 // Performance Monitoring
@@ -592,6 +597,31 @@ window.addEventListener('message', event => {
                     duration: critical ? 1500 : 1200
                 });
                 console.log(`Agent interaction: ${from} -> ${to}${critical ? ' (CRITICAL)' : ''}`);
+            }
+            break;
+
+        case 'toWebview:triggerFusion':
+            // Story 11.11: Trigger collective agent fusion
+            if (agentFusionManager && agentCharacterManager) {
+                const { agents, metadata } = message;
+
+                // Get agent character components
+                const agentComponents = (agents as string[])
+                    .map((agentId: string) => agentCharacterManager.getCharacter(agentId as any))
+                    .filter((agent: any) => agent !== undefined);
+
+                if (agentComponents.length > 0) {
+                    agentFusionManager.triggerFusion(agentComponents as any[], metadata);
+                    console.log(`Fusion triggered with ${agentComponents.length} agents`);
+                }
+            }
+            break;
+
+        case 'toWebview:releaseFusion':
+            // Story 11.11: Release collective agent fusion
+            if (agentFusionManager) {
+                agentFusionManager.releaseFusion();
+                console.log('Fusion released');
             }
             break;
     }

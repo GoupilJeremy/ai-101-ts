@@ -66,6 +66,16 @@ export class AgentOrchestrator {
     public async processUserRequest(prompt: string): Promise<IAgentResponse> {
         ErrorHandler.log(`Processing user request: ${prompt}`);
 
+        // Story 11.11: Determine if fusion should be triggered
+        const willInvolveArchitect = this.shouldInvolveArchitect(prompt);
+        const activeAgents: AgentType[] = ['context', 'coder', 'reviewer'];
+        if (willInvolveArchitect) {
+            activeAgents.splice(1, 0, 'architect'); // Insert architect after context
+        }
+
+        const shouldFuse = this.shouldTriggerFusion(prompt, activeAgents.length);
+        let fusionTriggered = false;
+
         try {
             // 1. Context Agent - Load relevant files
             const contextResponse = await this.runAgent('context', { prompt });
@@ -87,7 +97,18 @@ export class AgentOrchestrator {
                     ErrorHandler.log('Failed to retrieve project architecture context', 'WARNING');
                 }
 
-                if (this.shouldInvolveArchitect(prompt)) {
+                if (willInvolveArchitect) {
+                    // Story 11.11: Trigger fusion if needed (after context loads)
+                    if (shouldFuse && !fusionTriggered) {
+                        const metadata = this.collectFusionMetadata(prompt, activeAgents);
+                        WebviewManager.getInstance().postMessageToWebview({
+                            type: 'toWebview:triggerFusion',
+                            agents: activeAgents,
+                            metadata
+                        });
+                        fusionTriggered = true;
+                    }
+
                     // Story 11.8: Visualize context → architect interaction
                     this.visualizeAgentInteraction('context', 'architect',
                         'Context loaded - analyzing architecture', false);
@@ -127,9 +148,29 @@ export class AgentOrchestrator {
                 'Review complete - updating context', false);
 
             // 5. Synthesize Final Response
-            return this.synthesizeResponse(coderResponse, reviewerResponse, architectReasoning, prompt);
+            const response = this.synthesizeResponse(coderResponse, reviewerResponse, architectReasoning, prompt);
+
+            // Story 11.11: Release fusion if it was triggered
+            if (fusionTriggered) {
+                WebviewManager.getInstance().postMessageToWebview({
+                    type: 'toWebview:releaseFusion'
+                });
+            }
+
+            return response;
 
         } catch (error: any) {
+            // Story 11.11: Release fusion on error
+            if (fusionTriggered) {
+                try {
+                    WebviewManager.getInstance().postMessageToWebview({
+                        type: 'toWebview:releaseFusion'
+                    });
+                } catch (defusionError) {
+                    ErrorHandler.log('Failed to release fusion on error', 'WARNING');
+                }
+            }
+
             ErrorHandler.handleError(error);
             throw error;
         }
@@ -183,6 +224,82 @@ Please provide the corrected code snippet or file content.`;
     private shouldInvolveArchitect(prompt: string): boolean {
         const structuralKeywords = ['architecture', 'design', 'structure', 'refactor', 'pattern', 'setup', 'scaffold'];
         return structuralKeywords.some(keyword => prompt.toLowerCase().includes(keyword));
+    }
+
+    /**
+     * Determines if agents should fuse based on collaboration intensity
+     * Story 11.11
+     *
+     * Fusion is triggered when:
+     * - 3+ agents are active simultaneously
+     * - Task is complex (architectural changes + code gen + review)
+     * - Estimated duration >5 seconds
+     *
+     * @param prompt - User's request prompt
+     * @param activeAgentCount - Number of agents that will be involved
+     * @returns true if fusion should be triggered
+     */
+    private shouldTriggerFusion(prompt: string, activeAgentCount: number): boolean {
+        // Must have 3+ agents (typically: context, architect, coder, reviewer)
+        if (activeAgentCount < 3) {
+            return false;
+        }
+
+        // Check for complex task keywords
+        const complexTaskKeywords = [
+            'architecture', 'architectural', 'design', 'redesign',
+            'refactor', 'refactoring', 'restructure',
+            'pattern', 'patterns', 'framework',
+            'system', 'module', 'component',
+            'migrate', 'migration', 'upgrade',
+            'optimize', 'optimization',
+            'entire', 'complete', 'comprehensive'
+        ];
+
+        const hasComplexKeyword = complexTaskKeywords.some(keyword =>
+            prompt.toLowerCase().includes(keyword)
+        );
+
+        // If has complex keyword and 3+ agents, likely a fusion-worthy task
+        return hasComplexKeyword;
+    }
+
+    /**
+     * Collects metadata for fusion visualization
+     * Story 11.11
+     *
+     * @param prompt - User's request prompt
+     * @param activeAgents - Array of active agent types
+     * @returns Fusion metadata object
+     */
+    private collectFusionMetadata(prompt: string, activeAgents: AgentType[]): any {
+        // Estimate tokens (rough approximation: 1 token ≈ 4 characters)
+        const estimatedTokens = Math.ceil(prompt.length / 4);
+
+        // Determine status based on prompt
+        let status = 'collaborating';
+        if (prompt.toLowerCase().includes('refactor')) {
+            status = 'refactoring';
+        } else if (prompt.toLowerCase().includes('architecture')) {
+            status = 'architectural design';
+        } else if (prompt.toLowerCase().includes('optimize')) {
+            status = 'optimization';
+        } else if (prompt.toLowerCase().includes('migrate')) {
+            status = 'migration';
+        }
+
+        // Create contextual message from prompt (truncate if too long)
+        let message = prompt;
+        if (message.length > 50) {
+            message = message.substring(0, 47) + '...';
+        }
+
+        return {
+            tokens: estimatedTokens,
+            status,
+            agents: activeAgents,
+            message
+        };
     }
 
     /**
