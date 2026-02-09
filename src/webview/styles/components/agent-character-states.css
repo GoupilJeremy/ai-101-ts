@@ -1,0 +1,319 @@
+/**
+ * Agent Character State Animations
+ * Story 11.9 - Enhanced Visual States
+ *
+ * Defines keyframe animations for different agent states:
+ * - idle: Gentle breathing (4s cycle)
+ * - thinking: Light oscillation (2s cycle)
+ * - working: Intense pulsation with glow (1s cycle)
+ * - success: Green flash with expansion (2s one-time)
+ * - alert/error: Red shake (0.5s one-time)
+ */
+
+/* ============================================================================
+   Idle State - Gentle Breathing
+   ============================================================================ */
+
+/**
+ * Idle animation: Gentle breathing effect
+ * 4 second cycle with subtle scale and opacity changes
+ * Simulates a relaxed, waiting state
+ */
+@keyframes agent-idle-breathe {
+    0%, 100% {
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translate3d(0, 0, 0) scale(1.02);
+        opacity: 0.95;
+    }
+}
+
+.agent-character--idle {
+    animation: agent-idle-breathe 4s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+/* ============================================================================
+   Thinking State - Light Oscillation
+   ============================================================================ */
+
+/**
+ * Thinking animation: Gentle oscillation/sway
+ * 2 second cycle with slight rotation and vertical movement
+ * Suggests contemplation and analysis
+ */
+@keyframes agent-thinking-oscillate {
+    0%, 100% {
+        transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    }
+    25% {
+        transform: translate3d(-2px, 1px, 0) rotate(-2deg) scale(1.01);
+    }
+    75% {
+        transform: translate3d(2px, -1px, 0) rotate(2deg) scale(1.01);
+    }
+}
+
+.agent-character--thinking {
+    animation: agent-thinking-oscillate 2s ease-in-out infinite;
+    will-change: transform;
+}
+
+/* ============================================================================
+   Working State - Intense Pulsation
+   ============================================================================ */
+
+/**
+ * Working animation: Intense pulsation with vermillion glow
+ * 1 second cycle with rapid scale and strong glow
+ * Indicates active processing and high activity
+ */
+@keyframes agent-working-pulse {
+    0%, 100% {
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: drop-shadow(0 0 0px var(--vermillion-red, #E74C3C));
+    }
+    50% {
+        transform: translate3d(0, 0, 0) scale(1.08);
+        filter: drop-shadow(0 0 12px var(--vermillion-red, #E74C3C));
+    }
+}
+
+.agent-character--working {
+    animation: agent-working-pulse 1s cubic-bezier(0.4, 0.0, 0.6, 1.0) infinite;
+    will-change: transform, filter;
+}
+
+/* Alternative: Box-shadow glow for better performance in some browsers */
+.agent-character--working::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    box-shadow: 0 0 20px var(--vermillion-red, #E74C3C);
+    opacity: 0;
+    animation: working-glow-pulse 1s cubic-bezier(0.4, 0.0, 0.6, 1.0) infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes working-glow-pulse {
+    0%, 100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    50% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
+
+/* ============================================================================
+   Success State - Green Flash with Expansion
+   ============================================================================ */
+
+/**
+ * Success animation: Green flash with expansion
+ * 2 second one-time animation
+ * Celebrates successful completion
+ */
+@keyframes agent-success-flash {
+    0% {
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: drop-shadow(0 0 0px var(--pine-green, #27AE60));
+    }
+    20% {
+        transform: translate3d(0, 0, 0) scale(1.15);
+        filter: drop-shadow(0 0 20px var(--pine-green, #27AE60));
+    }
+    40% {
+        transform: translate3d(0, 0, 0) scale(1.05);
+        filter: drop-shadow(0 0 15px var(--pine-green, #27AE60));
+    }
+    100% {
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: drop-shadow(0 0 0px var(--pine-green, #27AE60));
+    }
+}
+
+.agent-character--success {
+    animation: agent-success-flash 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    will-change: transform, filter;
+}
+
+/* ============================================================================
+   Alert/Error State - Red Shake
+   ============================================================================ */
+
+/**
+ * Alert/Error animation: Rapid shake with red glow
+ * 0.5 second one-time animation
+ * Draws attention to errors or warnings
+ */
+@keyframes agent-alert-shake {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+        filter: drop-shadow(0 0 0px var(--vermillion-red, #E74C3C));
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translate3d(-4px, 0, 0);
+        filter: drop-shadow(0 0 15px var(--vermillion-red, #E74C3C));
+    }
+    20%, 40%, 60%, 80% {
+        transform: translate3d(4px, 0, 0);
+        filter: drop-shadow(0 0 15px var(--vermillion-red, #E74C3C));
+    }
+}
+
+.agent-character--alert {
+    animation: agent-alert-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
+    will-change: transform, filter;
+}
+
+/* ============================================================================
+   Transition Smoothing
+   ============================================================================ */
+
+/**
+ * Smooth transitions between states
+ * Prevents jarring visual changes when switching animations
+ */
+.agent-character {
+    transition: animation 0.3s ease-out;
+}
+
+/* Remove transitions when entering alert state (needs to be immediate) */
+.agent-character--alert {
+    transition: none !important;
+}
+
+/* ============================================================================
+   Performance Optimizations
+   ============================================================================ */
+
+/**
+ * GPU acceleration hints
+ * Ensures all animations run on GPU for 60fps
+ */
+.agent-character--idle,
+.agent-character--thinking,
+.agent-character--working,
+.agent-character--success,
+.agent-character--alert {
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+/* ============================================================================
+   Reduced Motion Support
+   ============================================================================ */
+
+/**
+ * Disable animations for users who prefer reduced motion
+ * Accessibility: respects user preferences
+ */
+@media (prefers-reduced-motion: reduce) {
+    .agent-character--idle,
+    .agent-character--thinking,
+    .agent-character--working,
+    .agent-character--success,
+    .agent-character--alert {
+        animation: none !important;
+    }
+
+    .agent-character--working::after {
+        animation: none !important;
+        opacity: 0.3 !important; /* Static glow for working state */
+    }
+
+    /* Static indicators for states */
+    .agent-character--working {
+        transform: scale(1.05) !important;
+    }
+
+    .agent-character--success {
+        filter: drop-shadow(0 0 10px var(--pine-green, #27AE60)) !important;
+    }
+
+    .agent-character--alert {
+        filter: drop-shadow(0 0 10px var(--vermillion-red, #E74C3C)) !important;
+    }
+}
+
+/* ============================================================================
+   Performance Mode
+   ============================================================================ */
+
+/**
+ * Simplified animations for performance mode
+ * Reduces visual complexity while maintaining state indicators
+ */
+body.performance-mode .agent-character--idle {
+    animation-duration: 6s; /* Slower, less frequent */
+}
+
+body.performance-mode .agent-character--thinking {
+    animation-duration: 3s; /* Slower */
+}
+
+body.performance-mode .agent-character--working {
+    animation-duration: 1.5s; /* Slightly slower */
+}
+
+body.performance-mode .agent-character--working::after {
+    display: none; /* Disable glow layer */
+}
+
+/* ============================================================================
+   High Contrast Mode
+   ============================================================================ */
+
+/**
+ * Enhanced visibility for high contrast mode
+ * Stronger glows and more pronounced animations
+ */
+@media (prefers-contrast: high) {
+    .agent-character--working {
+        filter: drop-shadow(0 0 20px var(--vermillion-red, #E74C3C)) !important;
+    }
+
+    .agent-character--success {
+        filter: drop-shadow(0 0 25px var(--pine-green, #27AE60)) !important;
+    }
+
+    .agent-character--alert {
+        filter: drop-shadow(0 0 25px var(--vermillion-red, #E74C3C)) !important;
+    }
+}
+
+/* ============================================================================
+   Debug Mode
+   ============================================================================ */
+
+/**
+ * Debug mode: Show state labels
+ * Useful for development and testing
+ */
+body.debug-mode .agent-character::before {
+    content: attr(data-state);
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-family: monospace;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 1000;
+}

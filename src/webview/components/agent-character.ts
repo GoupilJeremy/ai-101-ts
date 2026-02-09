@@ -20,12 +20,18 @@ export interface AgentPosition {
 }
 
 /**
+ * Visual states for agent animation (Story 11.9)
+ */
+export type AgentVisualState = 'idle' | 'thinking' | 'working' | 'success' | 'alert';
+
+/**
  * Agent character state
  */
 interface CharacterState {
     position: AgentPosition | null;
     isVisible: boolean;
     isAnimating: boolean;
+    visualState: AgentVisualState;  // Story 11.9: Current visual state
 }
 
 /**
@@ -107,7 +113,8 @@ export class AgentCharacterComponent {
         this.state = {
             position: null,
             isVisible: false,
-            isAnimating: false
+            isAnimating: false,
+            visualState: 'idle'  // Story 11.9: Start in idle state
         };
     }
 
@@ -125,8 +132,9 @@ export class AgentCharacterComponent {
         // Create main element
         this.element = document.createElement('div');
         this.element.id = `agent-character-${this.agentId}`;
-        this.element.className = 'agent-character';
+        this.element.className = 'agent-character agent-character--idle';  // Story 11.9: Start with idle state
         this.element.dataset.agentId = this.agentId;
+        this.element.dataset.state = 'idle';  // Story 11.9: Initial state for debugging
         this.element.setAttribute('role', 'img');
         this.element.setAttribute('aria-label', `${AgentCharacterComponent.AGENT_NAMES[this.agentId]} agent`);
 
@@ -298,6 +306,112 @@ export class AgentCharacterComponent {
     }
 
     /**
+     * Set visual state with smooth transitions (Story 11.9)
+     *
+     * @param newState - The visual state to transition to
+     *
+     * @example
+     * ```typescript
+     * character.setState('thinking'); // Apply thinking animation
+     * character.setState('success');  // Trigger success flash
+     * ```
+     */
+    public setState(newState: AgentVisualState): void {
+        if (!this.element) {
+            console.warn(`Agent ${this.agentId} not rendered yet`);
+            return;
+        }
+
+        // Don't re-apply the same state
+        if (this.state.visualState === newState) {
+            return;
+        }
+
+        // Remove all state classes
+        const stateClasses = [
+            'agent-character--idle',
+            'agent-character--thinking',
+            'agent-character--working',
+            'agent-character--success',
+            'agent-character--alert'
+        ];
+
+        stateClasses.forEach(cls => this.element?.classList.remove(cls));
+
+        // Apply new state class
+        this.element.classList.add(`agent-character--${newState}`);
+
+        // Update data attribute for debugging
+        this.element.dataset.state = newState;
+
+        // Update internal state
+        const previousState = this.state.visualState;
+        this.state.visualState = newState;
+
+        // Handle one-time animations (success and alert return to idle)
+        if (newState === 'success') {
+            // Success animation is 2s, then return to idle
+            setTimeout(() => {
+                if (this.state.visualState === 'success') {
+                    this.setState('idle');
+                }
+            }, 2000);
+        } else if (newState === 'alert') {
+            // Alert animation is 0.5s, then return to appropriate state
+            setTimeout(() => {
+                if (this.state.visualState === 'alert') {
+                    // Return to thinking if that was the previous state (interruption)
+                    // Otherwise go to idle (errors stop the workflow)
+                    const returnState = previousState === 'thinking' ? 'thinking' : 'idle';
+                    this.setState(returnState);
+                }
+            }, 500);
+        }
+    }
+
+    /**
+     * Get current visual state (Story 11.9)
+     */
+    public getVisualState(): AgentVisualState {
+        return this.state.visualState;
+    }
+
+    /**
+     * Convenience method: Set to idle state
+     */
+    public setIdleState(): void {
+        this.setState('idle');
+    }
+
+    /**
+     * Convenience method: Set to thinking state
+     */
+    public setThinkingState(): void {
+        this.setState('thinking');
+    }
+
+    /**
+     * Convenience method: Set to working state
+     */
+    public setWorkingState(): void {
+        this.setState('working');
+    }
+
+    /**
+     * Convenience method: Trigger success animation
+     */
+    public setSuccessState(): void {
+        this.setState('success');
+    }
+
+    /**
+     * Convenience method: Trigger alert animation
+     */
+    public setAlertState(): void {
+        this.setState('alert');
+    }
+
+    /**
      * Dispose and remove from DOM
      */
     public dispose(): void {
@@ -309,7 +423,8 @@ export class AgentCharacterComponent {
         this.state = {
             position: null,
             isVisible: false,
-            isAnimating: false
+            isAnimating: false,
+            visualState: 'idle'  // Story 11.9: Reset visual state
         };
     }
 }
