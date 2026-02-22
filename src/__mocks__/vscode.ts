@@ -27,6 +27,7 @@ export const window = {
     showWarningMessage: vi.fn(async () => undefined),
     showQuickPick: vi.fn(async () => undefined),
     showInputBox: vi.fn(async () => undefined),
+    showOpenDialog: vi.fn(async () => undefined),
     createOutputChannel: vi.fn(() => ({
         appendLine: vi.fn(),
         append: vi.fn(),
