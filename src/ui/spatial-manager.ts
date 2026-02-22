@@ -20,6 +20,9 @@ export class SpatialManager {
      */
     private agentAnchors: Map<AgentType, number> = new Map();
 
+    private _onAnchorChanged = new vscode.EventEmitter<{ agent: AgentType, line: number | undefined }>();
+    public readonly onAnchorChanged = this._onAnchorChanged.event;
+
     private constructor() {
         this.initializeListeners();
     }
@@ -52,6 +55,8 @@ export class SpatialManager {
 
         // Calculate and send new position
         this.updateAgentPosition(agentId);
+
+        this._onAnchorChanged.fire({ agent: agentId, line: lineNumber });
     }
 
     /**
@@ -67,6 +72,8 @@ export class SpatialManager {
 
         // Notify webview of detachment (null position)
         this.notifyWebview(agentId, null);
+
+        this._onAnchorChanged.fire({ agent: agentId, line: undefined });
     }
 
     /**

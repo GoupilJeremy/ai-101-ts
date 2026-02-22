@@ -3,6 +3,7 @@ import { AgentMode, IModeConfig, ModeConfigs } from '../modes/mode-types.js';
 import { IDecisionRecord } from './history.interface.js';
 import { DevelopmentPhase } from './types.js';
 import { LifecycleEventManager } from '../api/lifecycle-event-manager.js';
+import { IGamificationState } from '../gamification/gamification-manager.js';
 
 
 export interface IMetricsState {
@@ -31,6 +32,7 @@ export class ExtensionStateManager extends EventEmitter {
     private history: IDecisionRecord[] = [];
     private currentPhase: DevelopmentPhase = 'prototype';
     private hudVisible: boolean = true;
+    private gamificationState: IGamificationState | undefined;
 
     private constructor() {
         super();
@@ -64,7 +66,22 @@ export class ExtensionStateManager extends EventEmitter {
                 mode: this.currentMode,
                 modeConfig: this.modeConfig,
                 phase: this.currentPhase,
-                hudVisible: this.hudVisible
+                hudVisible: this.hudVisible,
+                gamification: this.gamificationState // Added gamification state
+            });
+        }
+    }
+
+    /**
+     * Updates gamification state and notifies webview.
+     */
+    public notifyGamificationUpdate(state: IGamificationState, message?: string): void {
+        this.gamificationState = state;
+        if (this.webview) {
+            this.webview.postMessage({
+                type: 'toWebview:gamificationUpdate',
+                state,
+                message
             });
         }
     }

@@ -39,6 +39,9 @@ import {
 	registerSearchTroubleshootingCommand,
 	registerSendToTroubleshootingCommand
 } from './commands/show-troubleshooting.js';
+import { GamificationManager } from './gamification/gamification-manager.js';
+import { EditorOverlayManager } from './ui/editor-overlay-manager.js';
+import { AgentCodeLensProvider } from './ui/agent-codelens-provider.js';
 
 // Global reference to survey service for deactivate
 let surveyService: SurveyService | null = null;
@@ -124,6 +127,46 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 		registerOpenTroubleshootingArticleCommand(context),
 		registerSearchTroubleshootingCommand(context),
 		registerSendToTroubleshootingCommand(context, troubleshootingProvider)
+	);
+
+	// Initialize Gamification
+	GamificationManager.getInstance().initialize(context);
+
+	// Initialize Editor Overlay
+	EditorOverlayManager.getInstance();
+
+	// Register CodeLens Provider
+	context.subscriptions.push(
+		vscode.languages.registerCodeLensProvider(
+			{ scheme: 'file', language: 'typescript' }, // Restrict to TS for now or make broader? Let's start with broader but safe defaults
+			new AgentCodeLensProvider()
+		),
+		vscode.languages.registerCodeLensProvider( // Add JS support
+			{ scheme: 'file', language: 'javascript' },
+			new AgentCodeLensProvider()
+		)
+	);
+
+	// Register Launch Agent Command
+	context.subscriptions.push(
+		vscode.commands.registerCommand('suika.launchAgentFromCodeLens', async (args: { agent: string, prompt: string, range: vscode.Range }) => {
+			const { agent, prompt } = args;
+			vscode.window.showInformationMessage(`Launching ${agent} with prompt: ${prompt}`);
+
+			// Trigger the agent via Orchestrator
+			// We need a way to pass this specific prompt. 
+			// For now, let's treat it as a general request but pre-fill context or force specific agent?
+			// The Orchestrator mainly takes a prompt string.
+			// Let's prepend "AgentName: " to the prompt to hint the orchestrator, or just send the prompt.
+
+			try {
+				const response = await AgentOrchestrator.getInstance().processUserRequest(prompt);
+				// If successful, maybe gamify it?
+				GamificationManager.getInstance().addXp(50, 'CodeLens Interaction');
+			} catch (error: any) {
+				vscode.window.showErrorMessage(`Agent failed: ${error.message}`);
+			}
+		})
 	);
 
 	// Dispose knowledge base on deactivation

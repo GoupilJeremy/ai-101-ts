@@ -90,6 +90,13 @@ export interface AI101Events {
     'suggestionAccepted': ISuggestionLifecycleEvent;
     /** Triggered when the user rejects a suggestion */
     'suggestionRejected': ISuggestionLifecycleEvent;
+
+    /** Triggered when the user levels up in gamification */
+    'gamificationLevelUp': {
+        level: number;
+        xp: number;
+        timestamp: number;
+    };
 }
 
 /**
