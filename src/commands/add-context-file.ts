@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { ContextAgent } from '../agents/context/context-agent.js';
+import { AgentOrchestrator } from '../agents/orchestrator.js';
 
 /**
  * Command to manually add a file to the context.
@@ -74,7 +75,7 @@ export async function removeContextFileCommand(): Promise<void> {
  * accessed through the agent orchestrator or a service registry.
  */
 function getContextAgentInstance(): ContextAgent | null {
-    // TODO: Implement proper dependency injection/service locator pattern
-    // For now, return null to indicate not implemented
-    return null;
+    const orchestrator = AgentOrchestrator.getInstance();
+    const agent = orchestrator.getAgent('context');
+    return (agent as ContextAgent) || null;
 }

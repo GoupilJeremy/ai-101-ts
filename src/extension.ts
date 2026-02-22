@@ -316,6 +316,15 @@ export function activate(context: vscode.ExtensionContext): IAI101API {
 	);
 
 	context.subscriptions.push(
+		vscode.commands.registerCommand('suika.addContextFile', () => {
+			import('./commands/add-context-file.js').then(module => module.addContextFileCommand());
+		}),
+		vscode.commands.registerCommand('suika.removeContextFile', () => {
+			import('./commands/add-context-file.js').then(module => module.removeContextFileCommand());
+		})
+	);
+
+	context.subscriptions.push(
 		vscode.commands.registerCommand('suika.toggleHUD', () => {
 			import('./commands/toggle-hud.js').then(module => module.toggleHUDCommand());
 		})
