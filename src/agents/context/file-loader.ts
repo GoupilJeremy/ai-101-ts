@@ -28,16 +28,18 @@ export class FileLoader {
         const files: Array<{ path: string, content: string }> = [];
 
         try {
+            let currentContent: string | null = null;
+
             // Priority 1: Current file
             if (currentFile) {
-                const currentContent = await this.loadFileContent(currentFile);
+                currentContent = await this.loadFileContent(currentFile);
                 if (currentContent) {
                     files.push({ path: currentFile, content: currentContent });
                 }
             }
 
             // Priority 2: Import dependencies
-            const importFiles = await this.discoverImportDependencies(currentFile);
+            const importFiles = await this.discoverImportDependencies(currentFile, currentContent ?? undefined);
             for (const importFile of importFiles) {
                 if (files.length >= maxFiles) { break; }
                 if (!files.some(f => f.path === importFile)) {
@@ -89,10 +91,10 @@ export class FileLoader {
     /**
      * Analyzes import statements in the current file to find dependencies.
      */
-    private async discoverImportDependencies(currentFile?: string): Promise<string[]> {
+    private async discoverImportDependencies(currentFile?: string, currentContent?: string | null): Promise<string[]> {
         if (!currentFile) { return []; }
 
-        const content = await this.loadFileContent(currentFile);
+        const content = currentContent ?? await this.loadFileContent(currentFile);
         if (!content) { return []; }
 
         const dependencies: string[] = [];
