@@ -61,7 +61,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
                 this.sendAnnotationsToWebview(message.suggestionId);
                 break;
             case 'toExtension:lowFpsDetected':
-                this.handleLowFpsDetected(message.fps, message.consecutiveCount);
+                this.handleLowFpsDetected(message.fps);
                 break;
             case 'toExtension:openFile':
                 this.openFileInEditor(message.filePath);
@@ -387,8 +387,7 @@ export class AI101WebviewProvider implements vscode.WebviewViewProvider {
      * Handle low FPS detection from webview.
      * Records FPS in PerformanceDetector for trend analysis and suggestions.
      */
-    private handleLowFpsDetected(fps: number, consecutiveCount: number): void {
-        console.log(`Performance: Low FPS detected (${fps} fps, ${consecutiveCount} consecutive)`);
+    private handleLowFpsDetected(fps: number): void {
         PerformanceDetector.getInstance().recordFps(fps);
     }
 
